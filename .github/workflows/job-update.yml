@@ -1,0 +1,38 @@
+name: JobSeek - Update Jobs Every 4 Hours
+on:
+  schedule:
+    - cron: '17 */4 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  update-jobs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run job updater when available
+        shell: bash
+        run: |
+          if [ -f scripts/fetch_jobs.py ]; then
+            python scripts/fetch_jobs.py
+          elif [ -f fetch_jobs.py ]; then
+            python fetch_jobs.py
+          else
+            echo 'No job-fetching script found yet. Keeping workflow ready for the live job engine.'
+          fi
+      - name: Commit updated job data
+        run: |
+          git config user.name 'JobSeek Bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .
+          if git diff --cached --quiet; then
+            echo 'No job data changes to commit.'
+          else
+            git commit -m 'chore: refresh job listings'
+            git push
+          fi
