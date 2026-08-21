@@ -1,0 +1,10 @@
+{
+  "feeds": [
+    {"name":"Remotive","url":"https://remotive.com/feed","format":"rss","region":"Global","type":"remote"},
+    {"name":"Arbeitnow","url":"https://www.arbeitnow.com/api/job-board-api","format":"json","region":"Europe/Global","type":"general"}
+  ],
+  "api_sources": [
+    {"name":"Adzuna","enabled":false,"requires":"ADZUNA_APP_ID and ADZUNA_APP_KEY","countries":["gb","us","ca","au","de","fr","nl","nz","sg","za","ng"]},
+    {"name":"USAJOBS","enabled":false,"requires":"USAJOBS_API_KEY","region":"United States"}
+  ]
+}
