@@ -1,71 +1,54 @@
-"""JobSeek multi-source job-feed updater.
-
-Public feeds are configured in config/job-feeds.json. Secret API credentials are
-read only from GitHub Actions environment variables/secrets and are never stored
-in source code.
-"""
-import json, os, re, hashlib
-from datetime import datetime, timezone
-from urllib.request import Request, urlopen
+"""JobSeek multi-source updater with conservative direct-employer classification."""
+import json,os,re,hashlib
+from datetime import datetime,timezone
+from urllib.request import Request,urlopen
 from urllib.parse import urlencode
 from xml.etree import ElementTree as ET
-
-OUT='jobs.json'
-CONFIG='config/job-feeds.json'
-
-def clean(s): return re.sub(r'\s+', ' ', re.sub('<[^>]+>', ' ', str(s or ''))).strip()
-def get(url, headers=None):
-    h={'User-Agent':'JobSeek/1.0 public-job-feed'}; h.update(headers or {})
-    req=Request(url,headers=h)
-    with urlopen(req,timeout=30) as r: return r.read()
-
-def parse_rss(data,source):
-    root=ET.fromstring(data); out=[]
-    for item in root.findall('.//item'):
-        title=clean(item.findtext('title')); link=clean(item.findtext('link')); desc=clean(item.findtext('description'))
-        if not title or not link: continue
-        guid=clean(item.findtext('guid')) or link
-        out.append(record(source,guid,title,desc,link,clean(item.findtext('pubDate')),clean(item.findtext('location')) or 'See listing'))
-    return out
-
-def parse_json(data,source):
-    obj=json.loads(data); rows=obj if isinstance(obj,list) else obj.get('jobs',obj.get('results',[])); out=[]
-    for x in rows:
-        if not isinstance(x,dict): continue
-        title=clean(x.get('title') or x.get('name')); link=x.get('url') or x.get('link')
-        if not title or not link: continue
-        out.append(record(source,str(x.get('id') or link),title,x.get('description') or x.get('summary'),link,x.get('published_at') or x.get('date'),x.get('location') or 'See listing',x.get('company')))
-    return out
-
+OUT='jobs.json'; CONFIG='config/job-feeds.json'
+def clean(s): return re.sub(r'\s+',' ',re.sub('<[^>]+>',' ',str(s or ''))).strip()
+def get(url):
+ req=Request(url,headers={'User-Agent':'JobSeek/1.0 public-job-feed'})
+ with urlopen(req,timeout=30) as r:return r.read()
+def direct_flag(desc,source,company=None):
+ t=clean(desc).lower(); s=clean(source).lower(); c=clean(company).lower()
+ # Conservative: generic aggregators are never treated as proof by themselves.
+ evidence=bool(re.search(r'direct apply|posted directly by the employer|apply on (the )?employer|employer.?s own (site|website|career)',t))
+ return evidence and bool(c) and c not in {'arbeitnow','remotive','adzuna','jobseek'}
 def record(source,guid,title,desc,link,published,location,company=None):
-    return {'id':hashlib.sha256((source+guid).encode()).hexdigest()[:16],'title':title,'company':clean(company or source),'location':clean(location),'description':clean(desc)[:1800],'url':link,'source':source,'published_at':clean(published),'fetched_at':datetime.now(timezone.utc).isoformat()}
-
-def adzuna_jobs():
-    app_id=os.getenv('ADZUNA_APP_ID'); key=os.getenv('ADZUNA_APP_KEY')
-    if not app_id or not key: return [], None
-    countries=os.getenv('ADZUNA_COUNTRIES','gb,us,ca,au,de,fr,nl,nz,sg,za,ng').split(',')
-    queries=os.getenv('ADZUNA_QUERIES','electrician,construction,driver,cleaner,cook,warehouse,hospitality,healthcare,engineering,technology').split(',')
-    out=[]; errors=[]
-    for country in countries:
-        for q in queries:
-            params={'app_id':app_id,'app_key':key,'results_per_page':'50','what':q.strip(),'content-type':'application/json'}
-            try:
-                data=json.loads(get('https://api.adzuna.com/v1/api/jobs/'+country.strip()+'/search/1?'+urlencode(params)))
-                for x in data.get('results',[]):
-                    out.append(record('Adzuna',str(x.get('id') or x.get('redirect_url')),x.get('title'),x.get('description'),x.get('redirect_url'),x.get('created'),(x.get('location') or {}).get('display_name') or country,x.get('company',{}).get('display_name')))
-            except Exception as e: errors.append({'source':'Adzuna '+country,'query':q,'error':str(e)})
-    return out, errors
-
+ company=clean(company or '')
+ return {'id':hashlib.sha256((source+guid).encode()).hexdigest()[:16],'title':clean(title),'company':company or source,'location':clean(location),'description':clean(desc)[:1800],'url':link,'source':source,'published_at':clean(published),'fetched_at':datetime.now(timezone.utc).isoformat(),'direct_employer':direct_flag(desc,source,company)}
+def rss(data,source):
+ root=ET.fromstring(data);out=[]
+ for x in root.findall('.//item'):
+  t=clean(x.findtext('title'));u=clean(x.findtext('link'));d=clean(x.findtext('description'))
+  if t and u:out.append(record(source,clean(x.findtext('guid')) or u,t,d,u,clean(x.findtext('pubDate')),clean(x.findtext('location')) or 'See listing'))
+ return out
+def js(data,source):
+ o=json.loads(data);rows=o if isinstance(o,list) else o.get('jobs',o.get('results',[]));out=[]
+ for x in rows:
+  if not isinstance(x,dict):continue
+  t=clean(x.get('title') or x.get('name'));u=x.get('url') or x.get('link')
+  if t and u:out.append(record(source,str(x.get('id') or u),t,x.get('description') or x.get('summary'),u,x.get('published_at') or x.get('date'),x.get('location') or 'See listing',x.get('company')))
+ return out
+def adzuna():
+ aid,key=os.getenv('ADZUNA_APP_ID'),os.getenv('ADZUNA_APP_KEY')
+ if not aid or not key:return [],[]
+ countries=os.getenv('ADZUNA_COUNTRIES','gb,us,ca,au,de,fr,nl,nz,sg,za,ng').split(',');queries=os.getenv('ADZUNA_QUERIES','electrician,construction,driver,cleaner,cook,warehouse,hospitality,engineering').split(',');out=[];err=[]
+ for c in countries:
+  for q in queries:
+   try:
+    p=urlencode({'app_id':aid,'app_key':key,'results_per_page':50,'what':q.strip(),'content-type':'application/json'});d=json.loads(get(f'https://api.adzuna.com/v1/api/jobs/{c.strip()}/search/1?{p}'))
+    for x in d.get('results',[]):out.append(record('Adzuna',str(x.get('id') or x.get('redirect_url')),x.get('title'),x.get('description'),x.get('redirect_url'),x.get('created'),(x.get('location') or {}).get('display_name') or c,(x.get('company') or {}).get('display_name')))
+   except Exception as e:err.append({'source':'Adzuna '+c,'query':q,'error':str(e)})
+ return out,err
 def main():
-    cfg=json.load(open(CONFIG,encoding='utf-8')); all_jobs=[]; errors=[]
-    for f in cfg.get('feeds',[]):
-        try:
-            data=get(f['url']); all_jobs.extend(parse_json(data,f['name']) if f.get('format')=='json' else parse_rss(data,f['name']))
-        except Exception as e: errors.append({'source':f.get('name'),'error':str(e)})
-    aj,ae=adzuna_jobs(); all_jobs.extend(aj); errors.extend(ae or [])
-    unique={j['url'].split('#')[0]:j for j in all_jobs if j.get('url')}
-    jobs=list(unique.values())
-    payload={'updated_at':datetime.now(timezone.utc).isoformat(),'count':len(jobs),'jobs':jobs,'source_errors':errors,'sources':sorted({j['source'] for j in jobs})}
-    with open(OUT,'w',encoding='utf-8') as fp: json.dump(payload,fp,ensure_ascii=False,indent=2)
-    print(f'JobSeek: wrote {len(jobs)} jobs from {len(payload["sources"])} sources; {len(errors)} errors')
-if __name__=='__main__': main()
+ cfg=json.load(open(CONFIG,encoding='utf-8'));jobs=[];errors=[]
+ for f in cfg.get('feeds',[]):
+  try:jobs += js(get(f['url']),f['name']) if f.get('format')=='json' else rss(get(f['url']),f['name'])
+  except Exception as e:errors.append({'source':f.get('name'),'error':str(e)})
+ a,e=adzuna();jobs+=a;errors+=e
+ unique={j['url'].split('#')[0]:j for j in jobs if j.get('url')};jobs=list(unique.values())
+ payload={'updated_at':datetime.now(timezone.utc).isoformat(),'count':len(jobs),'direct_employer_count':sum(1 for j in jobs if j['direct_employer']),'jobs':jobs,'source_errors':errors,'sources':sorted({j['source'] for j in jobs})}
+ with open(OUT,'w',encoding='utf-8') as f:json.dump(payload,f,ensure_ascii=False,indent=2)
+ print(f'JobSeek: {len(jobs)} jobs; {payload["direct_employer_count"]} direct-employer evidence matches; {len(errors)} source errors')
+if __name__=='__main__':main()
