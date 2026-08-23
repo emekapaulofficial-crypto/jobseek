@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="JobSeek Professional LinkedIn and Indeed Profile Builder">
+  <title>Profile Builder | JobSeek</title>
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    .profile-builder {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 50px 20px 80px;
+    }
+
+    .builder-hero {
+      background: linear-gradient(135deg, #07111f, #102a46);
+      color: white;
+      border-radius: 24px;
+      padding: 45px;
+      margin-bottom: 30px;
+    }
+
+    .builder-hero h1 {
+      margin: 8px 0 15px;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+    }
+
+    .builder-hero p {
+      max-width: 760px;
+      color: #c8d8e8;
+      line-height: 1.7;
+    }
+
+    .builder-card {
+      background: white;
+      border: 1px solid #dce5ee;
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 25px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.05);
+    }
+
+    .builder-card h2 {
+      margin-top: 0;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      font-weight: 700;
+      font-size: .92rem;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      border: 1px solid #cfd9e4;
+      border-radius: 10px;
+      padding: 13px;
+      font: inherit;
+      background: #fff;
+    }
+
+    .field textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    .generate-btn {
+      margin-top: 20px;
+      border: 0;
+      cursor: pointer;
+      padding: 15px 24px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 1rem;
+      background: #0b67d1;
+      color: white;
+    }
+
+    .generate-btn:hover {
+      opacity: .9;
+    }
+
+    .results {
+      display: none;
+    }
+
+    .profile-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .profile-tab {
+      border: 1px solid #cfd9e4;
+      background: white;
+      padding: 11px 18px;
+      border-radius: 9px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .profile-tab.active {
+      background: #07111f;
+      color: white;
+    }
+
+    .profile-panel {
+      display: none;
+    }
+
+    .profile-panel.active {
+      display: block;
+    }
+
+    .output-box {
+      border: 1px solid #d7e0e9;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 18px;
+      background: #f9fbfd;
+    }
+
+    .output-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 10px;
+    }
+
+    .output-top h3 {
+      margin: 0;
+    }
+
+    .copy-btn {
+      border: 1px solid #b9c8d7;
+      background: white;
+      padding: 8px 13px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .copy-btn:hover {
+      background: #eef5fb;
+    }
+
+    .output-content {
+      white-space: pre-wrap;
+      line-height: 1.7;
+      color: #26384b;
+    }
+
+    .notice {
+      padding: 15px;
+      border-radius: 10px;
+      background: #fff8e5;
+      border: 1px solid #f0d889;
+      color: #624c08;
+      margin-top: 18px;
+      line-height: 1.6;
+    }
+
+    .success {
+      display: none;
+      padding: 15px;
+      border-radius: 10px;
+      background: #e9f8ef;
+      border: 1px solid #a9dfbd;
+      color: #175c31;
+      margin-top: 18px;
+    }
+
+    .loading {
+      display: none;
+      margin-top: 15px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 700px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .field.full {
+        grid-column: auto;
+      }
+
+      .builder-hero {
+        padding: 30px 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="container nav">
+
+    <a class="brand" href="index.html">
+      <span class="logo">J</span>
+      <b>Job<span>Seek</span></b>
+    </a>
+
+    <button id="menu" aria-label="Menu">☰</button>
+
+    <nav id="nav">
+      <a href="jobs.html">Find Jobs</a>
+      <a href="construction-jobs.html">Construction Jobs</a>
+      <a href="application-assistant.html">Application Assistant</a>
+      <a href="profile-builder.html">LinkedIn & Indeed Profile</a>
+    </nav>
+
+  </div>
+</header>
+
+<main class="profile-builder">
+
+  <section class="builder-hero">
+
+    <p class="eyebrow">JOBSEEK PROFESSIONAL SERVICE</p>
+
+    <h1>Build your LinkedIn & Indeed profile.</h1>
+
+    <p>
+      Give JobSeek your real CV and cover letter information.
+      We'll organize it into professional, job-focused profile content
+      that you can review and copy into LinkedIn and Indeed.
+    </p>
+
+  </section>
+
+
+  <section class="builder-card">
+
+    <h2>1. Candidate information</h2>
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label for="name">Full name</label>
+        <input id="name" placeholder="Your full name">
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="you@example.com">
+      </div>
+
+      <div class="field">
+        <label for="location">Current location</label>
+        <input id="location" placeholder="Lagos, Nigeria">
+      </div>
+
+      <div class="field">
+        <label for="target">Target job</label>
+        <input id="target" placeholder="Data Analyst">
+      </div>
+
+      <div class="field">
+        <label for="workType">Preferred work arrangement</label>
+        <select id="workType">
+          <option>Remote</option>
+          <option>Hybrid</option>
+          <option>On-site</option>
+          <option>Remote / Hybrid / On-site</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="country">Target country</label>
+        <input id="country" placeholder="UK, Canada, Germany, Worldwide">
+      </div>
+
+      <div class="field full">
+        <label for="cv">
+          CV / Resume
+        </label>
+
+        <textarea
+          id="cv"
+          placeholder="Paste the candidate's CV here..."
+        ></textarea>
+      </div>
+
+      <div class="field full">
+        <label for="coverLetter">
+          Cover letter
+        </label>
+
+        <textarea
+          id="coverLetter"
+          placeholder="Paste the candidate's cover letter here..."
+        ></textarea>
+      </div>
+
+    </div>
+
+    <button class="generate-btn" id="generateBtn">
+      Build Professional Profiles
+    </button>
+
+    <div class="loading" id="loading">
+      Preparing your professional profile...
+    </div>
+
+    <div class="success" id="success">
+      Your LinkedIn and Indeed profile drafts are ready.
+    </div>
+
+    <div class="notice">
+      <strong>Important:</strong>
+      JobSeek does not invent qualifications, employment history,
+      certifications or experience. The generated profile should always
+      be reviewed by the candidate before publishing.
+    </div>
+
+  </section>
+
+
+  <section class="builder-card results" id="results">
+
+    <h2>2. Your professional profiles</h2>
+
+    <div class="profile-tabs">
+
+      <button class="profile-tab active" data-tab="linkedin">
+        LinkedIn
+      </button>
+
+      <button class="profile-tab" data-tab="indeed">
+        Indeed
+      </button>
+
+    </div>
+
+
+    <!-- LINKEDIN -->
+
+    <div class="profile-panel active" id="linkedin">
+
+      <div class="output-box">
+
+        <div class="output-top">
+          <h3>Professional Headline</h3>
+          <button class="copy-btn" data-copy="linkedinHeadline">
+            Copy
+          </button>
+        </div>
+
+        <div class="output-content" id="linkedinHeadline"></div>
+
+      </div>
+
+
+      <div class="output-box">
+
+        <div class="output-top">
+          <h3>About</h3>
+          <button class="copy-btn" data-copy="linkedinAbout">
+            Copy
+          </button>
+        </div>
+
+        <div class="output-content" id="linkedinAbout"></div>
+
+      </div>
+
+
+      <div class="output-box">
+
+        <div class="output-top">
+          <h3>Experience</h3>
+          <button class="copy-btn" data-copy="linkedinExperience">
+            Copy
+          </button>
+        </div>
+
+        <div class="output-content" id="linkedinExperience"></div>
+
+      </div>
+
+
+      <div class="output-box">
+
+        <div class="output-top">
+          <h3>Skills</h3>
+          <button class="copy-btn" data-copy="linkedinSkills">
+            Copy
+          </button>
+        </div>
+
+        <div class="output-content" id="linkedinSkills"></div>
+
+      </div>
+
+
+      <div class="output-box">
+
+        <div class="output-top">
+          <h3>Education & Certifications</h3>
+          <button class="copy-btn" data-copy="linkedinEducation">
+            Copy
+          </button>
+        </div>
+
+        <div class="output-content" id="linkedinEducation"></div>
+
+      </div>
+
+
+      <div class="output-box">
+
+        <div class="output-top">
+          <h3>Projects</h3>
+          <button class="copy-btn" data-copy="linkedinProjects">
+            Copy
+          </button>
+        </div>
+
+        <div class="output-content" id="linkedinProjects"></div>
+
+      </div>
+
+    </div>
+
+
+    <!-- INDEED -->
+
+    <div class="profile-panel" id="indeed">
+
+      <div class="output-box">
+
+        <div class="output-top">
+          <h3>Indeed Professional Summary</h3>
+          <button class="copy-btn" data-copy="indeedSummary">
+            Copy
+          </button>
+        </div>
+
+        <div class="output-content" id="indeedSummary"></div>
+
+      </div>
+
+
+      <div class="output-box">
+
+        <div class="output-top">
+          <h3>Work Experience</h3>
+          <button class="copy-btn" data-copy="indeedExperience">
+            Copy
+          </button>
+        </div>
+
+        <div class="output-content" id="indeedExperience"></div>
+
+      </div>
+
+
+      <div class="output-box">
+
+        <div class="output-top">
+          <h3>Skills</h3>
+          <button class="copy-btn" data-copy="indeedSkills">
+            Copy
+          </button>
+        </div>
+
+        <div class="output-content" id="indeedSkills"></div>
+
+      </div>
+
+
+      <div class="output-box">
+
+        <div class="output-top">
+          <h3>Education & Certifications</h3>
+          <button class="copy-btn" data-copy="indeedEducation">
+            Copy
+          </button>
+        </div>
+
+        <div class="output-content" id="indeedEducation"></div>
+
+      </div>
+
+
+      <div class="output-box">
+
+        <div class="output-top">
+          <h3>Target Job Titles</h3>
+          <button class="copy-btn" data-copy="indeedTitles">
+            Copy
+          </button>
+        </div>
+
+        <div class="output-content" id="indeedTitles"></div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<footer>
+
+  <div class="container copy">
+    © 2026 JobSeek · Professional profile preparation service
+  </div>
+
+</footer>
+
+
+<script>
+
+const $ = id => document.getElementById(id);
+
+
+function cleanText(text) {
+
+  return String(text || "")
+    .replace(/\r/g, "")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+
+}
+
+
+function getLines(text) {
+
+  return cleanText(text)
+    .split("\n")
+    .map(x => x.trim())
+    .filter(Boolean);
+
+}
+
+
+function findSection(text, names) {
+
+  const lines = getLines(text);
+
+  const wanted = names.map(x =>
+    x.toLowerCase()
+  );
+
+  let start = -1;
+
+  for (let i = 0; i < lines.length; i++) {
+
+    const normalized =
+      lines[i]
+        .toLowerCase()
+        .replace(/[:\-]/g, "")
+        .trim();
+
+    if (
+      wanted.some(name =>
+        normalized === name ||
+        normalized.includes(name)
+      )
+    ) {
+
+      start = i + 1;
+      break;
+
+    }
+
+  }
+
+  if (start === -1) return "";
+
+  const sectionNames = [
+    "experience",
+    "work experience",
+    "employment",
+    "education",
+    "skills",
+    "certifications",
+    "certificates",
+    "projects",
+    "summary",
+    "profile",
+    "professional summary",
+    "objective"
+  ];
+
+  const output = [];
+
+  for (let i = start; i < lines.length; i++) {
+
+    const n =
+      lines[i]
+        .toLowerCase()
+        .replace(/[:\-]/g, "")
+        .trim();
+
+    if (
+      sectionNames.some(section =>
+        n === section ||
+        n.startsWith(section + " ")
+      )
+    ) {
+      break;
+    }
+
+    output.push(lines[i]);
+
+  }
+
+  return output.join("\n");
+
+}
+
+
+function uniqueWords(text) {
+
+  const stop = new Set([
+    "and","the","for","with","from","this","that",
+    "your","have","has","was","are","you","job",
+    "work","years","into","using","will","our",
+    "their","they","been","also","about","more"
+  ]);
+
+  const words =
+    cleanText(text)
+      .toLowerCase()
+      .replace(/[^a-z0-9+#./ -]/g, " ")
+      .split(/\s+/)
+      .filter(w =>
+        w.length > 2 &&
+        !stop.has(w)
+      );
+
+  const count = {};
+
+  words.forEach(word => {
+    count[word] = (count[word] || 0) + 1;
+  });
+
+  return Object.entries(count)
+    .sort((a,b) => b[1] - a[1])
+    .slice(0, 20)
+    .map(x => x[0]);
+
+}
+
+
+function generateProfiles() {
+
+  const name = cleanText($("name").value);
+  const target = cleanText($("target").value);
+  const location = cleanText($("location").value);
+  const country = cleanText($("country").value);
+  const workType = cleanText($("workType").value);
+  const cv = cleanText($("cv").value);
+  const cover = cleanText($("coverLetter").value);
+
+  if (!name || !target || !cv) {
+
+    alert(
+      "Please enter your name, target job and CV."
+    );
+
+    return;
+
+  }
+
+
+  $("loading").style.display = "block";
+  $("success").style.display = "none";
+
+
+  const summary =
+    findSection(cv, [
+      "summary",
+      "professional summary",
+      "profile",
+      "objective"
+    ]);
+
+
+  const experience =
+    findSection(cv, [
+      "experience",
+      "work experience",
+      "employment"
+    ]);
+
+
+  const education =
+    findSection(cv, [
+      "education"
+    ]);
+
+
+  const skills =
+    findSection(cv, [
+      "skills"
+    ]);
+
+
+  const certifications =
+    findSection(cv, [
+      "certifications",
+      "certificates"
+    ]);
+
+
+  const projects =
+    findSection(cv, [
+      "projects"
+    ]);
+
+
+  const keywords =
+    uniqueWords(
+      cv + "\n" + cover + "\n" + target
+    );
+
+
+  const skillText =
+    skills ||
+    keywords.join(", ");
+
+
+  const about =
+    summary ||
+    `${name} is a professional seeking opportunities as a ${target}. ` +
+    `Based on the information provided in the candidate's CV, ` +
+    `their professional background and skills can be presented ` +
+    `for relevant ${target} opportunities. ` +
+    `Preferred work arrangement: ${workType}.`;
+
+
+  const headline =
+    `${target} | ${keywords.slice(0,5).join(" | ")}`;
+
+
+  const targetTitles =
+    [
+      target,
+      `${target} Specialist`,
+      `${target} Analyst`,
+      `Junior ${target}`,
+      `Senior ${target}`
+    ].join("\n");
+
+
+  const experienceText =
+    experience ||
+    "Use the employment history exactly as stated in the CV.";
+
+
+  const educationText =
+    education ||
+    "Use the education and qualifications exactly as stated in the CV.";
+
+
+  const projectText =
+    projects ||
+    "No project section was identified. Add only genuine projects from the candidate's CV.";
+
+
+  const linkedinEducation =
+    educationText +
+    (certifications
+      ? "\n\nCertifications:\n" + certifications
+      : "");
+
+
+  $("linkedinHeadline").textContent =
+    headline;
+
+
+  $("linkedinAbout").textContent =
+    about;
+
+
+  $("linkedinExperience").textContent =
+    experienceText;
+
+
+  $("linkedinSkills").textContent =
+    skillText;
+
+
+  $("linkedinEducation").textContent =
+    linkedinEducation;
+
+
+  $("linkedinProjects").textContent =
+    projectText;
+
+
+  $("indeedSummary").textContent =
+    about;
+
+
+  $("indeedExperience").textContent =
+    experienceText;
+
+
+  $("indeedSkills").textContent =
+    skillText;
+
+
+  $("indeedEducation").textContent =
+    linkedinEducation;
+
+
+  $("indeedTitles").textContent =
+    targetTitles;
+
+
+  $("loading").style.display = "none";
+  $("success").style.display = "block";
+  $("results").style.display = "block";
+
+
+  $("results").scrollIntoView({
+    behavior: "smooth"
+  });
+
+}
+
+
+$("generateBtn")
+  .addEventListener(
+    "click",
+    generateProfiles
+  );
+
+
+document
+  .querySelectorAll(".profile-tab")
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        document
+          .querySelectorAll(".profile-tab")
+          .forEach(x =>
+            x.classList.remove("active")
+          );
+
+        document
+          .querySelectorAll(".profile-panel")
+          .forEach(x =>
+            x.classList.remove("active")
+          );
+
+        button.classList.add("active");
+
+        $(button.dataset.tab)
+          .classList.add("active");
+
+      }
+    );
+
+  });
+
+
+document
+  .querySelectorAll(".copy-btn")
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      async () => {
+
+        const element =
+          $(button.dataset.copy);
+
+        try {
+
+          await navigator.clipboard.writeText(
+            element.textContent
+          );
+
+          const old =
+            button.textContent;
+
+          button.textContent = "Copied!";
+
+          setTimeout(() => {
+            button.textContent = old;
+          }, 1500);
+
+        } catch {
+
+          alert(
+            "Copy failed. Please select the text manually."
+          );
+
+        }
+
+      }
+    );
+
+  });
+
+</script>
+
+</body>
+</html>
