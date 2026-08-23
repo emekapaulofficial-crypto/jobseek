@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Search every job vacancy connected to JobSeek, filter by category, country and keyword.">
+<title>Find Jobs | JobSeek</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <div class="container nav">
+    <a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a>
+    <button id="menu" aria-label="Menu">☰</button>
+    <nav id="nav">
+      <a href="jobs.html">Find Jobs</a>
+      <a href="construction-jobs.html">Construction</a>
+      <a href="employer.html">Employers</a>
+      <a href="profile-builder.html">LinkedIn & Indeed Profile</a>
+      <a href="application-assistant.html">Application Assistant</a>
+      <a href="pricing.html">Premium</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section class="section" style="padding-bottom:20px">
+  <div class="container">
+    <p class="eyebrow">JOB SEARCH</p>
+    <h1>Find your next opportunity</h1>
+    <p class="lead">Every vacancy JobSeek is connected to, across every category. Sponsorship information should always be verified with the employer.</p>
+    <div class="search" style="margin-top:30px">
+      <div><label>Keyword</label><input id="keyword" placeholder="Any job title, skill or keyword..."></div>
+      <div><label>Country / location</label><input id="country" placeholder="Canada, UK, Germany, Remote..."></div>
+      <button class="btn" id="filter">Search</button>
+    </div>
+    <div id="chips" class="chips" style="margin-top:16px"></div>
+  </div>
+</section>
+<section class="section" style="padding-top:10px;background:#f7faff">
+  <div class="container">
+    <div class="head">
+      <div><p class="eyebrow">LISTINGS</p><h2>All connected vacancies</h2></div>
+      <span id="count" class="micro"></span>
+    </div>
+    <div class="jobs" id="list"><p class="none">Loading connected job sources…</p></div>
+  </div>
+</section>
+</main>
+<footer><div class="container copy">© 2026 JobSeek · Verify job, employer and visa information before applying.</div></footer>
+<script src="app.js"></script>
+<script>
+let all = [];
+let activeCategory = 'All';
+const list = document.getElementById('list');
+const count = document.getElementById('count');
+const chips = document.getElementById('chips');
+
+async function load() {
+  try {
+    const [jobsRes, employerRes] = await Promise.allSettled([
+      fetch('jobs.json', { cache: 'no-store' }),
+      fetch('employer-jobs.json', { cache: 'no-store' })
+    ]);
+    let jobs = [];
+    if (jobsRes.status === 'fulfilled' && jobsRes.value.ok) {
+      const d = await jobsRes.value.json();
+      jobs = jobs.concat(d.jobs || []);
+    }
+    if (employerRes.status === 'fulfilled' && employerRes.value.ok) {
+      const d = await employerRes.value.json();
+      jobs = jobs.concat(d.jobs || []);
+    }
+    all = jobs;
+    buildChips();
+    render();
+  } catch (e) {
+    list.innerHTML = '<p class="none">The live job feed is temporarily unavailable.</p>';
+  }
+}
+
+function buildChips() {
+  const cats = ['All', ...new Set(all.map(j => j.category || 'General'))];
+  chips.innerHTML = cats.map(c =>
+    `<button class="chip${c === activeCategory ? ' active' : ''}" data-cat="${c}">${c}</button>`
+  ).join('');
+  chips.querySelectorAll('.chip').forEach(btn => btn.addEventListener('click', () => {
+    activeCategory = btn.dataset.cat;
+    buildChips();
+    render();
+  }));
+}
+
+function render() {
+  const k = document.getElementById('keyword').value.toLowerCase().trim();
+  const c = document.getElementById('country').value.toLowerCase().trim();
+  const rows = all.filter(j => {
+    const text = (j.title + ' ' + j.description + ' ' + (j.company || '')).toLowerCase();
+    const matchesKeyword = !k || text.includes(k);
+    const matchesCountry = !c || (j.location || '').toLowerCase().includes(c);
+    const matchesCategory = activeCategory === 'All' || (j.category || 'General') === activeCategory;
+    return matchesKeyword && matchesCountry && matchesCategory;
+  });
+  count.textContent = rows.length + ' matching vacancies';
+  list.innerHTML = rows.slice(0, 90).map(j => `
+    <article class="job">
+      <span class="tag">${j.employer_posted ? 'EMPLOYER POSTED' : (j.source || 'CONNECTED SOURCE')}</span>
+      <h3>${j.title}</h3>
+      <p>${j.company || ''} · ${j.location || 'See listing'}</p>
+      <p class="micro" style="margin:-4px 0 8px">${j.category || 'General'}</p>
+      <p>${(j.description || '').slice(0, 180)}</p>
+      <a class="outline" style="display:block;text-align:center" href="${j.url}" target="_blank" rel="noopener">View & apply</a>
+    </article>
+  `).join('') || '<p class="none">No matching opportunities found. Try a broader keyword or category.</p>';
+}
+
+document.getElementById('filter').addEventListener('click', render);
+['keyword', 'country'].forEach(id => document.getElementById(id).addEventListener('keydown', e => {
+  if (e.key === 'Enter') render();
+}));
+load();
+</script>
+</body>
+</html>
