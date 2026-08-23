@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Post a job on JobSeek and reach job seekers looking for visa-sponsored and international opportunities.">
+<title>For Employers | JobSeek</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <div class="container nav">
+    <a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a>
+    <button id="menu" aria-label="Menu">☰</button>
+    <nav id="nav">
+      <a href="jobs.html">Find Jobs</a>
+      <a href="construction-jobs.html">Construction</a>
+      <a href="employer.html">Employers</a>
+      <a href="profile-builder.html">LinkedIn & Indeed Profile</a>
+      <a href="application-assistant.html">Application Assistant</a>
+      <a href="pricing.html">Premium</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section class="hero" style="padding:70px 0">
+  <div class="container">
+    <p class="eyebrow">FOR EMPLOYERS & RECRUITERS</p>
+    <h1>Post a job.<br><em>Reach candidates faster.</em></h1>
+    <p class="lead">JobSeek connects employers with candidates actively searching for roles — including international candidates looking for visa-sponsored positions. Submit a vacancy below and it will appear on JobSeek once reviewed.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <div class="head">
+      <div><p class="eyebrow">HOW IT WORKS</p><h2>Three simple steps</h2></div>
+    </div>
+    <div class="countries">
+      <div><b>1️⃣ Submit</b><span>Fill in the job form below with role, location and how to apply.</span></div>
+      <div><b>2️⃣ Review</b><span>JobSeek checks the listing before it goes live.</span></div>
+      <div><b>3️⃣ Published</b><span>Your job appears on the Find Jobs page, tagged "Employer Posted".</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:#f7faff">
+  <div class="container">
+    <div class="head"><div><p class="eyebrow">POST A VACANCY</p><h2>Tell us about the role</h2></div></div>
+    <form class="post-job" id="postJobForm" action="https://formspree.io/f/xvkpnazd" method="POST">
+      <div class="row2">
+        <div><label>Job title</label><input name="Job title" required placeholder="e.g. Warehouse Supervisor"></div>
+        <div><label>Company / employer name</label><input name="Company" required placeholder="e.g. Northgate Logistics Ltd"></div>
+      </div>
+      <div class="row2">
+        <div><label>Location</label><input name="Location" required placeholder="City, country, or Remote"></div>
+        <div>
+          <label>Category</label>
+          <select name="Category" required>
+            <option>Construction & Trades</option>
+            <option>Technology & IT</option>
+            <option>Healthcare</option>
+            <option>Hospitality & Food</option>
+            <option>Transport & Logistics</option>
+            <option>Cleaning & Facilities</option>
+            <option>Admin & Office</option>
+            <option>Sales & Customer Service</option>
+            <option>Education</option>
+            <option>Finance & Accounting</option>
+            <option>Manufacturing & Production</option>
+            <option>Engineering</option>
+            <option>General</option>
+          </select>
+        </div>
+      </div>
+      <div class="row2">
+        <div><label>Job type</label><input name="Job type" placeholder="Full-time, Part-time, Contract..."></div>
+        <div><label>Visa sponsorship</label><input name="Sponsorship" placeholder="e.g. Sponsorship available, local candidates only..."></div>
+      </div>
+      <div><label>Job description</label><textarea name="Description" required placeholder="Responsibilities, requirements, salary if applicable..."></textarea></div>
+      <div class="row2">
+        <div><label>Link where candidates apply (optional)</label><input name="Apply URL" type="url" placeholder="https://..."></div>
+        <div><label>Contact email</label><input name="Contact email" type="email" required placeholder="you@company.com"></div>
+      </div>
+      <button class="btn" type="submit">Submit job for review</button>
+      <p class="micro" id="formNote">We'll review your listing and publish it to JobSeek. There's no charge to post at this time.</p>
+    </form>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="head">
+      <div><p class="eyebrow">LIVE ON JOBSEEK</p><h2>Currently posted employer jobs</h2></div>
+      <a href="jobs.html">See all jobs →</a>
+    </div>
+    <div class="jobs" id="employerList"><p class="none">Loading employer listings…</p></div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container">
+    <p class="eyebrow light">FIND CANDIDATES</p>
+    <h2>Have a hard-to-fill role?</h2>
+    <p>Reach us directly and we'll help match qualified candidates to your vacancy.</p>
+    <a class="btn light" href="mailto:employer@jobseek.example">Contact JobSeek</a>
+  </div>
+</section>
+</main>
+
+<footer><div class="container copy">© 2026 JobSeek · Employer submissions are reviewed before publishing. JobSeek does not guarantee hires or visa outcomes.</div></footer>
+
+<script src="app.js"></script>
+<script>
+async function loadEmployerJobs() {
+  const box = document.getElementById('employerList');
+  try {
+    const r = await fetch('employer-jobs.json', { cache: 'no-store' });
+    const d = await r.json();
+    if (!d.jobs || !d.jobs.length) {
+      box.innerHTML = '<p class="none">No employer jobs published yet — be the first to post one above.</p>';
+      return;
+    }
+    box.innerHTML = d.jobs.slice(0, 30).map(j => `
+      <article class="job">
+        <span class="tag">EMPLOYER POSTED</span>
+        <h3>${j.title}</h3>
+        <p>${j.company || ''} · ${j.location || 'See listing'}</p>
+        <p>${(j.description || '').slice(0, 180)}</p>
+        <a class="outline" style="display:block;text-align:center" href="${j.url}" target="_blank" rel="noopener">View & apply</a>
+      </article>
+    `).join('');
+  } catch (e) {
+    box.innerHTML = '<p class="none">Employer listings are temporarily unavailable.</p>';
+  }
+}
+
+const form = document.getElementById('postJobForm');
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const note = document.getElementById('formNote');
+  note.textContent = 'Submitting…';
+  try {
+    const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
+    if (res.ok) {
+      note.textContent = 'Thanks! Your job has been submitted for review.';
+      form.reset();
+    } else {
+      note.textContent = 'Something went wrong submitting the form — please try again or email us directly.';
+    }
+  } catch (err) {
+    note.textContent = 'Something went wrong submitting the form — please try again or email us directly.';
+  }
+});
+
+loadEmployerJobs();
+</script>
+</body>
+</html>
