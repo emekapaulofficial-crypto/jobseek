@@ -1,79 +1,22 @@
 {
   "feeds": [
-    {
-      "name": "Arbeitnow",
-      "url": "https://www.arbeitnow.com/api/job-board-api",
-      "format": "json",
-      "region": "Europe/Global",
-      "type": "general"
-    }
+    {"name":"Arbeitnow","url":"https://www.arbeitnow.com/api/job-board-api","format":"json","region":"Europe/Global","type":"general"}
   ],
   "public_api_sources": [
-    {
-      "name": "Jobicy",
-      "url": "https://jobicy.com/api/v2/remote-jobs?count=200",
-      "format": "json",
-      "region": "Worldwide",
-      "type": "remote",
-      "requires_key": false,
-      "attribution_required": true
-    },
-    {
-      "name": "RemoteOK",
-      "url": "https://remoteok.com/api",
-      "format": "json",
-      "region": "Worldwide",
-      "type": "remote",
-      "requires_key": false,
-      "attribution_required": true
-    }
+    {"name":"Jobicy","url":"https://jobicy.com/api/v2/remote-jobs?count=200","format":"json","region":"Worldwide","type":"remote","requires_key":false,"attribution_required":true},
+    {"name":"RemoteOK","url":"https://remoteok.com/api","format":"json","region":"Worldwide","type":"remote","requires_key":false,"attribution_required":true}
   ],
   "credentialed_api_sources": [
-    {
-      "name": "Adzuna",
-      "enabled": true,
-      "requires": "ADZUNA_APP_ID and ADZUNA_APP_KEY",
-      "countries": ["gb", "us", "ca", "au", "de", "fr", "nl", "nz", "sg", "za", "ng"]
-    },
-    {
-      "name": "USAJOBS",
-      "enabled": false,
-      "requires": "USAJOBS_API_KEY",
-      "region": "United States"
-    }
+    {"name":"Adzuna","enabled":true,"requires":"ADZUNA_APP_ID and ADZUNA_APP_KEY","countries":["gb","us","ca","au","de","fr","nl","nz","sg","za","ng"]},
+    {"name":"USAJOBS","enabled":false,"requires":"USAJOBS_API_KEY","region":"United States"}
   ],
-  "verification_policy": {
-    "never_claim_guaranteed_legitimacy": true,
-    "preserve_original_application_url": true,
-    "flag_unreachable_application_urls": true,
-    "flag_scam_language": true,
-    "deduplicate_by_canonical_url": true
-  },
-  "job_categories": [
-    "Construction & Skilled Trades",
-    "Farming & Agriculture",
-    "Farm Worker & Seasonal Agriculture",
-    "Technology & IT",
-    "Engineering",
-    "Healthcare",
-    "Driving & Transport",
-    "Logistics & Warehouse",
-    "Hospitality & Catering",
-    "Cleaning & Facilities",
-    "Security",
-    "Finance & Accounting",
-    "Administration",
-    "Sales & Customer Service",
-    "Marketing & Design",
-    "Education",
-    "Retail",
-    "Remote & Freelance",
-    "Other"
-  ],
-  "job_intent_tags": {
-    "construction": ["construction", "builder", "carpenter", "mason", "bricklayer", "plumber", "welder", "electrician", "roofer", "scaffolder", "civil site", "heavy equipment", "laborer"],
-    "farming": ["farm worker", "farmer", "agriculture", "agricultural", "fruit picker", "harvest", "greenhouse", "livestock", "poultry", "dairy", "tractor operator", "irrigation", "horticulture", "orchard", "vineyard", "seasonal farm"],
-    "visa_sponsorship": ["visa sponsorship", "visa sponsor", "sponsorship available", "sponsor visa", "work permit sponsorship", "work permit provided", "employer sponsorship", "immigration sponsorship", "sponsorship provided"],
-    "no_sponsorship": ["no sponsorship", "without sponsorship", "must have right to work", "must already have work authorization", "work authorization required", "no visa sponsorship", "unable to sponsor"]
+  "verification_policy":{"never_claim_guaranteed_legitimacy":true,"preserve_original_application_url":true,"flag_unreachable_application_urls":true,"flag_scam_language":true,"deduplicate_by_canonical_url":true},
+  "job_categories":["Construction & Skilled Trades","Farming & Agriculture","Farm Worker & Seasonal Agriculture","Technology & Software","Cybersecurity","Data & AI","Cloud & DevOps","Web & Mobile Development","IT Support & Systems","Product & Project Management","UI/UX & Design","Engineering","Healthcare","Driving & Transport","Logistics & Warehouse","Hospitality & Catering","Cleaning & Facilities","Security","Finance & Accounting","Administration","Sales & Customer Service","Marketing & Design","Education","Retail","Remote & Freelance","Other"],
+  "job_intent_tags":{
+    "construction":["construction","builder","carpenter","mason","bricklayer","plumber","welder","electrician","roofer","scaffolder","civil site","heavy equipment","laborer"],
+    "farming":["farm worker","farmer","agriculture","agricultural","fruit picker","harvest","greenhouse","livestock","poultry","dairy","tractor operator","irrigation","horticulture","orchard","vineyard","seasonal farm"],
+    "technology":["software engineer","software developer","frontend developer","front-end developer","backend developer","back-end developer","full stack developer","full-stack developer","web developer","mobile developer","ios developer","android developer","react developer","react native","vue developer","angular developer","node.js","python developer","java developer","javascript developer","typescript developer","php developer",".net developer","c# developer","ruby developer","go developer","golang","rust developer","flutter developer","devops","devsecops","cloud engineer","cloud architect","aws","azure","google cloud","site reliability engineer","sre","platform engineer","kubernetes","docker","terraform","cybersecurity","cyber security","security analyst","security engineer","penetration tester","ethical hacker","soc analyst","information security","data analyst","data scientist","data engineer","machine learning","machine learning engineer","ai engineer","artificial intelligence","deep learning","nlp engineer","computer vision","database administrator","sql developer","network engineer","network administrator","systems administrator","it support","help desk","technical support","solutions architect","software architect","qa engineer","test engineer","automation tester","qa analyst","product manager","product owner","project manager","scrum master","business analyst","ui designer","ux designer","ui/ux","ux researcher","product designer","technical writer","seo specialist","wordpress developer"],
+    "visa_sponsorship":["visa sponsorship","visa sponsor","sponsorship available","sponsor visa","work permit sponsorship","work permit provided","employer sponsorship","immigration sponsorship","sponsorship provided"],
+    "no_sponsorship":["no sponsorship","without sponsorship","must have right to work","must already have work authorization","work authorization required","no visa sponsorship","unable to sponsor"]
   }
 }
