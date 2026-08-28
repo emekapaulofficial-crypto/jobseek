@@ -1,35 +1,49 @@
-name: JobSeek - Update Jobs Every 4 Hours
+name: JobSeek AI Agent - Global Job Discovery
+
 on:
   schedule:
-    - cron: '17 */4 * * *'
+    # GitHub Actions schedules use UTC. Offset the minute from the hour to reduce queue contention.
+    - cron: '17 */2 * * *'
   workflow_dispatch:
+
 permissions:
   contents: write
+
+concurrency:
+  group: jobseek-ai-agent
+  cancel-in-progress: false
+
 jobs:
-  update-jobs:
+  discover:
+    name: Discover, verify and publish jobs
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Run multi-source job updater
+
+      - name: Run JobSeek AI Job Agent
         env:
           ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
           ADZUNA_COUNTRIES: gb,us,ca,au,de,fr,nl,nz,sg,za,ng
-          ADZUNA_QUERIES: electrician,construction,driver,cleaner,cook,warehouse,hospitality,healthcare,engineering,technology
-        run: python scripts/fetch_jobs.py
+          ADZUNA_QUERIES: construction,electrician,driver,warehouse,healthcare,engineering,technology,hospitality,cleaning,finance,sales
+          JOB_URL_CHECK_LIMIT: '40'
+        run: python scripts/ai_job_agent.py
+
       - name: Commit updated job data
         run: |
-          git config user.name 'JobSeek Bot'
+          git config user.name 'JobSeek AI Agent'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add jobs.json
           if git diff --cached --quiet; then
-            echo 'No job data changes to commit.'
+            echo 'No job data changes.'
           else
-            git commit -m 'chore: refresh global job listings'
+            git commit -m 'chore: AI agent refresh global job listings'
             git push
           fi
