@@ -51,6 +51,8 @@
   },
   "job_categories": [
     "Construction & Skilled Trades",
+    "Farming & Agriculture",
+    "Farm Worker & Seasonal Agriculture",
     "Technology & IT",
     "Engineering",
     "Healthcare",
@@ -67,5 +69,11 @@
     "Retail",
     "Remote & Freelance",
     "Other"
-  ]
+  ],
+  "job_intent_tags": {
+    "construction": ["construction", "builder", "carpenter", "mason", "bricklayer", "plumber", "welder", "electrician", "roofer", "scaffolder", "civil site", "heavy equipment", "laborer"],
+    "farming": ["farm worker", "farmer", "agriculture", "agricultural", "fruit picker", "harvest", "greenhouse", "livestock", "poultry", "dairy", "tractor operator", "irrigation", "horticulture", "orchard", "vineyard", "seasonal farm"],
+    "visa_sponsorship": ["visa sponsorship", "visa sponsor", "sponsorship available", "sponsor visa", "work permit sponsorship", "work permit provided", "employer sponsorship", "immigration sponsorship", "sponsorship provided"],
+    "no_sponsorship": ["no sponsorship", "without sponsorship", "must have right to work", "must already have work authorization", "work authorization required", "no visa sponsorship", "unable to sponsor"]
+  }
 }
