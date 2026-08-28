@@ -1,14 +1,71 @@
 {
   "feeds": [
-    {"name":"Remotive","url":"https://remotive.com/feed","format":"rss","region":"Global","type":"remote","categories":["technology","design","marketing","customer-support","software","data"]},
-    {"name":"Arbeitnow","url":"https://www.arbeitnow.com/api/job-board-api","format":"json","region":"Europe/Global","type":"general","categories":["technology","construction","engineering","healthcare","hospitality","logistics","finance","administration","sales","customer-service","trades"]}
+    {
+      "name": "Arbeitnow",
+      "url": "https://www.arbeitnow.com/api/job-board-api",
+      "format": "json",
+      "region": "Europe/Global",
+      "type": "general"
+    }
   ],
-  "api_sources": [
-    {"name":"Adzuna","enabled":false,"requires":"ADZUNA_APP_ID and ADZUNA_APP_KEY","countries":["gb","us","ca","au","de","fr","nl","nz","sg","za","ng"],"categories":["construction","technology","engineering","healthcare","hospitality","logistics","driving","cleaning","warehouse","retail","finance","administration","sales","customer-service","trades"]},
-    {"name":"USAJOBS","enabled":false,"requires":"USAJOBS_API_KEY","region":"United States","categories":["construction","technology","engineering","healthcare","administration","logistics","security","trades"]}
+  "public_api_sources": [
+    {
+      "name": "Jobicy",
+      "url": "https://jobicy.com/api/v2/remote-jobs?count=200",
+      "format": "json",
+      "region": "Worldwide",
+      "type": "remote",
+      "requires_key": false,
+      "attribution_required": true
+    },
+    {
+      "name": "RemoteOK",
+      "url": "https://remoteok.com/api",
+      "format": "json",
+      "region": "Worldwide",
+      "type": "remote",
+      "requires_key": false,
+      "attribution_required": true
+    }
   ],
-  "job_categories":[
-    "Construction & Skilled Trades","Technology & IT","Engineering","Healthcare","Driving & Transport","Logistics & Warehouse","Hospitality & Catering","Cleaning & Facilities","Security","Finance & Accounting","Administration","Sales & Customer Service","Marketing & Design","Education","Retail","Remote & Freelance","Other"
+  "credentialed_api_sources": [
+    {
+      "name": "Adzuna",
+      "enabled": true,
+      "requires": "ADZUNA_APP_ID and ADZUNA_APP_KEY",
+      "countries": ["gb", "us", "ca", "au", "de", "fr", "nl", "nz", "sg", "za", "ng"]
+    },
+    {
+      "name": "USAJOBS",
+      "enabled": false,
+      "requires": "USAJOBS_API_KEY",
+      "region": "United States"
+    }
   ],
-  "search_queries":["construction","electrician","welder","plumber","carpenter","mason","civil engineer","software developer","web developer","IT support","data analyst","cybersecurity","nurse","healthcare","driver","warehouse","logistics","hotel","cook","chef","cleaner","security","accountant","administrator","sales","customer service"]
+  "verification_policy": {
+    "never_claim_guaranteed_legitimacy": true,
+    "preserve_original_application_url": true,
+    "flag_unreachable_application_urls": true,
+    "flag_scam_language": true,
+    "deduplicate_by_canonical_url": true
+  },
+  "job_categories": [
+    "Construction & Skilled Trades",
+    "Technology & IT",
+    "Engineering",
+    "Healthcare",
+    "Driving & Transport",
+    "Logistics & Warehouse",
+    "Hospitality & Catering",
+    "Cleaning & Facilities",
+    "Security",
+    "Finance & Accounting",
+    "Administration",
+    "Sales & Customer Service",
+    "Marketing & Design",
+    "Education",
+    "Retail",
+    "Remote & Freelance",
+    "Other"
+  ]
 }
