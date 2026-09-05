@@ -2,8 +2,9 @@ name: JobSeek AI Agent - Global Job Discovery
 
 on:
   schedule:
-    # GitHub Actions schedules use UTC. Offset the minute from the hour to reduce queue contention.
-    - cron: '17 */2 * * *'
+    # Nigeria/WAT is UTC+1. Run at 12:00am, 12:00pm and 6:00pm Nigeria time.
+    # GitHub Actions uses UTC, so these are 23:00, 11:00 and 17:00 UTC.
+    - cron: '0 23,11,17 * * *'
   workflow_dispatch:
 
 permissions:
@@ -15,9 +16,9 @@ concurrency:
 
 jobs:
   discover:
-    name: Discover, verify and publish jobs
+    name: Discover, verify, clean and publish jobs
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,10 +34,13 @@ jobs:
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
           ADZUNA_COUNTRIES: gb,us,ca,au,de,fr,nl,nz,sg,za,ng
           ADZUNA_QUERIES: construction,electrician,driver,warehouse,healthcare,engineering,technology,hospitality,cleaning,finance,sales
-          JOB_URL_CHECK_LIMIT: '40'
+          JOB_URL_CHECK_LIMIT: '60'
         run: python scripts/ai_job_agent.py
 
-      - name: Commit updated job data
+      - name: Remove expired and unsafe listings
+        run: python scripts/cleanup_jobs.py
+
+      - name: Commit refreshed job data
         run: |
           git config user.name 'JobSeek AI Agent'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
@@ -44,6 +48,6 @@ jobs:
           if git diff --cached --quiet; then
             echo 'No job data changes.'
           else
-            git commit -m 'chore: AI agent refresh global job listings'
+            git commit -m 'chore: refresh and clean global job listings'
             git push
           fi
