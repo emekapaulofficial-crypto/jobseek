@@ -1,9 +1,8 @@
 /* JobSeek Supabase client foundation.
- * Safe for GitHub Pages: only the publishable/anon key belongs here.
- * Replace the placeholders with your Supabase project URL and publishable key.
+ * The publishable/anon key is safe for browser use; never put a service-role key here.
  */
 const JOBSEEK_SUPABASE_URL = window.JOBSEEK_SUPABASE_URL || 'https://eavamfsbasjvngeqsyua.supabase.co';
-const JOBSEEK_SUPABASE_KEY = window.JOBSEEK_SUPABASE_KEY || '';
+const JOBSEEK_SUPABASE_KEY = window.JOBSEEK_SUPABASE_KEY || 'sb_publishable_E40QKzlb3dtIoawvmxPHfA_07t2XIxu';
 
 window.JobSeekSupabase = {
   configured: Boolean(JOBSEEK_SUPABASE_URL && JOBSEEK_SUPABASE_KEY),
@@ -11,8 +10,6 @@ window.JobSeekSupabase = {
   key: JOBSEEK_SUPABASE_KEY
 };
 
-// Supabase JS is loaded by pages that need authentication.
-// Keeping this small wrapper avoids exposing a service-role key in the static site.
 window.JobSeekAuth = {
   async signUp(email, password, metadata = {}) {
     if (!window.supabase?.createClient || !JOBSEEK_SUPABASE_KEY) throw new Error('Supabase client is not configured.');

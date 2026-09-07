@@ -3,7 +3,6 @@ name: JobSeek AI Agent - Global Job Discovery
 on:
   schedule:
     # Nigeria/WAT is UTC+1. Run at 12:00am, 12:00pm and 6:00pm Nigeria time.
-    # GitHub Actions uses UTC, so these are 23:00, 11:00 and 17:00 UTC.
     - cron: '0 23,11,17 * * *'
   workflow_dispatch:
 
@@ -18,7 +17,7 @@ jobs:
   discover:
     name: Discover, verify, clean and publish jobs
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,12 +32,56 @@ jobs:
           ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
           ADZUNA_COUNTRIES: gb,us,ca,au,de,fr,nl,nz,sg,za,ng
-          ADZUNA_QUERIES: construction,electrician,driver,warehouse,healthcare,engineering,technology,hospitality,cleaning,finance,sales
-          JOB_URL_CHECK_LIMIT: '60'
+          ADZUNA_QUERIES: construction,electrician,carpenter,welder,plumber,mason,driver,warehouse,healthcare,engineering,technology,hospitality,cleaning,finance,sales
+          JOB_URL_CHECK_LIMIT: '100'
         run: python scripts/ai_job_agent.py
+
+      - name: Add trusted remote sources and remove Jobicy
+        run: python scripts/add_trusted_job_sources.py
 
       - name: Remove expired and unsafe listings
         run: python scripts/cleanup_jobs.py
+
+      - name: Validate published job feed
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('jobs.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+          jobs = data.get('jobs', [])
+          required = ('id', 'title', 'company', 'location', 'url', 'apply_url', 'source', 'verification_status')
+          allowed = {'VERIFIED', 'NOT CONFIRMED'}
+          seen = set()
+
+          for job in jobs:
+              missing = [key for key in required if not job.get(key)]
+              if missing:
+                  raise SystemExit(f"Invalid job {job.get('id')}: missing {missing}")
+              if job['verification_status'] not in allowed:
+                  raise SystemExit(f"REMOVED job leaked into public feed: {job.get('id')}")
+              if job['id'] in seen:
+                  raise SystemExit(f"Duplicate job id: {job['id']}")
+              seen.add(job['id'])
+              if not str(job['url']).startswith(('http://', 'https://')):
+                  raise SystemExit(f"Invalid source URL: {job['id']}")
+              if not str(job['apply_url']).startswith(('http://', 'https://')):
+                  raise SystemExit(f"Invalid application URL: {job['id']}")
+              if job.get('visa_sponsorship') and not job.get('visa_evidence'):
+                  raise SystemExit(f"Visa sponsorship has no evidence: {job['id']}")
+
+          if any(str(j.get('source', '')).lower() == 'jobicy' for j in jobs):
+              raise SystemExit('Jobicy listing leaked into public feed')
+          if data.get('count') != len(jobs):
+              raise SystemExit('jobs.json count does not match jobs array')
+          if not data.get('updated_at'):
+              raise SystemExit('jobs.json has no updated_at timestamp')
+
+          print(f'Validated {len(jobs)} public JobSeek listings.')
+          print(f"VERIFIED={data.get('verified_count', 0)} NOT_CONFIRMED={data.get('not_confirmed_count', 0)}")
+          print('SOURCES=' + ', '.join(data.get('sources', [])))
+          PY
 
       - name: Commit refreshed job data
         run: |
