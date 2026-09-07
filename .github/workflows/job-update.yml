@@ -17,7 +17,7 @@ jobs:
   discover:
     name: Discover, verify, clean and publish jobs
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,9 +32,12 @@ jobs:
           ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
           ADZUNA_COUNTRIES: gb,us,ca,au,de,fr,nl,nz,sg,za,ng
-          ADZUNA_QUERIES: construction,electrician,driver,warehouse,healthcare,engineering,technology,hospitality,cleaning,finance,sales
-          JOB_URL_CHECK_LIMIT: '60'
+          ADZUNA_QUERIES: construction,electrician,carpenter,welder,plumber,mason,driver,warehouse,healthcare,engineering,technology,hospitality,cleaning,finance,sales
+          JOB_URL_CHECK_LIMIT: '100'
         run: python scripts/ai_job_agent.py
+
+      - name: Add trusted remote sources and remove Jobicy
+        run: python scripts/add_trusted_job_sources.py
 
       - name: Remove expired and unsafe listings
         run: python scripts/cleanup_jobs.py
@@ -43,7 +46,6 @@ jobs:
         run: |
           python - <<'PY'
           import json
-          from datetime import datetime, timezone
           from pathlib import Path
 
           path = Path('jobs.json')
@@ -69,6 +71,8 @@ jobs:
               if job.get('visa_sponsorship') and not job.get('visa_evidence'):
                   raise SystemExit(f"Visa sponsorship has no evidence: {job['id']}")
 
+          if any(str(j.get('source', '')).lower() == 'jobicy' for j in jobs):
+              raise SystemExit('Jobicy listing leaked into public feed')
           if data.get('count') != len(jobs):
               raise SystemExit('jobs.json count does not match jobs array')
           if not data.get('updated_at'):
@@ -76,6 +80,7 @@ jobs:
 
           print(f'Validated {len(jobs)} public JobSeek listings.')
           print(f"VERIFIED={data.get('verified_count', 0)} NOT_CONFIRMED={data.get('not_confirmed_count', 0)}")
+          print('SOURCES=' + ', '.join(data.get('sources', [])))
           PY
 
       - name: Commit refreshed job data
