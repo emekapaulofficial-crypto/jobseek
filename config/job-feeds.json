@@ -3,15 +3,21 @@
     {"name":"Arbeitnow","url":"https://www.arbeitnow.com/api/job-board-api","format":"json","region":"Europe/Global","type":"general"}
   ],
   "public_api_sources": [
-    {"name":"Jobicy","url":"https://jobicy.com/api/v2/remote-jobs?count=200","format":"json","region":"Worldwide","type":"remote","requires_key":false,"attribution_required":true},
-    {"name":"RemoteOK","url":"https://remoteok.com/api","format":"json","region":"Worldwide","type":"remote","requires_key":false,"attribution_required":true}
+    {"name":"RemoteOK","url":"https://remoteok.com/api","format":"json","region":"Worldwide","type":"remote","requires_key":false,"attribution_required":true},
+    {"name":"Remotive","url":"https://remotive.com/api/remote-jobs?limit=200","format":"json","region":"Worldwide","type":"remote","requires_key":false,"attribution_required":true},
+    {"name":"Himalayas","url":"https://himalayas.app/jobs/api","format":"json","region":"Worldwide","type":"remote","requires_key":false,"attribution_required":true},
+    {"name":"We Work Remotely","url":"https://weworkremotely.com/remote-jobs.rss","format":"rss","region":"Worldwide","type":"remote","requires_key":false,"attribution_required":true}
   ],
   "credentialed_api_sources": [
     {"name":"Adzuna","enabled":true,"requires":"ADZUNA_APP_ID and ADZUNA_APP_KEY","countries":["gb","us","ca","au","de","fr","nl","nz","sg","za","ng"]},
     {"name":"USAJOBS","enabled":false,"requires":"USAJOBS_API_KEY","region":"United States"}
   ],
-  "verification_policy":{"never_claim_guaranteed_legitimacy":true,"preserve_original_application_url":true,"flag_unreachable_application_urls":true,"flag_scam_language":true,"deduplicate_by_canonical_url":true},
+  "excluded_sources":[
+    {"name":"Jobicy","reason":"Removed from JobSeek public feed because users reported unreliable application routes. It will not be ingested or displayed."}
+  ],
+  "verification_policy":{"never_claim_guaranteed_legitimacy":true,"preserve_original_application_url":true,"flag_unreachable_application_urls":true,"flag_scam_language":true,"deduplicate_by_canonical_url":true,"direct_employer_requires_explicit_evidence":true,"visa_sponsorship_requires_explicit_source_evidence":true},
   "job_categories":["Construction & Skilled Trades","Farming & Agriculture","Farm Worker & Seasonal Agriculture","Technology & Software","Cybersecurity","Data & AI","Cloud & DevOps","Web & Mobile Development","IT Support & Systems","Product & Project Management","UI/UX & Design","Engineering","Healthcare","Driving & Transport","Logistics & Warehouse","Hospitality & Catering","Cleaning & Facilities","Security","Finance & Accounting","Administration","Sales & Customer Service","Marketing & Design","Education","Retail","Remote & Freelance","Other"],
+  "priority_search_terms":["construction","electrician","carpenter","welder","plumber","mason","bricklayer","roofer","scaffolder","civil engineer","heavy equipment operator","construction driver","site supervisor","remote","work from home","worldwide remote","visa sponsorship","work permit sponsorship"],
   "job_intent_tags":{
     "construction":["construction","builder","carpenter","mason","bricklayer","plumber","welder","electrician","roofer","scaffolder","civil site","heavy equipment","laborer"],
     "farming":["farm worker","farmer","agriculture","agricultural","fruit picker","harvest","greenhouse","livestock","poultry","dairy","tractor operator","irrigation","horticulture","orchard","vineyard","seasonal farm"],
