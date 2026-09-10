@@ -36,11 +36,29 @@ jobs:
           JOB_URL_CHECK_LIMIT: '100'
         run: python scripts/ai_job_agent.py
 
-      - name: Add trusted remote sources and remove Jobicy
+      - name: Permanently purge Jobicy records
+        run: python scripts/purge_jobicy.py
+
+      - name: Add trusted remote sources
         run: python scripts/add_trusted_job_sources.py
+
+      - name: Permanently purge Jobicy again after source enrichment
+        run: python scripts/purge_jobicy.py
 
       - name: Remove expired and unsafe listings
         run: python scripts/cleanup_jobs.py
+
+      - name: Final Jobicy leak check
+        run: |
+          python - <<'PY'
+          import json
+          data = json.load(open('jobs.json', encoding='utf-8'))
+          jobs = data.get('jobs', [])
+          leaked = [j for j in jobs if str(j.get('source', '')).strip().lower() == 'jobicy' or 'jobicy.com' in str(j.get('url', '')).lower() or 'jobicy.com' in str(j.get('apply_url', '')).lower()]
+          if leaked:
+              raise SystemExit(f'Jobicy leaked into public feed: {len(leaked)}')
+          print(f'Jobicy check passed: {len(jobs)} listings remain.')
+          PY
 
       - name: Validate published job feed
         run: |
@@ -62,7 +80,7 @@ jobs:
               if job['verification_status'] not in allowed:
                   raise SystemExit(f"REMOVED job leaked into public feed: {job.get('id')}")
               if job['id'] in seen:
-                  raise SystemExit(f"Duplicate job id: {job['id']}")
+                  raise SystemExit(f"Duplicate job id: {job.get('id')}")
               seen.add(job['id'])
               if not str(job['url']).startswith(('http://', 'https://')):
                   raise SystemExit(f"Invalid source URL: {job['id']}")
@@ -71,8 +89,8 @@ jobs:
               if job.get('visa_sponsorship') and not job.get('visa_evidence'):
                   raise SystemExit(f"Visa sponsorship has no evidence: {job['id']}")
 
-          if any(str(j.get('source', '')).lower() == 'jobicy' for j in jobs):
-              raise SystemExit('Jobicy listing leaked into public feed')
+          if any('jobicy.com' in str(j.get(k, '')).lower() for j in jobs for k in ('url', 'apply_url')):
+              raise SystemExit('Jobicy URL leaked into public feed')
           if data.get('count') != len(jobs):
               raise SystemExit('jobs.json count does not match jobs array')
           if not data.get('updated_at'):
@@ -91,6 +109,6 @@ jobs:
           if git diff --cached --quiet; then
             echo 'No job data changes.'
           else
-            git commit -m 'chore: refresh and clean global job listings'
+            git commit -m 'chore: permanently remove Jobicy and refresh job sources'
             git push
           fi
