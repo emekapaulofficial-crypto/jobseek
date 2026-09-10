@@ -1,6 +1,14 @@
 name: JobSeek AI Agent - Global Job Discovery
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/job-update.yml'
+      - 'scripts/ai_job_agent.py'
+      - 'scripts/purge_jobicy.py'
+      - 'scripts/add_trusted_job_sources.py'
+      - 'scripts/cleanup_jobs.py'
   schedule:
     # Nigeria/WAT is UTC+1. Run at 12:00am, 12:00pm and 6:00pm Nigeria time.
     - cron: '0 23,11,17 * * *'
