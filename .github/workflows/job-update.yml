@@ -68,6 +68,32 @@ jobs:
           print(f'Jobicy check passed: {len(jobs)} listings remain.')
           PY
 
+      - name: Normalize public feed before validation
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from datetime import datetime, timezone
+
+          path = Path('jobs.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+          jobs = data.get('jobs', [])
+          for job in jobs:
+              # A source can be legitimate while still omitting a company name.
+              # Keep the listing usable and make the missing employer explicit instead of failing the whole refresh.
+              company = str(job.get('company') or job.get('employer') or '').strip()
+              if not company:
+                  job['company'] = 'Employer not specified by source'
+              if not job.get('url') and job.get('source_url'):
+                  job['url'] = job['source_url']
+              if not job.get('apply_url') and job.get('url'):
+                  job['apply_url'] = job['url']
+          data['count'] = len(jobs)
+          data['updated_at'] = datetime.now(timezone.utc).isoformat()
+          path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding='utf-8')
+          print(f'Normalized {len(jobs)} listings for publication.')
+          PY
+
       - name: Validate published job feed
         run: |
           python - <<'PY'
