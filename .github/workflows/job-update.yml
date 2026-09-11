@@ -62,7 +62,7 @@ jobs:
           import json
           data = json.load(open('jobs.json', encoding='utf-8'))
           jobs = data.get('jobs', [])
-          leaked = [j for j in jobs if str(j.get('source', '')).strip().lower() == 'jobicy' or 'jobicy.com' in str(j.get('url', '')).lower() or 'jobicy.com' in str(j.get('apply_url', '')).lower()]
+          leaked = [j for j in jobs if str(j.get('source', '')).strip().lower() == 'jobicy' or 'jobicy.com' in str(j.get('url', '')).lower() or 'jobicy.com' in str(j.get('apply_url', '')).lower() or 'jobicy.com' in str(j.get('source_url', '')).lower()]
           if leaked:
               raise SystemExit(f'Jobicy leaked into public feed: {len(leaked)}')
           print(f'Jobicy check passed: {len(jobs)} listings remain.')
@@ -78,7 +78,7 @@ jobs:
           data = json.loads(path.read_text(encoding='utf-8'))
           jobs = data.get('jobs', [])
           required = ('id', 'title', 'company', 'location', 'url', 'apply_url', 'source', 'verification_status')
-          allowed = {'VERIFIED', 'NOT CONFIRMED'}
+          allowed = {'VERIFIED', 'NOT CONFIRMED', 'source_verified'}
           seen = set()
 
           for job in jobs:
@@ -86,7 +86,7 @@ jobs:
               if missing:
                   raise SystemExit(f"Invalid job {job.get('id')}: missing {missing}")
               if job['verification_status'] not in allowed:
-                  raise SystemExit(f"REMOVED job leaked into public feed: {job.get('id')}")
+                  raise SystemExit(f"Invalid verification status for {job.get('id')}: {job['verification_status']}")
               if job['id'] in seen:
                   raise SystemExit(f"Duplicate job id: {job.get('id')}")
               seen.add(job['id'])
@@ -97,8 +97,10 @@ jobs:
               if job.get('visa_sponsorship') and not job.get('visa_evidence'):
                   raise SystemExit(f"Visa sponsorship has no evidence: {job['id']}")
 
-          if any('jobicy.com' in str(j.get(k, '')).lower() for j in jobs for k in ('url', 'apply_url')):
+          if any('jobicy.com' in str(j.get(k, '')).lower() for j in jobs for k in ('url', 'apply_url', 'source_url')):
               raise SystemExit('Jobicy URL leaked into public feed')
+          if any(str(j.get('source', '')).strip().lower() == 'jobicy' for j in jobs):
+              raise SystemExit('Jobicy source leaked into public feed')
           if data.get('count') != len(jobs):
               raise SystemExit('jobs.json count does not match jobs array')
           if not data.get('updated_at'):
