@@ -56,6 +56,64 @@ jobs:
       - name: Remove expired and unsafe listings
         run: python scripts/cleanup_jobs.py
 
+      - name: Normalize public feed before validation
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from datetime import datetime, timezone
+
+          path = Path('jobs.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+          source_jobs = data.get('jobs', [])
+          jobs = []
+          seen = set()
+          dropped = 0
+
+          for job in source_jobs:
+              if not isinstance(job, dict):
+                  dropped += 1
+                  continue
+              # Never publish records without the minimum information needed to apply.
+              job_id = str(job.get('id') or '').strip()
+              title = str(job.get('title') or '').strip()
+              location = str(job.get('location') or 'See source listing').strip()
+              source = str(job.get('source') or '').strip()
+              url = str(job.get('url') or job.get('source_url') or '').strip()
+              apply_url = str(job.get('apply_url') or url).strip()
+              if not job_id or not title or not source or not url or not apply_url:
+                  dropped += 1
+                  continue
+              if job_id in seen:
+                  dropped += 1
+                  continue
+              if 'jobicy.com' in url.lower() or 'jobicy.com' in apply_url.lower() or 'jobicy.com' in str(job.get('source_url') or '').lower() or source.lower() == 'jobicy':
+                  dropped += 1
+                  continue
+              company = str(job.get('company') or job.get('employer') or '').strip()
+              job['company'] = company or 'Employer not specified by source'
+              job['location'] = location
+              job['url'] = url
+              job['apply_url'] = apply_url
+              status = str(job.get('verification_status') or 'NOT CONFIRMED').strip().upper()
+              if status == 'SOURCE_VERIFIED':
+                  status = 'source_verified'
+              if status not in {'VERIFIED', 'NOT CONFIRMED', 'source_verified'}:
+                  status = 'NOT CONFIRMED'
+              job['verification_status'] = status
+              seen.add(job_id)
+              jobs.append(job)
+
+          data['jobs'] = jobs
+          data['count'] = len(jobs)
+          data['verified_count'] = sum(1 for j in jobs if j.get('verification_status') == 'VERIFIED')
+          data['not_confirmed_count'] = sum(1 for j in jobs if j.get('verification_status') != 'VERIFIED')
+          data['sources'] = sorted(set(str(j.get('source') or 'Connected source') for j in jobs))
+          data['updated_at'] = datetime.now(timezone.utc).isoformat()
+          path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding='utf-8')
+          print(f'Normalized {len(jobs)} publishable listings; dropped {dropped} invalid/duplicate/blocked records.')
+          PY
+
       - name: Final Jobicy leak check
         run: |
           python - <<'PY'
@@ -68,45 +126,16 @@ jobs:
           print(f'Jobicy check passed: {len(jobs)} listings remain.')
           PY
 
-      - name: Normalize public feed before validation
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          from datetime import datetime, timezone
-
-          path = Path('jobs.json')
-          data = json.loads(path.read_text(encoding='utf-8'))
-          jobs = data.get('jobs', [])
-          for job in jobs:
-              # A source can be legitimate while still omitting a company name.
-              # Keep the listing usable and make the missing employer explicit instead of failing the whole refresh.
-              company = str(job.get('company') or job.get('employer') or '').strip()
-              if not company:
-                  job['company'] = 'Employer not specified by source'
-              if not job.get('url') and job.get('source_url'):
-                  job['url'] = job['source_url']
-              if not job.get('apply_url') and job.get('url'):
-                  job['apply_url'] = job['url']
-          data['count'] = len(jobs)
-          data['updated_at'] = datetime.now(timezone.utc).isoformat()
-          path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding='utf-8')
-          print(f'Normalized {len(jobs)} listings for publication.')
-          PY
-
       - name: Validate published job feed
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-
-          path = Path('jobs.json')
-          data = json.loads(path.read_text(encoding='utf-8'))
+          data = json.loads(Path('jobs.json').read_text(encoding='utf-8'))
           jobs = data.get('jobs', [])
           required = ('id', 'title', 'company', 'location', 'url', 'apply_url', 'source', 'verification_status')
           allowed = {'VERIFIED', 'NOT CONFIRMED', 'source_verified'}
           seen = set()
-
           for job in jobs:
               missing = [key for key in required if not job.get(key)]
               if missing:
@@ -116,25 +145,17 @@ jobs:
               if job['id'] in seen:
                   raise SystemExit(f"Duplicate job id: {job.get('id')}")
               seen.add(job['id'])
-              if not str(job['url']).startswith(('http://', 'https://')):
-                  raise SystemExit(f"Invalid source URL: {job['id']}")
-              if not str(job['apply_url']).startswith(('http://', 'https://')):
-                  raise SystemExit(f"Invalid application URL: {job['id']}")
+              if not str(job['url']).startswith(('http://', 'https://')) or not str(job['apply_url']).startswith(('http://', 'https://')):
+                  raise SystemExit(f"Invalid application/source URL: {job['id']}")
               if job.get('visa_sponsorship') and not job.get('visa_evidence'):
                   raise SystemExit(f"Visa sponsorship has no evidence: {job['id']}")
-
           if any('jobicy.com' in str(j.get(k, '')).lower() for j in jobs for k in ('url', 'apply_url', 'source_url')):
               raise SystemExit('Jobicy URL leaked into public feed')
           if any(str(j.get('source', '')).strip().lower() == 'jobicy' for j in jobs):
               raise SystemExit('Jobicy source leaked into public feed')
-          if data.get('count') != len(jobs):
-              raise SystemExit('jobs.json count does not match jobs array')
-          if not data.get('updated_at'):
-              raise SystemExit('jobs.json has no updated_at timestamp')
-
+          if data.get('count') != len(jobs) or not data.get('updated_at'):
+              raise SystemExit('jobs.json metadata is invalid')
           print(f'Validated {len(jobs)} public JobSeek listings.')
-          print(f"VERIFIED={data.get('verified_count', 0)} NOT_CONFIRMED={data.get('not_confirmed_count', 0)}")
-          print('SOURCES=' + ', '.join(data.get('sources', [])))
           PY
 
       - name: Commit refreshed job data
@@ -145,6 +166,6 @@ jobs:
           if git diff --cached --quiet; then
             echo 'No job data changes.'
           else
-            git commit -m 'chore: permanently remove Jobicy and refresh job sources'
+            git commit -m 'chore: publish fresh global jobs without Jobicy'
             git push
           fi
