@@ -74,7 +74,6 @@ jobs:
               if not isinstance(job, dict):
                   dropped += 1
                   continue
-              # Never publish records without the minimum information needed to apply.
               job_id = str(job.get('id') or '').strip()
               title = str(job.get('title') or '').strip()
               location = str(job.get('location') or 'See source listing').strip()
