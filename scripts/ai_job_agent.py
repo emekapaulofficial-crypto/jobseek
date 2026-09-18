@@ -11,7 +11,7 @@ from urllib.parse import urlparse, urlencode
 from urllib.request import Request, urlopen
 from xml.etree import ElementTree as ET
 
-OUT="jobs.json"; CONFIG="config/job-feeds.json"; USER_AGENT="JobSeek-AI-Agent/2.2"
+OUT="jobs.json"; CONFIG="config/job-feeds.json"; USER_AGENT="JobSeek-AI-Agent/3.0"
 TRUSTED_SOURCES={"arbeitnow","adzuna","remoteok","remotive","himalayas","weworkremotely"}
 EXCLUDED_SOURCES={"jobicy","jobicy.com"}
 SCAM_TERMS=re.compile(r"\b(pay\s+to\s+apply|registration\s+fee|processing\s+fee|buy\s+equipment|crypto\s+payment|gift\s+card|western\s+union|telegram\s+only|whatsapp\s+only|guaranteed\s+income)\b",re.I)
@@ -63,6 +63,14 @@ def detect_country(location):
   for alias in aliases:
    if re.search(r"(^|[^a-z])"+re.escape(alias)+r"([^a-z]|$)",text,re.I):return country
  return ""
+def nigeria_eligibility(title,description,location,visa,remote):
+ text=f"{title} {description} {location}"
+ if NIGERIA_TERMS.search(text): return True,"nigeria"
+ if visa: return True,"visa_sponsorship"
+ if INTERNATIONAL_ELIGIBLE_TERMS.search(text): return True,"international_eligible"
+ if remote and not COUNTRY_LOCK_TERMS.search(text): return True,"remote_no_country_lock"
+ return False,"not_nigeria_eligible"
+
 def normalize(source,item):
  source_key=source.lower().replace(" ","")
  if source_key in EXCLUDED_SOURCES:return None
@@ -70,8 +78,10 @@ def normalize(source,item):
  if not title or not url or "jobicy.com" in url.lower():return None
  description=clean(item.get("description") or item.get("jobDescription") or item.get("summary") or item.get("jobExcerpt")); company=clean(item.get("company") or item.get("companyName")); location=clean(item.get("location") or item.get("jobGeo") or "See listing")
  published=clean(item.get("published_at") or item.get("pubDate") or item.get("created") or item.get("date")); closing=clean(item.get("closing") or item.get("closing_date") or item.get("deadline") or item.get("expires") or item.get("expirationDate"))
- risk,risk_flags=risk_for(title,description,company,url); text=f"{title} {description} {location}"; visa=bool(VISA_TERMS.search(text)) and not bool(NO_VISA_TERMS.search(text)); visa_evidence=VISA_TERMS.findall(text) if visa else []
- return {"id":hashlib.sha256((source+"|"+url).encode()).hexdigest()[:16],"title":title,"company":company,"location":location,"country":clean(item.get("country")) or detect_country(location),"description":description[:3000],"url":url,"apply_url":url,"source":source,"source_url":url,"published_at":published,"closing_date":closing or "Not specified","fetched_at":datetime.now(timezone.utc).isoformat(),"category":category_for(title,description),"employment_type":clean(item.get("jobType") or item.get("type") or item.get("employment_type")),"salary":clean(item.get("salary") or ""),"remote":bool(re.search(r"remote|work from home|anywhere",text,re.I)),"direct_employer":False,"source_trusted":source_key in TRUSTED_SOURCES,"visa_sponsorship":visa,"visa_evidence":sorted(set(visa_evidence)),"risk_level":risk,"risk_flags":risk_flags,"verification_status":"NOT CONFIRMED","verification_reasons":[],"verification_checked_at":None,"apply_url_checked":False,"apply_url_status":"not_checked"}
+ risk,risk_flags=risk_for(title,description,company,url); text=f"{title} {description} {location}"; visa=bool(VISA_TERMS.search(text)) and not bool(NO_VISA_TERMS.search(text)); visa_evidence=VISA_TERMS.findall(text) if visa else []; remote=bool(re.search(r"remote|work from home|anywhere",text,re.I))
+ eligible,eligibility_reason=nigeria_eligibility(title,description,location,visa,remote)
+ if not eligible:return None
+ return {"id":hashlib.sha256((source+"|"+url).encode()).hexdigest()[:16],"title":title,"company":company,"location":location,"country":clean(item.get("country")) or detect_country(location),"description":description[:3000],"url":url,"apply_url":url,"source":source,"source_url":url,"published_at":published,"closing_date":closing or "Not specified","fetched_at":datetime.now(timezone.utc).isoformat(),"category":category_for(title,description),"employment_type":clean(item.get("jobType") or item.get("type") or item.get("employment_type")),"salary":clean(item.get("salary") or ""),"remote":bool(re.search(r"remote|work from home|anywhere",text,re.I)),"direct_employer":False,"nigeria_eligible":True,"nigeria_eligibility_reason":eligibility_reason,"source_trusted":source_key in TRUSTED_SOURCES,"visa_sponsorship":visa,"visa_evidence":sorted(set(visa_evidence)),"risk_level":risk,"risk_flags":risk_flags,"verification_status":"NOT CONFIRMED","verification_reasons":[],"verification_checked_at":None,"apply_url_checked":False,"apply_url_status":"not_checked"}
 def from_json(data,source):
  obj=json.loads(data); rows=obj.get("jobs",obj.get("results",[])) if isinstance(obj,dict) else obj; return [j for row in rows or [] if isinstance(row,dict) and (j:=normalize(source,row))]
 def from_rss(data,source):
@@ -91,7 +101,7 @@ def remotive():data,_=fetch("https://remotive.com/api/remote-jobs?limit=200"); r
 def adzuna():
  aid,key=os.getenv("ADZUNA_APP_ID"),os.getenv("ADZUNA_APP_KEY")
  if not aid or not key:return [],[]
- countries=os.getenv("ADZUNA_COUNTRIES","gb,us,ca,au,de,fr,nl,nz,sg,za,ng").split(","); queries=os.getenv("ADZUNA_QUERIES","construction,electrician,driver,warehouse,healthcare,engineering,technology,hospitality,cleaning,finance,sales").split(","); out=[]; errors=[]
+ countries=os.getenv("ADZUNA_COUNTRIES","ng,gb,us,ca,au,de,fr,nl,nz,za").split(","); queries=os.getenv("ADZUNA_QUERIES","construction,electrician,driver,warehouse,healthcare,engineering,technology,hospitality,cleaning,finance,sales").split(","); out=[]; errors=[]
  for country in countries:
   for query in queries:
    try:
@@ -151,9 +161,9 @@ def main():
  jobs=deduped
  limit=int(os.getenv("JOB_URL_CHECK_LIMIT","60"))
  for i,job in enumerate(jobs):verify_job(job,check_urls=(i<limit))
- public_jobs=[j for j in jobs if j["verification_status"]!="REMOVED" and "jobicy.com" not in str(j.get("url","")).lower() and "jobicy.com" not in str(j.get("apply_url","")).lower()]
+ public_jobs=[j for j in jobs if j["verification_status"]!="REMOVED" and j.get("nigeria_eligible") and "jobicy.com" not in str(j.get("url","")).lower() and "jobicy.com" not in str(j.get("apply_url","")).lower()]
  public_jobs.sort(key=lambda x:(x.get("verification_status")=="VERIFIED",x.get("published_at","")),reverse=True)
- payload={"agent":{"name":"JobSeek AI Job Agent","version":"2.2","mode":"automated_discovery_and_verification","updated_at":datetime.now(timezone.utc).isoformat()},"updated_at":datetime.now(timezone.utc).isoformat(),"count":len(public_jobs),"verified_count":sum(j["verification_status"]=="VERIFIED" for j in public_jobs),"not_confirmed_count":sum(j["verification_status"]=="NOT CONFIRMED" for j in public_jobs),"removed_count":sum(j["verification_status"]=="REMOVED" for j in jobs),"direct_employer_count":sum(j["direct_employer"] for j in public_jobs),"visa_sponsorship_count":sum(j["visa_sponsorship"] for j in public_jobs),"jobs":public_jobs,"source_errors":errors,"sources":sorted({j["source"] for j in public_jobs})}
+ payload={"agent":{"name":"JobSeek AI Job Agent","version":"3.0","mode":"nigeria_focused_discovery_and_verification","market":{"primary_country":"Nigeria","international_for":"Nigerian applicants","international_rule":"Nigeria, internationally eligible remote, Africa/global roles, or explicit visa/work-permit sponsorship"},"updated_at":datetime.now(timezone.utc).isoformat()},"updated_at":datetime.now(timezone.utc).isoformat(),"count":len(public_jobs),"verified_count":sum(j["verification_status"]=="VERIFIED" for j in public_jobs),"not_confirmed_count":sum(j["verification_status"]=="NOT CONFIRMED" for j in public_jobs),"removed_count":sum(j["verification_status"]=="REMOVED" for j in jobs),"direct_employer_count":sum(j["direct_employer"] for j in public_jobs),"visa_sponsorship_count":sum(j["visa_sponsorship"] for j in public_jobs),"jobs":public_jobs,"source_errors":errors,"sources":sorted({j["source"] for j in public_jobs})}
  with open(OUT,"w",encoding="utf-8") as fh:json.dump(payload,fh,ensure_ascii=False,indent=2)
  print(f"JobSeek: {len(public_jobs)} public jobs; {payload['verified_count']} VERIFIED; {payload['not_confirmed_count']} NOT CONFIRMED; {payload['removed_count']} removed")
 if __name__=="__main__":main()
