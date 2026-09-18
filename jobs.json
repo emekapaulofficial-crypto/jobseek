@@ -10,7 +10,7 @@
     },
     "updated_at": "2026-09-18T17:48:34.628996+00:00"
   },
-  "updated_at": "2026-09-18T17:48:36.160210+00:00",
+  "updated_at": "2026-09-18T19:15:47.297622+00:00",
   "count": 0,
   "verified_count": 0,
   "not_confirmed_count": 0,
@@ -48,5 +48,15 @@
     "removed_unsafe": 0,
     "remaining": 0
   },
-  "freshness_window_days": 14
+  "freshness_window_days": 14,
+  "paul_guardian": {
+    "name": "Paul",
+    "visibility": "ADMIN_ONLY",
+    "public_display": false,
+    "status": "ACTIVE",
+    "mode": "automated_job_quality_control",
+    "last_run_at": "2026-09-18T19:15:47.297622+00:00",
+    "removed_this_run": 0,
+    "public_rule": "VERIFIED + posted date + active + working 2xx/3xx application URL"
+  }
 }
