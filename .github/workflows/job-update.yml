@@ -18,7 +18,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: jobseek-ai-agent
+  group: jobseek-job-data
   cancel-in-progress: false
 
 jobs:
@@ -128,4 +128,4 @@ jobs:
           git config user.name 'JobSeek AI Agent'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add jobs.json
-          if git diff --cached --quiet; then echo 'No job data changes.'; else git commit -m 'chore: publish fresh global jobs without Jobicy'; git push; fi
+          if git diff --cached --quiet; then echo 'No job data changes.'; else git commit -m 'chore: publish fresh global jobs without Jobicy'; git pull --rebase origin main; git push; fi
