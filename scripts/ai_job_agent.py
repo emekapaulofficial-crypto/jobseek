@@ -65,11 +65,12 @@ def detect_country(location):
  return ""
 def nigeria_eligibility(title,description,location,visa,remote):
  text=f"{title} {description} {location}"
- if NIGERIA_TERMS.search(text): return True,"nigeria"
- if visa: return True,"visa_sponsorship"
- if INTERNATIONAL_ELIGIBLE_TERMS.search(text): return True,"international_eligible"
- if remote and not COUNTRY_LOCK_TERMS.search(text): return True,"remote_no_country_lock"
- return False,"not_nigeria_eligible"
+ # Global feed: keep international jobs, but reject roles explicitly locked to
+ # a foreign residence/work-authorization/local-bank requirement that excludes
+ # applicants outside that country.
+ if COUNTRY_LOCK_TERMS.search(text) and not VISA_TERMS.search(text) and not NIGERIA_TERMS.search(text):
+  return False,"foreign_country_locked"
+ return True,"global_or_nigeria_eligible"
 
 def normalize(source,item):
  source_key=source.lower().replace(" ","")
@@ -161,9 +162,9 @@ def main():
  jobs=deduped
  limit=int(os.getenv("JOB_URL_CHECK_LIMIT","60"))
  for i,job in enumerate(jobs):verify_job(job,check_urls=(i<limit))
- public_jobs=[j for j in jobs if j["verification_status"]!="REMOVED" and j.get("nigeria_eligible") and "jobicy.com" not in str(j.get("url","")).lower() and "jobicy.com" not in str(j.get("apply_url","")).lower()]
+ public_jobs=[j for j in jobs if j["verification_status"]!="REMOVED" and "jobicy.com" not in str(j.get("url","")).lower() and "jobicy.com" not in str(j.get("apply_url","")).lower()]
  public_jobs.sort(key=lambda x:(x.get("verification_status")=="VERIFIED",x.get("published_at","")),reverse=True)
- payload={"agent":{"name":"JobSeek AI Job Agent","version":"3.0","mode":"nigeria_focused_discovery_and_verification","market":{"primary_country":"Nigeria","international_for":"Nigerian applicants","international_rule":"Nigeria, internationally eligible remote, Africa/global roles, or explicit visa/work-permit sponsorship"},"updated_at":datetime.now(timezone.utc).isoformat()},"updated_at":datetime.now(timezone.utc).isoformat(),"count":len(public_jobs),"verified_count":sum(j["verification_status"]=="VERIFIED" for j in public_jobs),"not_confirmed_count":sum(j["verification_status"]=="NOT CONFIRMED" for j in public_jobs),"removed_count":sum(j["verification_status"]=="REMOVED" for j in jobs),"direct_employer_count":sum(j["direct_employer"] for j in public_jobs),"visa_sponsorship_count":sum(j["visa_sponsorship"] for j in public_jobs),"jobs":public_jobs,"source_errors":errors,"sources":sorted({j["source"] for j in public_jobs})}
+ payload={"agent":{"name":"JobSeek AI Job Agent","version":"3.0","mode":"global_discovery_and_verification","market":{"primary_country":"Global","international_for":"All applicants","international_rule":"Global job feed; exclude roles explicitly locked to a foreign residence/work-authorization/local-bank requirement unless sponsorship or Nigeria eligibility is stated"},"updated_at":datetime.now(timezone.utc).isoformat()},"updated_at":datetime.now(timezone.utc).isoformat(),"count":len(public_jobs),"verified_count":sum(j["verification_status"]=="VERIFIED" for j in public_jobs),"not_confirmed_count":sum(j["verification_status"]=="NOT CONFIRMED" for j in public_jobs),"removed_count":sum(j["verification_status"]=="REMOVED" for j in jobs),"direct_employer_count":sum(j["direct_employer"] for j in public_jobs),"visa_sponsorship_count":sum(j["visa_sponsorship"] for j in public_jobs),"jobs":public_jobs,"source_errors":errors,"sources":sorted({j["source"] for j in public_jobs})}
  with open(OUT,"w",encoding="utf-8") as fh:json.dump(payload,fh,ensure_ascii=False,indent=2)
  print(f"JobSeek: {len(public_jobs)} public jobs; {payload['verified_count']} VERIFIED; {payload['not_confirmed_count']} NOT CONFIRMED; {payload['removed_count']} removed")
 if __name__=="__main__":main()
