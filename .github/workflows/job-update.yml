@@ -42,6 +42,7 @@ jobs:
           ADZUNA_COUNTRIES: gb,us,ca,au,de,fr,nl,nz,sg,za,ng
           ADZUNA_QUERIES: construction,electrician,carpenter,welder,plumber,mason,driver,warehouse,healthcare,engineering,technology,hospitality,cleaning,finance,sales
           JOB_URL_CHECK_LIMIT: '100'
+          JOB_MAX_AGE_DAYS: '14'
         run: python scripts/ai_job_agent.py
 
       - name: Permanently purge Jobicy records
@@ -155,6 +156,19 @@ jobs:
           if data.get('count') != len(jobs) or not data.get('updated_at'):
               raise SystemExit('jobs.json metadata is invalid')
           print(f'Validated {len(jobs)} public JobSeek listings.')
+          PY
+
+      - name: Publish freshness summary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from datetime import datetime, timezone
+          data=json.loads(Path('jobs.json').read_text(encoding='utf-8'))
+          print('Freshness window:', data.get('freshness_window_days', 14), 'days')
+          print('Published listings:', data.get('count', 0))
+          print('Sources:', ', '.join(data.get('sources', [])))
+          print('Updated:', data.get('updated_at'))
           PY
 
       - name: Commit refreshed job data

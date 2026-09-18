@@ -116,6 +116,8 @@ def verify_job(job,check_urls=True):
  return job
 def main():
  cfg=json.load(open(CONFIG,encoding="utf-8")); jobs=[]; errors=[]
+ max_age_days=max(1,int(os.getenv("JOB_MAX_AGE_DAYS","14")))
+ now=datetime.now(timezone.utc)
  for feed in cfg.get("feeds",[]):
   if feed.get("name","").lower().replace(" ","") in EXCLUDED_SOURCES:continue
   try:
@@ -129,7 +131,25 @@ def main():
   if job.get("source","").lower().replace(" ","") in EXCLUDED_SOURCES or "jobicy.com" in str(job.get("url","")).lower() or "jobicy.com" in str(job.get("apply_url","")).lower():continue
   key=re.sub(r"#.*$","",job["url"]).rstrip("/").lower()
   if key and key not in unique:unique[key]=job
- jobs=list(unique.values()); limit=int(os.getenv("JOB_URL_CHECK_LIMIT","60"))
+ jobs=list(unique.values())
+ # Keep the public feed genuinely fresh. Listings without a usable published date are retained,
+ # but dated listings older than the freshness window are excluded before publication.
+ fresh=[]; stale=0
+ for job in jobs:
+  published=parse_date(job.get("published_at"))
+  if published and (now-published).total_seconds()>max_age_days*86400:
+   stale+=1; continue
+  fresh.append(job)
+ jobs=fresh
+ # De-duplicate the same vacancy when multiple aggregators expose it.
+ fingerprints={}; deduped=[]
+ for job in jobs:
+  fp=re.sub(r"\\W+"," ",f"{job.get("title","")} {job.get("company","")} {job.get("location","")}".lower()).strip()
+  if fp and fp in fingerprints: continue
+  if fp: fingerprints[fp]=job.get("id")
+  deduped.append(job)
+ jobs=deduped
+ limit=int(os.getenv("JOB_URL_CHECK_LIMIT","60"))
  for i,job in enumerate(jobs):verify_job(job,check_urls=(i<limit))
  public_jobs=[j for j in jobs if j["verification_status"]!="REMOVED" and "jobicy.com" not in str(j.get("url","")).lower() and "jobicy.com" not in str(j.get("apply_url","")).lower()]
  public_jobs.sort(key=lambda x:(x.get("verification_status")=="VERIFIED",x.get("published_at","")),reverse=True)
