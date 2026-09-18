@@ -1,221 +1,58 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="JobSeek — global jobs, construction careers, visa sponsorship and professional application preparation.">
-<title>JobSeek | Find Better Jobs. Apply Smarter.</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="JobSeek — fresh job opportunities and professional application documents.">
+<title>JobSeek | Find Work. Build Your Application. Apply.</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-<header>
-  <div class="container nav">
-    <a class="brand" href="#home"><span class="logo">J</span><b>Job<span>Seek</span></b></a>
-    <button id="menu" aria-label="Menu">☰</button>
-    <nav id="nav">
-      <a href="jobs.html">Find Jobs</a>
-      <a href="construction-jobs.html">Construction Jobs</a>
-      <a href="employer.html">Employers</a>
-      <a href="profile-builder.html">LinkedIn & Indeed Profile</a>
-      <a href="#visa">Visa Sponsorship</a>
-      <a href="application-assistant.html">Application Assistant</a>
-      <a href="pricing.html">Premium</a>
-    </nav>
-  </div>
-</header>
-
+<header><div class="container nav">
+<a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a>
+<button id="menu" aria-label="Menu">☰</button>
+<nav id="nav"><a href="jobs.html">Find Jobs</a><a href="#categories">Categories</a><a href="construction-jobs.html">Construction</a><a href="ats-cv-builder.html">CV Builder</a><a href="application-assistant.html">Application Assistant</a><a href="job-alerts.html">Job Alerts</a></nav>
+</div></header>
 <main>
-<section class="hero" id="home">
-  <div class="container hero-grid">
-    <div>
-      <p class="eyebrow">GLOBAL CAREER PLATFORM</p>
-      <h1>Find better jobs.<br><em>Apply smarter.</em></h1>
-      <p class="lead">Search international opportunities, with dedicated construction, technology, data and professional career tools.</p>
+<section class="hero"><div class="container hero-grid">
+<div><p class="eyebrow">GLOBAL JOB DISCOVERY PLATFORM</p><h1>Find real opportunities.<br><em>Apply with confidence.</em></h1>
+<p class="lead">Search active opportunities, filter by career area and location, then build professional application documents from your own truthful information.</p>
+<div class="search"><div><label>Job title or skill</label><input id="q" placeholder="Electrician, Data Analyst, Developer..."></div><div><label>Location</label><input id="loc" placeholder="Canada, UK, Germany, Remote..."></div><button class="btn" id="searchBtn">Search jobs</button></div>
+<div class="hero-actions"><a class="btn" href="jobs.html">Browse fresh jobs</a><a class="btn" href="ats-cv-builder.html">Build my CV</a></div>
+<p class="micro">Remote · Construction · Technology · Data & AI · Healthcare · Engineering · Logistics · Agriculture · Hospitality</p></div>
+<aside class="readiness"><div class="rhead"><span>JOBSEEK WORKFLOW</span><strong>01 → 04</strong></div>
+<div class="steps"><div><b>01</b><span><strong>Discover</strong>Search jobs by category, location and keyword.</span></div><div><b>02</b><span><strong>Review</strong>Check source, date posted and application route.</span></div><div><b>03</b><span><strong>Build</strong>Create your CV and cover letter from genuine details.</span></div><div><b>04</b><span><strong>Apply</strong>Open the original application route and submit yourself.</span></div></div>
+<small>JobSeek does not guarantee employment or visa approval.</small></aside>
+</div></section>
 
-      <div class="search">
-        <div>
-          <label>Job title, skill or keyword</label>
-          <input id="q" placeholder="Electrician, Data Analyst, Developer...">
-        </div>
-        <div>
-          <label>Location</label>
-          <input id="loc" placeholder="Canada, UK, Germany, Remote...">
-        </div>
-        <button class="btn" id="searchBtn">Search jobs</button>
-      </div>
+<section class="section" id="categories"><div class="container">
+<div class="head"><div><p class="eyebrow">CAREER AREAS</p><h2>Find the work you want</h2></div><a href="jobs.html">View all jobs →</a></div>
+<div class="countries">
+<a href="jobs.html?category=Technology%20%26%20Software"><b>💻 Technology & IT</b><span>Software, cloud, cybersecurity and support</span></a>
+<a href="construction-jobs.html"><b>🏗️ Construction & Trades</b><span>Electricians, welders, carpenters and site roles</span></a>
+<a href="jobs.html?category=Data%20%26%20AI"><b>📊 Data & AI</b><span>Analysts, data engineers and AI roles</span></a>
+<a href="jobs.html?category=Healthcare"><b>🩺 Healthcare</b><span>Clinical, care and health operations</span></a>
+<a href="jobs.html?category=Engineering"><b>⚙️ Engineering</b><span>Civil, electrical, mechanical and more</span></a>
+<a href="jobs.html?category=Logistics%20%26%20Warehouse"><b>🚚 Logistics</b><span>Drivers, warehouse and supply chain</span></a>
+<a href="jobs.html?category=Farming%20%26%20Agriculture"><b>🌱 Agriculture</b><span>Farm, greenhouse and seasonal roles</span></a>
+<a href="jobs.html?category=Remote%20%26%20Freelance"><b>🌍 Remote</b><span>Work-from-home and worldwide opportunities</span></a>
+</div></div></section>
 
-      <p class="micro">✓ Construction & trades &nbsp; ✓ Technology & IT &nbsp; ✓ Data & analytics &nbsp; ✓ International opportunities</p>
+<section class="section" style="padding-top:20px"><div class="container">
+<div class="head"><div><p class="eyebrow">FRESH OPPORTUNITIES</p><h2>Recently published jobs</h2></div><a href="jobs.html">Search & filter →</a></div>
+<div id="liveJobs" class="jobs"><p class="none">Loading fresh opportunities…</p></div><p id="feedStatus" class="micro"></p>
+</div></section>
 
-      <a class="btn" style="margin-top:12px" href="construction-jobs.html">🏗️ Browse construction jobs</a>
-      <a class="btn" style="margin-top:12px;background:#fff;color:#1261d6;border:1px solid #dce5ef" href="profile-builder.html">💼 Build LinkedIn & Indeed Profile</a>
-      <a class="btn" style="margin-top:12px;background:#fff;color:#1261d6;border:1px solid #dce5ef" href="pricing.html">See Premium plans</a>
-    </div>
+<section class="section"><div class="container two"><div>
+<p class="eyebrow">CAREER DOCUMENTS</p><h2>Build your application in one place.</h2>
+<p class="lead">Create an ATS-friendly CV, cover letter and application content from information you provide. Print or save the finished document as PDF and use the original job application link.</p>
+<div class="hero-actions"><a class="btn" href="ats-cv-builder.html">Build ATS CV</a><a class="btn" href="application-assistant.html">Build application</a></div>
+</div><div class="countries"><div><b>📄 CV / Resume</b><span>Professional structure for your real experience.</span></div><div><b>✉️ Cover Letter</b><span>Tailored wording without invented qualifications.</span></div><div><b>💼 LinkedIn & Indeed</b><span>Profile content ready to copy and review.</span></div><div><b>🗂️ Document Vault</b><span>Keep your recruitment documents organized.</span></div></div></div></section>
 
-    <aside class="readiness">
-      <div class="rhead"><span>APPLICATION ASSISTANT</span><strong>ATS</strong></div>
-      <div class="ring">ATS</div>
-      <h3>Prepare before you apply</h3>
-      <p>Compare the vacancy with your real skills, experience and documents.</p>
-      <div class="bar"><i style="width:100%"></i></div>
-      <small>Readiness guidance is not a guarantee of employment.</small>
-    </aside>
-  </div>
-</section>
-
-<section class="section">
-<div class="container">
-  <div class="head">
-    <div><p class="eyebrow">FOR YOUR CLIENTS</p><h2>Construction jobs by trade</h2></div>
-    <a href="construction-jobs.html">See all construction →</a>
-  </div>
-  <div class="countries">
-    <div><b>⚡ Electrician</b><span>Electrical installation</span></div>
-    <div><b>🔧 Welder</b><span>Fabrication & structural</span></div>
-    <div><b>🏗️ Carpenter</b><span>Formwork & framing</span></div>
-    <div><b>🧱 Mason</b><span>Brickwork & concrete</span></div>
-    <div><b>🚜 Plant Operator</b><span>Heavy machinery</span></div>
-    <div><b>🚛 Construction Driver</b><span>Haulage & logistics</span></div>
-    <div><b>👷 General Labourer</b><span>Site support</span></div>
-    <div><b>📐 Civil Engineer</b><span>Infrastructure & sites</span></div>
-  </div>
-</div>
-</section>
-
-<section class="section" style="padding-top:20px">
-<div class="container">
-  <div class="head">
-    <div><p class="eyebrow">LATEST OPPORTUNITIES</p><h2>Jobs from connected sources</h2></div>
-    <a href="jobs.html">Browse all jobs →</a>
-  </div>
-  <div id="liveJobs" class="jobs"><p class="none">Loading connected opportunities…</p></div>
-  <p id="feedStatus" class="micro"></p>
-</div>
-</section>
-
-<section class="section">
-<div class="container">
-  <div class="head">
-    <div><p class="eyebrow">CAREER TOOLS</p><h2>Build your professional presence</h2></div>
-    <a href="profile-builder.html">Open profile builder →</a>
-  </div>
-  <div class="countries">
-    <div>
-      <b>💼 LinkedIn Profile</b>
-      <span>Headline, About, experience, skills and projects</span>
-      <a href="profile-builder.html">Build profile →</a>
-    </div>
-    <div>
-      <b>📄 Indeed Profile</b>
-      <span>Summary, work history, skills and target roles</span>
-      <a href="profile-builder.html">Build profile →</a>
-    </div>
-    <div>
-      <b>📝 CV & Cover Letter</b>
-      <span>Prepare application documents around the vacancy</span>
-      <a href="application-assistant.html">Start preparing →</a>
-    </div>
-  </div>
-</div>
-</section>
-
-<section class="dark" id="assistant">
-<div class="container two">
-  <div>
-    <p class="eyebrow light">APPLICATION ASSISTANT</p>
-    <h2>Prepare an application around the actual job.</h2>
-    <p>Analyze a vacancy, check ATS readiness and prepare truthful CV and cover-letter drafts.</p>
-    <a class="btn light" href="application-assistant.html">Start preparing</a>
-    <a class="btn light" href="profile-builder.html" style="margin-left:8px">Build LinkedIn & Indeed</a>
-  </div>
-  <div class="steps">
-    <div><b>01</b><span><strong>Analyze the vacancy</strong>Extract requirements, skills and terminology.</span></div>
-    <div><b>02</b><span><strong>Check ATS readiness</strong>Review structure, relevance and keyword alignment.</span></div>
-    <div><b>03</b><span><strong>Prepare documents</strong>Build tailored drafts from truthful information.</span></div>
-  </div>
-</div>
-</section>
-
-<section class="section" id="visa">
-<div class="container">
-  <p class="eyebrow">INTERNATIONAL CAREERS</p>
-  <h2>Visa sponsorship, clearly explained</h2>
-  <p class="lead narrow">Search by country and sponsorship status. Verify employer and immigration details on the original listing.</p>
-  <div class="countries">
-    <div>🇬🇧<b>United Kingdom</b><span>Skilled roles</span></div>
-    <div>🇨🇦<b>Canada</b><span>Employer opportunities</span></div>
-    <div>🇦🇺<b>Australia</b><span>Skilled pathways</span></div>
-    <div>🇩🇪<b>Germany</b><span>International careers</span></div>
-  </div>
-</div>
-</section>
-
-<section class="cta">
-<div class="container">
-  <p class="eyebrow light">JOBSEEK WORKSPACE</p>
-  <h2>Free job search. Premium career tools.</h2>
-  <p>Find opportunities for free, then upgrade when you need advanced application support.</p>
-  <a class="btn light" href="pricing.html">View plans</a>
-</div>
-</section>
+<section class="dark"><div class="container two"><div><p class="eyebrow light">JOBSEEK PRINCIPLE</p><h2>You stay in control of every application.</h2><p>JobSeek helps discover opportunities and prepare documents. The original employer makes the hiring decision, and you review every document before submitting it.</p><a class="btn light" href="jobs.html">Start finding jobs</a></div>
+<div class="steps"><div><b>✓</b><span><strong>Original application route</strong>Each listing keeps its source/application route when available.</span></div><div><b>✓</b><span><strong>Freshness tracking</strong>Listings show publication information when supplied by the source.</span></div><div><b>✓</b><span><strong>Visa evidence</strong>Sponsorship is shown only when supported by listing evidence.</span></div></div></div></section>
 </main>
-
-<footer id="employers">
-<div class="container foot">
-  <div>
-    <a class="brand"><span class="logo">J</span><b>Job<span>Seek</span></b></a>
-    <p>Professional job discovery and application preparation.</p>
-  </div>
-  <div>
-    <b>Platform</b>
-    <a href="jobs.html">Find Jobs</a>
-    <a href="construction-jobs.html">Construction Jobs</a>
-    <a href="profile-builder.html">LinkedIn & Indeed Profile</a>
-    <a href="application-assistant.html">Application Assistant</a>
-    <a href="pricing.html">Premium Plans</a>
-  </div>
-  <div>
-    <b>Employers</b>
-    <a href="employer.html">Post a job</a>
-    <a href="employer.html">Find candidates</a>
-  </div>
-</div>
-<div class="container copy">© 2026 JobSeek · Career support only. Employment and visa outcomes are never guaranteed.</div>
-</footer>
-
-<script src="app.js"></script>
-<script>
-async function loadLive(){
-  const box=document.getElementById('liveJobs');
-  const status=document.getElementById('feedStatus');
-  try{
-    const r=await fetch('jobs.json',{cache:'no-store'});
-    if(!r.ok) throw Error();
-    const d=await r.json();
-
-    if(!d.jobs?.length){
-      box.innerHTML='<p class="none">No live listings are connected yet. The automated updater is ready for approved public feeds.</p>';
-      status.textContent='Feed status: waiting for source configuration.';
-      return;
-    }
-
-    box.innerHTML=d.jobs.slice(0,6).map(j=>`
-      <article class="job">
-        <span class="tag">${j.source||'CONNECTED SOURCE'}</span>
-        <h3>${j.title}</h3>
-        <p>${j.company||''} · ${j.location||'See listing'}</p>
-        <p>${(j.description||'').slice(0,180)}</p>
-        <a class="outline" style="display:block;text-align:center" href="${j.url}" target="_blank" rel="noopener">View original listing</a>
-      </article>
-    `).join('');
-
-    status.textContent=`Last feed refresh: ${d.updated_at||'not yet refreshed'} · ${d.count||0} listings`;
-  }catch(e){
-    box.innerHTML='<p class="none">Live job feed is temporarily unavailable.</p>';
-    status.textContent='Feed status: unavailable.';
-  }
-}
-loadLive();
-</script>
-</body>
-</html>
+<footer><div class="container foot"><div><a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a><p>Job discovery and professional application preparation.</p></div><div><b>Jobs</b><a href="jobs.html">All jobs</a><a href="construction-jobs.html">Construction</a><a href="job-alerts.html">Job alerts</a></div><div><b>Tools</b><a href="ats-cv-builder.html">CV builder</a><a href="application-assistant.html">Application assistant</a><a href="candidate-documents.html">Documents</a></div></div><div class="container copy">© 2026 JobSeek · Employment and visa outcomes are never guaranteed.</div></footer>
+<script src="app.js"></script><script>
+document.getElementById('searchBtn').onclick=()=>{const q=document.getElementById('q').value.trim(),loc=document.getElementById('loc').value.trim();location.href='jobs.html?keyword='+encodeURIComponent(q)+'&region='+encodeURIComponent(loc)};
+async function loadLive(){const box=document.getElementById('liveJobs'),status=document.getElementById('feedStatus');try{const r=await fetch('public-jobs.json?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error();const d=await r.json();const rows=(d.jobs||[]).filter(j=>j.title&&j.url).sort((a,b)=>new Date(b.published_at||0)-new Date(a.published_at||0)).slice(0,6);if(!rows.length){box.innerHTML='<p class="none">No active listings are available yet.</p>';return}const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));box.innerHTML=rows.map(j=>'<article class="job"><span class="tag">'+esc(j.category||'JOB')+'</span><h3>'+esc(j.title)+'</h3><p><strong>'+esc(j.company||'Employer not specified')+'</strong> · '+esc(j.location||'See listing')+'</p><p class="micro">Posted: '+esc(j.published_at?new Date(j.published_at).toLocaleDateString():'Not specified')+(j.remote?' · Remote':'')+'</p><a class="outline" href="job-details.html?id='+encodeURIComponent(j.id)+'">View job</a></article>').join('');status.textContent='Feed refreshed '+(d.updated_at?new Date(d.updated_at).toLocaleString():'recently')+' · '+(d.count||rows.length)+' active listings'}catch(e){box.innerHTML='<p class="none">Fresh job feed is temporarily unavailable. Please try again shortly.</p>';status.textContent='Feed status: unavailable'}}loadLive();
+</script></body></html>
