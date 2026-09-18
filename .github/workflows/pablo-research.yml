@@ -4,12 +4,14 @@ on:
   push:
     branches: [main]
     paths:
-      - '.github/workflows/pablo-research.yml'\n      - '.github/workflows/job-update.yml'
+      - '.github/workflows/pablo-research.yml'
+      - '.github/workflows/job-update.yml'
       - 'scripts/ai_job_agent.py'
       - 'scripts/purge_jobicy.py'
       - 'scripts/add_trusted_job_sources.py'
       - 'scripts/cleanup_jobs.py'
-      - 'scripts/reclassify_jobs.py'\n      - 'scripts/pablo_research.py'
+      - 'scripts/reclassify_jobs.py'
+      - 'scripts/pablo_research.py'
   schedule:
     - cron: '*/30 * * * *'
   workflow_dispatch:
@@ -42,7 +44,16 @@ jobs:
           JOB_URL_CHECK_LIMIT: '1000'
           JOB_MAX_AGE_DAYS: '3'
         run: python scripts/pablo_research.py
-      - name: Ensure every supported category is searched\n        run: |\n          python - <<'PY'\n          import json\n          from pathlib import Path\n          cfg=json.loads(Path('config/job-feeds.json').read_text())\n          print('Pablo coverage targets:', len(cfg.get('job_categories',[])), 'categories')\n          print('Priority terms:', len(cfg.get('priority_search_terms',[])))\n          PY\n      - name: Permanently purge Jobicy records
+      - name: Ensure every supported category is searched
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          cfg=json.loads(Path('config/job-feeds.json').read_text())
+          print('Pablo coverage targets:', len(cfg.get('job_categories',[])), 'categories')
+          print('Priority terms:', len(cfg.get('priority_search_terms',[])))
+          PY
+      - name: Permanently purge Jobicy records
         run: python scripts/purge_jobicy.py
       - name: Add trusted remote sources
         run: python scripts/add_trusted_job_sources.py
