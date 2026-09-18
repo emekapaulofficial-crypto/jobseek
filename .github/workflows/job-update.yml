@@ -39,7 +39,7 @@ jobs:
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
           ADZUNA_COUNTRIES: gb,us,ca,au,de,fr,nl,nz,sg,za,ng
           ADZUNA_QUERIES: construction,electrician,carpenter,welder,plumber,mason,driver,warehouse,healthcare,engineering,technology,hospitality,cleaning,finance,sales
-          JOB_URL_CHECK_LIMIT: '100'
+          JOB_URL_CHECK_LIMIT: '1000'
           JOB_MAX_AGE_DAYS: '14'
         run: python scripts/ai_job_agent.py
       - name: Permanently purge Jobicy records
