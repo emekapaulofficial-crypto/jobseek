@@ -73,31 +73,32 @@ def main():
         status = normalize_status(job.get("verification_status"))
         if status == "REMOVED":
             continue
-        if job.get("apply_url_checked"):
-            raw_status = str(job.get("apply_url_status", ""))
-            code_match = re.search(r"\b(\d{3})\b", raw_status)
-            if code_match:
-                code = int(code_match.group(1))
-                if not 200 <= code < 400:
-                    status = "NOT CONFIRMED"
-                    job.setdefault("risk_flags", []).append("application_url_unreachable")
-            elif raw_status and not raw_status.lower().startswith(("http", "source_feed")):
-                status = "NOT CONFIRMED"
-                job.setdefault("risk_flags", []).append("application_url_unreachable")
 
-        job["verification_status"] = status
-        if status == "NOT CONFIRMED":
-            needs_review += 1
+        published = parse_date(job.get("published_at") or job.get("posted_at") or job.get("posted_date") or job.get("date_posted"))
+        raw_status = str(job.get("apply_url_status", ""))
+        code_match = re.search(r"\b(\d{3})\b", raw_status)
+        url_working = bool(job.get("apply_url_checked")) and bool(code_match and 200 <= int(code_match.group(1)) < 400)
+        if status != "VERIFIED":
+            continue
+        if not published:
+            continue
+        if not job.get("is_active", True):
+            continue
+        if not url_working:
+            continue
+
+        job["verification_status"] = "VERIFIED"
         job["is_active"] = True
+        job["application_button_ready"] = True
         job["last_cleanup_at"] = now.isoformat()
         kept.append(job)
 
     payload["jobs"] = kept
     payload["count"] = len(kept)
     payload["verified_count"] = sum(1 for j in kept if j.get("verification_status") == "VERIFIED")
-    payload["not_confirmed_count"] = needs_review
+    payload["not_confirmed_count"] = 0
     payload["verified_source_count"] = payload["verified_count"]
-    payload["needs_review_count"] = needs_review
+    payload["needs_review_count"] = 0
     payload["cleanup"] = {
         "ran_at": now.isoformat(),
         "removed_expired": removed_expired,
