@@ -4,12 +4,12 @@ on:
   push:
     branches: [main]
     paths:
-      - '.github/workflows/job-update.yml'
+      - '.github/workflows/pablo-research.yml'\n      - '.github/workflows/job-update.yml'
       - 'scripts/ai_job_agent.py'
       - 'scripts/purge_jobicy.py'
       - 'scripts/add_trusted_job_sources.py'
       - 'scripts/cleanup_jobs.py'
-      - 'scripts/reclassify_jobs.py'
+      - 'scripts/reclassify_jobs.py'\n      - 'scripts/pablo_research.py'
   schedule:
     - cron: '*/30 * * * *'
   workflow_dispatch:
@@ -41,8 +41,8 @@ jobs:
           ADZUNA_QUERIES: construction,electrician,carpenter,welder,plumber,mason,driver,warehouse,healthcare,engineering,technology,hospitality,cleaning,finance,sales
           JOB_URL_CHECK_LIMIT: '1000'
           JOB_MAX_AGE_DAYS: '3'
-        run: python scripts/ai_job_agent.py
-      - name: Permanently purge Jobicy records
+        run: python scripts/pablo_research.py
+      - name: Ensure every supported category is searched\n        run: |\n          python - <<'PY'\n          import json\n          from pathlib import Path\n          cfg=json.loads(Path('config/job-feeds.json').read_text())\n          print('Pablo coverage targets:', len(cfg.get('job_categories',[])), 'categories')\n          print('Priority terms:', len(cfg.get('priority_search_terms',[])))\n          PY\n      - name: Permanently purge Jobicy records
         run: python scripts/purge_jobicy.py
       - name: Add trusted remote sources
         run: python scripts/add_trusted_job_sources.py
@@ -81,7 +81,7 @@ jobs:
           data['verified_count']=sum(j.get('verification_status')=='VERIFIED' for j in jobs)
           data['not_confirmed_count']=sum(j.get('verification_status')!='VERIFIED' for j in jobs)
           data['sources']=sorted(set(str(j.get('source') or 'Connected source') for j in jobs))
-          data['freshness_window_days']=int(data.get('freshness_window_days') or 14)
+          data['freshness_window_days']=3
           data['updated_at']=datetime.now(timezone.utc).isoformat()
           path.write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding='utf-8')
           print(f'Normalized {len(jobs)} publishable listings; dropped {dropped} invalid/duplicate/blocked records.')
@@ -117,7 +117,7 @@ jobs:
           python - <<'PY'
           import json
           data=json.load(open('jobs.json',encoding='utf-8'))
-          print('Freshness window:',data.get('freshness_window_days',14),'days')
+          print('Freshness window:',data.get('freshness_window_days',3),'days')
           print('Published listings:',data.get('count',0))
           print('Verified:',data.get('verified_count',0),'Not confirmed:',data.get('not_confirmed_count',0))
           print('Sources:',', '.join(data.get('sources',[])))
