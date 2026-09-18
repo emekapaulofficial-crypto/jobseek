@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   guard:
-    name: Paul verifies every public job
+    name: Paul verifies and removes non-publishable jobs
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
