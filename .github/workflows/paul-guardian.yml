@@ -1,0 +1,59 @@
+name: Paul Job Guardian - 24/7 Quality Control
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: paul-job-guardian
+  cancel-in-progress: true
+
+jobs:
+  guard:
+    name: Paul verifies every public job
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run Paul Guardian
+        run: python scripts/paul_guardian.py
+
+      - name: Validate public feed
+        run: |
+          python - <<'PY'
+          import json, re
+          from datetime import datetime, timezone
+          data=json.load(open('jobs.json',encoding='utf-8'))
+          jobs=data.get('jobs',[])
+          for j in jobs:
+              if j.get('verification_status') != 'VERIFIED':
+                  raise SystemExit(f"Paul blocked unverified job: {j.get('id')}")
+              if not j.get('application_button_ready'):
+                  raise SystemExit(f"Paul blocked job without ready application button: {j.get('id')}")
+              if not j.get('apply_url_checked'):
+                  raise SystemExit(f"Paul blocked unchecked application URL: {j.get('id')}")
+              m=re.search(r'\b(\d{3})\b',str(j.get('apply_url_status','')))
+              if not m or not 200 <= int(m.group(1)) < 400:
+                  raise SystemExit(f"Paul blocked non-working application URL: {j.get('id')}")
+              if not (j.get('published_at') or j.get('posted_at') or j.get('posted_date') or j.get('date_posted')):
+                  raise SystemExit(f"Paul blocked missing posted date: {j.get('id')}")
+          print(f"Paul validation passed: {len(jobs)} verified jobs with working application links.")
+          PY
+
+      - name: Commit Paul quality-control changes
+        run: |
+          git config user.name 'Paul Job Guardian'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add jobs.json
+          if git diff --cached --quiet; then echo 'Paul found no changes.'; else git commit -m 'chore: Paul guardian verify public jobs'; git push; fi
