@@ -10,7 +10,7 @@
     },
     "updated_at": "2026-09-18T19:50:44.819711+00:00"
   },
-  "updated_at": "2026-09-18T19:50:47.286942+00:00",
+  "updated_at": "2026-09-18T21:44:41.709008+00:00",
   "count": 3,
   "verified_count": 3,
   "not_confirmed_count": 0,
@@ -46,7 +46,7 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-18T19:50:46.807239+00:00",
+      "verification_checked_at": "2026-09-18T21:44:41.709008+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "pablo_researched_at": "2026-09-18T19:50:44.832190+00:00",
@@ -57,7 +57,7 @@
       "is_active": true,
       "application_button_ready": true,
       "last_cleanup_at": "2026-09-18T19:50:46.695173+00:00",
-      "paul_guardian_checked_at": "2026-09-18T19:50:46.807239+00:00"
+      "paul_guardian_checked_at": "2026-09-18T21:44:41.709008+00:00"
     },
     {
       "id": "648e93f65c12b2b3",
@@ -87,7 +87,7 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-18T19:50:46.807239+00:00",
+      "verification_checked_at": "2026-09-18T21:44:41.709008+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "pablo_researched_at": "2026-09-18T19:50:44.832190+00:00",
@@ -98,7 +98,7 @@
       "is_active": true,
       "application_button_ready": true,
       "last_cleanup_at": "2026-09-18T19:50:46.695173+00:00",
-      "paul_guardian_checked_at": "2026-09-18T19:50:46.807239+00:00"
+      "paul_guardian_checked_at": "2026-09-18T21:44:41.709008+00:00"
     },
     {
       "id": "be3366f1cf770523",
@@ -128,7 +128,7 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-18T19:50:46.807239+00:00",
+      "verification_checked_at": "2026-09-18T21:44:41.709008+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "pablo_researched_at": "2026-09-18T19:50:44.832190+00:00",
@@ -139,7 +139,7 @@
       "is_active": true,
       "application_button_ready": true,
       "last_cleanup_at": "2026-09-18T19:50:46.695173+00:00",
-      "paul_guardian_checked_at": "2026-09-18T19:50:46.807239+00:00"
+      "paul_guardian_checked_at": "2026-09-18T21:44:41.709008+00:00"
     }
   ],
   "source_errors": [],
@@ -183,7 +183,7 @@
     "public_display": false,
     "status": "ACTIVE",
     "mode": "automated_job_quality_control",
-    "last_run_at": "2026-09-18T19:50:46.807239+00:00",
+    "last_run_at": "2026-09-18T21:44:41.709008+00:00",
     "removed_this_run": 0,
     "public_rule": "VERIFIED + posted date + active + working 2xx/3xx application URL"
   }
