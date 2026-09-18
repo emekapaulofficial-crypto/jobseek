@@ -59,18 +59,29 @@ def main():
         closing=parse_date(j.get("closing_date") or j.get("closing_at") or j.get("application_deadline") or j.get("end_date") or j.get("expires_at"))
         if not published: reasons.append("missing_posted_date")
         if closing and closing <= now: reasons.append("expired")
-        if str(j.get("verification_status","")).upper() != "VERIFIED": reasons.append("not_verified")
-        if not j.get("source_trusted",False): reasons.append("source_not_trusted")
+        if str(j.get("verification_status","")).upper() != "VERIFIED":
+            reasons.append("not_verified")
+        if not j.get("source_trusted",False):
+            reasons.append("source_not_trusted")
+        source=str(j.get("source","")).strip().lower()
+        trusted_sources={"remoteok","remotive","himalayas","we work remotely","arbeitnow","adzuna","usajobs"}
+        if source not in trusted_sources:
+            reasons.append("unapproved_source")
+        apply_url=str(j.get("apply_url","")).strip()
+        source_url=str(j.get("url","")).strip()
+        if not apply_url or apply_url == source_url:
+            reasons.append("missing_direct_application_url")
         text=" ".join(str(j.get(k,"")) for k in ("title","company","description","url","apply_url"))
         if SCAM_TERMS.search(text): reasons.append("scam_indicator")
-        ok,status=check_url(j.get("apply_url") or j.get("url"))
+        ok,status=check_url(j.get("apply_url"))
         j["apply_url_checked"]=True
         j["apply_url_status"]=status
         j["verification_checked_at"]=now.isoformat()
         j["paul_guardian_checked_at"]=now.isoformat()
-        j["is_active"]=not reasons and ok
-        j["application_button_ready"]=not reasons and ok
-        if not ok: reasons.append("application_url_unreachable")
+        if not ok:
+            reasons.append("application_url_unreachable")
+        j["is_active"]=not reasons
+        j["application_button_ready"]=not reasons
         j["verification_reasons"]=sorted(set(reasons))
         return i,j,reasons
 
@@ -96,6 +107,8 @@ def main():
     data["needs_review_count"]=0
     data["paul_guardian"]={
         "name":"Paul",
+        "visibility":"ADMIN_ONLY",
+        "public_display":False,
         "status":"ACTIVE",
         "mode":"automated_job_quality_control",
         "last_run_at":now.isoformat(),
