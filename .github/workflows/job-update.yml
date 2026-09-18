@@ -11,7 +11,7 @@ on:
       - 'scripts/cleanup_jobs.py'
       - 'scripts/reclassify_jobs.py'
   schedule:
-    - cron: '0 23,11,17 * * *'
+    - cron: '0 23 * * *'
   workflow_dispatch:
 
 permissions:
