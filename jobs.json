@@ -2,15 +2,15 @@
   "agent": {
     "name": "JobSeek AI Job Agent",
     "version": "3.0",
-    "mode": "nigeria_focused_discovery_and_verification",
+    "mode": "global_discovery_and_verification",
     "market": {
-      "primary_country": "Nigeria",
-      "international_for": "Nigerian applicants",
-      "international_rule": "Nigeria, internationally eligible remote, Africa/global roles, or explicit visa/work-permit sponsorship"
+      "primary_country": "Global",
+      "international_for": "All applicants",
+      "international_rule": "Global job feed; exclude roles explicitly locked to a foreign residence/work-authorization/local-bank requirement unless sponsorship or Nigeria eligibility is stated"
     },
-    "updated_at": "2026-09-18T17:32:57.066324+00:00"
+    "updated_at": "2026-09-18T17:48:34.628996+00:00"
   },
-  "updated_at": "2026-09-18T17:32:59.320740+00:00",
+  "updated_at": "2026-09-18T17:48:36.160210+00:00",
   "count": 0,
   "verified_count": 0,
   "not_confirmed_count": 0,
@@ -21,26 +21,14 @@
   "source_errors": [
     {
       "source": "RemoteOK",
-      "error": "name 'NIGERIA_TERMS' is not defined"
+      "error": "name 'COUNTRY_LOCK_TERMS' is not defined"
     },
     {
       "source": "Remotive",
-      "error": "name 'NIGERIA_TERMS' is not defined"
+      "error": "name 'COUNTRY_LOCK_TERMS' is not defined"
     }
   ],
   "sources": [],
-  "pablo": {
-    "name": "Pablo",
-    "visibility": "ADMIN_ONLY",
-    "public_display": false,
-    "status": "ACTIVE",
-    "role": "job_research_manager",
-    "research_window_days": 3,
-    "last_research_at": "2026-09-18T17:32:57.076423+00:00",
-    "handoff": "PAUL_PENDING",
-    "rule": "Find jobs posted within the last 3 days; reject expired, unsafe or unreachable application routes before handoff."
-  },
-  "freshness_window_days": 3,
   "jobicy_removed": true,
   "source_policy": {
     "excluded": [
@@ -55,19 +43,10 @@
   "verified_source_count": 0,
   "needs_review_count": 0,
   "cleanup": {
-    "ran_at": "2026-09-18T17:32:59.001894+00:00",
+    "ran_at": "2026-09-18T17:48:36.033158+00:00",
     "removed_expired": 0,
     "removed_unsafe": 0,
     "remaining": 0
   },
-  "paul_guardian": {
-    "name": "Paul",
-    "visibility": "ADMIN_ONLY",
-    "public_display": false,
-    "status": "ACTIVE",
-    "mode": "automated_job_quality_control",
-    "last_run_at": "2026-09-18T17:32:59.231682+00:00",
-    "removed_this_run": 0,
-    "public_rule": "VERIFIED + posted date + active + working 2xx/3xx application URL"
-  }
+  "freshness_window_days": 14
 }
