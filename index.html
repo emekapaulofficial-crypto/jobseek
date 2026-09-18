@@ -36,10 +36,6 @@
 <a href="jobs.html?category=Remote%20%26%20Freelance"><b>🌍 Remote</b><span>Work-from-home and worldwide opportunities</span></a>
 </div></div></section>
 
-<section class="section" style="padding-top:20px"><div class="container">
-<div class="head"><div><p class="eyebrow">FRESH OPPORTUNITIES</p><h2>Recently published jobs</h2></div><a href="jobs.html">Search & filter →</a></div>
-<div id="liveJobs" class="jobs"><p class="none">Loading fresh opportunities…</p></div><p id="feedStatus" class="micro"></p>
-</div></section>
 
 <section class="section"><div class="container two"><div>
 <p class="eyebrow">CAREER DOCUMENTS</p><h2>Build your application in one place.</h2>
@@ -53,5 +49,4 @@
 <footer><div class="container foot"><div><a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a><p>Job discovery and professional application preparation.</p></div><div><b>Jobs</b><a href="jobs.html">All jobs</a><a href="construction-jobs.html">Construction</a><a href="job-alerts.html">Job alerts</a></div><div><b>Tools</b><a href="ats-cv-builder.html">CV builder</a><a href="application-assistant.html">Application assistant</a><a href="candidate-documents.html">Documents</a></div></div><div class="container copy">© 2026 JobSeek · Employment and visa outcomes are never guaranteed.</div></footer>
 <script src="app.js"></script><script>
 document.getElementById('searchBtn').onclick=()=>{const q=document.getElementById('q').value.trim(),loc=document.getElementById('loc').value.trim();location.href='jobs.html?keyword='+encodeURIComponent(q)+'&region='+encodeURIComponent(loc)};
-async function loadLive(){const box=document.getElementById('liveJobs'),status=document.getElementById('feedStatus');try{const r=await fetch('public-jobs.json?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error();const d=await r.json();const rows=(d.jobs||[]).filter(j=>j.title&&j.url).sort((a,b)=>new Date(b.published_at||0)-new Date(a.published_at||0)).slice(0,6);if(!rows.length){box.innerHTML='<p class="none">No active listings are available yet.</p>';return}const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));box.innerHTML=rows.map(j=>'<article class="job"><span class="tag">'+esc(j.category||'JOB')+'</span><h3>'+esc(j.title)+'</h3><p><strong>'+esc(j.company||'Employer not specified')+'</strong> · '+esc(j.location||'See listing')+'</p><p class="micro">Posted: '+esc(j.published_at?new Date(j.published_at).toLocaleDateString():'Not specified')+(j.remote?' · Remote':'')+'</p><a class="outline" href="job-details.html?id='+encodeURIComponent(j.id)+'">View job</a></article>').join('');status.textContent='Feed refreshed '+(d.updated_at?new Date(d.updated_at).toLocaleString():'recently')+' · '+(d.count||rows.length)+' active listings'}catch(e){box.innerHTML='<p class="none">Fresh job feed is temporarily unavailable. Please try again shortly.</p>';status.textContent='Feed status: unavailable'}}loadLive();
 </script></body></html>
