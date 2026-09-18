@@ -81,6 +81,8 @@ def wwr():
 
 def main():
     data = json.load(open(OUT, encoding="utf-8"))
+    max_age_days = max(1, int(__import__("os").getenv("JOB_MAX_AGE_DAYS", "14")))
+    now = datetime.now(timezone.utc)
     existing = [j for j in data.get("jobs", []) if str(j.get("source", "")).strip().lower() != "jobicy"]
     aggregator_sources = {"Adzuna", "Arbeitnow", "RemoteOK", "Remotive", "Jobicy", "Himalayas", "We Work Remotely"}
     for j in existing:
@@ -95,6 +97,14 @@ def main():
             for job in loader():
                 key = re.sub(r"#.*$", "", job["url"]).rstrip("/").lower()
                 if not key or key in seen or job["risk_level"] == "high": continue
+                published = parse_date(job.get("published_at"))
+                if published:
+                    try:
+                        dt = datetime.fromisoformat(published.replace("Z", "+00:00"))
+                        if (now - dt.astimezone(timezone.utc)).total_seconds() > max_age_days * 86400:
+                            continue
+                    except ValueError:
+                        pass
                 seen.add(key); added.append(job)
         except Exception as exc:
             data.setdefault("source_errors", []).append({"source": name, "error": str(exc)})
