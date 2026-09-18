@@ -69,8 +69,10 @@ def main():
             reasons.append("unapproved_source")
         apply_url=str(j.get("apply_url","")).strip()
         source_url=str(j.get("url","")).strip()
-        if not apply_url or apply_url == source_url:
-            reasons.append("missing_direct_application_url")
+        if not apply_url:
+            reasons.append("missing_application_url")
+        elif apply_url == source_url and source not in trusted_sources:
+            reasons.append("application_route_not_trusted")
         text=" ".join(str(j.get(k,"")) for k in ("title","company","description","url","apply_url"))
         if SCAM_TERMS.search(text): reasons.append("scam_indicator")
         ok,status=check_url(j.get("apply_url"))
