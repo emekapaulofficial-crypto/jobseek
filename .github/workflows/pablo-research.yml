@@ -61,6 +61,8 @@ jobs:
         run: python scripts/purge_jobicy.py
       - name: Remove expired and unsafe listings
         run: python scripts/cleanup_jobs.py
+      - name: Paul automatic verification and publication gate
+        run: python scripts/paul_guardian.py
       - name: Classify jobs and enforce freshness window
         run: python scripts/reclassify_jobs.py
       - name: Normalize public feed before validation
