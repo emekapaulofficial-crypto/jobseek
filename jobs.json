@@ -10,7 +10,7 @@
     },
     "updated_at": "2026-09-19T09:08:47.573869+00:00"
   },
-  "updated_at": "2026-09-19T09:08:49.480584+00:00",
+  "updated_at": "2026-09-19T11:41:36.067228+00:00",
   "count": 2,
   "verified_count": 2,
   "not_confirmed_count": 0,
@@ -46,7 +46,7 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T09:08:48.996101+00:00",
+      "verification_checked_at": "2026-09-19T11:41:36.067228+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "pablo_researched_at": "2026-09-19T09:08:47.587661+00:00",
@@ -57,7 +57,7 @@
       "is_active": true,
       "application_button_ready": true,
       "last_cleanup_at": "2026-09-19T09:08:48.823022+00:00",
-      "paul_guardian_checked_at": "2026-09-19T09:08:48.996101+00:00"
+      "paul_guardian_checked_at": "2026-09-19T11:41:36.067228+00:00"
     },
     {
       "id": "648e93f65c12b2b3",
@@ -87,7 +87,7 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T09:08:48.996101+00:00",
+      "verification_checked_at": "2026-09-19T11:41:36.067228+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "pablo_researched_at": "2026-09-19T09:08:47.587661+00:00",
@@ -98,7 +98,7 @@
       "is_active": true,
       "application_button_ready": true,
       "last_cleanup_at": "2026-09-19T09:08:48.823022+00:00",
-      "paul_guardian_checked_at": "2026-09-19T09:08:48.996101+00:00"
+      "paul_guardian_checked_at": "2026-09-19T11:41:36.067228+00:00"
     }
   ],
   "source_errors": [],
@@ -142,7 +142,7 @@
     "public_display": false,
     "status": "ACTIVE",
     "mode": "automated_job_quality_control",
-    "last_run_at": "2026-09-19T09:08:48.996101+00:00",
+    "last_run_at": "2026-09-19T11:41:36.067228+00:00",
     "removed_this_run": 0,
     "public_rule": "VERIFIED + posted date + active + working 2xx/3xx application URL"
   }
