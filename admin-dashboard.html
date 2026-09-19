@@ -1,14 +1,23 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JobSeek | Recruitment Admin</title><link rel="stylesheet" href="styles.css"></head><body><div id="loginGate" class="section"><div class="container" style="max-width:520px"><div class="job" style="padding:28px"><p class="eyebrow">JOBSEEK ADMINISTRATION</p><h1>Main Admin Login</h1><p class="lead">Sign in to manage and manually publish JobSeek jobs.</p><form id="adminLoginForm" style="display:grid;gap:12px;margin-top:18px"><input id="adminEmail" type="email" required autocomplete="email" placeholder="Admin email"><input id="adminPassword" type="password" required autocomplete="current-password" placeholder="Password"><button class="btn" type="submit">Log in</button><div id="loginMsg" class="micro"></div></form></div></div></div><div id="adminApp" hidden><main class="section"><div class="container"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div><p class="eyebrow">JOBSEEK AGENCY CONTROL CENTER</p><h1>Recruitment Admin</h1><p class="lead">Main Admin control center — you own JobSeek. You manually add, review and publish every public job.</p></div><button class="outline" id="logout">Log out</button></div><div id="guard" class="job" style="padding:18px;margin:20px 0">Checking admin access…</div><section id="panel" hidden><nav class="job" style="padding:16px;display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px"><a class="btn" href="admin-candidates.html">Candidates</a><a class="btn" href="admin-documents.html">Documents</a><a class="btn" href="admin-services.html">Services & Revenue</a></nav><div class="job" style="padding:20px;margin:20px 0"><h2>Manual Job Upload</h2><p class="micro">You control the public job board. Add jobs yourself, review them, then publish or close them.</p><form id="manualJobForm" style="display:grid;gap:10px;margin-top:14px"><input id="mjTitle" required placeholder="Job title"><input id="mjCompany" required placeholder="Company name"><input id="mjLocation" required placeholder="Location / Remote"><input id="mjCategory" placeholder="Category (e.g. Construction, Technology)"><input id="mjType" placeholder="Job type (e.g. Full-Time, Contract)"><input id="mjSalary" placeholder="Salary (optional)"><input id="mjApply" required type="url" placeholder="Original application URL"><input id="mjSource" value="Manual Admin Upload" placeholder="Source"><label>Posted date <input id="mjPosted" type="date"></label><label>Closing date <input id="mjClosing" type="date"></label><label><input id="mjVisa" type="checkbox"> Visa sponsorship explicitly stated</label><input id="mjVisaEvidence" placeholder="Visa evidence (optional)"><textarea id="mjDescription" rows="5" placeholder="Job description"></textarea><button class="btn" type="submit">Publish Job</button><div id="manualJobMsg" class="micro"></div></form><div id="manualJobs" style="margin-top:20px">Loading your manual jobs…</div>
 <div class="job" style="padding:20px;margin-top:18px;border:2px dashed #cbd5e1">
-<h3>Upload Job Document</h3>
-<p class="micro">Upload a PDF, Word document (.docx), CSV, JSON or text file containing one or more jobs. JobSeek extracts the job details and original application link, then shows a review list before publishing.</p>
+<h3>Upload Jobs from Excel</h3>
+<p class="micro">Recommended: use the Excel template. Add one job per row, upload it here, review the rows, then publish only the valid jobs you select.</p>
+<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0">
+  <button class="outline" id="downloadJobExcelTemplate" type="button">Download Excel Template</button>
+  <input id="jobExcel" type="file" accept=".xlsx,.xls,.csv">
+</div>
+<div id="excelMsg" class="micro"></div>
+<div id="excelPreview" style="margin-top:14px"></div>
+<hr style="margin:20px 0;border:0;border-top:1px solid #e5e7eb">
+<h3>Other Job Document Upload</h3>
+<p class="micro">Optional: PDF, Word (.docx), CSV, JSON or text documents are still supported.</p>
 <input id="jobDocument" type="file" accept=".pdf,.docx,.csv,.json,.txt,.md" style="margin:10px 0">
 <div id="documentMsg" class="micro"></div><div id="documentPreview" style="margin-top:14px"></div>
 </div></div><div id="stats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:20px 0"></div>
 <div class="job" style="padding:20px;margin-bottom:20px"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap"><div><h2>Application administration queue</h2><p class="micro">New paid-service requests appear here. Review, assign, request information, and only mark submission after candidate approval.</p></div><button class="outline" id="refreshRequests">Refresh</button></div><div id="adminRequests">Loading…</div></div>
 <div class="job" style="padding:20px;margin-bottom:20px"><h2>Employer verification queue</h2><div id="employers">Loading…</div></div><div class="job" style="padding:20px;margin-bottom:20px"><h2>Agency vacancies</h2><div id="jobs">Loading…</div></div><div class="job" style="padding:20px"><h2>Applications & placement status</h2><div id="apps">Loading…</div></div></section></div></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-client.js"></script><script>
 let client,user;const $=id=>document.getElementById(id);const statuses=['applied','shortlisted','interview','offer','visa','deployed','rejected','withdrawn'];const adminStatuses=['REQUESTED','REVIEWING','NEEDS_INFO','READY_FOR_APPROVAL','APPROVED_TO_SUBMIT','SUBMITTED','INTERVIEW','OFFER','CLOSED','CANCELLED'];function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function fmt(d){return d?new Date(d).toLocaleString():''}
-async function init(){if(!JobSeekSupabase.configured){$('guard').textContent='Supabase public key is not configured yet.';return}client=supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key);const r=await client.auth.getUser();if(!r.data.user){location.href='auth.html';return}user=r.data.user;const a=await client.from('jobseek_accounts').select('role,full_name').eq('id',user.id).single();if(a.error||!['agent','admin'].includes(a.data.role)){$('guard').textContent='Access denied. This dashboard is for authorized JobSeek agents/admins.';return}$('guard').textContent='Signed in as '+(a.data.full_name||user.email)+' · '+a.data.role;$('panel').hidden=false;load()}
+async function init(){if(!JobSeekSupabase.configured){$('guard').textContent='Supabase public key is not configured yet.';return}client=supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key);const r=await client.auth.getUser();if(!r.data.user){location.href='auth.html';return}user=r.data.user;const a=await client.from('jobseek_accounts').select('role,full_name').eq('id',user.id).single();if(a.error||a.data.role!=='admin'){$('guard').textContent='Access denied. This dashboard is for authorized JobSeek agents/admins.';return}$('guard').textContent='Signed in as '+(a.data.full_name||user.email)+' · '+a.data.role;$('panel').hidden=false;load()}
 async function load(){const [e,j,a,c,rq]=await Promise.all([client.from('employers').select('id,company_name,country,verification_status,created_at').order('created_at',{ascending:false}),client.from('agency_jobs').select('id,title,country,city,status,verification_status,employers(company_name)').order('created_at',{ascending:false}),client.from('applications').select('id,status,submitted_at,candidate_profiles(full_name,user_id),agency_jobs(title,country,employer_id)').order('submitted_at',{ascending:false}),client.from('candidate_profiles').select('id',{count:'exact',head:true}),client.from('jobseek_application_requests').select('*').order('created_at',{ascending:false})]);if(rq.error){$('adminRequests').innerHTML='<p>Application request table unavailable: '+esc(rq.error.message)+'</p>'}else renderRequests(rq.data||[]);await loadManualJobs();$('stats').innerHTML=[['Candidates',c.count??0],['Employers',e.data?.length??0],['Pending employers',(e.data||[]).filter(x=>x.verification_status!=='verified').length],['Agency jobs',j.data?.length??0],['Applications',a.data?.length??0],['Admin requests',rq.data?.length??0],['Manual published jobs',window.manualJobsCount||0]].map(x=>'<div class="job" style="padding:16px"><strong>'+x[0]+'</strong><div style="font-size:26px">'+x[1]+'</div></div>').join('');$('employers').innerHTML=e.data?.length?e.data.map(x=>'<div style="padding:12px 0;border-bottom:1px solid #ddd"><strong>'+esc(x.company_name)+'</strong> — '+esc(x.country)+' — <strong>'+esc(x.verification_status)+'</strong> <select data-employer="'+x.id+'"><option value="">Change status</option><option>verified</option><option>under_review</option><option>rejected</option><option>suspended</option></select></div>').join(''):'No employers';$('jobs').innerHTML=j.data?.length?j.data.map(x=>'<div style="padding:12px 0;border-bottom:1px solid #ddd"><strong>'+esc(x.title)+'</strong> — '+esc(x.employers?.company_name||'')+' — '+esc(x.country)+' — <strong>'+esc(x.status)+'</strong> <select data-job="'+x.id+'"><option value="">Change job status</option><option>under_review</option><option>approved</option><option>published</option><option>filled</option><option>closed</option><option>rejected</option></select></div>').join(''):'No agency vacancies';$('apps').innerHTML=a.data?.length?a.data.map(x=>'<div style="padding:12px 0;border-bottom:1px solid #ddd"><strong>'+esc(x.candidate_profiles?.full_name||'Candidate')+'</strong> — '+esc(x.agency_jobs?.title||'Placement')+' — <strong>'+esc(x.status)+'</strong> <select data-app="'+x.id+'"><option value="">Update status</option>'+statuses.map(s=>'<option>'+s+'</option>').join('')+'</select></div>').join(''):'No applications'}
 async function loadManualJobs(){const r=await client.from('jobseek_manual_jobs').select('*').order('created_at',{ascending:false});if(r.error){$('manualJobs').innerHTML='<p>Manual jobs unavailable: '+esc(r.error.message)+'</p>';return}const rows=r.data||[];window.manualJobsCount=rows.filter(x=>x.status==='published').length;$('manualJobs').innerHTML=rows.length?rows.map(x=>'<div style="padding:12px 0;border-bottom:1px solid #ddd"><strong>'+esc(x.title)+'</strong> — '+esc(x.company)+' — '+esc(x.location)+' — <strong>'+esc(x.status)+'</strong> <a class="btn" target="_blank" rel="noopener" href="'+esc(x.apply_url)+'">Apply</a> <button class="outline" data-manual-close="'+x.id+'">'+(x.status==='closed'?'Reopen':'Close')+'</button></div>').join(''):'No manual jobs yet.'}
 async function saveManualJob(e){e.preventDefault();const msg=$('manualJobMsg');msg.textContent='Publishing…';const row={title:$('mjTitle').value.trim(),company:$('mjCompany').value.trim(),location:$('mjLocation').value.trim(),category:$('mjCategory').value.trim()||null,employment_type:$('mjType').value.trim()||null,salary:$('mjSalary').value.trim()||null,apply_url:$('mjApply').value.trim(),source:$('mjSource').value.trim()||'Manual Admin Upload',posted_at:$('mjPosted').value?new Date($('mjPosted').value+'T00:00:00').toISOString():new Date().toISOString(),closing_date:$('mjClosing').value?new Date($('mjClosing').value+'T23:59:59').toISOString():null,visa_sponsorship:$('mjVisa').checked,visa_evidence:$('mjVisaEvidence').value.trim()||null,description:$('mjDescription').value.trim()||null,status:'published',created_by:user.id,updated_at:new Date().toISOString()};const r=await client.from('jobseek_manual_jobs').insert(row);if(r.error){msg.textContent=r.error.message;return}msg.textContent='Job published successfully.';$('manualJobForm').reset();$('mjSource').value='Manual Admin Upload';await loadManualJobs();load()}
@@ -28,4 +37,169 @@ async function publishImported(){const ids=[...document.querySelectorAll("[data-
 $("jobDocument").addEventListener("change",async e=>{const f=e.target.files&&e.target.files[0];if(!f)return;$("documentMsg").textContent="Reading "+f.name+"…";try{const t=await readDoc(f);importedJobs=docBlocks(t).map(parseDocBlock).filter(j=>j.title||j.company||j.apply_url);if(!importedJobs.length)throw new Error("No jobs detected. Use Job Title, Company, Location, Category and Application Link labels; separate jobs with ---");$("documentMsg").textContent="Extracted "+importedJobs.length+" job(s). Review below, then publish.";showImported()}catch(err){$("documentMsg").textContent="Could not read document: "+err.message}});
 </script>function renderRequests(rows){$('adminRequests').innerHTML=rows.length?rows.map(x=>`<article style="padding:16px 0;border-bottom:1px solid #ddd"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><div><h3 style="margin:0">${esc(x.job_title)}</h3><p><strong>${esc(x.full_name||'Candidate')}</strong> · ${esc(x.email||'')} ${x.employer_name?'· '+esc(x.employer_name):''}</p><p class="micro">Reference: ${esc(x.id)} · Created: ${fmt(x.created_at)}${x.assigned_to?' · Assigned: '+esc(x.assigned_to):''}</p></div><span class="tag">${esc(x.status)}</span></div><p>${esc(x.notes||'No additional notes.')}</p><label>Status <select data-request-status="${x.id}"><option value="">Update status</option>${adminStatuses.map(s=>`<option ${s===x.status?'selected':''}>${s}</option>`).join('')}</select></label> <label style="display:inline-block;margin-left:8px">Assign to <input data-request-assign="${x.id}" value="${esc(x.assigned_to||'')}" placeholder="Admin user ID" style="max-width:220px"></label><button class="outline" data-request-save="${x.id}" style="margin-left:8px">Save</button></article>`).join(''):'No administration requests yet.'}
 async function saveRequest(id){const statusEl=document.querySelector(`[data-request-status="${id}"]`),assignEl=document.querySelector(`[data-request-assign="${id}"]`);const patch={};if(statusEl?.value)patch.status=statusEl.value;if(assignEl)patch.assigned_to=assignEl.value.trim()||null;if(patch.status==='APPROVED_TO_SUBMIT')patch.candidate_approved_at=new Date().toISOString();if(patch.status==='SUBMITTED')patch.submitted_at=new Date().toISOString();const r=await client.from('jobseek_application_requests').update(patch).eq('id',id);if(r.error)alert(r.error.message);else load()}
-document.addEventListener('change',async e=>{const t=e.target;if(t.dataset.employer&&t.value){const r=await client.from('employers').update({verification_status:t.value,verified_at:t.value==='verified'?new Date().toISOString():null,verified_by:t.value==='verified'?user.id:null}).eq('id',t.dataset.employer);if(r.error)alert(r.error.message);else load()}if(t.dataset.job&&t.value){const r=await client.from('agency_jobs').update({status:t.value,verification_status:t.value==='published'||t.value==='approved'?'verified':t.value==='rejected'?'rejected':'under_review',approved_by:['approved','published'].includes(t.value)?user.id:null,approved_at:['approved','published'].includes(t.value)?new Date().toISOString():null,published_at:t.value==='published'?new Date().toISOString():null}).eq('id',t.dataset.job);if(r.error)alert(r.error.message);else load()}if(t.dataset.app&&t.value){const r=await client.rpc('jobseek_admin_update_application',{p_application_id:t.dataset.app,p_status:t.value,p_note:null});if(r.error)alert(r.error.message);else load()}});document.addEventListener('click',e=>{const t=e.target;if(t.dataset.requestSave)saveRequest(t.dataset.requestSave)});$('refreshRequests').onclick=load;$('manualJobForm').onsubmit=saveManualJob;document.addEventListener('click',async e=>{const id=e.target.dataset.manualClose;if(!id)return;const row=await client.from('jobseek_manual_jobs').select('status').eq('id',id).single();if(row.error)return alert(row.error.message);const next=row.data.status==='closed'?'published':'closed';const u=await client.from('jobseek_manual_jobs').update({status:next,updated_at:new Date().toISOString()}).eq('id',id);if(u.error)alert(u.error.message);else load()});$('logout').onclick=async()=>{await client?.auth.signOut();location.href='auth.html'};init();</script></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-client.js"></script><script>const sb=supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key);const id=x=>document.getElementById(x);async function showAdmin(){const s=await sb.auth.getSession();const session=s.data.session;if(!session){id('loginGate').hidden=false;id('adminApp').hidden=true;return}const p=await sb.from('profiles').select('is_admin').eq('id',session.user.id).maybeSingle();if(!p.data?.is_admin){await sb.auth.signOut();id('loginMsg').textContent='This account is not authorized for the Main Admin Dashboard.';return}id('loginGate').hidden=true;id('adminApp').hidden=false;if(typeof load==='function')load()}id('adminLoginForm').addEventListener('submit',async e=>{e.preventDefault();id('loginMsg').textContent='Signing in…';const r=await sb.auth.signInWithPassword({email:id('adminEmail').value.trim(),password:id('adminPassword').value});if(r.error){id('loginMsg').textContent=r.error.message;return}showAdmin()});showAdmin();</script><script>const sb=supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key);const id=x=>document.getElementById(x);async function showAdmin(){const s=await sb.auth.getSession();const session=s.data.session;if(!session){id('loginGate').hidden=false;id('adminApp').hidden=true;return}const a=await sb.from('jobseek_accounts').select('role').eq('id',session.user.id).maybeSingle();if(!['admin','agent'].includes(a.data?.role)){await sb.auth.signOut();id('loginMsg').textContent='This account is not authorized for the Main Admin Dashboard.';return}id('loginGate').hidden=true;id('adminApp').hidden=false;if(typeof init==='function')init()}id('adminLoginForm').addEventListener('submit',async e=>{e.preventDefault();id('loginMsg').textContent='Signing in…';const r=await sb.auth.signInWithPassword({email:id('adminEmail').value.trim(),password:id('adminPassword').value});if(r.error){id('loginMsg').textContent=r.error.message;return}showAdmin()});showAdmin();</script></body></html>
+document.addEventListener('change',async e=>{const t=e.target;if(t.dataset.employer&&t.value){const r=await client.from('employers').update({verification_status:t.value,verified_at:t.value==='verified'?new Date().toISOString():null,verified_by:t.value==='verified'?user.id:null}).eq('id',t.dataset.employer);if(r.error)alert(r.error.message);else load()}if(t.dataset.job&&t.value){const r=await client.from('agency_jobs').update({status:t.value,verification_status:t.value==='published'||t.value==='approved'?'verified':t.value==='rejected'?'rejected':'under_review',approved_by:['approved','published'].includes(t.value)?user.id:null,approved_at:['approved','published'].includes(t.value)?new Date().toISOString():null,published_at:t.value==='published'?new Date().toISOString():null}).eq('id',t.dataset.job);if(r.error)alert(r.error.message);else load()}if(t.dataset.app&&t.value){const r=await client.rpc('jobseek_admin_update_application',{p_application_id:t.dataset.app,p_status:t.value,p_note:null});if(r.error)alert(r.error.message);else load()}});document.addEventListener('click',e=>{const t=e.target;if(t.dataset.requestSave)saveRequest(t.dataset.requestSave)});$('refreshRequests').onclick=load;$('manualJobForm').onsubmit=saveManualJob;document.addEventListener('click',async e=>{const id=e.target.dataset.manualClose;if(!id)return;const row=await client.from('jobseek_manual_jobs').select('status').eq('id',id).single();if(row.error)return alert(row.error.message);const next=row.data.status==='closed'?'published':'closed';const u=await client.from('jobseek_manual_jobs').update({status:next,updated_at:new Date().toISOString()}).eq('id',id);if(u.error)alert(u.error.message);else load()});$('logout').onclick=async()=>{await client?.auth.signOut();location.href='auth.html'};init();</script></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-client.js"></script><script>const sb=supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key);const id=x=>document.getElementById(x);async function showAdmin(){const s=await sb.auth.getSession();const session=s.data.session;if(!session){id('loginGate').hidden=false;id('adminApp').hidden=true;return}const p=await sb.from('profiles').select('is_admin').eq('id',session.user.id).maybeSingle();if(!p.data?.is_admin){await sb.auth.signOut();id('loginMsg').textContent='This account is not authorized for the Main Admin Dashboard.';return}id('loginGate').hidden=true;id('adminApp').hidden=false;if(typeof load==='function')load()}id('adminLoginForm').addEventListener('submit',async e=>{e.preventDefault();id('loginMsg').textContent='Signing in…';const r=await sb.auth.signInWithPassword({email:id('adminEmail').value.trim(),password:id('adminPassword').value});if(r.error){id('loginMsg').textContent=r.error.message;return}showAdmin()});showAdmin();</script><script>const sb=supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key);const id=x=>document.getElementById(x);async function showAdmin(){const s=await sb.auth.getSession();const session=s.data.session;if(!session){id('loginGate').hidden=false;id('adminApp').hidden=true;return}const a=await sb.from('jobseek_accounts').select('role').eq('id',session.user.id).maybeSingle();if(!['admin','agent'].includes(a.data?.role)){await sb.auth.signOut();id('loginMsg').textContent='This account is not authorized for the Main Admin Dashboard.';return}id('loginGate').hidden=true;id('adminApp').hidden=false;if(typeof init==='function')init()}id('adminLoginForm').addEventListener('submit',async e=>{e.preventDefault();id('loginMsg').textContent='Signing in…';const r=await sb.auth.signInWithPassword({email:id('adminEmail').value.trim(),password:id('adminPassword').value});if(r.error){id('loginMsg').textContent=r.error.message;return}showAdmin()});showAdmin();</script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<script>
+(function(){
+  let excelJobs=[];
+  const excelCategories=['Construction','Technology','Data Analysis','Healthcare','Engineering','Finance','Logistics','Hospitality','Customer Service','Remote','Other'];
+
+  function excelText(v){ return String(v==null?'':v).trim(); }
+  function excelKey(v){ return excelText(v).toLowerCase().replace(/[^a-z0-9]+/g,' ').trim(); }
+  function excelCategory(text){
+    const s=String(text||'').toLowerCase();
+    if(/electrician|welder|plumber|carpenter|mason|construction|scaffolder|hvac|roofer|site manager|civil/.test(s)) return 'Construction';
+    if(/data analyst|data scientist|software|developer|devops|cyber|information technology|programmer|frontend|backend|qa engineer/.test(s)) return 'Technology';
+    if(/nurse|doctor|healthcare|medical|pharmac|care assistant|midwife/.test(s)) return 'Healthcare';
+    if(/accountant|finance|banking|auditor|bookkeeper|investment/.test(s)) return 'Finance';
+    if(/driver|truck|warehouse|logistics|forklift|supply chain/.test(s)) return 'Logistics';
+    if(/engineer|engineering/.test(s)) return 'Engineering';
+    if(/hospitality|hotel|chef|cook|restaurant|housekeeping/.test(s)) return 'Hospitality';
+    if(/customer service|call center|customer support/.test(s)) return 'Customer Service';
+    if(/remote/.test(s)) return 'Remote';
+    if(/data|analytics|sql|power bi|tableau|excel/.test(s)) return 'Data Analysis';
+    return 'Other';
+  }
+  function excelDate(v){
+    if(v==null || v==='') return null;
+    if(v instanceof Date && !Number.isNaN(v.getTime())) return v;
+    if(typeof v==='number'){
+      const d=XLSX.SSF.parse_date_code(v);
+      if(d) return new Date(Date.UTC(d.y,d.m-1,d.d,d.H||0,d.M||0,d.S||0));
+    }
+    const s=excelText(v);
+    const d=new Date(s);
+    return Number.isNaN(d.getTime())?null:d;
+  }
+  function iso(v,end){
+    const d=excelDate(v); if(!d) return null;
+    if(end) d.setUTCHours(23,59,59,999);
+    return d.toISOString();
+  }
+  function normalizeVisa(v){
+    const s=excelText(v).toLowerCase();
+    return /^(yes|y|true|1|available|sponsor|sponsorship)$/.test(s);
+  }
+  function normalizeUrl(v){
+    const s=excelText(v);
+    if(!s) return '';
+    try { return new URL(s).toString(); } catch(e) { return ''; }
+  }
+  function normalizeRow(raw){
+    const r={};
+    Object.keys(raw||{}).forEach(k=>r[excelKey(k)]=raw[k]);
+    const title=excelText(r['job title']||r['title']||r['position']);
+    const company=excelText(r['company']||r['company name']||r['employer']);
+    const location=excelText(r['location']||r['job location']||r['country']);
+    const description=excelText(r['description']||r['job description']||r['details']);
+    const category=excelText(r['category']||r['job category']) || excelCategory(title+' '+description+' '+location);
+    const posted=iso(r['posted date']||r['date posted']||r['posted at']);
+    const closing=iso(r['closing date']||r['deadline']||r['application deadline'],true);
+    const apply=normalizeUrl(r['application link']||r['apply link']||r['apply url']||r['url']);
+    return {
+      title, company, location, category,
+      employment_type:excelText(r['job type']||r['employment type']||r['employment'])||null,
+      salary:excelText(r['salary']||r['salary range']||r['pay'])||null,
+      description:description||null,
+      posted_at:posted||new Date().toISOString(),
+      closing_date:closing,
+      apply_url:apply,
+      source:excelText(r['source'])||'Manual Excel Upload',
+      visa_sponsorship:normalizeVisa(r['visa sponsorship']||r['visa sponsorship available']||r['sponsorship']),
+      visa_evidence:excelText(r['visa evidence'])||null,
+      status:'published'
+    };
+  }
+  function validate(j){
+    const errors=[];
+    if(!j.title) errors.push('Job Title');
+    if(!j.company) errors.push('Company');
+    if(!j.location) errors.push('Location');
+    if(!j.apply_url) errors.push('valid Application Link');
+    if(j.closing_date && new Date(j.closing_date)<new Date() && j.status==='published') errors.push('future Closing Date');
+    return errors;
+  }
+  async function duplicateKeys(){
+    const r=await client.from('jobseek_manual_jobs').select('title,company,apply_url');
+    if(r.error) throw r.error;
+    return new Set((r.data||[]).map(x=>excelKey(x.title)+'|'+excelKey(x.company)+'|'+excelKey(x.apply_url)));
+  }
+  function renderExcelPreview(){
+    const box=document.getElementById('excelPreview');
+    if(!excelJobs.length){box.innerHTML='';return;}
+    box.innerHTML='<h4>Excel jobs — review before publishing</h4>'+
+      excelJobs.map((j,i)=>{
+        const errs=validate(j);
+        return '<div class="job" style="padding:14px;margin:10px 0">'+
+          '<label><input type="checkbox" data-excel-index="'+i+'" '+(errs.length?'':'checked')+'></label> '+
+          '<strong>Row '+(i+2)+': '+esc(j.title||'Title missing')+'</strong>'+
+          '<p class="micro">'+esc(j.company||'Company missing')+' · '+esc(j.location||'Location missing')+' · '+esc(j.category)+'</p>'+
+          '<p class="micro">Posted: '+esc(j.posted_at?new Date(j.posted_at).toLocaleDateString():'')+' · Visa: '+(j.visa_sponsorship?'Yes':'No')+'</p>'+
+          '<p class="micro">Apply: '+esc(j.apply_url||'NOT FOUND')+'</p>'+
+          (errs.length?'<p style="margin:6px 0"><strong>Needs fixing:</strong> '+esc(errs.join(', '))+'</p>':'')+
+          '</div>';
+      }).join('')+
+      '<button class="btn" id="publishExcelJobs" type="button">Publish Selected Excel Jobs</button>';
+    document.getElementById('publishExcelJobs').onclick=publishExcelJobs;
+  }
+  async function publishExcelJobs(){
+    const msg=document.getElementById('excelMsg');
+    const selected=[...document.querySelectorAll('[data-excel-index]:checked')].map(x=>Number(x.dataset.excelIndex));
+    if(!selected.length){msg.textContent='Select at least one valid job.';return;}
+    msg.textContent='Checking duplicates and publishing…';
+    try{
+      const existing=await duplicateKeys(), seen=new Set(), rows=[], skipped=[];
+      selected.forEach(i=>{
+        const j=excelJobs[i], k=excelKey(j.title)+'|'+excelKey(j.company)+'|'+excelKey(j.apply_url);
+        const errs=validate(j);
+        if(errs.length){skipped.push('Row '+(i+2)+': '+errs.join(', '));return;}
+        if(existing.has(k)||seen.has(k)){skipped.push('Row '+(i+2)+': duplicate job');return;}
+        seen.add(k); rows.push({...j,created_by:user.id,updated_at:new Date().toISOString()});
+      });
+      if(!rows.length){msg.textContent='Nothing published. '+skipped.join(' | ');return;}
+      const r=await client.from('jobseek_manual_jobs').insert(rows);
+      if(r.error) throw r.error;
+      msg.textContent=rows.length+' job(s) published successfully.'+(skipped.length?' Skipped: '+skipped.join(' | '):'');
+      excelJobs=[]; renderExcelPreview(); document.getElementById('jobExcel').value='';
+      await loadManualJobs(); await load();
+    }catch(e){msg.textContent='Publish failed: '+e.message;}
+  }
+  function downloadTemplate(){
+    const headers=['Job Title','Company','Location','Category','Job Type','Salary','Posted Date','Closing Date','Visa Sponsorship','Application Link','Description','Source','Visa Evidence'];
+    const example=['Construction Electrician','Example Company','Lagos, Nigeria','Construction','Full-Time','NGN 300,000/month','2026-09-19','2026-10-19','No','https://example.com/apply','Paste the job description here.','Manual Excel Upload',''];
+    const ws=XLSX.utils.aoa_to_sheet([headers,example]);
+    ws['!cols']=headers.map(h=>({wch:Math.max(18,h.length+2)}));
+    const ins=[
+      ['JOBSEEK EXCEL JOB UPLOAD — INSTRUCTIONS'],
+      ['1. Add one job per row. Do not merge cells.'],
+      ['2. Required: Job Title, Company, Location and Application Link.'],
+      ['3. Dates should be YYYY-MM-DD where possible.'],
+      ['4. Visa Sponsorship must be Yes or No. Use Yes only when the source explicitly states sponsorship.'],
+      ['5. Application Link must be the original employer or job-portal application URL.'],
+      ['6. Category can be blank; JobSeek will infer a category from the title, description and location.'],
+      ['7. Supported categories: '+excelCategories.join(', ')+'.'],
+      ['8. Review the preview before publishing. Duplicate jobs are skipped automatically.']
+    ];
+    const wi=XLSX.utils.aoa_to_sheet(ins); wi['!cols']=[{wch:110}];
+    const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Jobs'); XLSX.utils.book_append_sheet(wb,wi,'Instructions');
+    XLSX.writeFile(wb,'JobSeek_Job_Upload_Template.xlsx');
+  }
+  document.addEventListener('DOMContentLoaded',()=>{
+    document.getElementById('downloadJobExcelTemplate')?.addEventListener('click',downloadTemplate);
+    document.getElementById('jobExcel')?.addEventListener('change',async e=>{
+      const f=e.target.files&&e.target.files[0]; if(!f)return;
+      const msg=document.getElementById('excelMsg'); msg.textContent='Reading '+f.name+'…';
+      try{
+        const wb=XLSX.read(await f.arrayBuffer(),{type:'array',cellDates:true});
+        const ws=wb.Sheets[wb.SheetNames[0]];
+        const rows=XLSX.utils.sheet_to_json(ws,{defval:''});
+        if(!rows.length) throw new Error('The first worksheet is empty.');
+        excelJobs=rows.map(normalizeRow);
+        msg.textContent='Loaded '+excelJobs.length+' job row(s). Review them below.';
+        renderExcelPreview();
+      }catch(err){msg.textContent='Could not read Excel file: '+err.message;excelJobs=[];renderExcelPreview();}
+    });
+  });
+})();
+</script>
+</body></html>
