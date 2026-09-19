@@ -1,4 +1,4 @@
-name: Pablo - Fresh Global Job Research (3-day)
+name: JobSeek - Automatic Job Upload (3-day)
 
 on:
   push:
@@ -24,8 +24,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  discover:
-    name: Discover, verify, clean and publish jobs
+  upload:
+    name: Automatically discover, verify and publish jobs
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
