@@ -8,9 +8,9 @@
       "international_for": "All applicants",
       "international_rule": "Global job feed; exclude roles explicitly locked to a foreign residence/work-authorization/local-bank requirement unless sponsorship or Nigeria eligibility is stated"
     },
-    "updated_at": "2026-09-19T17:43:33.544110+00:00"
+    "updated_at": "2026-09-19T17:54:04.582572+00:00"
   },
-  "updated_at": "2026-09-19T17:43:35.861769+00:00",
+  "updated_at": "2026-09-19T17:54:07.595729+00:00",
   "count": 2,
   "verified_count": 2,
   "not_confirmed_count": 0,
@@ -31,7 +31,7 @@
       "source_url": "https://remoteOK.com/remote-jobs/remote-senior-shopify-developer-sanctuary-computer-1137405",
       "published_at": "2026-09-18T13:29:53+00:00",
       "closing_date": "Not specified",
-      "fetched_at": "2026-09-19T17:43:27.194723+00:00",
+      "fetched_at": "2026-09-19T17:53:58.943286+00:00",
       "category": "Technology & IT",
       "employment_type": "",
       "salary": "",
@@ -46,18 +46,18 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T17:43:35.447090+00:00",
+      "verification_checked_at": "2026-09-19T17:54:07.191387+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
-      "pablo_researched_at": "2026-09-19T17:43:33.556942+00:00",
+      "pablo_researched_at": "2026-09-19T17:54:04.595167+00:00",
       "pablo_research_window_days": 3,
       "pablo_research_status": "RESEARCHED",
       "employer_identified": true,
       "direct_application": false,
       "is_active": true,
       "application_button_ready": true,
-      "last_cleanup_at": "2026-09-19T17:43:35.336427+00:00",
-      "paul_guardian_checked_at": "2026-09-19T17:43:35.447090+00:00"
+      "last_cleanup_at": "2026-09-19T17:54:07.063822+00:00",
+      "paul_guardian_checked_at": "2026-09-19T17:54:07.191387+00:00"
     },
     {
       "id": "972119ffc782b38e",
@@ -65,14 +65,14 @@
       "company": "Arango",
       "location": "Remote",
       "country": "",
-      "description": "Remote - Arango delivers a unified, natively multimodel contextual data platform that powers AI agents, assistants, and applications with the unified, current, and trusted business context needed to reason, decide, and act at scale.The Arango Contextual Data Platform connects... Please mention the word **FESTIVE** and tag RNTcuMTUxLjEzOC4xNDg= when applying to show you read the job post completely (#RNTcuMTUxLjEzOC4xNDg=). This is a beta feature to avoid spam applicants. Companies can search these words to find applicants that read this and see they're human.",
+      "description": "Remote - Arango delivers a unified, natively multimodel contextual data platform that powers AI agents, assistants, and applications with the unified, current, and trusted business context needed to reason, decide, and act at scale.The Arango Contextual Data Platform connects... Please mention the word **FESTIVE** and tag RNTcuMTUxLjEzNy4yMTY= when applying to show you read the job post completely (#RNTcuMTUxLjEzNy4yMTY=). This is a beta feature to avoid spam applicants. Companies can search these words to find applicants that read this and see they're human.",
       "url": "https://remoteOK.com/remote-jobs/remote-golang-kubernetes-engineer-arango-1137400",
       "apply_url": "https://remoteOK.com/remote-jobs/remote-golang-kubernetes-engineer-arango-1137400",
       "source": "RemoteOK",
       "source_url": "https://remoteOK.com/remote-jobs/remote-golang-kubernetes-engineer-arango-1137400",
       "published_at": "2026-09-16T19:00:02+00:00",
       "closing_date": "Not specified",
-      "fetched_at": "2026-09-19T17:43:27.195634+00:00",
+      "fetched_at": "2026-09-19T17:53:58.944210+00:00",
       "category": "Engineering",
       "employment_type": "",
       "salary": "",
@@ -87,18 +87,18 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T17:43:35.447090+00:00",
+      "verification_checked_at": "2026-09-19T17:54:07.191387+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
-      "pablo_researched_at": "2026-09-19T17:43:33.556942+00:00",
+      "pablo_researched_at": "2026-09-19T17:54:04.595167+00:00",
       "pablo_research_window_days": 3,
       "pablo_research_status": "RESEARCHED",
       "employer_identified": true,
       "direct_application": false,
       "is_active": true,
       "application_button_ready": true,
-      "last_cleanup_at": "2026-09-19T17:43:35.336427+00:00",
-      "paul_guardian_checked_at": "2026-09-19T17:43:35.447090+00:00"
+      "last_cleanup_at": "2026-09-19T17:54:07.063822+00:00",
+      "paul_guardian_checked_at": "2026-09-19T17:54:07.191387+00:00"
     }
   ],
   "source_errors": [],
@@ -112,7 +112,7 @@
     "status": "ACTIVE",
     "role": "job_research_manager",
     "research_window_days": 3,
-    "last_research_at": "2026-09-19T17:43:33.556942+00:00",
+    "last_research_at": "2026-09-19T17:54:04.595167+00:00",
     "handoff": "PAUL_PENDING",
     "rule": "Find jobs posted within the last 3 days; reject expired, unsafe or unreachable application routes before handoff."
   },
@@ -131,7 +131,7 @@
   "verified_source_count": 2,
   "needs_review_count": 0,
   "cleanup": {
-    "ran_at": "2026-09-19T17:43:35.336427+00:00",
+    "ran_at": "2026-09-19T17:54:07.063822+00:00",
     "removed_expired": 0,
     "removed_unsafe": 0,
     "remaining": 2
@@ -142,7 +142,7 @@
     "public_display": false,
     "status": "ACTIVE",
     "mode": "automated_job_quality_control",
-    "last_run_at": "2026-09-19T17:43:35.447090+00:00",
+    "last_run_at": "2026-09-19T17:54:07.191387+00:00",
     "removed_this_run": 0,
     "public_rule": "VERIFIED + posted date + active + working 2xx/3xx application URL"
   }
