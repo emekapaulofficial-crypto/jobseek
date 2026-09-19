@@ -10,7 +10,7 @@
     },
     "updated_at": "2026-09-19T00:55:31.680263+00:00"
   },
-  "updated_at": "2026-09-19T00:55:33.230806+00:00",
+  "updated_at": "2026-09-19T01:57:11.712051+00:00",
   "count": 17,
   "verified_count": 17,
   "not_confirmed_count": 0,
@@ -46,14 +46,15 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T00:55:26.507028+00:00",
+      "verification_checked_at": "2026-09-19T01:57:11.712051+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "employer_identified": true,
       "direct_application": false,
       "is_active": true,
       "application_button_ready": true,
-      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00"
+      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00",
+      "paul_guardian_checked_at": "2026-09-19T01:57:11.712051+00:00"
     },
     {
       "id": "648e93f65c12b2b3",
@@ -83,14 +84,15 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T00:55:26.711434+00:00",
+      "verification_checked_at": "2026-09-19T01:57:11.712051+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "employer_identified": true,
       "direct_application": false,
       "is_active": true,
       "application_button_ready": true,
-      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00"
+      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00",
+      "paul_guardian_checked_at": "2026-09-19T01:57:11.712051+00:00"
     },
     {
       "id": "be3366f1cf770523",
@@ -120,14 +122,15 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T00:55:26.955805+00:00",
+      "verification_checked_at": "2026-09-19T01:57:11.712051+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "employer_identified": true,
       "direct_application": false,
       "is_active": true,
       "application_button_ready": true,
-      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00"
+      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00",
+      "paul_guardian_checked_at": "2026-09-19T01:57:11.712051+00:00"
     },
     {
       "id": "48638ea6188e2d5c",
@@ -157,14 +160,15 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T00:55:27.151422+00:00",
+      "verification_checked_at": "2026-09-19T01:57:11.712051+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "employer_identified": true,
       "direct_application": false,
       "is_active": true,
       "application_button_ready": true,
-      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00"
+      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00",
+      "paul_guardian_checked_at": "2026-09-19T01:57:11.712051+00:00"
     },
     {
       "id": "88984b3026fc2153",
@@ -194,14 +198,15 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T00:55:27.286790+00:00",
+      "verification_checked_at": "2026-09-19T01:57:11.712051+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "employer_identified": true,
       "direct_application": false,
       "is_active": true,
       "application_button_ready": true,
-      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00"
+      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00",
+      "paul_guardian_checked_at": "2026-09-19T01:57:11.712051+00:00"
     },
     {
       "id": "a957b3b4d270ff84",
@@ -231,14 +236,15 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T00:55:27.396595+00:00",
+      "verification_checked_at": "2026-09-19T01:57:11.712051+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "employer_identified": true,
       "direct_application": false,
       "is_active": true,
       "application_button_ready": true,
-      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00"
+      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00",
+      "paul_guardian_checked_at": "2026-09-19T01:57:11.712051+00:00"
     },
     {
       "id": "1bba541d34a0cc0a",
@@ -268,14 +274,15 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T00:55:27.513372+00:00",
+      "verification_checked_at": "2026-09-19T01:57:11.712051+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "employer_identified": true,
       "direct_application": false,
       "is_active": true,
       "application_button_ready": true,
-      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00"
+      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00",
+      "paul_guardian_checked_at": "2026-09-19T01:57:11.712051+00:00"
     },
     {
       "id": "f714ac5d9d2a0cf1",
@@ -305,14 +312,15 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T00:55:27.649741+00:00",
+      "verification_checked_at": "2026-09-19T01:57:11.712051+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "employer_identified": true,
       "direct_application": false,
       "is_active": true,
       "application_button_ready": true,
-      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00"
+      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00",
+      "paul_guardian_checked_at": "2026-09-19T01:57:11.712051+00:00"
     },
     {
       "id": "9de82f7b1e095900",
@@ -342,14 +350,15 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T00:55:27.781474+00:00",
+      "verification_checked_at": "2026-09-19T01:57:11.712051+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "employer_identified": true,
       "direct_application": false,
       "is_active": true,
       "application_button_ready": true,
-      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00"
+      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00",
+      "paul_guardian_checked_at": "2026-09-19T01:57:11.712051+00:00"
     },
     {
       "id": "df1d253a53d89218",
@@ -379,14 +388,15 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T00:55:27.946152+00:00",
+      "verification_checked_at": "2026-09-19T01:57:11.712051+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "employer_identified": true,
       "direct_application": false,
       "is_active": true,
       "application_button_ready": true,
-      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00"
+      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00",
+      "paul_guardian_checked_at": "2026-09-19T01:57:11.712051+00:00"
     },
     {
       "id": "a4e309dc3b85ff6e",
@@ -416,14 +426,15 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T00:55:28.127383+00:00",
+      "verification_checked_at": "2026-09-19T01:57:11.712051+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "employer_identified": true,
       "direct_application": false,
       "is_active": true,
       "application_button_ready": true,
-      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00"
+      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00",
+      "paul_guardian_checked_at": "2026-09-19T01:57:11.712051+00:00"
     },
     {
       "id": "7f155a47d4f36b6a",
@@ -453,14 +464,15 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T00:55:28.272023+00:00",
+      "verification_checked_at": "2026-09-19T01:57:11.712051+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "employer_identified": true,
       "direct_application": false,
       "is_active": true,
       "application_button_ready": true,
-      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00"
+      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00",
+      "paul_guardian_checked_at": "2026-09-19T01:57:11.712051+00:00"
     },
     {
       "id": "3b96cf84d434df4d",
@@ -490,14 +502,15 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T00:55:28.465810+00:00",
+      "verification_checked_at": "2026-09-19T01:57:11.712051+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "employer_identified": true,
       "direct_application": false,
       "is_active": true,
       "application_button_ready": true,
-      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00"
+      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00",
+      "paul_guardian_checked_at": "2026-09-19T01:57:11.712051+00:00"
     },
     {
       "id": "09e44b4eccd98b3e",
@@ -527,14 +540,15 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T00:55:28.608042+00:00",
+      "verification_checked_at": "2026-09-19T01:57:11.712051+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "employer_identified": true,
       "direct_application": false,
       "is_active": true,
       "application_button_ready": true,
-      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00"
+      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00",
+      "paul_guardian_checked_at": "2026-09-19T01:57:11.712051+00:00"
     },
     {
       "id": "334d926a78ef4bab",
@@ -564,14 +578,15 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T00:55:28.802552+00:00",
+      "verification_checked_at": "2026-09-19T01:57:11.712051+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "employer_identified": true,
       "direct_application": false,
       "is_active": true,
       "application_button_ready": true,
-      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00"
+      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00",
+      "paul_guardian_checked_at": "2026-09-19T01:57:11.712051+00:00"
     },
     {
       "id": "89fbba20dede3a8c",
@@ -601,14 +616,15 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T00:55:28.853340+00:00",
+      "verification_checked_at": "2026-09-19T01:57:11.712051+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "employer_identified": true,
       "direct_application": false,
       "is_active": true,
       "application_button_ready": true,
-      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00"
+      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00",
+      "paul_guardian_checked_at": "2026-09-19T01:57:11.712051+00:00"
     },
     {
       "id": "e6de02a7e5fc69b0",
@@ -638,14 +654,15 @@
       "risk_flags": [],
       "verification_status": "VERIFIED",
       "verification_reasons": [],
-      "verification_checked_at": "2026-09-19T00:55:29.060868+00:00",
+      "verification_checked_at": "2026-09-19T01:57:11.712051+00:00",
       "apply_url_checked": true,
       "apply_url_status": "200",
       "employer_identified": true,
       "direct_application": false,
       "is_active": true,
       "application_button_ready": true,
-      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00"
+      "last_cleanup_at": "2026-09-19T00:55:32.914995+00:00",
+      "paul_guardian_checked_at": "2026-09-19T01:57:11.712051+00:00"
     }
   ],
   "source_errors": [],
@@ -671,5 +688,15 @@
     "removed_unsafe": 0,
     "remaining": 17
   },
-  "freshness_window_days": 14
+  "freshness_window_days": 14,
+  "paul_guardian": {
+    "name": "Paul",
+    "visibility": "ADMIN_ONLY",
+    "public_display": false,
+    "status": "ACTIVE",
+    "mode": "automated_job_quality_control",
+    "last_run_at": "2026-09-19T01:57:11.712051+00:00",
+    "removed_this_run": 0,
+    "public_rule": "VERIFIED + posted date + active + working 2xx/3xx application URL"
+  }
 }
