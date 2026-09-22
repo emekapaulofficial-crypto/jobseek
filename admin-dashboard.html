@@ -32,6 +32,18 @@
   <div id="cleanupSummary" style="margin:14px 0">Checking jobs…</div>
   <div id="cleanupJobs">Loading cleanup results…</div>
 </div>
+<div class="job" style="padding:20px;margin-bottom:20px;border:2px solid #2563eb">
+  <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
+    <div>
+      <p class="eyebrow" style="margin-bottom:4px">🔎 JOB LINK MONITOR ROBOT</p>
+      <h2 style="margin:0">Closed Job Link Alerts</h2>
+      <p class="micro">The robot checks every published job's original application link every 15 minutes. It reports strong closed/not-found signals here. It does not remove a job automatically, so you remain in control.</p>
+    </div>
+    <button class="outline" id="refreshLinkMonitor" type="button">Refresh Robot Report</button>
+  </div>
+  <div id="linkMonitorSummary" style="margin:14px 0">Loading robot report…</div>
+  <div id="linkMonitorJobs">Loading…</div>
+</div>
 <div class="job" style="padding:20px;margin-bottom:20px"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap"><div><h2>Application administration queue</h2><p class="micro">New paid-service requests appear here. Review, assign, request information, and only mark submission after candidate approval.</p></div><button class="outline" id="refreshRequests">Refresh</button></div><div id="adminRequests">Loading…</div></div>
 <div class="job" style="padding:20px;margin-bottom:20px"><h2>Employer verification queue</h2><div id="employers">Loading…</div></div><div class="job" style="padding:20px;margin-bottom:20px"><h2>Agency vacancies</h2><div id="jobs">Loading…</div></div><div class="job" style="padding:20px"><h2>Applications & placement status</h2><div id="apps">Loading…</div></div></section></div></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-client.js"></script><script>
 let client,user;const $=id=>document.getElementById(id);const statuses=['applied','shortlisted','interview','offer','visa','deployed','rejected','withdrawn'];const adminStatuses=['REQUESTED','REVIEWING','NEEDS_INFO','READY_FOR_APPROVAL','APPROVED_TO_SUBMIT','SUBMITTED','INTERVIEW','OFFER','CLOSED','CANCELLED'];function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function fmt(d){return d?new Date(d).toLocaleString():''}
