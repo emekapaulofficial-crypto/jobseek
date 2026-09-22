@@ -1,0 +1,208 @@
+name: JobSeek Job Link Monitor
+
+on:
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/job-link-monitor.yml'
+      - 'supabase-client.js'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: jobseek-link-monitor
+  cancel-in-progress: true
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Check out JobSeek
+        uses: actions/checkout@v4
+
+      - name: Check every published job application link
+        env:
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python - <<'PY'
+          import json, re, time
+          from concurrent.futures import ThreadPoolExecutor, as_completed
+          from datetime import datetime, timezone
+          from pathlib import Path
+          from urllib.parse import quote
+          from urllib.request import Request, urlopen
+          from urllib.error import HTTPError, URLError
+
+          text = Path('supabase-client.js').read_text(encoding='utf-8')
+          url_match = re.search(r"url\s*:\s*['\"]([^'\"]+)['\"]", text)
+          key_match = re.search(r"key\s*:\s*['\"]([^'\"]+)['\"]", text)
+          if not url_match or not key_match:
+              raise SystemExit('Could not read Supabase URL/publishable key from supabase-client.js')
+
+          supabase_url = url_match.group(1).rstrip('/')
+          supabase_key = key_match.group(1)
+
+          endpoint = (
+              supabase_url + '/rest/v1/jobseek_manual_jobs'
+              '?select=id,title,company,location,apply_url,status,closing_date,updated_at'
+              '&status=eq.published'
+          )
+          req = Request(endpoint, headers={
+              'apikey': supabase_key,
+              'Authorization': 'Bearer ' + supabase_key,
+              'Accept': 'application/json',
+              'User-Agent': 'JobSeek-Link-Monitor/1.0'
+          })
+          with urlopen(req, timeout=20) as response:
+              jobs = json.loads(response.read().decode('utf-8'))
+
+          strong_closed = [
+              'job is closed',
+              'job closed',
+              'position is closed',
+              'position closed',
+              'position has been filled',
+              'position has already been filled',
+              'no longer accepting applications',
+              'applications are closed',
+              'application period has ended',
+              'this job is no longer available',
+              'job is no longer available',
+              'vacancy is closed',
+              'vacancy closed',
+              'applications closed',
+              'job has expired',
+              'job expired',
+              'this vacancy has expired',
+              'vacancy has expired',
+              'we are no longer accepting applications',
+              'role has been filled',
+              'role is no longer available'
+          ]
+          not_found = [
+              'job not found',
+              'position not found',
+              'vacancy not found',
+              'no such job',
+              'job does not exist',
+              'page not found'
+          ]
+
+          def check(job):
+              raw = str(job.get('apply_url') or '').strip()
+              result = {
+                  'id': job.get('id'),
+                  'title': job.get('title'),
+                  'company': job.get('company'),
+                  'location': job.get('location'),
+                  'apply_url': raw,
+                  'status': 'NO_LINK',
+                  'http_status': None,
+                  'final_url': raw,
+                  'evidence': '',
+                  'checked_at': datetime.now(timezone.utc).isoformat()
+              }
+              if not raw:
+                  return result
+
+              try:
+                  request = Request(raw, headers={
+                      'User-Agent': 'Mozilla/5.0 (compatible; JobSeekLinkMonitor/1.0; +https://jobsee.pages.dev/)'
+                  })
+                  with urlopen(request, timeout=20) as response:
+                      body = response.read(1500000).decode('utf-8', errors='ignore')
+                      code = response.getcode()
+                      final_url = response.geturl()
+                  low = re.sub(r'\s+', ' ', body).lower()
+
+                  result['http_status'] = code
+                  result['final_url'] = final_url
+
+                  if code in (404, 410):
+                      result['status'] = 'CLOSED'
+                      result['evidence'] = f'HTTP {code}'
+                      return result
+
+                  if code >= 500:
+                      result['status'] = 'TEMP_ERROR'
+                      result['evidence'] = f'HTTP {code}'
+                      return result
+
+                  if code in (401, 403, 429):
+                      result['status'] = 'CHECK_MANUALLY'
+                      result['evidence'] = f'HTTP {code} — site blocked or rate-limited the robot'
+                      return result
+
+                  for marker in strong_closed:
+                      if marker in low:
+                          result['status'] = 'CLOSED'
+                          result['evidence'] = marker
+                          return result
+
+                  for marker in not_found:
+                      if marker in low and len(low) < 250000:
+                          result['status'] = 'CLOSED'
+                          result['evidence'] = marker
+                          return result
+
+                  result['status'] = 'OPEN'
+                  return result
+
+              except HTTPError as e:
+                  result['http_status'] = e.code
+                  result['status'] = 'CLOSED' if e.code in (404, 410) else ('CHECK_MANUALLY' if e.code in (401,403,429) else 'TEMP_ERROR')
+                  result['evidence'] = f'HTTP {e.code}'
+                  return result
+              except (URLError, TimeoutError) as e:
+                  result['status'] = 'CHECK_MANUALLY'
+                  result['evidence'] = 'Network/timeout: ' + str(e)[:180]
+                  return result
+              except Exception as e:
+                  result['status'] = 'CHECK_MANUALLY'
+                  result['evidence'] = type(e).__name__ + ': ' + str(e)[:180]
+                  return result
+
+          results = []
+          with ThreadPoolExecutor(max_workers=8) as pool:
+              futures = [pool.submit(check, job) for job in jobs]
+              for future in as_completed(futures):
+                  results.append(future.result())
+
+          results.sort(key=lambda x: (x['status'] != 'CLOSED', x['status'], (x.get('title') or '').lower()))
+
+          counts = {}
+          for item in results:
+              counts[item['status']] = counts.get(item['status'], 0) + 1
+
+          report = {
+              'updated_at': datetime.now(timezone.utc).isoformat(),
+              'source': 'Supabase public published manual jobs',
+              'check_interval': '15 minutes',
+              'note': 'CLOSED means the robot found a strong closed/not-found signal. JobSeek does not automatically remove jobs; an admin must review and close/remove them from the public feed.',
+              'counts': counts,
+              'jobs': results
+          }
+
+          Path('job-link-monitor.json').write_text(
+              json.dumps(report, ensure_ascii=False, indent=2),
+              encoding='utf-8'
+          )
+          print('JobSeek link monitor checked', len(results), 'published jobs:', counts)
+          PY
+
+      - name: Publish monitor report
+        run: |
+          git config user.name 'JobSeek AI Agent'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add job-link-monitor.json
+          if git diff --cached --quiet; then
+            echo 'No monitor report changes.'
+          else
+            git commit -m 'chore: update job link monitor report'
+            git push
+          fi
