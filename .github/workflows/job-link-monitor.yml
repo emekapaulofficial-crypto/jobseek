@@ -39,8 +39,8 @@ jobs:
           from urllib.error import HTTPError, URLError
 
           text = Path('supabase-client.js').read_text(encoding='utf-8')
-          url_match = re.search(r"url\s*:\s*['\"]([^'\"]+)['\"]", text)
-          key_match = re.search(r"key\s*:\s*['\"]([^'\"]+)['\"]", text)
+          url_match = re.search(r"JOBSEEK_SUPABASE_URL\\s*=.*?['\"](https://[^'\"]+)['\"]", text)
+          key_match = re.search(r"JOBSEEK_SUPABASE_KEY\\s*=.*?['\"]([^'\"]+)['\"]", text)
           if not url_match or not key_match:
               raise SystemExit('Could not read Supabase URL/publishable key from supabase-client.js')
 
