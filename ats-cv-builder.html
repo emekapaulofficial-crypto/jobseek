@@ -1,1 +1,161 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JobSeek | ATS CV Builder</title><link rel="stylesheet" href="styles.css"><style>.wrap{max-width:1000px;margin:auto;padding:35px 18px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.card{background:#fff;border:1px solid #dce5ee;border-radius:16px;padding:22px;margin-bottom:18px}.field{display:grid;gap:6px;margin-bottom:13px}.field input,.field textarea{width:100%;padding:12px;border:1px solid #cbd7e3;border-radius:9px;font:inherit}.field textarea{min-height:120px}.cv{background:#fff;padding:40px;box-shadow:0 8px 30px #0000000d;line-height:1.5}.cv h1{margin-bottom:4px}.cv h2{font-size:15px;text-transform:uppercase;border-bottom:1px solid #333;padding-bottom:4px;margin-top:24px}.cv .contact{color:#445}.actions{display:flex;gap:10px;flex-wrap:wrap}@media(max-width:750px){.grid{grid-template-columns:1fr}.cv{padding:22px}}@media print{header,footer,.builder-form,.actions,.lead,.eyebrow{display:none!important}.wrap{padding:0}.cv{box-shadow:none;padding:0}}</style></head><body><header><div class="container nav"><a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a><nav><a href="candidate-dashboard.html">Dashboard</a><a href="jobs.html">Find Jobs</a></nav></div></header><main class="wrap"><p class="eyebrow">JOBSEEK ATS CV BUILDER</p><h1>Create a recruitment-ready CV</h1><p class="lead">Your JobSeek profile is used to prefill the builder. The CV only uses information you provide; it never invents qualifications or experience.</p><div class="card builder-form"><h2>Candidate details</h2><div class="grid"><div><div class="field"><label>Full name<input id="name"></label></div><div class="field"><label>Professional title<input id="title" placeholder="Electrician"></label></div><div class="field"><label>Email<input id="email" type="email"></label></div><div class="field"><label>Phone<input id="phone"></label></div><div class="field"><label>Location<input id="location"></label></div><div class="field"><label>LinkedIn / portfolio<input id="links"></label></div></div><div><div class="field"><label>Professional summary<textarea id="summary" placeholder="Write a truthful summary of your experience and strengths."></textarea></label></div><div class="field"><label>Skills<textarea id="skills" placeholder="One skill per line or comma separated"></textarea></label></div><div class="field"><label>Work experience<textarea id="experience" placeholder="Job title — Employer — Dates\nResponsibilities and achievements"></textarea></label></div><div class="field"><label>Education & certifications<textarea id="education" placeholder="Qualification — Institution — Year"></textarea></label></div></div></div><div class="actions"><button class="btn" id="load">Load my JobSeek profile</button><button class="btn" id="build">Build ATS CV</button><button class="outline" id="print">Print / Save PDF</button></div><p id="status" class="micro"></p></div><section class="cv" id="cv"><h1 id="outName">Your Name</h1><strong id="outTitle">Professional Title</strong><div class="contact" id="outContact">Email · Phone · Location</div><section><h2>Professional Summary</h2><div id="outSummary">Your summary will appear here.</div></section><section><h2>Core Skills</h2><div id="outSkills">Your skills will appear here.</div></section><section><h2>Professional Experience</h2><div id="outExperience">Your experience will appear here.</div></section><section><h2>Education & Certifications</h2><div id="outEducation">Your education and certifications will appear here.</div></section><section id="linkSection"><h2>Professional Links</h2><div id="outLinks"></div></section></section></main><footer><div class="container copy">© 2026 JobSeek</div></footer><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-client.js"></script><script>let client,user;const $=id=>document.getElementById(id);const clean=s=>String(s||'').trim();const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));function render(){const v=id=>clean($(id).value);$('outName').textContent=v('name')||'Your Name';$('outTitle').textContent=v('title')||'Professional Title';$('outContact').textContent=[v('email'),v('phone'),v('location')].filter(Boolean).join(' · ');$('outSummary').textContent=v('summary')||'Add a truthful professional summary.';$('outSkills').innerHTML=v('skills').split(/\n|,/).map(clean).filter(Boolean).map(x=>'• '+esc(x)).join('<br>');$('outExperience').innerHTML=esc(v('experience')).replace(/\n/g,'<br>')||'Add your work experience.';$('outEducation').innerHTML=esc(v('education')).replace(/\n/g,'<br>')||'Add your education and certifications.';const links=v('links');$('linkSection').style.display=links?'block':'none';$('outLinks').textContent=links}async function init(){if(!window.JobSeekSupabase?.configured)return;client=supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key);const r=await client.auth.getUser();if(r.data.user)user=r.data.user}async function loadProfile(){if(!user){$('status').textContent='Please log in to load your JobSeek profile.';return}const r=await client.from('candidate_profiles').select('*').eq('user_id',user.id).maybeSingle();if(r.error||!r.data){$('status').textContent='No saved candidate profile found.';return}const p=r.data;const set=(id,val)=>$(id).value=Array.isArray(val)?val.join(', '):(val??'');set('name',p.full_name);set('title',p.target_job||p.profession);set('phone',p.phone);set('location',[p.city,p.country_of_residence].filter(Boolean).join(', '));set('skills',p.skills);set('education',p.education);set('experience',p.experience);set('summary',p.professional_summary||'');render();$('status').textContent='JobSeek profile loaded ✓'}$('load').onclick=loadProfile;$('build').onclick=()=>{render();$('status').textContent='ATS CV prepared ✓'};$('print').onclick=()=>window.print();['name','title','email','phone','location','links','summary','skills','experience','education'].forEach(id=>$(id).addEventListener('input',render));init();</script></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JobSeek | ATS CV Builder</title><link rel="stylesheet" href="styles.css"><style>.wrap{max-width:1080px;margin:auto;padding:35px 18px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.card{background:#fff;border:1px solid #dce5ee;border-radius:16px;padding:22px;margin-bottom:18px}.field{display:grid;gap:6px;margin-bottom:13px}.field label{font-weight:600;color:#173251}.field input,.field textarea,.field select{width:100%;padding:12px;border:1px solid #cbd7e3;border-radius:9px;font:inherit;background:#fff;box-sizing:border-box}.field textarea{min-height:120px}.role-card{background:linear-gradient(135deg,#f7fbff,#fff);border:1px solid #cfe0f3}.role-badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#eaf3ff;color:#1557a6;font-size:12px;font-weight:700}.cv-shell{background:#eef3f8;padding:24px;border-radius:18px}.cv{background:#fff;padding:46px;box-shadow:0 12px 35px rgba(16,35,61,.09);line-height:1.55;min-height:900px}.cv h1{margin-bottom:4px;font-size:30px}.cv h2{font-size:14px;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid #d8e0e8;padding-bottom:6px;margin-top:24px;color:#173251}.cv .contact{color:#52647a;margin:5px 0 20px}.cv .target{font-size:13px;color:#35638f;margin-top:4px}.actions{display:flex;gap:10px;flex-wrap:wrap}.alignment{padding:14px;border:1px solid #dce5ee;border-radius:12px;background:#f8fafc;margin-top:14px}.match{color:#197a4b;font-weight:700}.missing{color:#9a5b00}.hint{font-size:12px;color:#64748b;margin-top:4px}@media(max-width:750px){.grid{grid-template-columns:1fr}.cv{padding:24px}.cv-shell{padding:10px}}@media print{header,footer,.builder-form,.actions,.lead,.eyebrow,.alignment,.cv-shell>h2{display:none!important}.wrap{padding:0;max-width:none}.cv-shell{background:#fff;padding:0}.cv{box-shadow:none;padding:0;min-height:auto}}</style></head><body><header><div class="container nav"><a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a><nav><a href="candidate-dashboard.html">Dashboard</a><a href="jobs.html">Find Jobs</a></nav></div></header><main class="wrap"><p class="eyebrow">JOBSEEK ATS CV BUILDER</p><h1>Create a recruitment-ready CV</h1><p class="lead">Your JobSeek profile is used to prefill the builder. The CV only uses information you provide; it never invents qualifications or experience.</p><div class="card role-card builder-form">
+  <span class="role-badge">ROLE-TAILORED ATS CV</span>
+  <h2>Tell JobSeek which role you are applying for</h2>
+  <p class="hint">JobSeek will structure the CV around the role, vacancy requirements and your real evidence. It will never invent qualifications, employers or achievements.</p>
+  <div class="grid">
+    <div class="field"><label>Target job title<input id="targetRole" placeholder="e.g. Sales Executive"></label></div>
+    <div class="field"><label>Company / employer<input id="targetCompany" placeholder="Optional"></label></div>
+  </div>
+  <div class="field"><label>Exact vacancy requirements<textarea id="jobRequirements" placeholder="Paste the employer's requirements, qualifications, skills and responsibilities here. If you opened this builder from a JobSeek vacancy, they will load automatically."></textarea></label></div>
+</div>
+
+<div class="card builder-form">
+  <h2>Your real candidate information</h2>
+  <p class="hint">Give JobSeek enough evidence to build a strong CV. Keep everything truthful.</p>
+  <div class="grid">
+    <div>
+      <div class="field"><label>Full name<input id="name"></label></div>
+      <div class="field"><label>Professional title<input id="title" placeholder="Your current/professional title"></label></div>
+      <div class="field"><label>Email<input id="email" type="email"></label></div>
+      <div class="field"><label>Phone<input id="phone"></label></div>
+      <div class="field"><label>Location<input id="location"></label></div>
+      <div class="field"><label>LinkedIn / portfolio<input id="links"></label></div>
+    </div>
+    <div>
+      <div class="field"><label>Professional summary<textarea id="summary" placeholder="Your real experience, industry background and strongest areas. JobSeek can improve the wording."></textarea></label></div>
+      <div class="field"><label>Skills<textarea id="skills" placeholder="One skill per line or comma separated"></textarea></label></div>
+      <div class="field"><label>Work experience<textarea id="experience" placeholder="Job title — Employer — Dates&#10;Responsibilities, results and achievements you can genuinely support."></textarea></label></div>
+      <div class="field"><label>Education & certifications<textarea id="education" placeholder="Qualification — Institution — Year"></textarea></label></div>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="btn" id="load">Load my JobSeek profile</button>
+    <button class="btn" id="build">Build role-tailored CV</button>
+    <button class="outline" id="download">Download CV</button>
+    <button class="outline" id="downloadTxt">Download text copy</button>
+    <button class="outline" id="print">Print / Save PDF</button>
+  </div>
+  <p id="status" class="micro"></p>
+  <div class="alignment" id="alignment" style="display:none"></div>
+</div>
+
+<div class="cv-shell">
+  <h2 style="margin:0 0 12px;color:#173251">Professional CV Preview</h2>
+  <section class="cv" id="cv">
+    <h1 id="outName">Your Name</h1>
+    <strong id="outTitle">Professional Title</strong>
+    <div class="target" id="outTarget"></div>
+    <div class="contact" id="outContact">Email · Phone · Location</div>
+    <section><h2>Professional Summary</h2><div id="outSummary">Your tailored summary will appear here.</div></section>
+    <section><h2>Core Skills</h2><div id="outSkills">Your role-relevant skills will appear here.</div></section>
+    <section><h2>Professional Experience</h2><div id="outExperience">Your experience will appear here.</div></section>
+    <section><h2>Education & Certifications</h2><div id="outEducation">Your education and certifications will appear here.</div></section>
+    <section id="linkSection"><h2>Professional Links</h2><div id="outLinks"></div></section>
+  </section>
+</div></main><footer><div class="container copy">© 2026 JobSeek</div></footer><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-client.js"></script><script>
+let client,user,profile={},vacancy={};
+const $=id=>document.getElementById(id);
+const clean=s=>String(s||'').replace(/\s+/g,' ').trim();
+const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const params=new URLSearchParams(location.search);
+const jobId=params.get('id')||params.get('job_id');
+
+function words(text){return clean(text).toLowerCase().replace(/[^a-z0-9+#.&/-]+/g,' ').split(/\s+/).filter(w=>w.length>2)}
+function unique(a){return [...new Set(a)]}
+function roleTerms(role,req){
+  const text=(role+' '+req).toLowerCase();
+  const common=['management','leadership','communication','sales','marketing','customer','client','business development','operations','project management','administration','finance','accounting','engineering','software','development','data','analysis','reporting','planning','negotiation','strategy','recruitment','compliance','research','design','support','technical','microsoft office','excel','crm'];
+  return unique(common.filter(x=>text.includes(x)).concat(words(req).filter(w=>w.length>4))).slice(0,28);
+}
+function candidateSkills(){return unique(clean($('skills').value).split(/[,\n;|]+/).map(clean).filter(Boolean))}
+function buildSummary(role,skills,experience){
+  const name=clean($('name').value);
+  const title=clean($('title').value);
+  const exp=clean(experience);
+  const roleName=role||title||'the target role';
+  const matched=skills.filter(s=>roleTerms(role,$('jobRequirements').value).some(t=>s.toLowerCase().includes(t)||t.includes(s.toLowerCase())));
+  const strengths=matched.slice(0,5).join(', ')||skills.slice(0,5).join(', ');
+  let intro=title?title+' with practical experience':(name?'Professional candidate':'Professional candidate');
+  if(exp) intro+=' across the experience provided';
+  if(strengths) intro+=', with strengths in '+strengths;
+  return intro+'. Seeking to contribute these capabilities in a '+roleName+' role while delivering reliable, measurable results.';
+}
+function tailorSkills(){
+  const skills=candidateSkills(), terms=roleTerms($('targetRole').value,$('jobRequirements').value);
+  const matched=skills.filter(s=>terms.some(t=>s.toLowerCase().includes(t)||t.includes(s.toLowerCase())));
+  const rest=skills.filter(s=>!matched.includes(s));
+  return unique([...matched,...rest]);
+}
+function renderAlignment(){
+  const box=$('alignment'), terms=roleTerms($('targetRole').value,$('jobRequirements').value), skills=candidateSkills();
+  if(!terms.length){box.style.display='none';return}
+  const matched=terms.filter(t=>skills.some(s=>s.toLowerCase().includes(t)||t.includes(s.toLowerCase())));
+  const missing=terms.filter(t=>!matched.includes(t)).slice(0,10);
+  box.style.display='block';
+  box.innerHTML='<strong>Hiring-manager alignment check</strong><div style="margin-top:8px">Matched from your evidence: <span class="match">'+(matched.join(', ')||'None identified yet')+'</span></div>'+(missing.length?'<div style="margin-top:6px">Not yet evidenced: <span class="missing">'+missing.join(', ')+'</span>. JobSeek will not falsely add these.</div>':'<div style="margin-top:6px" class="match">Your provided skills cover the main identified role terms.</div>');
+}
+function render(){
+  const v=id=>clean($(id).value), role=v('targetRole')||v('title')||'';
+  const skills=tailorSkills();
+  $('outName').textContent=v('name')||'Your Name';
+  $('outTitle').textContent=v('title')||'Professional Title';
+  $('outTarget').textContent=role?('Target role: '+role+(v('targetCompany')?' · '+v('targetCompany'):'')):'';
+  $('outContact').textContent=[v('email'),v('phone'),v('location')].filter(Boolean).join(' · ');
+  $('outSummary').textContent=v('summary')||buildSummary(role,skills,v('experience'))||'Add your truthful professional summary.';
+  $('outSkills').innerHTML=skills.map(x=>'• '+esc(x)).join('<br>')||'Add your genuine skills.';
+  $('outExperience').innerHTML=esc(v('experience')).replace(/\n/g,'<br>')||'Add your work experience.';
+  $('outEducation').innerHTML=esc(v('education')).replace(/\n/g,'<br>')||'Add your education and certifications.';
+  const links=v('links');$('linkSection').style.display=links?'block':'none';$('outLinks').textContent=links;
+  renderAlignment();
+}
+async function init(){
+  if(!window.JobSeekSupabase?.configured)return;
+  client=supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key);
+  const r=await client.auth.getUser(); if(r.data.user)user=r.data.user;
+  if(user) $('email').value=user.email||'';
+  await loadJob();
+}
+async function loadJob(){
+  if(!client||!jobId)return;
+  const r=await client.from('jobseek_manual_jobs').select('id,title,company,location,description,requirements,responsibilities,apply_url').eq('id',jobId).maybeSingle();
+  if(r.error||!r.data)return;
+  vacancy=r.data;
+  $('targetRole').value=vacancy.title||'';
+  $('targetCompany').value=vacancy.company||'';
+  $('jobRequirements').value=vacancy.requirements||vacancy.responsibilities||vacancy.description||'';
+  render();
+  $('status').textContent='Exact vacancy loaded. Your CV will now be tailored to this role.';
+}
+async function loadProfile(){
+  if(!user){$('status').textContent='Please log in to load your JobSeek profile.';return}
+  const r=await client.from('candidate_profiles').select('*').eq('user_id',user.id).maybeSingle();
+  if(r.error||!r.data){$('status').textContent='No saved candidate profile found.';return}
+  profile=r.data;
+  const set=(id,val)=>$(id).value=Array.isArray(val)?val.join(', '):(val??'');
+  set('name',profile.full_name);set('title',profile.target_job||profile.profession);set('phone',profile.phone);
+  set('location',[profile.city,profile.country_of_residence].filter(Boolean).join(', '));
+  set('skills',profile.skills);set('education',profile.education);set('experience',profile.experience);
+  set('summary',profile.professional_summary||'');render();
+  $('status').textContent='JobSeek profile loaded ✓';
+}
+function cvText(){
+  const v=id=>clean($(id).value);
+  return [v('name')||'Your Name',v('title')||'Professional Title',v('email'),v('phone'),v('location'),v('links'),'', 'TARGET ROLE: '+(v('targetRole')||v('title')||''),'','PROFESSIONAL SUMMARY',v('summary')||buildSummary(v('targetRole'),tailorSkills(),v('experience')),'','CORE SKILLS',tailorSkills().join(' • '),'','PROFESSIONAL EXPERIENCE',v('experience')||'Add your experience.','','EDUCATION & CERTIFICATIONS',v('education')||'Add your education and certifications.'].filter((x,i)=>i<6||x||i>7).join('\n');
+}
+function downloadFile(filename,blob){
+  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
+function downloadCV(){
+  const title=clean($('name').value)||'JobSeek-CV';
+  const html='<!doctype html><html><head><meta charset="utf-8"><title>'+esc(title)+' CV</title><style>body{font-family:Arial,sans-serif;color:#10233d;max-width:800px;margin:40px auto;line-height:1.55;padding:0 24px}h1{margin-bottom:4px}h2{font-size:14px;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid #d8e0e8;padding-bottom:6px;margin-top:24px}.contact{color:#52647a}.target{color:#35638f;font-size:13px}</style></head><body>'+document.getElementById('cv').innerHTML+'</body></html>';
+  downloadFile((title.replace(/[^a-z0-9]+/gi,'-')||'JobSeek-CV')+'.html',new Blob([html],{type:'text/html;charset=utf-8'}));
+}
+function downloadTxt(){downloadFile('JobSeek-CV.txt',new Blob([cvText()],{type:'text/plain;charset=utf-8'}))}
+$('load').onclick=loadProfile;
+$('build').onclick=()=>{render();$('status').textContent='Professional role-tailored CV prepared ✓'};
+$('download').onclick=downloadCV;
+$('downloadTxt').onclick=downloadTxt;
+$('print').onclick=()=>window.print();
+['targetRole','targetCompany','jobRequirements','name','title','email','phone','location','links','summary','skills','experience','education'].forEach(id=>$(id).addEventListener('input',render));
+init();
+</script></body></html>
