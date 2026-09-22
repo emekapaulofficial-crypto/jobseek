@@ -204,5 +204,15 @@ jobs:
             echo 'No monitor report changes.'
           else
             git commit -m 'chore: update job link monitor report'
-            git push
+            # Another JobSeek update may have landed while this check was running.
+            # Rebase the generated report onto the newest main before pushing so the robot
+            # never fails just because the repository changed during the 15-minute check.
+            for attempt in 1 2 3; do
+              git fetch origin main
+              git rebase origin/main && git push && exit 0
+              git rebase --abort 2>/dev/null || true
+              sleep 2
+            done
+            echo 'Could not publish the monitor report after 3 attempts.'
+            exit 1
           fi
