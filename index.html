@@ -23,6 +23,7 @@
 <div class="steps"><div><b>01</b><span><strong>Discover</strong>Search jobs by category, location and keyword.</span></div><div><b>02</b><span><strong>Review</strong>Check source, date posted and application route.</span></div><div><b>03</b><span><strong>Build</strong>Create your CV and cover letter from genuine details.</span></div><div><b>04</b><span><strong>Apply</strong>Open the original application route and submit yourself.</span></div></div>
 <small>JobSeek does not guarantee employment or visa approval.</small></aside>
 </div></section>
+<section class="section" id="latestJobs"><div class="container"><div class="head"><div><p class="eyebrow">JUST PUBLISHED</p><h2>Latest JobSeek Jobs</h2><p class="lead">Jobs you publish in the admin dashboard appear here automatically.</p></div><a class="btn" href="jobs.html">View all jobs →</a></div><div id="latestJobList" class="jobs"><p class="none">Loading latest jobs…</p></div></div></section>
 <section class="section" id="dashboard"><div class="container"><div class="head"><div><p class="eyebrow">ONE MAIN WORKSPACE</p><h2>Your JobSeek Dashboard</h2><p class="lead">Pick any job and keep the job, CV, application builder, documents, alerts and application tracking connected in one place.</p></div><a class="btn" href="candidate-dashboard.html">Open full dashboard →</a></div><div class="countries"><a href="candidate-dashboard.html"><b>📊 Candidate Dashboard</b><span>Profile, readiness, matches and application tracking.</span></a><a href="jobs.html"><b>🔎 Find Jobs</b><span>Choose a vacancy and carry it into every application tool.</span></a><a href="ats-cv-builder.html"><b>📄 CV Builder</b><span>Build an ATS-ready CV for the selected vacancy.</span></a><a href="application-assistant.html"><b>📝 Application Assistant</b><span>Generate job-specific application content.</span></a><a href="candidate-documents.html"><b>🗂️ Documents</b><span>Keep your recruitment documents organized.</span></a><a href="job-alerts.html"><b>🔔 Job Alerts</b><span>Stay informed about new opportunities.</span></a></div></div></section>
 <section class="section" id="categories"><div class="container">
 <div class="head"><div><p class="eyebrow">CAREER AREAS</p><h2>Find the work you want</h2></div><a href="jobs.html">View all jobs →</a></div>
@@ -49,4 +50,17 @@
 <footer><div class="container foot"><div><a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a><p>Job discovery and professional application preparation.</p></div><div><b>Jobs</b><a href="jobs.html">All jobs</a><a href="construction-jobs.html">Construction</a><a href="job-alerts.html">Job alerts</a></div><div><b>Tools</b><a href="ats-cv-builder.html">CV builder</a><a href="application-assistant.html">Application assistant</a><a href="candidate-documents.html">Documents</a></div><div><b>Administration</b><a href="admin-dashboard.html" aria-label="Open JobSeek Main Admin Dashboard">Main Admin Dashboard</a></div></div><div class="container copy">© 2026 JobSeek · Employment and visa outcomes are never guaranteed.</div></footer>
 <script src="app.js"></script><script>
 document.getElementById('searchBtn').onclick=()=>{const q=document.getElementById('q').value.trim(),loc=document.getElementById('loc').value.trim();location.href='jobs.html?keyword='+encodeURIComponent(q)+'&region='+encodeURIComponent(loc)};
+</script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-client.js"></script><script>
+(async function loadLatestPublishedJobs(){
+  const box=document.getElementById('latestJobList'); if(!box||!window.JobSeekSupabase?.configured)return;
+  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const fmt=d=>d&&!Number.isNaN(new Date(d).getTime())?new Date(d).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'}):'';
+  try{
+    const db=supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key);
+    const r=await db.from('jobseek_manual_jobs').select('*').eq('status','published').or('closing_date.is.null,closing_date.gt.'+new Date().toISOString()).order('created_at',{ascending:false}).limit(12);
+    if(r.error)throw r.error;
+    const rows=r.data||[];
+    box.innerHTML=rows.length?rows.map(j=>'<article class="job"><span class="tag">🟢 PUBLISHED</span><h3>'+esc(j.title)+'</h3><p><strong>'+esc(j.company||'Employer not specified')+'</strong> · '+esc(j.location||'See listing')+'</p><p class="micro">Published: '+fmt(j.created_at||j.posted_at)+(j.employment_type?' · '+esc(j.employment_type):'')+(j.visa_sponsorship?' · 🛂 Visa sponsorship stated':'')+'</p><p>'+esc((j.description||'').slice(0,180))+'</p><a class="btn" style="display:block;text-align:center" href="job-details.html?id='+encodeURIComponent(j.id)+'">View Job</a></article>').join(''):'<p class="none">No published jobs yet.</p>';
+  }catch(e){console.error(e);box.innerHTML='<p class="none">Latest jobs are temporarily unavailable. <a href="jobs.html">Open the jobs page</a> to retry.</p>'}
+})();
 </script></body></html>
