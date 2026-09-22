@@ -1,12 +1,12 @@
 {
-  "updated_at": "2026-09-22T21:37:11.140337+00:00",
+  "updated_at": "2026-09-22T23:52:18.865276+00:00",
   "source": "Supabase public published manual jobs",
   "check_interval": "15 minutes",
   "note": "CLOSED means the robot found a strong closed/not-found signal. JobSeek does not automatically remove jobs; an admin must review and close/remove them from the public feed.",
   "counts": {
-    "CLOSED": 40,
-    "CHECK_MANUALLY": 1,
-    "OPEN": 8
+    "CLOSED": 37,
+    "CHECK_MANUALLY": 3,
+    "OPEN": 9
   },
   "jobs": [
     {
@@ -19,19 +19,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/account-officer-m0j9nj",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:08.304501+00:00"
-    },
-    {
-      "id": "39f7b8ab-b1fc-49fa-ad10-632b8af0e4a8",
-      "title": "Backend Java Developer - Remote",
-      "company": "YO IT Consulting",
-      "location": "Nigeria / Remote",
-      "apply_url": "https://ng.linkedin.com/jobs/remote-java-jobs",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://ng.linkedin.com/jobs/remote-java-jobs",
-      "evidence": "this job is no longer available",
-      "checked_at": "2026-09-22T21:37:10.214689+00:00"
+      "checked_at": "2026-09-22T23:52:15.938040+00:00"
     },
     {
       "id": "8a947ca8-b5f8-4a8a-a327-e3e5dec11393",
@@ -43,7 +31,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/c-software-developer-jobs",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-22T21:37:10.198626+00:00"
+      "checked_at": "2026-09-22T23:52:17.833779+00:00"
     },
     {
       "id": "a2414027-1ba2-4ce8-96a4-905b42485b8f",
@@ -55,19 +43,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/compensation-and-benefits-analysts-7j0mez",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:08.373244+00:00"
-    },
-    {
-      "id": "21bbd513-d7ec-4862-89c5-87fd8a210594",
-      "title": "Construction Project Operations Coordinator",
-      "company": "Jobgether",
-      "location": "Nigeria",
-      "apply_url": "https://ng.linkedin.com/jobs/project-construction-manager-jobs",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://ng.linkedin.com/jobs/project-construction-manager-jobs",
-      "evidence": "this job is no longer available",
-      "checked_at": "2026-09-22T21:37:10.263320+00:00"
+      "checked_at": "2026-09-22T23:52:16.060374+00:00"
     },
     {
       "id": "4d4b7e69-a64b-4919-a999-7748633f129e",
@@ -79,7 +55,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/content-creator-8m9dez",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:09.551506+00:00"
+      "checked_at": "2026-09-22T23:52:17.075678+00:00"
     },
     {
       "id": "7b185d0a-1a36-4f34-83f7-d251b76258bb",
@@ -91,7 +67,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/digital-growth-content-specialist-rrj4jn",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:08.922380+00:00"
+      "checked_at": "2026-09-22T23:52:16.556336+00:00"
     },
     {
       "id": "21b72c07-deac-4177-b3f4-f9ae6cf0a476",
@@ -103,7 +79,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/driver-8m9dwx",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:09.221042+00:00"
+      "checked_at": "2026-09-22T23:52:16.882359+00:00"
     },
     {
       "id": "d907a25a-7368-420d-8534-cf571d16268e",
@@ -115,7 +91,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/field-sales-agent-merchant-acquisition-2kw59k",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:08.788191+00:00"
+      "checked_at": "2026-09-22T23:52:16.529622+00:00"
     },
     {
       "id": "a044c4b8-a212-4a97-b962-28dba8cc749f",
@@ -127,7 +103,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/finance-operations-manager-needed-wrk8nk",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:08.433590+00:00"
+      "checked_at": "2026-09-22T23:52:16.126752+00:00"
     },
     {
       "id": "e2459c03-a588-49d0-ada4-67fb8d3814a8",
@@ -139,7 +115,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/back-end-developer-qz5857",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:07.440993+00:00"
+      "checked_at": "2026-09-22T23:52:15.105691+00:00"
     },
     {
       "id": "9c2f5028-0ade-4f8e-b17f-90b62bf537b5",
@@ -151,7 +127,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/hotel-manager-erx745",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:08.978133+00:00"
+      "checked_at": "2026-09-22T23:52:16.564234+00:00"
     },
     {
       "id": "25cc1d1b-e11e-419d-aa9e-2bb9dbfcead1",
@@ -163,7 +139,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/inventory-supervisory-z8j6md",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:09.175644+00:00"
+      "checked_at": "2026-09-22T23:52:16.817120+00:00"
     },
     {
       "id": "22f1f4cc-0937-4f2b-81f2-2feda7f3bdb8",
@@ -175,7 +151,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/it-sales-executive-d926pr",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:08.015017+00:00"
+      "checked_at": "2026-09-22T23:52:15.625501+00:00"
     },
     {
       "id": "0c77da39-dc87-488f-8242-f5763f7c384e",
@@ -187,7 +163,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/junior-accountant-8m9n26",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:08.327745+00:00"
+      "checked_at": "2026-09-22T23:52:15.941334+00:00"
     },
     {
       "id": "75c299e0-cdf2-48be-ac5b-f0b800f96145",
@@ -199,7 +175,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/construction-site-manager-jobs-lagos",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-22T21:37:07.438890+00:00"
+      "checked_at": "2026-09-22T23:52:15.103711+00:00"
     },
     {
       "id": "47a3e61e-aa61-4c02-b9b2-dd52ee229e42",
@@ -211,7 +187,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/lead-accountant-rrj0g8",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:08.345692+00:00"
+      "checked_at": "2026-09-22T23:52:16.026408+00:00"
     },
     {
       "id": "3fb8d3c4-1c99-47cf-a2f1-1df3213eb06a",
@@ -223,7 +199,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/lead-generation-specialist-0k9zee",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:09.525018+00:00"
+      "checked_at": "2026-09-22T23:52:17.001928+00:00"
     },
     {
       "id": "eb9b69b9-5028-4871-9b84-317caa9b6397",
@@ -235,7 +211,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/machine-repair-technician-diesel-rrj0r2",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:09.861437+00:00"
+      "checked_at": "2026-09-22T23:52:17.638843+00:00"
     },
     {
       "id": "bcfec4a1-5ed9-47ec-8d68-fc5e9b8c9cce",
@@ -247,19 +223,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/operations-manager-qz5vm4",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:09.417401+00:00"
-    },
-    {
-      "id": "5d80993e-558e-402b-a922-aaceb0ac37a5",
-      "title": "Outbound Sales Representative",
-      "company": "BruntWork",
-      "location": "Remote / Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/outbound-sales-representative-erxje4",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/outbound-sales-representative-erxje4",
-      "evidence": "applications are closed",
-      "checked_at": "2026-09-22T21:37:09.401855+00:00"
+      "checked_at": "2026-09-22T23:52:16.986461+00:00"
     },
     {
       "id": "b12a1e50-1e0f-4c16-84f4-c354195ace7c",
@@ -271,7 +235,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/payloader-driver-456mne",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:09.816717+00:00"
+      "checked_at": "2026-09-22T23:52:17.579898+00:00"
     },
     {
       "id": "6210d785-2b18-403c-bf10-a4d5e7a936ab",
@@ -283,7 +247,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/personal-assistant-qz5867",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:09.027494+00:00"
+      "checked_at": "2026-09-22T23:52:16.712100+00:00"
     },
     {
       "id": "acea7cec-1d6b-4266-aeb2-3b6f807fac83",
@@ -295,7 +259,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/product-designer-6qvmq6",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:07.441275+00:00"
+      "checked_at": "2026-09-22T23:52:15.105977+00:00"
     },
     {
       "id": "403803ca-632c-4837-bab9-b7dadc0bf7f7",
@@ -307,7 +271,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/experienced-real-estate-sales-executive-pgj7z2",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:08.773405+00:00"
+      "checked_at": "2026-09-22T23:52:16.497239+00:00"
     },
     {
       "id": "dea5879d-2665-4b29-824a-4f2552c8aa25",
@@ -319,7 +283,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/sales-executive-z8j69d",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:09.753756+00:00"
+      "checked_at": "2026-09-22T23:52:17.381002+00:00"
     },
     {
       "id": "595a7941-7c20-470f-84e0-410b207be450",
@@ -331,7 +295,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/e-commerce-sales-representative-pgj7ex",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:08.672426+00:00"
+      "checked_at": "2026-09-22T23:52:16.314398+00:00"
     },
     {
       "id": "b401b74f-6043-4a75-a2be-e8d72a5707aa",
@@ -343,7 +307,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/sales-representative-k7xqej",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:08.756885+00:00"
+      "checked_at": "2026-09-22T23:52:16.395424+00:00"
     },
     {
       "id": "c92ac32c-5e30-462f-b952-cfce6f7cfaf0",
@@ -355,7 +319,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/salesbusiness-development-executive-j6x7zw",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:08.713527+00:00"
+      "checked_at": "2026-09-22T23:52:16.380497+00:00"
     },
     {
       "id": "106340aa-fdcb-48ba-ad11-6e2f4b168807",
@@ -367,7 +331,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/sales-business-development-executives-erxw6v",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:09.567755+00:00"
+      "checked_at": "2026-09-22T23:52:17.172066+00:00"
     },
     {
       "id": "7c8a3219-4984-40ed-b460-6c84ab7b137b",
@@ -379,7 +343,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/secretary-vdkq78",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:09.160036+00:00"
+      "checked_at": "2026-09-22T23:52:16.781365+00:00"
     },
     {
       "id": "2fe8f08a-4812-4841-aa1c-68c6a3bdfdc6",
@@ -391,7 +355,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/construction-project-manager-jobs",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-22T21:37:07.439623+00:00"
+      "checked_at": "2026-09-22T23:52:15.104431+00:00"
     },
     {
       "id": "a1be8b4c-0985-48f9-a1ae-fb55d30a16cb",
@@ -403,7 +367,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/senior-data-engineer-9kndjv",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:07.944592+00:00"
+      "checked_at": "2026-09-22T23:52:15.620550+00:00"
     },
     {
       "id": "4395529b-b5e9-4b77-99e0-feea08166e6f",
@@ -415,7 +379,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/construction-project-manager-jobs",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-22T21:37:07.439280+00:00"
+      "checked_at": "2026-09-22T23:52:15.104091+00:00"
     },
     {
       "id": "2be33652-8711-4fc9-bfc4-79f9358edd0f",
@@ -427,7 +391,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/software-engineer-senior-jobs",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-22T21:37:08.126167+00:00"
+      "checked_at": "2026-09-22T23:52:15.842752+00:00"
     },
     {
       "id": "53182eda-70f8-4b73-b44a-c6230aca9420",
@@ -439,7 +403,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/soc-engineer-5pzvnr",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:09.683459+00:00"
+      "checked_at": "2026-09-22T23:52:17.294087+00:00"
     },
     {
       "id": "7e986be2-3871-417e-9a2e-c1c8327555f9",
@@ -451,7 +415,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/social-media-store-assistant-6qvmej",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:09.106137+00:00"
+      "checked_at": "2026-09-22T23:52:16.766631+00:00"
     },
     {
       "id": "1aa4166a-6089-46b8-a8bb-ad5452e76f59",
@@ -463,7 +427,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/software-engineer-back-end-jobs",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-22T21:37:10.058683+00:00"
+      "checked_at": "2026-09-22T23:52:17.740607+00:00"
     },
     {
       "id": "513bef52-d2e4-46b6-aa45-3690683e111d",
@@ -475,7 +439,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/software-engineer-senior-jobs",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-22T21:37:10.432350+00:00"
+      "checked_at": "2026-09-22T23:52:17.992616+00:00"
     },
     {
       "id": "145d350b-9d9f-407a-806e-43b57b1a20f8",
@@ -487,7 +451,19 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/tvro-dstv-technician-2kwded",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-22T21:37:09.583744+00:00"
+      "checked_at": "2026-09-22T23:52:17.186529+00:00"
+    },
+    {
+      "id": "39f7b8ab-b1fc-49fa-ad10-632b8af0e4a8",
+      "title": "Backend Java Developer - Remote",
+      "company": "YO IT Consulting",
+      "location": "Nigeria / Remote",
+      "apply_url": "https://ng.linkedin.com/jobs/remote-java-jobs",
+      "status": "CHECK_MANUALLY",
+      "http_status": 429,
+      "final_url": "https://ng.linkedin.com/jobs/remote-java-jobs",
+      "evidence": "HTTP 429",
+      "checked_at": "2026-09-22T23:52:17.849109+00:00"
     },
     {
       "id": "87d21534-c485-4618-86d1-03334882a6fa",
@@ -499,7 +475,19 @@
       "http_status": 403,
       "final_url": "https://ng.indeed.com/cmp/Livebridge-Properties",
       "evidence": "HTTP 403",
-      "checked_at": "2026-09-22T21:37:10.001980+00:00"
+      "checked_at": "2026-09-22T23:52:17.701585+00:00"
+    },
+    {
+      "id": "21bbd513-d7ec-4862-89c5-87fd8a210594",
+      "title": "Construction Project Operations Coordinator",
+      "company": "Jobgether",
+      "location": "Nigeria",
+      "apply_url": "https://ng.linkedin.com/jobs/project-construction-manager-jobs",
+      "status": "CHECK_MANUALLY",
+      "http_status": 429,
+      "final_url": "https://ng.linkedin.com/jobs/project-construction-manager-jobs",
+      "evidence": "HTTP 429",
+      "checked_at": "2026-09-22T23:52:17.959075+00:00"
     },
     {
       "id": "4ba8344e-cb9c-4086-b561-c05d1cedd290",
@@ -511,7 +499,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/jobs/creative-design",
       "evidence": "",
-      "checked_at": "2026-09-22T21:37:08.085396+00:00"
+      "checked_at": "2026-09-22T23:52:15.790676+00:00"
     },
     {
       "id": "da61e033-73f1-40c6-a2a2-c5bacee8b8ee",
@@ -523,7 +511,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/view/dot-net-developer-at-choice-talents-ltd-4469514294",
       "evidence": "",
-      "checked_at": "2026-09-22T21:37:10.080102+00:00"
+      "checked_at": "2026-09-22T23:52:17.807963+00:00"
     },
     {
       "id": "3e6f5c4e-b6d7-4ee9-aae9-6271024f75b0",
@@ -535,7 +523,19 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/jobs/ibadan-oyo",
       "evidence": "",
-      "checked_at": "2026-09-22T21:37:07.439928+00:00"
+      "checked_at": "2026-09-22T23:52:15.104736+00:00"
+    },
+    {
+      "id": "5d80993e-558e-402b-a922-aaceb0ac37a5",
+      "title": "Outbound Sales Representative",
+      "company": "BruntWork",
+      "location": "Remote / Nigeria",
+      "apply_url": "https://www.jobberman.com/listings/outbound-sales-representative-erxje4",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.jobberman.com/jobs/customer-service-support",
+      "evidence": "",
+      "checked_at": "2026-09-22T23:52:16.950111+00:00"
     },
     {
       "id": "ec696d2a-6cd8-432e-9764-e99dafcae49e",
@@ -547,7 +547,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/view/project-manager-construction-manager-mcf-data-centres-at-haskoning-4458091052",
       "evidence": "",
-      "checked_at": "2026-09-22T21:37:10.017484+00:00"
+      "checked_at": "2026-09-22T23:52:17.724299+00:00"
     },
     {
       "id": "e0f6932e-fc4e-4531-8aaf-53b206b9ad46",
@@ -559,7 +559,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/view/quality-assurance-quality-control-engineer-at-construction-kaiser-limited-ckl-4466677647",
       "evidence": "",
-      "checked_at": "2026-09-22T21:37:10.310258+00:00"
+      "checked_at": "2026-09-22T23:52:17.991986+00:00"
     },
     {
       "id": "1ee28e26-f821-438f-bb47-3dc27fd2351d",
@@ -571,7 +571,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/jobs/engineering-technology",
       "evidence": "",
-      "checked_at": "2026-09-22T21:37:07.440677+00:00"
+      "checked_at": "2026-09-22T23:52:15.105458+00:00"
     },
     {
       "id": "2a61b029-ec2f-47f1-90c1-a00af8657f23",
@@ -583,7 +583,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/jobs/ibadan-oyo",
       "evidence": "",
-      "checked_at": "2026-09-22T21:37:07.440378+00:00"
+      "checked_at": "2026-09-22T23:52:15.105140+00:00"
     },
     {
       "id": "6cd490c1-9bc2-42d8-88f1-de0643d61351",
@@ -595,7 +595,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/view/shutdown-project-manager-h-f-at-ponticelli-nigeria-4432802134",
       "evidence": "",
-      "checked_at": "2026-09-22T21:37:08.134274+00:00"
+      "checked_at": "2026-09-22T23:52:15.911379+00:00"
     }
   ]
 }
