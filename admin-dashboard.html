@@ -175,7 +175,7 @@ document.addEventListener('change',async e=>{const t=e.target;if(t.dataset.emplo
     const title=excelText(r['job title']||r['title']||r['position']);
     const company=excelText(r['company']||r['company name']||r['employer']);
     const location=excelText(r['location']||r['job location']||r['country']);
-    const description=excelText(r['description']||r['job description']||r['details']);const responsibilities=excelText(r['responsibilities']||r['duties']||r['job responsibilities']);const requirements=excelText(r['requirements']||r['qualifications']||r['required skills']||r['job requirements'])||extractRequirementEvidence(description,responsibilities);
+    const description=excelText(r['description']||r['job description']||r['details']);const responsibilities=excelText(r['responsibilities']||r['duties']||r['job responsibilities']);const requirements=excelText(r['requirements']||r['qualifications']||r['required skills']||r['job requirements']);
     const category=excelText(r['category']||r['job category']) || excelCategory(title+' '+description+' '+location);
     const posted=iso(r['posted date']||r['date posted']||r['posted at']);
     const closing=iso(r['closing date']||r['deadline']||r['application deadline'],true);
@@ -185,6 +185,8 @@ document.addEventListener('change',async e=>{const t=e.target;if(t.dataset.emplo
       employment_type:excelText(r['job type']||r['employment type']||r['employment'])||null,
       salary:excelText(r['salary']||r['salary range']||r['pay'])||null,
       description:description||null,
+      requirements:requirements||null,
+      responsibilities:responsibilities||null,
       posted_at:posted||new Date().toISOString(),
       closing_date:closing,
       apply_url:apply,
