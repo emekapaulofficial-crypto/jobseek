@@ -1,529 +1,121 @@
 {
-  "updated_at": "2026-09-23T14:21:38.218933+00:00",
+  "updated_at": "2026-09-23T18:27:20.326638+00:00",
   "source": "Supabase public published manual jobs",
   "check_interval": "15 minutes",
   "note": "CLOSED means the robot found a strong closed/not-found signal. JobSeek does not automatically remove jobs; an admin must review and close/remove them from the public feed.",
   "counts": {
-    "CLOSED": 38,
-    "CHECK_MANUALLY": 5,
-    "OPEN": 40
+    "CLOSED": 6,
+    "CHECK_MANUALLY": 3,
+    "OPEN": 54
   },
   "jobs": [
     {
-      "id": "0cd5e97f-3b02-475a-ae9c-b07a5f3b7293",
-      "title": "Account Officer",
-      "company": "Jodazen Integrated Services",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/account-officer-m0j9nj",
+      "id": "119687ad-9016-425e-ad6f-4df216a7977f",
+      "title": "Craftsperson (Electrician)",
+      "company": "ScottishPower / SP Energy Networks",
+      "location": "Motherwell / Central & Southern Scotland, UK",
+      "apply_url": "https://careers.energyutilitiesjobs.co.uk/jobs/craftsperson-electrician-motherwell-lanarkshire/63735-1/",
       "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/account-officer-m0j9nj",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:32.708152+00:00"
+      "http_status": 404,
+      "final_url": "https://careers.energyutilitiesjobs.co.uk/jobs/craftsperson-electrician-motherwell-lanarkshire/63735-1/",
+      "evidence": "HTTP 404",
+      "checked_at": "2026-09-23T18:27:10.785380+00:00"
     },
     {
-      "id": "39f7b8ab-b1fc-49fa-ad10-632b8af0e4a8",
-      "title": "Backend Java Developer - Remote",
-      "company": "YO IT Consulting",
-      "location": "Nigeria / Remote",
-      "apply_url": "https://ng.linkedin.com/jobs/remote-java-jobs",
+      "id": "f9ab88e1-2845-4199-b8e2-38cacfca9b1a",
+      "title": "Data Manager",
+      "company": "The English College / International Schools Partnership",
+      "location": "Dubai, United Arab Emirates",
+      "apply_url": "https://www.tes.com/jobs/vacancy/data-manager-dubai-2339103",
       "status": "CLOSED",
       "http_status": 200,
-      "final_url": "https://ng.linkedin.com/jobs/remote-java-jobs",
+      "final_url": "https://www.tes.com/jobs/vacancy/data-manager-dubai-2339103",
+      "evidence": "applications closed",
+      "checked_at": "2026-09-23T18:27:14.306590+00:00"
+    },
+    {
+      "id": "3b39ba4b-5eda-4356-9bda-a8dd00e94fc0",
+      "title": "Electrician (Multi Skilled)",
+      "company": "Progress Housing Group",
+      "location": "Leyland, Lancashire, UK",
+      "apply_url": "https://www.jobs.service.gov.uk/jobs/6aa802aa3046452f0152736d",
+      "status": "CLOSED",
+      "http_status": 200,
+      "final_url": "https://www.jobs.service.gov.uk/jobs/6aa802aa3046452f0152736d",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T14:21:34.727537+00:00"
+      "checked_at": "2026-09-23T18:27:11.821033+00:00"
     },
     {
-      "id": "8a947ca8-b5f8-4a8a-a327-e3e5dec11393",
-      "title": "C Software Developer - Fully Remote",
-      "company": "Mercor",
-      "location": "Nigeria / Remote",
-      "apply_url": "https://ng.linkedin.com/jobs/c-software-developer-jobs",
+      "id": "d26f39c7-2649-421b-9248-6fb029d033f8",
+      "title": "Electrician (Testing)",
+      "company": "Liberty",
+      "location": "Salford, Greater Manchester, UK",
+      "apply_url": "https://www.jobs.service.gov.uk/jobs/6a9160d482444eb0b879e0e0",
       "status": "CLOSED",
       "http_status": 200,
-      "final_url": "https://ng.linkedin.com/jobs/c-software-developer-jobs",
+      "final_url": "https://www.jobs.service.gov.uk/jobs/6a9160d482444eb0b879e0e0",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T14:21:34.677834+00:00"
+      "checked_at": "2026-09-23T18:27:10.785667+00:00"
     },
     {
-      "id": "a2414027-1ba2-4ce8-96a4-905b42485b8f",
-      "title": "Compensation and Benefits Analyst",
-      "company": "Estrada International Staffing Solutions",
-      "location": "Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/compensation-and-benefits-analysts-7j0mez",
+      "id": "e347e5a5-6010-4a41-8afe-a55acf568d83",
+      "title": "Electrician — Domestic, Commercial & Industrial",
+      "company": "GSM Electrical (recruitment by The HR Booth)",
+      "location": "Fife, Scotland, UK",
+      "apply_url": "https://www.jobs.service.gov.uk/jobs/6a918a5b82444eb0b87a5990",
       "status": "CLOSED",
       "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/compensation-and-benefits-analysts-7j0mez",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:32.785784+00:00"
-    },
-    {
-      "id": "21bbd513-d7ec-4862-89c5-87fd8a210594",
-      "title": "Construction Project Operations Coordinator",
-      "company": "Jobgether",
-      "location": "Nigeria",
-      "apply_url": "https://ng.linkedin.com/jobs/project-construction-manager-jobs",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://ng.linkedin.com/jobs/project-construction-manager-jobs",
+      "final_url": "https://www.jobs.service.gov.uk/jobs/6a918a5b82444eb0b87a5990",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T14:21:34.781792+00:00"
+      "checked_at": "2026-09-23T18:27:11.719908+00:00"
     },
     {
-      "id": "4d4b7e69-a64b-4919-a999-7748633f129e",
-      "title": "Content Creator",
-      "company": "Raphael Group",
-      "location": "Remote / Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/content-creator-8m9dez",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/content-creator-8m9dez",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:33.928037+00:00"
-    },
-    {
-      "id": "7b185d0a-1a36-4f34-83f7-d251b76258bb",
-      "title": "Digital Growth & Content Specialist",
-      "company": "APHR Consult",
+      "id": "f709cd18-8504-4cf9-a806-478d2cc61a6c",
+      "title": "Senior Software Engineer — ATS Demo",
+      "company": "Landmark Africa",
       "location": "Lagos, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/digital-growth-content-specialist-rrj4jn",
+      "apply_url": "https://landmarkafrica.com/careers/jobs/senior-software-engineer-ats-demo",
       "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/digital-growth-content-specialist-rrj4jn",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:33.455997+00:00"
+      "http_status": 410,
+      "final_url": "https://landmarkafrica.com/careers/jobs/senior-software-engineer-ats-demo",
+      "evidence": "HTTP 410",
+      "checked_at": "2026-09-23T18:27:16.253027+00:00"
     },
     {
-      "id": "21b72c07-deac-4177-b3f4-f9ae6cf0a476",
-      "title": "Driver",
-      "company": "Busy Bee HR Services",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/driver-8m9dwx",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/driver-8m9dwx",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:33.734872+00:00"
+      "id": "b795b9fe-295f-4744-92ef-9decba55af5c",
+      "title": "Head of Platform Engineering",
+      "company": "IMP Software",
+      "location": "Remote, UK",
+      "apply_url": "https://impsoftware.co.uk/careers/head-of-platform-engineering/",
+      "status": "CHECK_MANUALLY",
+      "http_status": null,
+      "final_url": "https://impsoftware.co.uk/careers/head-of-platform-engineering/",
+      "evidence": "Network/timeout: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1000)>",
+      "checked_at": "2026-09-23T18:27:13.619909+00:00"
     },
     {
-      "id": "d907a25a-7368-420d-8534-cf571d16268e",
-      "title": "Field Sales Agent",
-      "company": "Fixme Global Ltd.",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/field-sales-agent-merchant-acquisition-2kw59k",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/field-sales-agent-merchant-acquisition-2kw59k",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:33.347876+00:00"
+      "id": "08274253-0460-4850-a527-f8fd821be33b",
+      "title": "IT Engineer",
+      "company": "IMP Software",
+      "location": "Remote, UK",
+      "apply_url": "https://impsoftware.co.uk/imp-careers/",
+      "status": "CHECK_MANUALLY",
+      "http_status": null,
+      "final_url": "https://impsoftware.co.uk/imp-careers/",
+      "evidence": "Network/timeout: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1000)>",
+      "checked_at": "2026-09-23T18:27:16.530790+00:00"
     },
     {
-      "id": "a044c4b8-a212-4a97-b962-28dba8cc749f",
-      "title": "Finance & Operations Manager",
-      "company": "Ng Showcase Limited",
-      "location": "Kaduna, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/finance-operations-manager-needed-wrk8nk",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/finance-operations-manager-needed-wrk8nk",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:33.044099+00:00"
-    },
-    {
-      "id": "9c2f5028-0ade-4f8e-b17f-90b62bf537b5",
-      "title": "Hotel Manager",
-      "company": "Jobs at E-direct",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/hotel-manager-erx745",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/hotel-manager-erx745",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:33.503643+00:00"
-    },
-    {
-      "id": "25cc1d1b-e11e-419d-aa9e-2bb9dbfcead1",
-      "title": "Inventory Supervisor",
-      "company": "Ascentech",
-      "location": "Abeokuta, Ogun State, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/inventory-supervisory-z8j6md",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/inventory-supervisory-z8j6md",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:33.709721+00:00"
-    },
-    {
-      "id": "22f1f4cc-0937-4f2b-81f2-2feda7f3bdb8",
-      "title": "IT Sales Executive",
-      "company": "Creastech Limited",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/it-sales-executive-d926pr",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/it-sales-executive-d926pr",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:32.577188+00:00"
-    },
-    {
-      "id": "0c77da39-dc87-488f-8242-f5763f7c384e",
-      "title": "Junior Accountant",
-      "company": "The Prosperis Associates Limited",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/junior-accountant-8m9n26",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/junior-accountant-8m9n26",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:32.732747+00:00"
-    },
-    {
-      "id": "75c299e0-cdf2-48be-ac5b-f0b800f96145",
-      "title": "Junior Project Manager",
-      "company": "The Startup Place Limited",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://ng.linkedin.com/jobs/construction-site-manager-jobs-lagos",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://ng.linkedin.com/jobs/construction-site-manager-jobs-lagos",
-      "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T14:21:31.888154+00:00"
-    },
-    {
-      "id": "47a3e61e-aa61-4c02-b9b2-dd52ee229e42",
-      "title": "Lead Accountant",
-      "company": "Generation Capital Limited",
-      "location": "Port Harcourt, Rivers State, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/lead-accountant-rrj0g8",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/lead-accountant-rrj0g8",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:32.766594+00:00"
-    },
-    {
-      "id": "3fb8d3c4-1c99-47cf-a2f1-1df3213eb06a",
-      "title": "Lead Generation Specialist",
-      "company": "Raphael Group",
-      "location": "Remote / Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/lead-generation-specialist-0k9zee",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/lead-generation-specialist-0k9zee",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:33.892326+00:00"
-    },
-    {
-      "id": "eb9b69b9-5028-4871-9b84-317caa9b6397",
-      "title": "Machine Repair Technician",
-      "company": "Mazeltov Chemical Limited",
-      "location": "Delta, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/machine-repair-technician-diesel-rrj0r2",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/machine-repair-technician-diesel-rrj0r2",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:34.327572+00:00"
-    },
-    {
-      "id": "bcfec4a1-5ed9-47ec-8d68-fc5e9b8c9cce",
-      "title": "Operations Manager",
-      "company": "Raphael Group",
-      "location": "Remote / Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/operations-manager-qz5vm4",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/operations-manager-qz5vm4",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:33.802822+00:00"
-    },
-    {
-      "id": "b12a1e50-1e0f-4c16-84f4-c354195ace7c",
-      "title": "Payloader Driver",
-      "company": "Mazeltov Chemical Limited",
-      "location": "Delta, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/payloader-driver-456mne",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/payloader-driver-456mne",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:34.295994+00:00"
-    },
-    {
-      "id": "6210d785-2b18-403c-bf10-a4d5e7a936ab",
-      "title": "Personal Assistant",
-      "company": "Crownscape Ventures",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/personal-assistant-qz5867",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/personal-assistant-qz5867",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:33.520663+00:00"
-    },
-    {
-      "id": "acea7cec-1d6b-4266-aeb2-3b6f807fac83",
-      "title": "Product Designer",
-      "company": "Asnas Atlantic Services Limited",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/product-designer-6qvmq6",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/product-designer-6qvmq6",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:31.890326+00:00"
-    },
-    {
-      "id": "403803ca-632c-4837-bab9-b7dadc0bf7f7",
-      "title": "Sales Executive",
-      "company": "Amaecom",
-      "location": "Abuja, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/experienced-real-estate-sales-executive-pgj7z2",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/experienced-real-estate-sales-executive-pgj7z2",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:33.317488+00:00"
-    },
-    {
-      "id": "dea5879d-2665-4b29-824a-4f2552c8aa25",
-      "title": "Sales Executive",
-      "company": "Anonymous Employer",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/sales-executive-z8j69d",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/sales-executive-z8j69d",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:34.157470+00:00"
-    },
-    {
-      "id": "595a7941-7c20-470f-84e0-410b207be450",
-      "title": "Sales Representative",
-      "company": "Yonko Nig Ltd",
-      "location": "Enugu, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/e-commerce-sales-representative-pgj7ex",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/e-commerce-sales-representative-pgj7ex",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:33.114149+00:00"
-    },
-    {
-      "id": "b401b74f-6043-4a75-a2be-e8d72a5707aa",
-      "title": "Sales Representative",
-      "company": "Primote Africa",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/sales-representative-k7xqej",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/sales-representative-k7xqej",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:33.225442+00:00"
-    },
-    {
-      "id": "c92ac32c-5e30-462f-b952-cfce6f7cfaf0",
-      "title": "Sales/Business Development Executive",
-      "company": "Castville Solutions",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/salesbusiness-development-executive-j6x7zw",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/salesbusiness-development-executive-j6x7zw",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:33.141335+00:00"
-    },
-    {
-      "id": "106340aa-fdcb-48ba-ad11-6e2f4b168807",
-      "title": "Sales/Business Development Executive",
-      "company": "Digital World Systems Africa Ltd",
-      "location": "Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/sales-business-development-executives-erxw6v",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/sales-business-development-executives-erxw6v",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:34.042199+00:00"
-    },
-    {
-      "id": "7c8a3219-4984-40ed-b460-6c84ab7b137b",
-      "title": "Secretary",
-      "company": "Gboroye Engineering Services",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/secretary-vdkq78",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/secretary-vdkq78",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:33.684202+00:00"
-    },
-    {
-      "id": "2fe8f08a-4812-4841-aa1c-68c6a3bdfdc6",
-      "title": "Senior Civil/Structural Engineer",
-      "company": "Haskoning",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://ng.linkedin.com/jobs/construction-project-manager-jobs",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://ng.linkedin.com/jobs/construction-project-manager-jobs",
-      "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T14:21:31.888792+00:00"
-    },
-    {
-      "id": "a1be8b4c-0985-48f9-a1ae-fb55d30a16cb",
+      "id": "cc092348-647d-4341-ba6e-e621bd62d2e2",
       "title": "Senior Data Engineer",
-      "company": "Asnas Atlantic Services Limited",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/senior-data-engineer-9kndjv",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/senior-data-engineer-9kndjv",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:32.321502+00:00"
-    },
-    {
-      "id": "4395529b-b5e9-4b77-99e0-feea08166e6f",
-      "title": "Senior Project Manager",
-      "company": "The Startup Place Limited",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://ng.linkedin.com/jobs/construction-project-manager-jobs",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://ng.linkedin.com/jobs/construction-project-manager-jobs",
-      "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T14:21:31.888483+00:00"
-    },
-    {
-      "id": "2be33652-8711-4fc9-bfc4-79f9358edd0f",
-      "title": "Senior Software Engineer",
-      "company": "BAFF",
-      "location": "Ikorodu, Lagos, Nigeria",
-      "apply_url": "https://ng.linkedin.com/jobs/software-engineer-senior-jobs",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://ng.linkedin.com/jobs/software-engineer-senior-jobs",
-      "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T14:21:32.640713+00:00"
-    },
-    {
-      "id": "53182eda-70f8-4b73-b44a-c6230aca9420",
-      "title": "SOC Engineer / ICT Infrastructure Engineer",
-      "company": "Upland Consulting Nigeria Limited",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/soc-engineer-5pzvnr",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/soc-engineer-5pzvnr",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:34.140122+00:00"
-    },
-    {
-      "id": "7e986be2-3871-417e-9a2e-c1c8327555f9",
-      "title": "Social Media & Store Assistant",
-      "company": "Anonymous Employer",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/social-media-store-assistant-6qvmej",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/social-media-store-assistant-6qvmej",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:33.575590+00:00"
-    },
-    {
-      "id": "1aa4166a-6089-46b8-a8bb-ad5452e76f59",
-      "title": "Software Developer",
-      "company": "TeKnowledge",
-      "location": "Ikeja, Lagos, Nigeria",
-      "apply_url": "https://ng.linkedin.com/jobs/software-engineer-back-end-jobs",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://ng.linkedin.com/jobs/software-engineer-back-end-jobs",
-      "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T14:21:34.443601+00:00"
-    },
-    {
-      "id": "513bef52-d2e4-46b6-aa45-3690683e111d",
-      "title": "Sr. Full-Stack Software Engineer - Remote",
-      "company": "YO AI Labs",
-      "location": "Lagos / Remote, Nigeria",
-      "apply_url": "https://ng.linkedin.com/jobs/software-engineer-senior-jobs",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://ng.linkedin.com/jobs/software-engineer-senior-jobs",
-      "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T14:21:34.797784+00:00"
-    },
-    {
-      "id": "145d350b-9d9f-407a-806e-43b57b1a20f8",
-      "title": "TVRO & DSTV Technician",
-      "company": "Upland Consulting Nigeria Limited",
-      "location": "Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/tvro-dstv-technician-2kwded",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/tvro-dstv-technician-2kwded",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T14:21:34.091896+00:00"
-    },
-    {
-      "id": "87d21534-c485-4618-86d1-03334882a6fa",
-      "title": "CIVIL ENGINEER",
-      "company": "Livebridge Properties",
-      "location": "Abuja, Nigeria",
-      "apply_url": "https://ng.indeed.com/cmp/Livebridge-Properties",
+      "company": "IMP Software",
+      "location": "Remote, UK",
+      "apply_url": "https://impsoftware.co.uk/imp-careers/",
       "status": "CHECK_MANUALLY",
-      "http_status": 403,
-      "final_url": "https://ng.indeed.com/cmp/Livebridge-Properties",
-      "evidence": "HTTP 403",
-      "checked_at": "2026-09-23T14:21:34.374280+00:00"
-    },
-    {
-      "id": "753edf33-3db7-45d9-b907-6e173b288c44",
-      "title": "Materials Operative",
-      "company": "Hitachi Rail UK Limited",
-      "location": "Ashford, Kent, United Kingdom",
-      "apply_url": "https://careers.hitachi.com/jobs/18208240-materials-operative",
-      "status": "CHECK_MANUALLY",
-      "http_status": 403,
-      "final_url": "https://careers.hitachi.com/jobs/18208240-materials-operative",
-      "evidence": "HTTP 403",
-      "checked_at": "2026-09-23T14:21:36.025078+00:00"
-    },
-    {
-      "id": "75e32f66-cd32-49fb-b7fd-9ec6b0408a54",
-      "title": "Production Scheduler",
-      "company": "Hitachi Rail UK Limited",
-      "location": "London, United Kingdom",
-      "apply_url": "https://careers.hitachi.com/jobs/18208294-production-scheduler",
-      "status": "CHECK_MANUALLY",
-      "http_status": 403,
-      "final_url": "https://careers.hitachi.com/jobs/18208294-production-scheduler",
-      "evidence": "HTTP 403",
-      "checked_at": "2026-09-23T14:21:36.704918+00:00"
-    },
-    {
-      "id": "0a90eb6d-74d6-435f-a909-b190fd3274b8",
-      "title": "Senior Project Manager",
-      "company": "Hitachi Rail GTS UK Limited",
-      "location": "United Kingdom",
-      "apply_url": "https://careers.hitachi.com/jobs/18150742-senior-project-manager",
-      "status": "CHECK_MANUALLY",
-      "http_status": 403,
-      "final_url": "https://careers.hitachi.com/jobs/18150742-senior-project-manager",
-      "evidence": "HTTP 403",
-      "checked_at": "2026-09-23T14:21:35.883154+00:00"
-    },
-    {
-      "id": "e8ba530c-755e-4590-aee8-88fa87127ad4",
-      "title": "Technical Support Engineer",
-      "company": "Hitachi Energy Finland Oy",
-      "location": "Vaasa, Finland",
-      "apply_url": "https://careers.hitachi.com/jobs/18192149-technical-support-engineer",
-      "status": "CHECK_MANUALLY",
-      "http_status": 403,
-      "final_url": "https://careers.hitachi.com/jobs/18192149-technical-support-engineer",
-      "evidence": "HTTP 403",
-      "checked_at": "2026-09-23T14:21:36.731061+00:00"
+      "http_status": null,
+      "final_url": "https://impsoftware.co.uk/imp-careers/",
+      "evidence": "Network/timeout: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1000)>",
+      "checked_at": "2026-09-23T18:27:11.694937+00:00"
     },
     {
       "id": "1015102a-5540-45bd-af3d-ebb62425f10c",
@@ -535,31 +127,7 @@
       "http_status": 200,
       "final_url": "https://avion-labs.com/careers",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:37.598653+00:00"
-    },
-    {
-      "id": "dacb3e94-edb0-4731-93a9-56267644b318",
-      "title": "AI/LLM Experience — Data Scientist Accelerator",
-      "company": "Binance",
-      "location": "Taipei/Hong Kong/Asia/Australia/New Zealand / Remote",
-      "apply_url": "https://jobs.lever.co/binance/96e8326e-074f-4d1f-89c4-8ed1a6f96014/apply",
-      "status": "OPEN",
-      "http_status": 200,
-      "final_url": "https://jobs.lever.co/binance/96e8326e-074f-4d1f-89c4-8ed1a6f96014/apply",
-      "evidence": "",
-      "checked_at": "2026-09-23T14:21:37.559747+00:00"
-    },
-    {
-      "id": "4ba8344e-cb9c-4086-b561-c05d1cedd290",
-      "title": "Audio Visual Technician",
-      "company": "JobClave",
-      "location": "Lagos / Uyo, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/audio-visual-technician-wrk54p",
-      "status": "OPEN",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/jobs/creative-design",
-      "evidence": "",
-      "checked_at": "2026-09-23T14:21:32.603697+00:00"
+      "checked_at": "2026-09-23T18:27:15.330976+00:00"
     },
     {
       "id": "a98ac81a-0185-48d0-a22c-762fb9ca034b",
@@ -571,43 +139,55 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/super.com/41c709ca-09fa-458b-28a8-d6608b04d85b",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:37.205037+00:00"
+      "checked_at": "2026-09-23T18:27:14.923835+00:00"
     },
     {
-      "id": "acfb0a29-9660-40e1-bfca-22ed6624a559",
-      "title": "Commerce Integrations Lead / Sales Engineer",
-      "company": "Terrific",
-      "location": "LATAM / EMEA remote locations",
-      "apply_url": "https://jobs.lever.co/terrific-innovation/ee9aceb1-b6c6-455c-bc9a-e48fea614bfd",
+      "id": "ac4e9380-df14-4565-a5f0-ccd643b10f68",
+      "title": "Construction Engineering Consultant",
+      "company": "UNICEF",
+      "location": "Egypt",
+      "apply_url": "https://www.unjobnet.org/jobs/areas-of-work/engineering?page=2",
       "status": "OPEN",
       "http_status": 200,
-      "final_url": "https://jobs.lever.co/terrific-innovation/ee9aceb1-b6c6-455c-bc9a-e48fea614bfd",
+      "final_url": "https://www.unjobnet.org/jobs/areas-of-work/engineering?page=2",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:37.202092+00:00"
+      "checked_at": "2026-09-23T18:27:16.241930+00:00"
     },
     {
-      "id": "305fb975-22ab-4781-a9f0-67b99fab6d11",
-      "title": "Construction trades helper",
-      "company": "E.T.G. Construction Inc.",
-      "location": "Edmonton, Alberta, Canada",
-      "apply_url": "https://www.jobbank.gc.ca/jobsearch/jobsearch?searchstring=construction+lmia",
+      "id": "f6025cd2-afc8-4219-8a65-e7fb9e40d099",
+      "title": "Construction Labourer",
+      "company": "HI-RISE CONSTRUCTION LTD",
+      "location": "Langley, British Columbia, Canada",
+      "apply_url": "https://nl.jobbank.gc.ca/jobsearch/jobposting/50336587",
       "status": "OPEN",
       "http_status": 200,
-      "final_url": "https://www.jobbank.gc.ca/jobsearch/jobsearch?searchstring=construction+lmia",
+      "final_url": "https://nl.jobbank.gc.ca/jobsearch/jobposting/50336587",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:35.050510+00:00"
+      "checked_at": "2026-09-23T18:27:11.838896+00:00"
     },
     {
-      "id": "e5ce57dc-7e75-4374-a365-1e42d0ed8de1",
-      "title": "Development Expert (f/m/d) - Virtualization (C, Linux, x86/ARM)",
-      "company": "SAP",
-      "location": "Berlin, Germany",
-      "apply_url": "https://careers.sap.com/job/Berlin-Development-Expert-%28fmd%29-Virtualization-%28C%2C-Linux-x86ARM%29-10557/1428570733/",
+      "id": "c580d79c-ae1f-416a-a3c6-69a873f72a09",
+      "title": "Data Specialist",
+      "company": "United Nations Secretariat",
+      "location": "Caracas, Venezuela",
+      "apply_url": "https://www.unjobnet.org/jobs/?page=1&select-occupations%255B0%5D=",
       "status": "OPEN",
       "http_status": 200,
-      "final_url": "https://careers.sap.com/job/Berlin-Development-Expert-%28fmd%29-Virtualization-%28C%2C-Linux-x86ARM%29-10557/1428570733/",
+      "final_url": "https://www.unjobnet.org/jobs/?page=1&select-occupations%255B0%5D=",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:36.566880+00:00"
+      "checked_at": "2026-09-23T18:27:14.366182+00:00"
+    },
+    {
+      "id": "cca72257-8282-4467-92d2-0afc2e02281b",
+      "title": "Development Coordination Officer, Engineer",
+      "company": "UN-Habitat",
+      "location": "Kakuma, Kenya",
+      "apply_url": "https://www.unjobnet.org/jobs/detail/unhabitat-development-coordination-officer-engineer-fixed-term-limited-88926842",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.unjobnet.org/jobs/detail/unhabitat-development-coordination-officer-engineer-fixed-term-limited-88926842",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:16.105295+00:00"
     },
     {
       "id": "b907f931-de7e-42db-8998-b69079f46938",
@@ -619,7 +199,19 @@
       "http_status": 200,
       "final_url": "https://avion-labs.com/careers",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:36.768157+00:00"
+      "checked_at": "2026-09-23T18:27:14.395669+00:00"
+    },
+    {
+      "id": "430faba3-091b-4cf6-a498-2fb847c06d6f",
+      "title": "DevOps Engineer",
+      "company": "Starion",
+      "location": "Darmstadt, Germany / Diegem, Belgium",
+      "apply_url": "https://www.stariongroup.eu/career/devops-engineer/",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.stariongroup.eu/career/devops-engineer/",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:13.455015+00:00"
     },
     {
       "id": "f559716d-c3aa-45eb-9c45-d8517c5fb473",
@@ -631,19 +223,67 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/Blackpoint%20Cyber/bcc5e057-f101-4057-bc8e-2fc533fd9bff",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:37.130832+00:00"
+      "checked_at": "2026-09-23T18:27:14.786371+00:00"
     },
     {
-      "id": "da61e033-73f1-40c6-a2a2-c5bacee8b8ee",
-      "title": "Dot Net Developer",
-      "company": "Choice Talents LTD",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://ng.linkedin.com/jobs/view/dot-net-developer-at-choice-talents-ltd-4469514294",
+      "id": "94deaaf5-8c6b-4dab-9b8c-93faaa6d7107",
+      "title": "Electrician",
+      "company": "Raisahara Enterprises Ltd.",
+      "location": "Surrey, British Columbia, Canada",
+      "apply_url": "https://bc.jobbank.gc.ca/jobsearch/jobposting/50345277",
       "status": "OPEN",
       "http_status": 200,
-      "final_url": "https://ng.linkedin.com/jobs/view/dot-net-developer-at-choice-talents-ltd-4469514294",
+      "final_url": "https://bc.jobbank.gc.ca/jobsearch/jobposting/50345277",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:34.494987+00:00"
+      "checked_at": "2026-09-23T18:27:12.643728+00:00"
+    },
+    {
+      "id": "47c143c6-824e-4ab5-97f5-c850e2582efb",
+      "title": "Electrician",
+      "company": "B4U ELECTRICAL LTD",
+      "location": "Edmonton, Alberta, Canada",
+      "apply_url": "https://www.nb.jobbank.gc.ca/jobsearch/jobposting/50343104",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.nb.jobbank.gc.ca/jobsearch/jobposting/50343104",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:12.513226+00:00"
+    },
+    {
+      "id": "cd68ced1-457a-4b54-9aae-7296e463ab38",
+      "title": "Electrician",
+      "company": "Yorkshire Housing",
+      "location": "Leeds, Yorkshire, UK",
+      "apply_url": "https://careerssearch.yorkshirehousing.co.uk/jobs/job/Electrician/1190",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://careerssearch.yorkshirehousing.co.uk/jobs/job/Electrician/1190",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:11.695516+00:00"
+    },
+    {
+      "id": "a72b4735-7f17-4242-8337-3abc49eaabda",
+      "title": "Engineer — Requirements Analyst",
+      "company": "NATO",
+      "location": "Mons, Belgium",
+      "apply_url": "https://www.unjobnet.org/jobs/areas-of-work/engineering?occupations%5B0%5D=28&page=3",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.unjobnet.org/jobs/areas-of-work/engineering?occupations%5B0%5D=28&page=3",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:15.852289+00:00"
+    },
+    {
+      "id": "6f97d6bb-a2b3-4bce-8681-5ea73dd40390",
+      "title": "Engineering and Maintenance Manager",
+      "company": "Solar Nigachem Limited",
+      "location": "Owode, Ogun / Lagos, Nigeria",
+      "apply_url": "https://www.careeroptionsafricagroup.com/jobs",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.careeroptionsafricagroup.com/jobs",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:10.784455+00:00"
     },
     {
       "id": "767b7db6-203d-406d-9e72-cda63a82cbfa",
@@ -655,7 +295,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/the-studio/ccb09b81-d9b9-4bfb-a62b-a8fdfbfc1c69",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:36.940367+00:00"
+      "checked_at": "2026-09-23T18:27:14.559218+00:00"
     },
     {
       "id": "3e6f5c4e-b6d7-4ee9-aae9-6271024f75b0",
@@ -667,19 +307,19 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/jobs/ibadan-oyo",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:31.889061+00:00"
+      "checked_at": "2026-09-23T18:27:10.784847+00:00"
     },
     {
-      "id": "b2449f85-36ae-4151-b007-9f6ee11f68cc",
-      "title": "First cook",
-      "company": "Piri Piri Hochelaga",
-      "location": "Montréal, Québec, Canada",
-      "apply_url": "https://on.jobbank.gc.ca/jobsearch/jobposting/49844971",
+      "id": "deb1bcd1-b57b-4a65-8222-d5df2f140127",
+      "title": "Financial Operations and Systems Analyst",
+      "company": "U.S. Office of Personnel Management",
+      "location": "Washington, DC, USA",
+      "apply_url": "https://www.usajobs.gov/job/885010400",
       "status": "OPEN",
       "http_status": 200,
-      "final_url": "https://on.jobbank.gc.ca/jobsearch/jobposting/49844971",
+      "final_url": "https://www.usajobs.gov/job/885010400",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:35.423462+00:00"
+      "checked_at": "2026-09-23T18:27:16.098709+00:00"
     },
     {
       "id": "9483ea05-06a6-40d6-a9fc-a825d734b028",
@@ -691,7 +331,7 @@
       "http_status": 200,
       "final_url": "https://jobs.lever.co/project-wayfinder/9cb7c8fb-314e-46f0-bd6e-378abf1e0318",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:36.938407+00:00"
+      "checked_at": "2026-09-23T18:27:14.558187+00:00"
     },
     {
       "id": "be7ffaea-d653-48a6-81ed-119152c7ef9c",
@@ -703,31 +343,175 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/super.com/10b27be5-ec32-4e4d-9a91-8eb898d957af",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:37.224305+00:00"
+      "checked_at": "2026-09-23T18:27:15.050827+00:00"
     },
     {
-      "id": "e2459c03-a588-49d0-ada4-67fb8d3814a8",
-      "title": "Front End Developer",
-      "company": "Geoinfotech Resources Limited",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/back-end-developer-qz5857",
+      "id": "062db140-18b9-4d5b-9831-6b84508725f4",
+      "title": "Geospatial Data Analyst",
+      "company": "World Resources Institute",
+      "location": "Jakarta, Indonesia",
+      "apply_url": "https://www.unjobnet.org/jobs/areas-of-work/information-and-communication-technology",
       "status": "OPEN",
       "http_status": 200,
-      "final_url": "https://www.jobberman.com/jobs/engineering-technology",
+      "final_url": "https://www.unjobnet.org/jobs/areas-of-work/information-and-communication-technology",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:31.890044+00:00"
+      "checked_at": "2026-09-23T18:27:15.742526+00:00"
     },
     {
-      "id": "d6f95cb8-59e0-487a-a4a7-6af918dcc2f3",
-      "title": "Long haul truck driver",
-      "company": "Black Legend Trans inc",
-      "location": "Edmonton, Alberta, Canada",
-      "apply_url": "https://www.jobbank.gc.ca/jobsearch/jobsearch?fglo=1&fn21=73300&fn21=73301&fn21=74102&fn21=74205&fn21=75101&fn21=75110&fn21=75200&fn21=75201&fn21=75211&fskl=101010&fskl=101020&sort=M",
+      "id": "99c54eae-3bd2-45f2-a297-75c1c70e4d2f",
+      "title": "GT Web Application and GIS Developer",
+      "company": "UNDP",
+      "location": "Moldova",
+      "apply_url": "https://www.unjobnet.org/jobs/detail/undp-qu2603118-gt-web-application-and-gis-developer-88925443",
       "status": "OPEN",
       "http_status": 200,
-      "final_url": "https://www.jobbank.gc.ca/jobsearch/jobsearch?fglo=1&fn21=73300&fn21=73301&fn21=74102&fn21=74205&fn21=75101&fn21=75110&fn21=75200&fn21=75201&fn21=75211&fskl=101010&fskl=101020&sort=M",
+      "final_url": "https://www.unjobnet.org/jobs/detail/undp-qu2603118-gt-web-application-and-gis-developer-88925443",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:36.691123+00:00"
+      "checked_at": "2026-09-23T18:27:16.485592+00:00"
+    },
+    {
+      "id": "ee2efbb7-9a5c-4b38-b737-7b1c898a1805",
+      "title": "ICT Analyst",
+      "company": "UNFPA",
+      "location": "Istanbul, Türkiye",
+      "apply_url": "https://www.unjobnet.org/jobs/areas-of-work/information-and-communication-technology",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.unjobnet.org/jobs/areas-of-work/information-and-communication-technology",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:15.437957+00:00"
+    },
+    {
+      "id": "499cf9c6-0a7b-4290-b34f-810c2e06e15f",
+      "title": "Information Technology Developer / Multiple Profiles",
+      "company": "Food and Agriculture Organization",
+      "location": "Multiple countries",
+      "apply_url": "https://www.unjobnet.org/jobs/areas-of-work/information-and-communication-technology",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.unjobnet.org/jobs/areas-of-work/information-and-communication-technology",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:16.111823+00:00"
+    },
+    {
+      "id": "931586ee-382f-47ea-ad0d-ef2b6b6a1bf8",
+      "title": "Information Technology Developer — Various Profiles",
+      "company": "Food and Agriculture Organization (FAO)",
+      "location": "Multiple locations",
+      "apply_url": "https://www.unjobnet.org/jobs/areas-of-work/information-and-communication-technology",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.unjobnet.org/jobs/areas-of-work/information-and-communication-technology",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:15.434290+00:00"
+    },
+    {
+      "id": "13c85350-7ef9-4053-be26-fa6fbf0ac9d9",
+      "title": "Information Technology Officer",
+      "company": "Plan International",
+      "location": "Yola, Adamawa, Nigeria",
+      "apply_url": "https://www.unjobnet.org/jobs/detail/plan-international-information-technology-officer-89114946",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.unjobnet.org/jobs/detail/plan-international-information-technology-officer-89114946",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:15.470630+00:00"
+    },
+    {
+      "id": "8c5dedc2-dcf8-4db7-8dc9-26190da3c554",
+      "title": "Information Technology Officer",
+      "company": "FHI 360",
+      "location": "Dar es Salaam, Tanzania",
+      "apply_url": "https://www.unjobnet.org/countries/tanzania",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.unjobnet.org/countries/tanzania",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:15.343171+00:00"
+    },
+    {
+      "id": "6fc4ba05-01a1-470b-87e3-10abd3669317",
+      "title": "Infrastructure Coordinator",
+      "company": "International Organization for Migration (IOM)",
+      "location": "Kinshasa, Democratic Republic of the Congo",
+      "apply_url": "https://www.unjobnet.org/jobs/detail/iom-infrastructure-coordinator-p-88953890",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.unjobnet.org/jobs/detail/iom-infrastructure-coordinator-p-88953890",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:15.339742+00:00"
+    },
+    {
+      "id": "fd492441-a6cb-47ff-9e2e-619bccbe2618",
+      "title": "IT Emergency Coordinator — Roster",
+      "company": "World Food Programme (WFP)",
+      "location": "Remote / Dubai, United Arab Emirates",
+      "apply_url": "https://wfp.impactpool.org/vacancies/1231127",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://wfp.impactpool.org/vacancies/1231127",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:14.362851+00:00"
+    },
+    {
+      "id": "a5b72d52-6bbd-4816-b2aa-216cfe5c42d8",
+      "title": "IT Operations Assistant, SSA5",
+      "company": "World Food Programme",
+      "location": "Dhaka, Bangladesh",
+      "apply_url": "https://www.unjobnet.org/jobs/detail/wfp-it-operations-assistant-ssa5-dhaka-88779257",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.unjobnet.org/jobs/detail/wfp-it-operations-assistant-ssa5-dhaka-88779257",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:14.916292+00:00"
+    },
+    {
+      "id": "160fe19e-1c95-4ff5-a59b-a51a8cda0860",
+      "title": "IT Operations Officer SC-8",
+      "company": "World Food Programme",
+      "location": "Kyiv, Ukraine",
+      "apply_url": "https://www.unjobnet.org/jobs/detail/wfp-it-operations-officer-sc8-88928570",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.unjobnet.org/jobs/detail/wfp-it-operations-officer-sc8-88928570",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:14.569654+00:00"
+    },
+    {
+      "id": "dfccd037-00ff-43a7-8f1e-cb9a53e5d2a8",
+      "title": "IT Operations Officer SC-9",
+      "company": "World Food Programme",
+      "location": "Kyiv, Ukraine",
+      "apply_url": "https://www.unjobnet.org/jobs/areas-of-work/information-and-communication-technology",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.unjobnet.org/jobs/areas-of-work/information-and-communication-technology",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:15.847558+00:00"
+    },
+    {
+      "id": "9bdf7a17-3a8d-47a3-a5d6-04935ef359e6",
+      "title": "IT Operations Support (m/w/d) (2061)",
+      "company": "Mitsubishi Chemical Group",
+      "location": "Düsseldorf, Germany",
+      "apply_url": "https://jobs-eu.mitsubishi-chemical.com/onemcc/vacancy/it-operations-support-m-w-d-2061-dusseldorf/2079/description/",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://jobs-eu.mitsubishi-chemical.com/onemcc/vacancy/it-operations-support-m-w-d-2061-dusseldorf/2079/description/",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:13.488229+00:00"
+    },
+    {
+      "id": "896f5f35-d756-49ab-99da-13f9ce55e67b",
+      "title": "Machine Learning Application Developer",
+      "company": "EUMETSAT",
+      "location": "Darmstadt, Germany",
+      "apply_url": "https://www.unjobnet.org/jobs/areas-of-work/information-and-communication-technology",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.unjobnet.org/jobs/areas-of-work/information-and-communication-technology",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:16.082470+00:00"
     },
     {
       "id": "3a91217b-6d61-40c5-a124-b4a60fa10442",
@@ -739,31 +523,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/Pear-VC/1c63a8a2-4c36-4712-9f32-4ceebe75cec4",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:36.946027+00:00"
-    },
-    {
-      "id": "590550df-1a79-4c83-9d64-73f2fef1e198",
-      "title": "MM Senior Account Executive",
-      "company": "SAP",
-      "location": "Osaka, Japan",
-      "apply_url": "https://careers.sap.com/job/Osaka-MM-Senior-Account-Executive-530-0001/1369930633/",
-      "status": "OPEN",
-      "http_status": 200,
-      "final_url": "https://careers.sap.com/job/Osaka-MM-Senior-Account-Executive-530-0001/1369930633/",
-      "evidence": "",
-      "checked_at": "2026-09-23T14:21:35.451112+00:00"
-    },
-    {
-      "id": "5d80993e-558e-402b-a922-aaceb0ac37a5",
-      "title": "Outbound Sales Representative",
-      "company": "BruntWork",
-      "location": "Remote / Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/outbound-sales-representative-erxje4",
-      "status": "OPEN",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/jobs/customer-service-support",
-      "evidence": "",
-      "checked_at": "2026-09-23T14:21:33.751618+00:00"
+      "checked_at": "2026-09-23T18:27:14.676356+00:00"
     },
     {
       "id": "144536bf-13f7-4230-9d66-b8e844c9de18",
@@ -775,7 +535,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/aphex/b1b9c4a0-07ba-40f7-8c3f-6aeb9b6fe7a5",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:37.199163+00:00"
+      "checked_at": "2026-09-23T18:27:14.826752+00:00"
     },
     {
       "id": "bb3aacca-af75-4464-b39a-73c5c5c3ef04",
@@ -787,19 +547,19 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/greatquestion/094067c8-29ec-4809-8617-06c7269593fb",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:37.325840+00:00"
+      "checked_at": "2026-09-23T18:27:15.064656+00:00"
     },
     {
-      "id": "ec696d2a-6cd8-432e-9764-e99dafcae49e",
-      "title": "Project Manager / Construction Manager (MCF/ Data Centres)",
-      "company": "Haskoning",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://ng.linkedin.com/jobs/view/project-manager-construction-manager-mcf-data-centres-at-haskoning-4458091052",
+      "id": "6792dfa7-a755-4be2-ba3b-8c9fdddf83ce",
+      "title": "Production Engineer (LVP Infusion Plant)",
+      "company": "Erkang Pharmaceutical",
+      "location": "Ilorin, Kwara, Nigeria",
+      "apply_url": "https://www.careeroptionsafricagroup.com/jobs/detail/production-engineer-lvp-infusion-plant-at-erkang-pharmaceutical-20068",
       "status": "OPEN",
       "http_status": 200,
-      "final_url": "https://ng.linkedin.com/jobs/view/project-manager-construction-manager-mcf-data-centres-at-haskoning-4458091052",
+      "final_url": "https://www.careeroptionsafricagroup.com/jobs/detail/production-engineer-lvp-infusion-plant-at-erkang-pharmaceutical-20068",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:34.427742+00:00"
+      "checked_at": "2026-09-23T18:27:10.783568+00:00"
     },
     {
       "id": "44770120-fc96-4a7b-9831-0e541cb95503",
@@ -811,7 +571,31 @@
       "http_status": 200,
       "final_url": "https://avion-labs.com/careers",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:36.797486+00:00"
+      "checked_at": "2026-09-23T18:27:14.409865+00:00"
+    },
+    {
+      "id": "25f1e5cb-2d02-4e75-a6c1-b2edbeef4238",
+      "title": "Recent Graduate — Litigation Support",
+      "company": "U.S. Department of Justice, U.S. Attorneys' Office",
+      "location": "Bangor, Maine, USA",
+      "apply_url": "https://www.usajobs.gov/job/879322700",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.usajobs.gov/job/879322700",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:13.920798+00:00"
+    },
+    {
+      "id": "255290fb-106a-468d-a661-0ec4b3f24728",
+      "title": "RO-Process Engineer",
+      "company": "MENA-Water",
+      "location": "Sharjah, United Arab Emirates",
+      "apply_url": "https://mena-water.com/career/",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://mena-water.com/career/",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:12.659549+00:00"
     },
     {
       "id": "b98d9e00-7e68-4eeb-b2a7-da8fd8ea1542",
@@ -823,7 +607,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/n8n/62309aac-598b-4cb0-bc1b-e0dad9cda130",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:37.479035+00:00"
+      "checked_at": "2026-09-23T18:27:15.299725+00:00"
     },
     {
       "id": "6110608f-1170-4b75-aae3-7b3f81c5b69c",
@@ -835,7 +619,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/hackerone/4ded5c3c-3b7c-4e87-8d0c-5e9c859e6e4a/",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:37.417201+00:00"
+      "checked_at": "2026-09-23T18:27:15.163523+00:00"
     },
     {
       "id": "119e78a1-7aeb-4730-b5ad-32a8af74a6da",
@@ -847,31 +631,7 @@
       "http_status": 200,
       "final_url": "https://avion-labs.com/careers",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:36.798249+00:00"
-    },
-    {
-      "id": "1ee28e26-f821-438f-bb47-3dc27fd2351d",
-      "title": "Senior DevOps Engineer",
-      "company": "Workpedia™",
-      "location": "Abuja, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/senior-devops-engineer-8m9xvr",
-      "status": "OPEN",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/jobs/engineering-technology",
-      "evidence": "",
-      "checked_at": "2026-09-23T14:21:31.889781+00:00"
-    },
-    {
-      "id": "a4ba7a44-5779-48f9-b201-eb03c3b12d07",
-      "title": "Senior Enterprise Architect",
-      "company": "SAP",
-      "location": "Tokyo, Japan",
-      "apply_url": "https://careers.sap.com/job/Tokyo-Senior-Enterprise-Architect-Toky-100-0004/1405314633/",
-      "status": "OPEN",
-      "http_status": 200,
-      "final_url": "https://careers.sap.com/job/Tokyo-Senior-Enterprise-Architect-Toky-100-0004/1405314633/",
-      "evidence": "",
-      "checked_at": "2026-09-23T14:21:35.478439+00:00"
+      "checked_at": "2026-09-23T18:27:14.476636+00:00"
     },
     {
       "id": "2504b7ca-0cf7-4cc4-95b3-a9b57f4ac5a8",
@@ -883,7 +643,19 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/HackerOne/c96e0eec-fe37-45a6-86dd-e2b1efdffa05",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:37.340861+00:00"
+      "checked_at": "2026-09-23T18:27:15.117556+00:00"
+    },
+    {
+      "id": "e11edd08-f81f-40ce-ad8c-87b3c5f9e869",
+      "title": "Senior Interface Engineer — Offshore",
+      "company": "Penspen",
+      "location": "Abu Dhabi, United Arab Emirates",
+      "apply_url": "https://careers.penspen.com/vacancy/senior-interface-engineeroffshore-619423.html",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://careers.penspen.com/vacancy/senior-interface-engineeroffshore-619423.html",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:16.386251+00:00"
     },
     {
       "id": "e2a75eb4-bf8a-4326-ad80-a9d652e93256",
@@ -895,19 +667,31 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/n8n/be824190-55e8-4226-b5b0-db9b4cd1eede",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:37.441170+00:00"
+      "checked_at": "2026-09-23T18:27:15.176758+00:00"
     },
     {
-      "id": "dd7a2719-00f0-49d5-a6c7-6267c8a27e31",
-      "title": "Senior Software Engineer - AI Experiences, Microsoft Edge",
-      "company": "Microsoft",
-      "location": "Redmond, Washington, USA",
-      "apply_url": "https://careers.microsoft.com/v2/global/en/locations/seattle-area.html",
+      "id": "3f1b29c0-d56d-467a-bb37-c445e085eb6b",
+      "title": "Senior Programme Officer — Enterprise Development",
+      "company": "International Labour Organization",
+      "location": "Addis Ababa, Ethiopia",
+      "apply_url": "https://www.unjobnet.org/jobs/detail/ilo-senior-programme-officer-enterprise-development-88978949",
       "status": "OPEN",
       "http_status": 200,
-      "final_url": "https://careers.microsoft.com/v2/global/en/locations/seattle-area.html",
+      "final_url": "https://www.unjobnet.org/jobs/detail/ilo-senior-programme-officer-enterprise-development-88978949",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:36.335813+00:00"
+      "checked_at": "2026-09-23T18:27:15.430654+00:00"
+    },
+    {
+      "id": "741ca98a-178a-4a36-933e-e409d38d3e44",
+      "title": "Senior Software Engineer — AI & Copilot Studio",
+      "company": "Cpl (for Tier 1 Banking Client)",
+      "location": "Dublin, Ireland",
+      "apply_url": "https://www.cpl.com/jobs/JO-2609-568695",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.cpl.com/jobs/JO-2609-568695",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:12.739571+00:00"
     },
     {
       "id": "2a61b029-ec2f-47f1-90c1-a00af8657f23",
@@ -919,31 +703,43 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/jobs/ibadan-oyo",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:31.889465+00:00"
+      "checked_at": "2026-09-23T18:27:10.785119+00:00"
     },
     {
-      "id": "6cd490c1-9bc2-42d8-88f1-de0643d61351",
-      "title": "Shutdown Project Manager H/F",
-      "company": "PONTICELLI NIGERIA",
-      "location": "Port Harcourt, Nigeria",
-      "apply_url": "https://ng.linkedin.com/jobs/view/shutdown-project-manager-h-f-at-ponticelli-nigeria-4432802134",
+      "id": "60cec4fe-969e-4f61-9533-cab2d91c4d4f",
+      "title": "Solar Grid Site Manager",
+      "company": "MykroGrid Limited",
+      "location": "Edo, Nigeria",
+      "apply_url": "https://www.careeroptionsafricagroup.com/jobs",
       "status": "OPEN",
       "http_status": 200,
-      "final_url": "https://ng.linkedin.com/jobs/view/shutdown-project-manager-h-f-at-ponticelli-nigeria-4432802134",
+      "final_url": "https://www.careeroptionsafricagroup.com/jobs",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:32.665510+00:00"
+      "checked_at": "2026-09-23T18:27:10.783900+00:00"
     },
     {
-      "id": "19be17ff-cc91-4376-b908-1e4d7e1bc902",
-      "title": "Software Engineer - Generative UI, Input Experience",
-      "company": "Apple",
-      "location": "Cupertino, California, USA",
-      "apply_url": "https://jobs.apple.com/en-us/search?location=united-states-USA",
+      "id": "2f8d4d62-ea70-4538-a9be-df13a846d13d",
+      "title": "Solar Technician / Installer",
+      "company": "VGL Energy and Power Technology Limited",
+      "location": "Surulere, Lagos, Nigeria",
+      "apply_url": "https://www.careeroptionsafricagroup.com/jobs",
       "status": "OPEN",
       "http_status": 200,
-      "final_url": "https://jobs.apple.com/en-us/search?location=united-states-USA",
+      "final_url": "https://www.careeroptionsafricagroup.com/jobs",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:36.085867+00:00"
+      "checked_at": "2026-09-23T18:27:10.784183+00:00"
+    },
+    {
+      "id": "c89f717b-3434-4348-959b-64abed21a13d",
+      "title": "Technical Business Analyst",
+      "company": "Boost Talent",
+      "location": "Mainly Remote / Newcastle, UK",
+      "apply_url": "https://boosttalent.co.uk/jobs/technical-business-analyst/",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://boosttalent.co.uk/jobs/technical-business-analyst/",
+      "evidence": "",
+      "checked_at": "2026-09-23T18:27:13.578349+00:00"
     },
     {
       "id": "7f3dd629-5789-46d8-b8b3-b92960fc22d7",
@@ -955,7 +751,7 @@
       "http_status": 200,
       "final_url": "https://avion-labs.com/careers",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:37.597528+00:00"
+      "checked_at": "2026-09-23T18:27:15.329407+00:00"
     },
     {
       "id": "cc6daf71-cbdf-43e6-b02a-2c0738723579",
@@ -967,43 +763,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/super.com/55781d35-563b-43e9-a779-b4f1467a833a/",
       "evidence": "",
-      "checked_at": "2026-09-23T14:21:37.206746+00:00"
-    },
-    {
-      "id": "3d68b533-3a5a-47bc-837e-f16764feecd1",
-      "title": "Welder",
-      "company": "Groupe Dacoh",
-      "location": "Montréal, Québec, Canada",
-      "apply_url": "https://mb.jobbank.gc.ca/jobsearch/jobposting/50206195",
-      "status": "OPEN",
-      "http_status": 200,
-      "final_url": "https://mb.jobbank.gc.ca/jobsearch/jobposting/50206195",
-      "evidence": "",
-      "checked_at": "2026-09-23T14:21:35.061225+00:00"
-    },
-    {
-      "id": "2e56b1d6-7dc8-4ce7-a276-33cae0f5ec3c",
-      "title": "Welder",
-      "company": "Can Tech Laser and Metals Inc.",
-      "location": "Brampton, Ontario, Canada",
-      "apply_url": "https://www.jobbank.gc.ca/jobsearch/jobsearch?locationstring=Canada&searchstring=LMIA+",
-      "status": "OPEN",
-      "http_status": 200,
-      "final_url": "https://www.jobbank.gc.ca/jobsearch/jobsearch?locationstring=Canada&searchstring=LMIA+",
-      "evidence": "",
-      "checked_at": "2026-09-23T14:21:35.235092+00:00"
-    },
-    {
-      "id": "7453cedb-6070-4cdf-bcdf-e3e83420fd6e",
-      "title": "Welder",
-      "company": "AIRTILIZE INC.",
-      "location": "Brampton, Ontario, Canada",
-      "apply_url": "https://www.nu.jobbank.gc.ca/jobsearch/jobposting/50078826",
-      "status": "OPEN",
-      "http_status": 200,
-      "final_url": "https://www.nu.jobbank.gc.ca/jobsearch/jobposting/50078826",
-      "evidence": "",
-      "checked_at": "2026-09-23T14:21:35.332007+00:00"
+      "checked_at": "2026-09-23T18:27:15.049815+00:00"
     }
   ]
 }
