@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-23T18:27:20.326638+00:00",
+  "updated_at": "2026-09-23T21:42:52.369771+00:00",
   "source": "Supabase public published manual jobs",
   "check_interval": "15 minutes",
   "note": "CLOSED means the robot found a strong closed/not-found signal. JobSeek does not automatically remove jobs; an admin must review and close/remove them from the public feed.",
@@ -19,7 +19,7 @@
       "http_status": 404,
       "final_url": "https://careers.energyutilitiesjobs.co.uk/jobs/craftsperson-electrician-motherwell-lanarkshire/63735-1/",
       "evidence": "HTTP 404",
-      "checked_at": "2026-09-23T18:27:10.785380+00:00"
+      "checked_at": "2026-09-23T21:42:45.879394+00:00"
     },
     {
       "id": "f9ab88e1-2845-4199-b8e2-38cacfca9b1a",
@@ -31,7 +31,7 @@
       "http_status": 200,
       "final_url": "https://www.tes.com/jobs/vacancy/data-manager-dubai-2339103",
       "evidence": "applications closed",
-      "checked_at": "2026-09-23T18:27:14.306590+00:00"
+      "checked_at": "2026-09-23T21:42:48.424425+00:00"
     },
     {
       "id": "3b39ba4b-5eda-4356-9bda-a8dd00e94fc0",
@@ -43,7 +43,7 @@
       "http_status": 200,
       "final_url": "https://www.jobs.service.gov.uk/jobs/6aa802aa3046452f0152736d",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T18:27:11.821033+00:00"
+      "checked_at": "2026-09-23T21:42:46.663166+00:00"
     },
     {
       "id": "d26f39c7-2649-421b-9248-6fb029d033f8",
@@ -55,7 +55,7 @@
       "http_status": 200,
       "final_url": "https://www.jobs.service.gov.uk/jobs/6a9160d482444eb0b879e0e0",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T18:27:10.785667+00:00"
+      "checked_at": "2026-09-23T21:42:45.879947+00:00"
     },
     {
       "id": "e347e5a5-6010-4a41-8afe-a55acf568d83",
@@ -67,7 +67,7 @@
       "http_status": 200,
       "final_url": "https://www.jobs.service.gov.uk/jobs/6a918a5b82444eb0b87a5990",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T18:27:11.719908+00:00"
+      "checked_at": "2026-09-23T21:42:46.547770+00:00"
     },
     {
       "id": "f709cd18-8504-4cf9-a806-478d2cc61a6c",
@@ -79,7 +79,7 @@
       "http_status": 410,
       "final_url": "https://landmarkafrica.com/careers/jobs/senior-software-engineer-ats-demo",
       "evidence": "HTTP 410",
-      "checked_at": "2026-09-23T18:27:16.253027+00:00"
+      "checked_at": "2026-09-23T21:42:51.024034+00:00"
     },
     {
       "id": "b795b9fe-295f-4744-92ef-9decba55af5c",
@@ -91,7 +91,7 @@
       "http_status": null,
       "final_url": "https://impsoftware.co.uk/careers/head-of-platform-engineering/",
       "evidence": "Network/timeout: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1000)>",
-      "checked_at": "2026-09-23T18:27:13.619909+00:00"
+      "checked_at": "2026-09-23T21:42:48.323673+00:00"
     },
     {
       "id": "08274253-0460-4850-a527-f8fd821be33b",
@@ -103,7 +103,7 @@
       "http_status": null,
       "final_url": "https://impsoftware.co.uk/imp-careers/",
       "evidence": "Network/timeout: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1000)>",
-      "checked_at": "2026-09-23T18:27:16.530790+00:00"
+      "checked_at": "2026-09-23T21:42:51.200474+00:00"
     },
     {
       "id": "cc092348-647d-4341-ba6e-e621bd62d2e2",
@@ -115,7 +115,7 @@
       "http_status": null,
       "final_url": "https://impsoftware.co.uk/imp-careers/",
       "evidence": "Network/timeout: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1000)>",
-      "checked_at": "2026-09-23T18:27:11.694937+00:00"
+      "checked_at": "2026-09-23T21:42:46.427164+00:00"
     },
     {
       "id": "1015102a-5540-45bd-af3d-ebb62425f10c",
@@ -127,7 +127,7 @@
       "http_status": 200,
       "final_url": "https://avion-labs.com/careers",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:15.330976+00:00"
+      "checked_at": "2026-09-23T21:42:49.342937+00:00"
     },
     {
       "id": "a98ac81a-0185-48d0-a22c-762fb9ca034b",
@@ -139,7 +139,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/super.com/41c709ca-09fa-458b-28a8-d6608b04d85b",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:14.923835+00:00"
+      "checked_at": "2026-09-23T21:42:49.125368+00:00"
     },
     {
       "id": "ac4e9380-df14-4565-a5f0-ccd643b10f68",
@@ -151,7 +151,7 @@
       "http_status": 200,
       "final_url": "https://www.unjobnet.org/jobs/areas-of-work/engineering?page=2",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:16.241930+00:00"
+      "checked_at": "2026-09-23T21:42:51.015871+00:00"
     },
     {
       "id": "f6025cd2-afc8-4219-8a65-e7fb9e40d099",
@@ -163,7 +163,7 @@
       "http_status": 200,
       "final_url": "https://nl.jobbank.gc.ca/jobsearch/jobposting/50336587",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:11.838896+00:00"
+      "checked_at": "2026-09-23T21:42:46.725484+00:00"
     },
     {
       "id": "c580d79c-ae1f-416a-a3c6-69a873f72a09",
@@ -175,7 +175,7 @@
       "http_status": 200,
       "final_url": "https://www.unjobnet.org/jobs/?page=1&select-occupations%255B0%5D=",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:14.366182+00:00"
+      "checked_at": "2026-09-23T21:42:48.592701+00:00"
     },
     {
       "id": "cca72257-8282-4467-92d2-0afc2e02281b",
@@ -187,7 +187,7 @@
       "http_status": 200,
       "final_url": "https://www.unjobnet.org/jobs/detail/unhabitat-development-coordination-officer-engineer-fixed-term-limited-88926842",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:16.105295+00:00"
+      "checked_at": "2026-09-23T21:42:50.016039+00:00"
     },
     {
       "id": "b907f931-de7e-42db-8998-b69079f46938",
@@ -199,7 +199,7 @@
       "http_status": 200,
       "final_url": "https://avion-labs.com/careers",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:14.395669+00:00"
+      "checked_at": "2026-09-23T21:42:48.698351+00:00"
     },
     {
       "id": "430faba3-091b-4cf6-a498-2fb847c06d6f",
@@ -211,7 +211,7 @@
       "http_status": 200,
       "final_url": "https://www.stariongroup.eu/career/devops-engineer/",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:13.455015+00:00"
+      "checked_at": "2026-09-23T21:42:47.873027+00:00"
     },
     {
       "id": "f559716d-c3aa-45eb-9c45-d8517c5fb473",
@@ -223,19 +223,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/Blackpoint%20Cyber/bcc5e057-f101-4057-bc8e-2fc533fd9bff",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:14.786371+00:00"
-    },
-    {
-      "id": "94deaaf5-8c6b-4dab-9b8c-93faaa6d7107",
-      "title": "Electrician",
-      "company": "Raisahara Enterprises Ltd.",
-      "location": "Surrey, British Columbia, Canada",
-      "apply_url": "https://bc.jobbank.gc.ca/jobsearch/jobposting/50345277",
-      "status": "OPEN",
-      "http_status": 200,
-      "final_url": "https://bc.jobbank.gc.ca/jobsearch/jobposting/50345277",
-      "evidence": "",
-      "checked_at": "2026-09-23T18:27:12.643728+00:00"
+      "checked_at": "2026-09-23T21:42:48.987451+00:00"
     },
     {
       "id": "47c143c6-824e-4ab5-97f5-c850e2582efb",
@@ -247,7 +235,19 @@
       "http_status": 200,
       "final_url": "https://www.nb.jobbank.gc.ca/jobsearch/jobposting/50343104",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:12.513226+00:00"
+      "checked_at": "2026-09-23T21:42:47.100132+00:00"
+    },
+    {
+      "id": "94deaaf5-8c6b-4dab-9b8c-93faaa6d7107",
+      "title": "Electrician",
+      "company": "Raisahara Enterprises Ltd.",
+      "location": "Surrey, British Columbia, Canada",
+      "apply_url": "https://bc.jobbank.gc.ca/jobsearch/jobposting/50345277",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://bc.jobbank.gc.ca/jobsearch/jobposting/50345277",
+      "evidence": "",
+      "checked_at": "2026-09-23T21:42:47.198587+00:00"
     },
     {
       "id": "cd68ced1-457a-4b54-9aae-7296e463ab38",
@@ -259,7 +259,7 @@
       "http_status": 200,
       "final_url": "https://careerssearch.yorkshirehousing.co.uk/jobs/job/Electrician/1190",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:11.695516+00:00"
+      "checked_at": "2026-09-23T21:42:46.472984+00:00"
     },
     {
       "id": "a72b4735-7f17-4242-8337-3abc49eaabda",
@@ -271,7 +271,7 @@
       "http_status": 200,
       "final_url": "https://www.unjobnet.org/jobs/areas-of-work/engineering?occupations%5B0%5D=28&page=3",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:15.852289+00:00"
+      "checked_at": "2026-09-23T21:42:49.751116+00:00"
     },
     {
       "id": "6f97d6bb-a2b3-4bce-8681-5ea73dd40390",
@@ -283,7 +283,7 @@
       "http_status": 200,
       "final_url": "https://www.careeroptionsafricagroup.com/jobs",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:10.784455+00:00"
+      "checked_at": "2026-09-23T21:42:45.878101+00:00"
     },
     {
       "id": "767b7db6-203d-406d-9e72-cda63a82cbfa",
@@ -295,7 +295,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/the-studio/ccb09b81-d9b9-4bfb-a62b-a8fdfbfc1c69",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:14.559218+00:00"
+      "checked_at": "2026-09-23T21:42:48.880316+00:00"
     },
     {
       "id": "3e6f5c4e-b6d7-4ee9-aae9-6271024f75b0",
@@ -307,7 +307,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/jobs/ibadan-oyo",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:10.784847+00:00"
+      "checked_at": "2026-09-23T21:42:45.878509+00:00"
     },
     {
       "id": "deb1bcd1-b57b-4a65-8222-d5df2f140127",
@@ -319,7 +319,7 @@
       "http_status": 200,
       "final_url": "https://www.usajobs.gov/job/885010400",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:16.098709+00:00"
+      "checked_at": "2026-09-23T21:42:49.858046+00:00"
     },
     {
       "id": "9483ea05-06a6-40d6-a9fc-a825d734b028",
@@ -331,7 +331,7 @@
       "http_status": 200,
       "final_url": "https://jobs.lever.co/project-wayfinder/9cb7c8fb-314e-46f0-bd6e-378abf1e0318",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:14.558187+00:00"
+      "checked_at": "2026-09-23T21:42:48.851594+00:00"
     },
     {
       "id": "be7ffaea-d653-48a6-81ed-119152c7ef9c",
@@ -343,7 +343,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/super.com/10b27be5-ec32-4e4d-9a91-8eb898d957af",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:15.050827+00:00"
+      "checked_at": "2026-09-23T21:42:49.138881+00:00"
     },
     {
       "id": "062db140-18b9-4d5b-9831-6b84508725f4",
@@ -355,7 +355,7 @@
       "http_status": 200,
       "final_url": "https://www.unjobnet.org/jobs/areas-of-work/information-and-communication-technology",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:15.742526+00:00"
+      "checked_at": "2026-09-23T21:42:49.577940+00:00"
     },
     {
       "id": "99c54eae-3bd2-45f2-a297-75c1c70e4d2f",
@@ -367,7 +367,7 @@
       "http_status": 200,
       "final_url": "https://www.unjobnet.org/jobs/detail/undp-qu2603118-gt-web-application-and-gis-developer-88925443",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:16.485592+00:00"
+      "checked_at": "2026-09-23T21:42:51.053192+00:00"
     },
     {
       "id": "ee2efbb7-9a5c-4b38-b737-7b1c898a1805",
@@ -379,7 +379,7 @@
       "http_status": 200,
       "final_url": "https://www.unjobnet.org/jobs/areas-of-work/information-and-communication-technology",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:15.437957+00:00"
+      "checked_at": "2026-09-23T21:42:49.407546+00:00"
     },
     {
       "id": "499cf9c6-0a7b-4290-b34f-810c2e06e15f",
@@ -391,7 +391,7 @@
       "http_status": 200,
       "final_url": "https://www.unjobnet.org/jobs/areas-of-work/information-and-communication-technology",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:16.111823+00:00"
+      "checked_at": "2026-09-23T21:42:50.408283+00:00"
     },
     {
       "id": "931586ee-382f-47ea-ad0d-ef2b6b6a1bf8",
@@ -403,7 +403,7 @@
       "http_status": 200,
       "final_url": "https://www.unjobnet.org/jobs/areas-of-work/information-and-communication-technology",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:15.434290+00:00"
+      "checked_at": "2026-09-23T21:42:49.399444+00:00"
     },
     {
       "id": "13c85350-7ef9-4053-be26-fa6fbf0ac9d9",
@@ -415,7 +415,7 @@
       "http_status": 200,
       "final_url": "https://www.unjobnet.org/jobs/detail/plan-international-information-technology-officer-89114946",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:15.470630+00:00"
+      "checked_at": "2026-09-23T21:42:49.503908+00:00"
     },
     {
       "id": "8c5dedc2-dcf8-4db7-8dc9-26190da3c554",
@@ -427,7 +427,7 @@
       "http_status": 200,
       "final_url": "https://www.unjobnet.org/countries/tanzania",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:15.343171+00:00"
+      "checked_at": "2026-09-23T21:42:49.371960+00:00"
     },
     {
       "id": "6fc4ba05-01a1-470b-87e3-10abd3669317",
@@ -439,7 +439,7 @@
       "http_status": 200,
       "final_url": "https://www.unjobnet.org/jobs/detail/iom-infrastructure-coordinator-p-88953890",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:15.339742+00:00"
+      "checked_at": "2026-09-23T21:42:49.347356+00:00"
     },
     {
       "id": "fd492441-a6cb-47ff-9e2e-619bccbe2618",
@@ -451,7 +451,7 @@
       "http_status": 200,
       "final_url": "https://wfp.impactpool.org/vacancies/1231127",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:14.362851+00:00"
+      "checked_at": "2026-09-23T21:42:48.478957+00:00"
     },
     {
       "id": "a5b72d52-6bbd-4816-b2aa-216cfe5c42d8",
@@ -463,7 +463,7 @@
       "http_status": 200,
       "final_url": "https://www.unjobnet.org/jobs/detail/wfp-it-operations-assistant-ssa5-dhaka-88779257",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:14.916292+00:00"
+      "checked_at": "2026-09-23T21:42:49.020708+00:00"
     },
     {
       "id": "160fe19e-1c95-4ff5-a59b-a51a8cda0860",
@@ -475,7 +475,7 @@
       "http_status": 200,
       "final_url": "https://www.unjobnet.org/jobs/detail/wfp-it-operations-officer-sc8-88928570",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:14.569654+00:00"
+      "checked_at": "2026-09-23T21:42:48.895853+00:00"
     },
     {
       "id": "dfccd037-00ff-43a7-8f1e-cb9a53e5d2a8",
@@ -487,7 +487,7 @@
       "http_status": 200,
       "final_url": "https://www.unjobnet.org/jobs/areas-of-work/information-and-communication-technology",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:15.847558+00:00"
+      "checked_at": "2026-09-23T21:42:49.745645+00:00"
     },
     {
       "id": "9bdf7a17-3a8d-47a3-a5d6-04935ef359e6",
@@ -499,7 +499,7 @@
       "http_status": 200,
       "final_url": "https://jobs-eu.mitsubishi-chemical.com/onemcc/vacancy/it-operations-support-m-w-d-2061-dusseldorf/2079/description/",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:13.488229+00:00"
+      "checked_at": "2026-09-23T21:42:47.912097+00:00"
     },
     {
       "id": "896f5f35-d756-49ab-99da-13f9ce55e67b",
@@ -511,7 +511,7 @@
       "http_status": 200,
       "final_url": "https://www.unjobnet.org/jobs/areas-of-work/information-and-communication-technology",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:16.082470+00:00"
+      "checked_at": "2026-09-23T21:42:49.840189+00:00"
     },
     {
       "id": "3a91217b-6d61-40c5-a124-b4a60fa10442",
@@ -523,7 +523,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/Pear-VC/1c63a8a2-4c36-4712-9f32-4ceebe75cec4",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:14.676356+00:00"
+      "checked_at": "2026-09-23T21:42:48.948305+00:00"
     },
     {
       "id": "144536bf-13f7-4230-9d66-b8e844c9de18",
@@ -535,7 +535,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/aphex/b1b9c4a0-07ba-40f7-8c3f-6aeb9b6fe7a5",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:14.826752+00:00"
+      "checked_at": "2026-09-23T21:42:48.995499+00:00"
     },
     {
       "id": "bb3aacca-af75-4464-b39a-73c5c5c3ef04",
@@ -547,7 +547,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/greatquestion/094067c8-29ec-4809-8617-06c7269593fb",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:15.064656+00:00"
+      "checked_at": "2026-09-23T21:42:49.172789+00:00"
     },
     {
       "id": "6792dfa7-a755-4be2-ba3b-8c9fdddf83ce",
@@ -559,7 +559,7 @@
       "http_status": 200,
       "final_url": "https://www.careeroptionsafricagroup.com/jobs/detail/production-engineer-lvp-infusion-plant-at-erkang-pharmaceutical-20068",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:10.783568+00:00"
+      "checked_at": "2026-09-23T21:42:45.877142+00:00"
     },
     {
       "id": "44770120-fc96-4a7b-9831-0e541cb95503",
@@ -571,7 +571,7 @@
       "http_status": 200,
       "final_url": "https://avion-labs.com/careers",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:14.409865+00:00"
+      "checked_at": "2026-09-23T21:42:48.785819+00:00"
     },
     {
       "id": "25f1e5cb-2d02-4e75-a6c1-b2edbeef4238",
@@ -583,7 +583,7 @@
       "http_status": 200,
       "final_url": "https://www.usajobs.gov/job/879322700",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:13.920798+00:00"
+      "checked_at": "2026-09-23T21:42:48.409883+00:00"
     },
     {
       "id": "255290fb-106a-468d-a661-0ec4b3f24728",
@@ -595,7 +595,7 @@
       "http_status": 200,
       "final_url": "https://mena-water.com/career/",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:12.659549+00:00"
+      "checked_at": "2026-09-23T21:42:47.364651+00:00"
     },
     {
       "id": "b98d9e00-7e68-4eeb-b2a7-da8fd8ea1542",
@@ -607,7 +607,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/n8n/62309aac-598b-4cb0-bc1b-e0dad9cda130",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:15.299725+00:00"
+      "checked_at": "2026-09-23T21:42:49.263287+00:00"
     },
     {
       "id": "6110608f-1170-4b75-aae3-7b3f81c5b69c",
@@ -619,7 +619,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/hackerone/4ded5c3c-3b7c-4e87-8d0c-5e9c859e6e4a/",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:15.163523+00:00"
+      "checked_at": "2026-09-23T21:42:49.189728+00:00"
     },
     {
       "id": "119e78a1-7aeb-4730-b5ad-32a8af74a6da",
@@ -631,7 +631,7 @@
       "http_status": 200,
       "final_url": "https://avion-labs.com/careers",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:14.476636+00:00"
+      "checked_at": "2026-09-23T21:42:48.832962+00:00"
     },
     {
       "id": "2504b7ca-0cf7-4cc4-95b3-a9b57f4ac5a8",
@@ -643,7 +643,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/HackerOne/c96e0eec-fe37-45a6-86dd-e2b1efdffa05",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:15.117556+00:00"
+      "checked_at": "2026-09-23T21:42:49.186681+00:00"
     },
     {
       "id": "e11edd08-f81f-40ce-ad8c-87b3c5f9e869",
@@ -655,7 +655,7 @@
       "http_status": 200,
       "final_url": "https://careers.penspen.com/vacancy/senior-interface-engineeroffshore-619423.html",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:16.386251+00:00"
+      "checked_at": "2026-09-23T21:42:51.044327+00:00"
     },
     {
       "id": "e2a75eb4-bf8a-4326-ad80-a9d652e93256",
@@ -667,7 +667,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/n8n/be824190-55e8-4226-b5b0-db9b4cd1eede",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:15.176758+00:00"
+      "checked_at": "2026-09-23T21:42:49.254691+00:00"
     },
     {
       "id": "3f1b29c0-d56d-467a-bb37-c445e085eb6b",
@@ -679,7 +679,7 @@
       "http_status": 200,
       "final_url": "https://www.unjobnet.org/jobs/detail/ilo-senior-programme-officer-enterprise-development-88978949",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:15.430654+00:00"
+      "checked_at": "2026-09-23T21:42:49.386061+00:00"
     },
     {
       "id": "741ca98a-178a-4a36-933e-e409d38d3e44",
@@ -691,7 +691,7 @@
       "http_status": 200,
       "final_url": "https://www.cpl.com/jobs/JO-2609-568695",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:12.739571+00:00"
+      "checked_at": "2026-09-23T21:42:47.437673+00:00"
     },
     {
       "id": "2a61b029-ec2f-47f1-90c1-a00af8657f23",
@@ -703,7 +703,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/jobs/ibadan-oyo",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:10.785119+00:00"
+      "checked_at": "2026-09-23T21:42:45.879004+00:00"
     },
     {
       "id": "60cec4fe-969e-4f61-9533-cab2d91c4d4f",
@@ -715,7 +715,7 @@
       "http_status": 200,
       "final_url": "https://www.careeroptionsafricagroup.com/jobs",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:10.783900+00:00"
+      "checked_at": "2026-09-23T21:42:45.877517+00:00"
     },
     {
       "id": "2f8d4d62-ea70-4538-a9be-df13a846d13d",
@@ -727,7 +727,7 @@
       "http_status": 200,
       "final_url": "https://www.careeroptionsafricagroup.com/jobs",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:10.784183+00:00"
+      "checked_at": "2026-09-23T21:42:45.877815+00:00"
     },
     {
       "id": "c89f717b-3434-4348-959b-64abed21a13d",
@@ -739,7 +739,7 @@
       "http_status": 200,
       "final_url": "https://boosttalent.co.uk/jobs/technical-business-analyst/",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:13.578349+00:00"
+      "checked_at": "2026-09-23T21:42:48.160738+00:00"
     },
     {
       "id": "7f3dd629-5789-46d8-b8b3-b92960fc22d7",
@@ -751,7 +751,7 @@
       "http_status": 200,
       "final_url": "https://avion-labs.com/careers",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:15.329407+00:00"
+      "checked_at": "2026-09-23T21:42:49.319023+00:00"
     },
     {
       "id": "cc6daf71-cbdf-43e6-b02a-2c0738723579",
@@ -763,7 +763,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/super.com/55781d35-563b-43e9-a779-b4f1467a833a/",
       "evidence": "",
-      "checked_at": "2026-09-23T18:27:15.049815+00:00"
+      "checked_at": "2026-09-23T21:42:49.127414+00:00"
     }
   ]
 }
