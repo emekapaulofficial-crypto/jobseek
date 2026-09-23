@@ -58,11 +58,20 @@ async function loadVacancy(){
     if($('requirements').textContent.includes('Loading vacancy requirements')) $('requirements').textContent='The source listing does not provide separate requirements. JobSeek will not invent qualifications.';
   }catch(e){
     console.warn('Vacancy load failed:',e);
-    if(requirementSource()) renderRequirements();
-    else $('requirements').textContent='Requirements could not be loaded from the vacancy record. Please refresh once; JobSeek will not invent qualifications.';
+    renderRequirements();
+    if(!requirementItems().length) $('requirements').innerHTML='<strong>Vacancy requirements not separately supplied.</strong><p style="margin:10px 0 0">JobSeek will not invent qualifications. The original application route remains available for the employer’s full requirements.</p>';
   }
 }
-function requirementSource(){return cleanText(job.requirements||job.responsibilities||job.description)}
+function extractRequirementEvidence(text){
+  const source=cleanText(text);
+  if(!source)return '';
+  const chunks=String(text).replace(/\\r/g,'').split(/\\n|[•▪●]/).map(cleanText).filter(Boolean);
+  const hits=chunks.filter(x=>/(requirements?|qualifications?|required skills?|experience|education|certifications?|responsibilities?|duties?|must|required|preferred|minimum|degree|diploma|certificate|license|proficien|ability|knowledge|years? of experience|experience with|experience in)/i.test(x));
+  if(hits.length)return [...new Set(hits)].slice(0,30).join('\\n');
+  const sentences=source.split(/(?<=[.!?])\\s+(?=[A-Z0-9])/).map(cleanText).filter(x=>x.length>18 && /(experience|skill|degree|diploma|certificate|license|ability|knowledge|operate|maintain|manage|coordinate|develop|analy[sz]e|communicate|supervise|install|repair|drive)/i.test(x));
+  return [...new Set(sentences)].slice(0,20).join('\\n');
+}
+function requirementSource(){return cleanText(job.requirements||job.responsibilities||extractRequirementEvidence(job.description))}
 function splitRequirements(text){
   const raw=String(text||'').replace(/\r/g,'').split(/\n|[•▪●]/).map(cleanText).filter(Boolean);
   if(raw.length>1)return raw.slice(0,30);
@@ -75,8 +84,9 @@ function requirementItems(){
 }
 function renderRequirements(){
   const items=requirementItems();
-  if(!items.length){$('requirements').textContent='The source listing does not provide a separate requirements section. JobSeek will not invent qualifications. Add the employer’s exact requirements in the admin job record when available.';return}
-  $('requirements').innerHTML=items.map((x,i)=>'<div style="padding:10px 0;border-bottom:1px solid #e8eef5"><strong>'+(i+1)+'.</strong> '+esc(x)+'</div>').join('');
+  const source=job.requirements||job.responsibilities?'Employer-supplied vacancy requirements':'Extracted requirement evidence from the vacancy description';
+  if(!items.length){$('requirements').innerHTML='<strong>'+source+'</strong><p style="margin:10px 0 0">No separate requirement details were supplied in this listing. JobSeek will not invent qualifications.</p>';return}
+  $('requirements').innerHTML='<div class="micro" style="margin-bottom:8px">'+source+'</div>'+items.map((x,i)=>'<div style="padding:10px 0;border-bottom:1px solid #e8eef5"><strong>'+(i+1)+'.</strong> '+esc(x)+'</div>').join('');
 }
 function evidenceMatches(){
   const source=requirementItems();
