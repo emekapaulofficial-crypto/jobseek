@@ -1,12 +1,12 @@
 {
-  "updated_at": "2026-09-23T09:30:27.329215+00:00",
+  "updated_at": "2026-09-23T14:21:38.218933+00:00",
   "source": "Supabase public published manual jobs",
   "check_interval": "15 minutes",
   "note": "CLOSED means the robot found a strong closed/not-found signal. JobSeek does not automatically remove jobs; an admin must review and close/remove them from the public feed.",
   "counts": {
-    "CLOSED": 39,
-    "CHECK_MANUALLY": 1,
-    "OPEN": 8
+    "CLOSED": 38,
+    "CHECK_MANUALLY": 5,
+    "OPEN": 40
   },
   "jobs": [
     {
@@ -19,7 +19,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/account-officer-m0j9nj",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:24.659906+00:00"
+      "checked_at": "2026-09-23T14:21:32.708152+00:00"
     },
     {
       "id": "39f7b8ab-b1fc-49fa-ad10-632b8af0e4a8",
@@ -31,7 +31,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/remote-java-jobs",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T09:30:26.549602+00:00"
+      "checked_at": "2026-09-23T14:21:34.727537+00:00"
     },
     {
       "id": "8a947ca8-b5f8-4a8a-a327-e3e5dec11393",
@@ -43,7 +43,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/c-software-developer-jobs",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T09:30:26.462602+00:00"
+      "checked_at": "2026-09-23T14:21:34.677834+00:00"
     },
     {
       "id": "a2414027-1ba2-4ce8-96a4-905b42485b8f",
@@ -55,7 +55,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/compensation-and-benefits-analysts-7j0mez",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:24.715813+00:00"
+      "checked_at": "2026-09-23T14:21:32.785784+00:00"
     },
     {
       "id": "21bbd513-d7ec-4862-89c5-87fd8a210594",
@@ -67,7 +67,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/project-construction-manager-jobs",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T09:30:26.564707+00:00"
+      "checked_at": "2026-09-23T14:21:34.781792+00:00"
     },
     {
       "id": "4d4b7e69-a64b-4919-a999-7748633f129e",
@@ -79,7 +79,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/content-creator-8m9dez",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:25.839163+00:00"
+      "checked_at": "2026-09-23T14:21:33.928037+00:00"
     },
     {
       "id": "7b185d0a-1a36-4f34-83f7-d251b76258bb",
@@ -91,7 +91,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/digital-growth-content-specialist-rrj4jn",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:25.355239+00:00"
+      "checked_at": "2026-09-23T14:21:33.455997+00:00"
     },
     {
       "id": "21b72c07-deac-4177-b3f4-f9ae6cf0a476",
@@ -103,7 +103,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/driver-8m9dwx",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:25.702977+00:00"
+      "checked_at": "2026-09-23T14:21:33.734872+00:00"
     },
     {
       "id": "d907a25a-7368-420d-8534-cf571d16268e",
@@ -115,7 +115,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/field-sales-agent-merchant-acquisition-2kw59k",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:25.348770+00:00"
+      "checked_at": "2026-09-23T14:21:33.347876+00:00"
     },
     {
       "id": "a044c4b8-a212-4a97-b962-28dba8cc749f",
@@ -127,19 +127,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/finance-operations-manager-needed-wrk8nk",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:24.993950+00:00"
-    },
-    {
-      "id": "e2459c03-a588-49d0-ada4-67fb8d3814a8",
-      "title": "Front End Developer",
-      "company": "Geoinfotech Resources Limited",
-      "location": "Lagos, Nigeria",
-      "apply_url": "https://www.jobberman.com/listings/back-end-developer-qz5857",
-      "status": "CLOSED",
-      "http_status": 200,
-      "final_url": "https://www.jobberman.com/listings/back-end-developer-qz5857",
-      "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:23.861191+00:00"
+      "checked_at": "2026-09-23T14:21:33.044099+00:00"
     },
     {
       "id": "9c2f5028-0ade-4f8e-b17f-90b62bf537b5",
@@ -151,7 +139,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/hotel-manager-erx745",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:25.427011+00:00"
+      "checked_at": "2026-09-23T14:21:33.503643+00:00"
     },
     {
       "id": "25cc1d1b-e11e-419d-aa9e-2bb9dbfcead1",
@@ -163,7 +151,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/inventory-supervisory-z8j6md",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:25.665299+00:00"
+      "checked_at": "2026-09-23T14:21:33.709721+00:00"
     },
     {
       "id": "22f1f4cc-0937-4f2b-81f2-2feda7f3bdb8",
@@ -175,7 +163,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/it-sales-executive-d926pr",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:24.344740+00:00"
+      "checked_at": "2026-09-23T14:21:32.577188+00:00"
     },
     {
       "id": "0c77da39-dc87-488f-8242-f5763f7c384e",
@@ -187,7 +175,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/junior-accountant-8m9n26",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:24.682843+00:00"
+      "checked_at": "2026-09-23T14:21:32.732747+00:00"
     },
     {
       "id": "75c299e0-cdf2-48be-ac5b-f0b800f96145",
@@ -199,7 +187,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/construction-site-manager-jobs-lagos",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T09:30:23.859701+00:00"
+      "checked_at": "2026-09-23T14:21:31.888154+00:00"
     },
     {
       "id": "47a3e61e-aa61-4c02-b9b2-dd52ee229e42",
@@ -211,7 +199,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/lead-accountant-rrj0g8",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:24.695289+00:00"
+      "checked_at": "2026-09-23T14:21:32.766594+00:00"
     },
     {
       "id": "3fb8d3c4-1c99-47cf-a2f1-1df3213eb06a",
@@ -223,7 +211,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/lead-generation-specialist-0k9zee",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:25.826349+00:00"
+      "checked_at": "2026-09-23T14:21:33.892326+00:00"
     },
     {
       "id": "eb9b69b9-5028-4871-9b84-317caa9b6397",
@@ -235,7 +223,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/machine-repair-technician-diesel-rrj0r2",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:26.182297+00:00"
+      "checked_at": "2026-09-23T14:21:34.327572+00:00"
     },
     {
       "id": "bcfec4a1-5ed9-47ec-8d68-fc5e9b8c9cce",
@@ -247,7 +235,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/operations-manager-qz5vm4",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:25.766575+00:00"
+      "checked_at": "2026-09-23T14:21:33.802822+00:00"
     },
     {
       "id": "b12a1e50-1e0f-4c16-84f4-c354195ace7c",
@@ -259,7 +247,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/payloader-driver-456mne",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:26.169222+00:00"
+      "checked_at": "2026-09-23T14:21:34.295994+00:00"
     },
     {
       "id": "6210d785-2b18-403c-bf10-a4d5e7a936ab",
@@ -271,7 +259,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/personal-assistant-qz5867",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:25.455324+00:00"
+      "checked_at": "2026-09-23T14:21:33.520663+00:00"
     },
     {
       "id": "acea7cec-1d6b-4266-aeb2-3b6f807fac83",
@@ -283,7 +271,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/product-designer-6qvmq6",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:23.861387+00:00"
+      "checked_at": "2026-09-23T14:21:31.890326+00:00"
     },
     {
       "id": "403803ca-632c-4837-bab9-b7dadc0bf7f7",
@@ -295,7 +283,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/experienced-real-estate-sales-executive-pgj7z2",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:25.236245+00:00"
+      "checked_at": "2026-09-23T14:21:33.317488+00:00"
     },
     {
       "id": "dea5879d-2665-4b29-824a-4f2552c8aa25",
@@ -307,7 +295,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/sales-executive-z8j69d",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:26.106890+00:00"
+      "checked_at": "2026-09-23T14:21:34.157470+00:00"
     },
     {
       "id": "595a7941-7c20-470f-84e0-410b207be450",
@@ -319,7 +307,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/e-commerce-sales-representative-pgj7ex",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:25.040488+00:00"
+      "checked_at": "2026-09-23T14:21:33.114149+00:00"
     },
     {
       "id": "b401b74f-6043-4a75-a2be-e8d72a5707aa",
@@ -331,7 +319,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/sales-representative-k7xqej",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:25.219293+00:00"
+      "checked_at": "2026-09-23T14:21:33.225442+00:00"
     },
     {
       "id": "c92ac32c-5e30-462f-b952-cfce6f7cfaf0",
@@ -343,7 +331,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/salesbusiness-development-executive-j6x7zw",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:25.072566+00:00"
+      "checked_at": "2026-09-23T14:21:33.141335+00:00"
     },
     {
       "id": "106340aa-fdcb-48ba-ad11-6e2f4b168807",
@@ -355,7 +343,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/sales-business-development-executives-erxw6v",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:25.949953+00:00"
+      "checked_at": "2026-09-23T14:21:34.042199+00:00"
     },
     {
       "id": "7c8a3219-4984-40ed-b460-6c84ab7b137b",
@@ -367,7 +355,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/secretary-vdkq78",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:25.587710+00:00"
+      "checked_at": "2026-09-23T14:21:33.684202+00:00"
     },
     {
       "id": "2fe8f08a-4812-4841-aa1c-68c6a3bdfdc6",
@@ -379,7 +367,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/construction-project-manager-jobs",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T09:30:23.860193+00:00"
+      "checked_at": "2026-09-23T14:21:31.888792+00:00"
     },
     {
       "id": "a1be8b4c-0985-48f9-a1ae-fb55d30a16cb",
@@ -391,7 +379,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/senior-data-engineer-9kndjv",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:24.302324+00:00"
+      "checked_at": "2026-09-23T14:21:32.321502+00:00"
     },
     {
       "id": "4395529b-b5e9-4b77-99e0-feea08166e6f",
@@ -403,7 +391,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/construction-project-manager-jobs",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T09:30:23.859977+00:00"
+      "checked_at": "2026-09-23T14:21:31.888483+00:00"
     },
     {
       "id": "2be33652-8711-4fc9-bfc4-79f9358edd0f",
@@ -415,7 +403,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/software-engineer-senior-jobs",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T09:30:24.567348+00:00"
+      "checked_at": "2026-09-23T14:21:32.640713+00:00"
     },
     {
       "id": "53182eda-70f8-4b73-b44a-c6230aca9420",
@@ -427,7 +415,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/soc-engineer-5pzvnr",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:26.094252+00:00"
+      "checked_at": "2026-09-23T14:21:34.140122+00:00"
     },
     {
       "id": "7e986be2-3871-417e-9a2e-c1c8327555f9",
@@ -439,7 +427,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/social-media-store-assistant-6qvmej",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:25.468348+00:00"
+      "checked_at": "2026-09-23T14:21:33.575590+00:00"
     },
     {
       "id": "1aa4166a-6089-46b8-a8bb-ad5452e76f59",
@@ -451,7 +439,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/software-engineer-back-end-jobs",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T09:30:26.325559+00:00"
+      "checked_at": "2026-09-23T14:21:34.443601+00:00"
     },
     {
       "id": "513bef52-d2e4-46b6-aa45-3690683e111d",
@@ -463,7 +451,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/software-engineer-senior-jobs",
       "evidence": "this job is no longer available",
-      "checked_at": "2026-09-23T09:30:26.586851+00:00"
+      "checked_at": "2026-09-23T14:21:34.797784+00:00"
     },
     {
       "id": "145d350b-9d9f-407a-806e-43b57b1a20f8",
@@ -475,7 +463,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/listings/tvro-dstv-technician-2kwded",
       "evidence": "job is no longer available",
-      "checked_at": "2026-09-23T09:30:26.022662+00:00"
+      "checked_at": "2026-09-23T14:21:34.091896+00:00"
     },
     {
       "id": "87d21534-c485-4618-86d1-03334882a6fa",
@@ -487,7 +475,79 @@
       "http_status": 403,
       "final_url": "https://ng.indeed.com/cmp/Livebridge-Properties",
       "evidence": "HTTP 403",
-      "checked_at": "2026-09-23T09:30:26.243303+00:00"
+      "checked_at": "2026-09-23T14:21:34.374280+00:00"
+    },
+    {
+      "id": "753edf33-3db7-45d9-b907-6e173b288c44",
+      "title": "Materials Operative",
+      "company": "Hitachi Rail UK Limited",
+      "location": "Ashford, Kent, United Kingdom",
+      "apply_url": "https://careers.hitachi.com/jobs/18208240-materials-operative",
+      "status": "CHECK_MANUALLY",
+      "http_status": 403,
+      "final_url": "https://careers.hitachi.com/jobs/18208240-materials-operative",
+      "evidence": "HTTP 403",
+      "checked_at": "2026-09-23T14:21:36.025078+00:00"
+    },
+    {
+      "id": "75e32f66-cd32-49fb-b7fd-9ec6b0408a54",
+      "title": "Production Scheduler",
+      "company": "Hitachi Rail UK Limited",
+      "location": "London, United Kingdom",
+      "apply_url": "https://careers.hitachi.com/jobs/18208294-production-scheduler",
+      "status": "CHECK_MANUALLY",
+      "http_status": 403,
+      "final_url": "https://careers.hitachi.com/jobs/18208294-production-scheduler",
+      "evidence": "HTTP 403",
+      "checked_at": "2026-09-23T14:21:36.704918+00:00"
+    },
+    {
+      "id": "0a90eb6d-74d6-435f-a909-b190fd3274b8",
+      "title": "Senior Project Manager",
+      "company": "Hitachi Rail GTS UK Limited",
+      "location": "United Kingdom",
+      "apply_url": "https://careers.hitachi.com/jobs/18150742-senior-project-manager",
+      "status": "CHECK_MANUALLY",
+      "http_status": 403,
+      "final_url": "https://careers.hitachi.com/jobs/18150742-senior-project-manager",
+      "evidence": "HTTP 403",
+      "checked_at": "2026-09-23T14:21:35.883154+00:00"
+    },
+    {
+      "id": "e8ba530c-755e-4590-aee8-88fa87127ad4",
+      "title": "Technical Support Engineer",
+      "company": "Hitachi Energy Finland Oy",
+      "location": "Vaasa, Finland",
+      "apply_url": "https://careers.hitachi.com/jobs/18192149-technical-support-engineer",
+      "status": "CHECK_MANUALLY",
+      "http_status": 403,
+      "final_url": "https://careers.hitachi.com/jobs/18192149-technical-support-engineer",
+      "evidence": "HTTP 403",
+      "checked_at": "2026-09-23T14:21:36.731061+00:00"
+    },
+    {
+      "id": "1015102a-5540-45bd-af3d-ebb62425f10c",
+      "title": "AI & Machine Learning Integration Engineer",
+      "company": "Avion Labs",
+      "location": "Remote",
+      "apply_url": "https://avion-labs.com/careers",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://avion-labs.com/careers",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:37.598653+00:00"
+    },
+    {
+      "id": "dacb3e94-edb0-4731-93a9-56267644b318",
+      "title": "AI/LLM Experience — Data Scientist Accelerator",
+      "company": "Binance",
+      "location": "Taipei/Hong Kong/Asia/Australia/New Zealand / Remote",
+      "apply_url": "https://jobs.lever.co/binance/96e8326e-074f-4d1f-89c4-8ed1a6f96014/apply",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://jobs.lever.co/binance/96e8326e-074f-4d1f-89c4-8ed1a6f96014/apply",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:37.559747+00:00"
     },
     {
       "id": "4ba8344e-cb9c-4086-b561-c05d1cedd290",
@@ -499,7 +559,79 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/jobs/creative-design",
       "evidence": "",
-      "checked_at": "2026-09-23T09:30:24.560363+00:00"
+      "checked_at": "2026-09-23T14:21:32.603697+00:00"
+    },
+    {
+      "id": "a98ac81a-0185-48d0-a22c-762fb9ca034b",
+      "title": "Chargeback Analyst Intern",
+      "company": "Super.com",
+      "location": "Canada; Toronto / Remote",
+      "apply_url": "https://jobs.ashbyhq.com/super.com/41c709ca-09fa-458b-28a8-d6608b04d85b",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://jobs.ashbyhq.com/super.com/41c709ca-09fa-458b-28a8-d6608b04d85b",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:37.205037+00:00"
+    },
+    {
+      "id": "acfb0a29-9660-40e1-bfca-22ed6624a559",
+      "title": "Commerce Integrations Lead / Sales Engineer",
+      "company": "Terrific",
+      "location": "LATAM / EMEA remote locations",
+      "apply_url": "https://jobs.lever.co/terrific-innovation/ee9aceb1-b6c6-455c-bc9a-e48fea614bfd",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://jobs.lever.co/terrific-innovation/ee9aceb1-b6c6-455c-bc9a-e48fea614bfd",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:37.202092+00:00"
+    },
+    {
+      "id": "305fb975-22ab-4781-a9f0-67b99fab6d11",
+      "title": "Construction trades helper",
+      "company": "E.T.G. Construction Inc.",
+      "location": "Edmonton, Alberta, Canada",
+      "apply_url": "https://www.jobbank.gc.ca/jobsearch/jobsearch?searchstring=construction+lmia",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.jobbank.gc.ca/jobsearch/jobsearch?searchstring=construction+lmia",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:35.050510+00:00"
+    },
+    {
+      "id": "e5ce57dc-7e75-4374-a365-1e42d0ed8de1",
+      "title": "Development Expert (f/m/d) - Virtualization (C, Linux, x86/ARM)",
+      "company": "SAP",
+      "location": "Berlin, Germany",
+      "apply_url": "https://careers.sap.com/job/Berlin-Development-Expert-%28fmd%29-Virtualization-%28C%2C-Linux-x86ARM%29-10557/1428570733/",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://careers.sap.com/job/Berlin-Development-Expert-%28fmd%29-Virtualization-%28C%2C-Linux-x86ARM%29-10557/1428570733/",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:36.566880+00:00"
+    },
+    {
+      "id": "b907f931-de7e-42db-8998-b69079f46938",
+      "title": "DevOps & Cloud Infrastructure Engineer",
+      "company": "Avion Labs",
+      "location": "Remote",
+      "apply_url": "https://avion-labs.com/careers",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://avion-labs.com/careers",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:36.768157+00:00"
+    },
+    {
+      "id": "f559716d-c3aa-45eb-9c45-d8517c5fb473",
+      "title": "Director of SRE",
+      "company": "Blackpoint Cyber",
+      "location": "Remote - Canada",
+      "apply_url": "https://jobs.ashbyhq.com/Blackpoint%20Cyber/bcc5e057-f101-4057-bc8e-2fc533fd9bff",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://jobs.ashbyhq.com/Blackpoint%20Cyber/bcc5e057-f101-4057-bc8e-2fc533fd9bff",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:37.130832+00:00"
     },
     {
       "id": "da61e033-73f1-40c6-a2a2-c5bacee8b8ee",
@@ -511,7 +643,19 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/view/dot-net-developer-at-choice-talents-ltd-4469514294",
       "evidence": "",
-      "checked_at": "2026-09-23T09:30:26.417284+00:00"
+      "checked_at": "2026-09-23T14:21:34.494987+00:00"
+    },
+    {
+      "id": "767b7db6-203d-406d-9e72-cda63a82cbfa",
+      "title": "Expert Panel",
+      "company": "UTOPIA Venture Platform",
+      "location": "Worldwide / Remote",
+      "apply_url": "https://jobs.ashbyhq.com/the-studio/ccb09b81-d9b9-4bfb-a62b-a8fdfbfc1c69",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://jobs.ashbyhq.com/the-studio/ccb09b81-d9b9-4bfb-a62b-a8fdfbfc1c69",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:36.940367+00:00"
     },
     {
       "id": "3e6f5c4e-b6d7-4ee9-aae9-6271024f75b0",
@@ -523,7 +667,91 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/jobs/ibadan-oyo",
       "evidence": "",
-      "checked_at": "2026-09-23T09:30:23.860425+00:00"
+      "checked_at": "2026-09-23T14:21:31.889061+00:00"
+    },
+    {
+      "id": "b2449f85-36ae-4151-b007-9f6ee11f68cc",
+      "title": "First cook",
+      "company": "Piri Piri Hochelaga",
+      "location": "Montréal, Québec, Canada",
+      "apply_url": "https://on.jobbank.gc.ca/jobsearch/jobposting/49844971",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://on.jobbank.gc.ca/jobsearch/jobposting/49844971",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:35.423462+00:00"
+    },
+    {
+      "id": "9483ea05-06a6-40d6-a9fc-a825d734b028",
+      "title": "FP&A Manager",
+      "company": "Wayfinder",
+      "location": "Remote (location eligibility to verify)",
+      "apply_url": "https://jobs.lever.co/project-wayfinder/9cb7c8fb-314e-46f0-bd6e-378abf1e0318",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://jobs.lever.co/project-wayfinder/9cb7c8fb-314e-46f0-bd6e-378abf1e0318",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:36.938407+00:00"
+    },
+    {
+      "id": "be7ffaea-d653-48a6-81ed-119152c7ef9c",
+      "title": "Fraud Analyst Intern (Earnings)",
+      "company": "Super.com",
+      "location": "Canada; Toronto / Remote",
+      "apply_url": "https://jobs.ashbyhq.com/super.com/10b27be5-ec32-4e4d-9a91-8eb898d957af",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://jobs.ashbyhq.com/super.com/10b27be5-ec32-4e4d-9a91-8eb898d957af",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:37.224305+00:00"
+    },
+    {
+      "id": "e2459c03-a588-49d0-ada4-67fb8d3814a8",
+      "title": "Front End Developer",
+      "company": "Geoinfotech Resources Limited",
+      "location": "Lagos, Nigeria",
+      "apply_url": "https://www.jobberman.com/listings/back-end-developer-qz5857",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.jobberman.com/jobs/engineering-technology",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:31.890044+00:00"
+    },
+    {
+      "id": "d6f95cb8-59e0-487a-a4a7-6af918dcc2f3",
+      "title": "Long haul truck driver",
+      "company": "Black Legend Trans inc",
+      "location": "Edmonton, Alberta, Canada",
+      "apply_url": "https://www.jobbank.gc.ca/jobsearch/jobsearch?fglo=1&fn21=73300&fn21=73301&fn21=74102&fn21=74205&fn21=75101&fn21=75110&fn21=75200&fn21=75201&fn21=75211&fskl=101010&fskl=101020&sort=M",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.jobbank.gc.ca/jobsearch/jobsearch?fglo=1&fn21=73300&fn21=73301&fn21=74102&fn21=74205&fn21=75101&fn21=75110&fn21=75200&fn21=75201&fn21=75211&fskl=101010&fskl=101020&sort=M",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:36.691123+00:00"
+    },
+    {
+      "id": "3a91217b-6d61-40c5-a124-b4a60fa10442",
+      "title": "MassHealth Enrollment Specialist",
+      "company": "BridgeHealthAI",
+      "location": "Boston / Remote",
+      "apply_url": "https://jobs.ashbyhq.com/Pear-VC/1c63a8a2-4c36-4712-9f32-4ceebe75cec4",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://jobs.ashbyhq.com/Pear-VC/1c63a8a2-4c36-4712-9f32-4ceebe75cec4",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:36.946027+00:00"
+    },
+    {
+      "id": "590550df-1a79-4c83-9d64-73f2fef1e198",
+      "title": "MM Senior Account Executive",
+      "company": "SAP",
+      "location": "Osaka, Japan",
+      "apply_url": "https://careers.sap.com/job/Osaka-MM-Senior-Account-Executive-530-0001/1369930633/",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://careers.sap.com/job/Osaka-MM-Senior-Account-Executive-530-0001/1369930633/",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:35.451112+00:00"
     },
     {
       "id": "5d80993e-558e-402b-a922-aaceb0ac37a5",
@@ -535,7 +763,31 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/jobs/customer-service-support",
       "evidence": "",
-      "checked_at": "2026-09-23T09:30:25.719328+00:00"
+      "checked_at": "2026-09-23T14:21:33.751618+00:00"
+    },
+    {
+      "id": "144536bf-13f7-4230-9d66-b8e844c9de18",
+      "title": "Product Designer",
+      "company": "Aphex",
+      "location": "UK / Remote",
+      "apply_url": "https://jobs.ashbyhq.com/aphex/b1b9c4a0-07ba-40f7-8c3f-6aeb9b6fe7a5",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://jobs.ashbyhq.com/aphex/b1b9c4a0-07ba-40f7-8c3f-6aeb9b6fe7a5",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:37.199163+00:00"
+    },
+    {
+      "id": "bb3aacca-af75-4464-b39a-73c5c5c3ef04",
+      "title": "Product Engineer (AI / Full-Stack)",
+      "company": "Great Question",
+      "location": "Canada / Remote",
+      "apply_url": "https://jobs.ashbyhq.com/greatquestion/094067c8-29ec-4809-8617-06c7269593fb",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://jobs.ashbyhq.com/greatquestion/094067c8-29ec-4809-8617-06c7269593fb",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:37.325840+00:00"
     },
     {
       "id": "ec696d2a-6cd8-432e-9764-e99dafcae49e",
@@ -547,7 +799,55 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/view/project-manager-construction-manager-mcf-data-centres-at-haskoning-4458091052",
       "evidence": "",
-      "checked_at": "2026-09-23T09:30:26.282233+00:00"
+      "checked_at": "2026-09-23T14:21:34.427742+00:00"
+    },
+    {
+      "id": "44770120-fc96-4a7b-9831-0e541cb95503",
+      "title": "QA & Test Automation Engineer",
+      "company": "Avion Labs",
+      "location": "Remote",
+      "apply_url": "https://avion-labs.com/careers",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://avion-labs.com/careers",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:36.797486+00:00"
+    },
+    {
+      "id": "b98d9e00-7e68-4eeb-b2a7-da8fd8ea1542",
+      "title": "Sales Data Analyst",
+      "company": "n8n",
+      "location": "Germany; Albania; Austria; Bosnia; Bulgaria; Croatia; Czech Republic; Denmark; Estonia; Greece; Hungary; Ireland; Latvia; Lithuania; Montenegro; Netherlands; Norway; Poland; Portugal; Serbia; Slovenia; Spain; UK",
+      "apply_url": "https://jobs.ashbyhq.com/n8n/62309aac-598b-4cb0-bc1b-e0dad9cda130",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://jobs.ashbyhq.com/n8n/62309aac-598b-4cb0-bc1b-e0dad9cda130",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:37.479035+00:00"
+    },
+    {
+      "id": "6110608f-1170-4b75-aae3-7b3f81c5b69c",
+      "title": "Senior Account Executive, Commercial, DACH",
+      "company": "HackerOne",
+      "location": "London / Remote",
+      "apply_url": "https://jobs.ashbyhq.com/hackerone/4ded5c3c-3b7c-4e87-8d0c-5e9c859e6e4a/",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://jobs.ashbyhq.com/hackerone/4ded5c3c-3b7c-4e87-8d0c-5e9c859e6e4a/",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:37.417201+00:00"
+    },
+    {
+      "id": "119e78a1-7aeb-4730-b5ad-32a8af74a6da",
+      "title": "Senior Backend Engineer (Go / PostgreSQL)",
+      "company": "Avion Labs",
+      "location": "Remote",
+      "apply_url": "https://avion-labs.com/careers",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://avion-labs.com/careers",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:36.798249+00:00"
     },
     {
       "id": "1ee28e26-f821-438f-bb47-3dc27fd2351d",
@@ -559,7 +859,55 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/jobs/engineering-technology",
       "evidence": "",
-      "checked_at": "2026-09-23T09:30:23.860972+00:00"
+      "checked_at": "2026-09-23T14:21:31.889781+00:00"
+    },
+    {
+      "id": "a4ba7a44-5779-48f9-b201-eb03c3b12d07",
+      "title": "Senior Enterprise Architect",
+      "company": "SAP",
+      "location": "Tokyo, Japan",
+      "apply_url": "https://careers.sap.com/job/Tokyo-Senior-Enterprise-Architect-Toky-100-0004/1405314633/",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://careers.sap.com/job/Tokyo-Senior-Enterprise-Architect-Toky-100-0004/1405314633/",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:35.478439+00:00"
+    },
+    {
+      "id": "2504b7ca-0cf7-4cc4-95b3-a9b57f4ac5a8",
+      "title": "Senior GTM Systems & Process Engineer",
+      "company": "HackerOne",
+      "location": "San Francisco; Austin; Boston; Seattle; Washington DC / Remote",
+      "apply_url": "https://jobs.ashbyhq.com/HackerOne/c96e0eec-fe37-45a6-86dd-e2b1efdffa05",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://jobs.ashbyhq.com/HackerOne/c96e0eec-fe37-45a6-86dd-e2b1efdffa05",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:37.340861+00:00"
+    },
+    {
+      "id": "e2a75eb4-bf8a-4326-ad80-a9d652e93256",
+      "title": "Senior Partner Manager SI, Southern Europe",
+      "company": "n8n",
+      "location": "Belgium; Germany; Ireland; Netherlands; Portugal; Spain; UK",
+      "apply_url": "https://jobs.ashbyhq.com/n8n/be824190-55e8-4226-b5b0-db9b4cd1eede",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://jobs.ashbyhq.com/n8n/be824190-55e8-4226-b5b0-db9b4cd1eede",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:37.441170+00:00"
+    },
+    {
+      "id": "dd7a2719-00f0-49d5-a6c7-6267c8a27e31",
+      "title": "Senior Software Engineer - AI Experiences, Microsoft Edge",
+      "company": "Microsoft",
+      "location": "Redmond, Washington, USA",
+      "apply_url": "https://careers.microsoft.com/v2/global/en/locations/seattle-area.html",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://careers.microsoft.com/v2/global/en/locations/seattle-area.html",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:36.335813+00:00"
     },
     {
       "id": "2a61b029-ec2f-47f1-90c1-a00af8657f23",
@@ -571,7 +919,7 @@
       "http_status": 200,
       "final_url": "https://www.jobberman.com/jobs/ibadan-oyo",
       "evidence": "",
-      "checked_at": "2026-09-23T09:30:23.860773+00:00"
+      "checked_at": "2026-09-23T14:21:31.889465+00:00"
     },
     {
       "id": "6cd490c1-9bc2-42d8-88f1-de0643d61351",
@@ -583,7 +931,79 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/view/shutdown-project-manager-h-f-at-ponticelli-nigeria-4432802134",
       "evidence": "",
-      "checked_at": "2026-09-23T09:30:24.606673+00:00"
+      "checked_at": "2026-09-23T14:21:32.665510+00:00"
+    },
+    {
+      "id": "19be17ff-cc91-4376-b908-1e4d7e1bc902",
+      "title": "Software Engineer - Generative UI, Input Experience",
+      "company": "Apple",
+      "location": "Cupertino, California, USA",
+      "apply_url": "https://jobs.apple.com/en-us/search?location=united-states-USA",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://jobs.apple.com/en-us/search?location=united-states-USA",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:36.085867+00:00"
+    },
+    {
+      "id": "7f3dd629-5789-46d8-b8b3-b92960fc22d7",
+      "title": "UI/UX Product Designer",
+      "company": "Avion Labs",
+      "location": "Remote",
+      "apply_url": "https://avion-labs.com/careers",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://avion-labs.com/careers",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:37.597528+00:00"
+    },
+    {
+      "id": "cc6daf71-cbdf-43e6-b02a-2c0738723579",
+      "title": "User Experience Research Intern",
+      "company": "Super.com",
+      "location": "Canada; Toronto / Remote",
+      "apply_url": "https://jobs.ashbyhq.com/super.com/55781d35-563b-43e9-a779-b4f1467a833a/",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://jobs.ashbyhq.com/super.com/55781d35-563b-43e9-a779-b4f1467a833a/",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:37.206746+00:00"
+    },
+    {
+      "id": "3d68b533-3a5a-47bc-837e-f16764feecd1",
+      "title": "Welder",
+      "company": "Groupe Dacoh",
+      "location": "Montréal, Québec, Canada",
+      "apply_url": "https://mb.jobbank.gc.ca/jobsearch/jobposting/50206195",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://mb.jobbank.gc.ca/jobsearch/jobposting/50206195",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:35.061225+00:00"
+    },
+    {
+      "id": "2e56b1d6-7dc8-4ce7-a276-33cae0f5ec3c",
+      "title": "Welder",
+      "company": "Can Tech Laser and Metals Inc.",
+      "location": "Brampton, Ontario, Canada",
+      "apply_url": "https://www.jobbank.gc.ca/jobsearch/jobsearch?locationstring=Canada&searchstring=LMIA+",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.jobbank.gc.ca/jobsearch/jobsearch?locationstring=Canada&searchstring=LMIA+",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:35.235092+00:00"
+    },
+    {
+      "id": "7453cedb-6070-4cdf-bcdf-e3e83420fd6e",
+      "title": "Welder",
+      "company": "AIRTILIZE INC.",
+      "location": "Brampton, Ontario, Canada",
+      "apply_url": "https://www.nu.jobbank.gc.ca/jobsearch/jobposting/50078826",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.nu.jobbank.gc.ca/jobsearch/jobposting/50078826",
+      "evidence": "",
+      "checked_at": "2026-09-23T14:21:35.332007+00:00"
     }
   ]
 }
