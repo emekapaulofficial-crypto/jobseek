@@ -586,3 +586,164 @@ body:not(.home-page):not(.jobs-page) .job-details-shell{}
 .reference-dashboard-ui{background:#f5f8fc}.reference-sidebar{background:#fff}.reference-dashboard-content{padding:20px 22px;max-width:none}.reference-welcome{margin-bottom:14px}.reference-welcome h1{font-size:18px;margin:0 0 4px}.reference-welcome p{font-size:8px;color:#73859b;margin:0}.reference-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.reference-kpis>div{background:#fff;border:1px solid #e0e7ef;border-radius:8px;padding:10px}.reference-kpis small{font-size:7px;color:#7c8da0;display:block}.reference-kpis strong{font-size:18px;display:block;margin-top:3px}.reference-kpis em{font-size:6px;color:#159161;font-style:normal;background:#e8f8f0;border-radius:99px;padding:3px 5px;display:inline-block;margin-top:3px}.reference-kpis .profile-meter{margin-top:7px}.reference-dashboard-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:10px}.reference-match-panel,.reference-profile,.reference-quick,.reference-activity{background:#fff;border:1px solid #e0e7ef;border-radius:8px;padding:12px}.reference-panel-head{display:flex;justify-content:space-between;align-items:center}.reference-panel-head h2,.reference-profile h2,.reference-quick h2,.reference-activity h2{font-size:10px;margin:0}.reference-panel-head a{font-size:7px;color:#1268e8;text-decoration:none}.reference-dashboard-jobs{margin-top:6px}.reference-dashboard-jobs .dashboard-job-row{display:grid;grid-template-columns:30px 1fr auto;gap:8px;padding:9px 0;border-bottom:1px solid #edf1f5}.reference-dashboard-jobs .dashboard-job-logo{width:28px;height:28px;border-radius:6px;font-size:9px}.reference-dashboard-jobs h3{font-size:8px;margin:0}.reference-dashboard-jobs p{font-size:7px;margin:2px 0;color:#71839a}.reference-dashboard-jobs .dashboard-match{font-size:6px;padding:3px 5px}.reference-dashboard-jobs .dashboard-match.yellow{background:#fff2c9;color:#9b7300}.reference-dashboard-jobs .small{font-size:7px;padding:6px 8px}.reference-profile{margin-bottom:9px}.profile-head{display:flex;gap:7px;align-items:center;margin-bottom:13px}.profile-head .avatar{width:27px;height:27px;border-radius:50%;background:#d9b28f;color:#fff;display:grid;place-items:center;font-size:7px}.profile-head b,.profile-head small{display:block}.profile-head b{font-size:8px}.profile-head small{font-size:6px;color:#8494a7}.reference-profile>strong{font-size:25px;color:#1268e8;display:block;margin:8px 0}.reference-profile p{font-size:7px;color:#708299}.reference-profile ul{font-size:6px;color:#73849a;padding-left:13px}.reference-profile .outline{font-size:7px;width:100%;justify-content:center;box-sizing:border-box}.reference-quick{display:grid;gap:5px}.reference-quick a{display:block;border-radius:5px;padding:7px;background:#f7faff;color:#5c7087;text-decoration:none;font-size:7px}.reference-notice{display:flex;align-items:center;gap:8px;background:#eaf8f1;border:1px solid #d0ebdf;border-radius:8px;padding:9px;margin-top:10px;font-size:7px;color:#2b6b53}.reference-notice span{flex:1;color:#6b8290}.reference-notice .small{font-size:7px;padding:6px 8px}.reference-activity{margin-top:10px;min-height:80px}.reference-activity #applications{font-size:7px;color:#73859a;margin-top:8px}.reference-dashboard-ui .dashboard-shell{grid-template-columns:205px 1fr}.reference-dashboard-ui .dashboard-sidebar a{font-size:8px;padding:9px 10px}.reference-dashboard-ui .dashboard-sidebar a em{margin-left:auto;background:#e84848;color:#fff;border-radius:50%;width:14px;height:14px;display:grid;place-items:center;font-size:6px;font-style:normal}.reference-dashboard-ui .profile-meter{height:5px;background:#e7edf4;border-radius:9px}.reference-dashboard-ui .profile-meter span{background:#1268e8}
 @media(max-width:900px){.reference-dashboard-grid{grid-template-columns:1fr}.reference-kpis{grid-template-columns:repeat(2,1fr)}.reference-dashboard-ui .dashboard-shell{grid-template-columns:1fr}.reference-sidebar{display:flex;overflow:auto;position:sticky;top:62px;z-index:20}.reference-sidebar a{white-space:nowrap}.reference-sidebar .side-title{display:none}}
 @media(max-width:600px){.reference-dashboard-content{padding:13px}.reference-kpis{gap:6px}.reference-kpis strong{font-size:16px}}
+
+
+/* JobSeek readability + hero image fix — 2026-09-24 */
+.reference-home-grid{min-height:560px}
+.reference-copy{padding:62px 0 48px}
+.reference-copy h1{font-size:56px;letter-spacing:-2.4px}
+.reference-copy>p{font-size:16px;line-height:1.65}
+.reference-handwrite{font-size:15px}
+.reference-search{width:min(760px,100%);padding:7px;border-radius:11px}
+.reference-search>div{padding:8px 12px}
+.reference-search label{font-size:10px}
+.reference-search input,.reference-search select{font-size:14px;height:22px}
+.reference-search-btn,.reference-blue-btn{font-size:13px;padding:12px 18px}
+.reference-trusts{gap:18px;margin-top:26px}
+.reference-trusts b{width:31px;height:31px;font-size:12px}
+.reference-trusts strong{font-size:12px}
+.reference-trusts small{font-size:10px}
+.reference-woman{min-height:560px}
+.reference-woman img{width:450px;height:500px;object-fit:contain;object-position:center bottom;margin-right:-8px;display:block}
+.reference-categories{padding:44px 0 38px}
+.reference-section-title h2{font-size:30px}
+.reference-section-title a{font-size:12px}
+.reference-section-title p{font-size:12px}
+.reference-category{padding:17px 12px;gap:5px}
+.reference-category i{width:36px;height:36px;font-size:15px}
+.reference-category b{font-size:14px}
+.reference-category small{font-size:10px}
+.reference-international{padding:15px 18px}
+.reference-international strong{font-size:12px}
+.reference-international small{font-size:10px}
+.reference-international .outline{font-size:11px;padding:10px 13px}
+.reference-live{padding:44px 0}
+.reference-job{padding:16px;gap:12px}
+.reference-job h3{font-size:14px}
+.reference-job p{font-size:11px}
+.reference-job small{font-size:10px}
+.reference-job .small{padding:9px 11px;font-size:10px}
+.mini-tag{font-size:8px}
+.reference-empty{font-size:12px}
+.reference-match{padding:58px 0}
+.reference-lead{font-size:14px;line-height:1.75}
+.reference-checks{gap:14px}
+.reference-checks>div{font-size:12px}
+.reference-footer-cta{padding:58px 0}
+.reference-footer-cta h2{font-size:32px}
+.reference-footer-cta p{font-size:13px}
+
+/* Readable Jobs UI */
+.reference-filter{padding:22px 16px}
+.filter-heading{font-size:13px}
+.filter-heading button{font-size:10px}
+.reference-filter>label{font-size:10px}
+.reference-input{height:38px;font-size:13px}
+.reference-input input{font-size:12px}
+.reference-filter select{height:38px;font-size:12px}
+.reference-check{font-size:11px}
+.reference-results{padding:26px 20px}
+.reference-results-head h1{font-size:24px}
+.reference-results-head select{font-size:11px}
+.reference-job-card{min-height:104px;padding:14px}
+.job-brand{width:50px;height:50px;font-size:20px}
+.job-info h3{font-size:14px}
+.job-info p{font-size:10px}
+.job-info small{font-size:9px}
+.job-info>span{font-size:9px}
+.match-pill{font-size:9px}
+.reference-job-card>.small{font-size:10px;padding:9px 10px}
+
+/* Readable Details UI */
+.details-head{padding:32px 0 18px}
+.details-title-row h1{font-size:28px}
+.details-title-row #meta{font-size:13px}
+.details-meta span{font-size:10px}
+.details-actions .outline{font-size:11px;padding:10px}
+.details-tabs a{font-size:11px;padding:14px 2px}
+.details-body{padding:24px 0 60px}
+.details-card{padding:20px}
+.details-card h2{font-size:16px}
+.details-card h3{font-size:12px}
+.details-card p{font-size:12px;line-height:1.75}
+.detail-bullets p{font-size:11px}
+.before li{font-size:11px}
+.details-note{font-size:10px}
+.details-card dt,.details-card dd{font-size:10px}
+.requirement-box{font-size:11px;line-height:1.75}
+.details-side .reference-blue-btn{font-size:11px;padding:11px}
+.details-side .outline{font-size:10px;padding:10px}
+
+/* Readable Scanner */
+.reference-scanner-hero{padding:32px 0 90px}
+.reference-scanner-hero h1{font-size:32px}
+.reference-scanner-hero p{font-size:13px}
+.reference-upload-card{padding:14px}
+.reference-drop{padding:34px 20px}
+.reference-drop h2{font-size:16px}
+.reference-drop p{font-size:11px}
+.reference-drop .reference-blue-btn{font-size:11px;padding:10px 16px}
+.reference-drop small{font-size:9px}
+.reference-profile-summary{font-size:10px}
+.how-title{font-size:17px}
+.reference-how{gap:18px}
+.reference-how i{width:36px;height:36px}
+.reference-how b{font-size:11px}
+.reference-how small{font-size:9px}
+.reference-scan-controls label{font-size:10px}
+.reference-scan-controls select,.reference-scan-controls input{height:36px;font-size:11px}
+.reference-secure{font-size:10px;padding:12px}
+
+/* Readable Dashboard */
+.reference-dashboard-content{padding:28px}
+.reference-welcome h1{font-size:26px}
+.reference-welcome p{font-size:11px}
+.reference-kpis{gap:12px}
+.reference-kpis>div{padding:15px}
+.reference-kpis small{font-size:10px}
+.reference-kpis strong{font-size:25px}
+.reference-kpis em{font-size:9px}
+.reference-panel-head h2,.reference-profile h2,.reference-quick h2,.reference-activity h2{font-size:14px}
+.reference-panel-head a{font-size:10px}
+.reference-dashboard-jobs .dashboard-job-row{padding:12px 0}
+.reference-dashboard-jobs h3{font-size:11px}
+.reference-dashboard-jobs p{font-size:9px}
+.reference-dashboard-jobs .dashboard-match{font-size:8px}
+.reference-dashboard-jobs .small{font-size:9px;padding:7px 9px}
+.profile-head b{font-size:10px}
+.profile-head small{font-size:8px}
+.reference-profile>strong{font-size:30px}
+.reference-profile p{font-size:9px}
+.reference-profile ul{font-size:8px}
+.reference-profile .outline{font-size:9px}
+.reference-quick a{font-size:9px;padding:9px}
+.reference-notice{font-size:9px}
+.reference-notice .small{font-size:9px}
+.reference-activity #applications{font-size:9px}
+
+@media(max-width:900px){
+  .reference-home-grid{min-height:0}
+  .reference-copy{padding:48px 0 32px}
+  .reference-copy h1{font-size:48px}
+  .reference-woman{min-height:390px}
+  .reference-woman img{width:330px;height:360px}
+  .reference-results{padding:20px 14px}
+}
+@media(max-width:600px){
+  .reference-copy h1{font-size:42px;letter-spacing:-1.5px}
+  .reference-copy>p{font-size:14px}
+  .reference-search label{font-size:10px}
+  .reference-search input,.reference-search select{font-size:14px;height:24px}
+  .reference-trusts strong{font-size:11px}
+  .reference-trusts small{font-size:9px}
+  .reference-woman{min-height:300px}
+  .reference-woman img{width:280px;height:300px}
+  .reference-section-title h2{font-size:26px}
+  .reference-category b{font-size:13px}
+  .reference-category small{font-size:10px}
+  .reference-job-card{padding:13px}
+  .details-title-row h1{font-size:24px}
+  .reference-scanner-hero h1{font-size:27px}
+  .reference-dashboard-content{padding:18px 13px}
+  .reference-welcome h1{font-size:23px}
+}
