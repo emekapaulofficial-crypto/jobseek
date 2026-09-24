@@ -2,7 +2,7 @@
   <button class="outline" id="clearAdminBoard" type="button">Clear Admin Board</button>
   <button class="outline" id="restoreAdminBoard" type="button">Show All Jobs Again</button>
   <button class="btn" id="closeSelectedPublic" type="button">Close Selected & Remove From Public Feed</button>
-  <span id="manualBoardMsg" class="micro">Clearing the admin board only hides jobs here. It does not delete or close them publicly.</span>
+  <span id="manualBoardMsg" class="micro">Clear Admin Board permanently deletes all current manual jobs. This cannot be undone.</span>
 </div>
 <div id="manualJobs" style="margin-top:20px">Loading your manual jobs…</div>
 <div class="job" style="padding:20px;margin-top:18px;border:2px dashed #cbd5e1">
@@ -52,7 +52,7 @@ async function load(){const [e,j,a,c,rq]=await Promise.all([client.from('employe
 const ADMIN_HIDDEN_KEY='jobseek_admin_hidden_manual_jobs';
 function getHiddenManualIds(){try{return JSON.parse(localStorage.getItem(ADMIN_HIDDEN_KEY)||'[]')}catch(e){return[]}}
 function setHiddenManualIds(ids){localStorage.setItem(ADMIN_HIDDEN_KEY,JSON.stringify([...new Set(ids)]))}
-function clearAdminBoard(){const ids=(window.allManualJobs||[]).map(x=>x.id);setHiddenManualIds(ids);$('manualBoardMsg').textContent='Admin board cleared. Your jobs are still safely stored and published publicly.';loadManualJobs()}
+async function clearAdminBoard(){if(!confirm('Clear ALL current manual jobs from JobSeek? This permanently deletes them from the manual jobs database and removes them from the public manual job feed.'))return;const r=await client.from('jobseek_manual_jobs').delete().not('id','is',null);if(r.error){$('manualBoardMsg').textContent='Clear failed: '+r.error.message;return}localStorage.removeItem(ADMIN_HIDDEN_KEY);$('manualBoardMsg').textContent='All manual jobs have been permanently cleared from the database.';await loadManualJobs();await load()}
 function restoreAdminBoard(){localStorage.removeItem(ADMIN_HIDDEN_KEY);$('manualBoardMsg').textContent='All manual jobs are visible again in the admin board.';loadManualJobs()}
 async function closeManualPublic(ids){const clean=[...new Set((ids||[]).filter(Boolean))];if(!clean.length){alert('Select at least one job.');return}if(!confirm('Close '+clean.length+' selected job(s) and remove them from the public JobSeek feed? The records will remain in Admin for history.'))return;const r=await client.from('jobseek_manual_jobs').update({status:'closed',updated_at:new Date().toISOString()}).in('id',clean);if(r.error){alert('Could not close jobs: '+r.error.message);return}$('manualBoardMsg').textContent=clean.length+' job(s) closed and removed from the public feed. Nothing was permanently deleted.';await loadManualJobs();await runJobCleanup();load()}
 async function loadLinkMonitor(){
