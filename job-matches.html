@@ -1,40 +1,13 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="JobSeek AI job match scanner."><title>AI Job Match Scanner | JobSeek</title><link rel="stylesheet" href="styles.css"></head>
-<body class="scanner-page">
-<header><div class="container nav"><a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a><button id="menu" aria-label="Open navigation" aria-expanded="false">☰</button><nav id="nav"></nav></div></header>
-<main>
-<section class="scanner-hero"><div class="container">
-<p class="eyebrow" style="text-align:center;color:#9dccff">AI JOB MATCH SCANNER</p>
-<h1>Find the jobs that fit your CV.</h1>
-<p>Upload your CV or use your saved JobSeek profile. JobSeek compares your information with current vacancy requirements and shows potential matches.</p>
-</div></section>
-<section class="section" style="padding-top:0"><div class="container">
-<div class="scanner-upload">
-<div class="scanner-drop" id="dropZone">
-<div class="upload-icon">↥</div><h2 style="font-size:18px;margin:10px 0 4px">Upload your CV</h2>
-<p class="micro">Drag & drop your CV here, or click to browse.</p>
-<input id="cvUpload" type="file" accept=".pdf,.doc,.docx,.txt,.md" style="display:none">
-<button class="btn" id="chooseCv" type="button">Choose CV</button>
-<p id="cvFileStatus" class="micro" style="margin:10px 0 0">Supported: PDF, DOC, DOCX, TXT, MD</p>
-</div>
-<div id="profileSummary" class="notice" style="margin-top:12px">Loading your JobSeek profile…</div>
-<div class="scanner-how">
-<div class="scanner-step"><b>1</b><div><b>Upload CV</b><p>Add your latest CV or use your saved profile.</p></div></div>
-<div class="scanner-step"><b>2</b><div><b>We scan</b><p>Compare skills, experience and preferences.</p></div></div>
-<div class="scanner-step"><b>3</b><div><b>Get matched</b><p>See vacancies that may fit your profile.</p></div></div>
-</div>
-</div>
-<div class="scanner-controls" style="margin:18px 0;display:flex;gap:10px;align-items:end;flex-wrap:wrap">
-<div><label>Minimum match</label><select id="minimum"><option value="0">Any match</option><option value="60">60%+</option><option value="70" selected>70%+</option><option value="80">80%+</option><option value="90">90%+</option></select></div>
-<div style="flex:1;min-width:220px"><label>Search within matches</label><input id="keyword" placeholder="Software engineer, finance, construction…"></div>
-<button class="btn" id="refresh" type="button">Scan for matches</button>
-</div>
-<div id="status" class="micro">Calculating personalized recommendations…</div>
-<div id="content" class="match-grid" style="margin-top:14px"></div>
-</div></section>
-</main>
-<script src="app.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI Job Match Scanner | JobSeek</title><link rel="stylesheet" href="styles.css?v=20260924-ui3"></head>
+<body class="scanner-page reference-scanner-ui"><header><div class="container nav"><a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a><button id="menu" aria-label="Open navigation" aria-expanded="false">☰</button><nav id="nav"></nav><div class="nav-user"><span>♧</span><span class="avatar">JD</span><span>John Doe</span><span>⌄</span></div></div></header>
+<main><section class="reference-scanner-hero"><div class="container"><h1>AI Job Match Scanner</h1><p>Upload your CV and let JobSeek find the best job matches<br>based on your skills, experience and goals.</p></div></section>
+<section class="reference-scanner-body"><div class="container">
+<div class="reference-upload-card"><div id="dropZone" class="reference-drop"><div class="upload-cloud">♧</div><h2>Upload Your CV</h2><p>Drag & drop your CV here or click to browse</p><input id="cvUpload" type="file" accept=".pdf,.doc,.docx,.txt,.md" hidden><button id="chooseCv" class="reference-blue-btn" type="button">Choose CV</button><small id="cvFileStatus">Supported formats: PDF, DOC, DOCX (Max 10MB)</small></div><div id="profileSummary" class="reference-profile-summary">Your saved JobSeek profile will also be used for matching.</div></div>
+<h2 class="how-title">How It Works</h2><div class="reference-how"><div><i>↥</i><b>1 &nbsp; Upload CV</b><small>Add your latest CV</small></div><div><i>◎</i><b>2 &nbsp; We scan</b><small>We analyze your skills<br>and experience</small></div><div><i>◈</i><b>3 &nbsp; Get matched</b><small>See jobs that fit your profile</small></div></div>
+<div class="reference-scan-controls"><label>Minimum match<select id="minimum"><option value="0">Any match</option><option value="70" selected>70%+</option><option value="80">80%+</option><option value="90">90%+</option></select></label><label>Search within matches<input id="keyword" placeholder="Search jobs..."></label><button id="refresh" class="reference-blue-btn">Scan for Matches</button></div>
+<p id="status" class="micro">Ready to scan current vacancies.</p><div id="content" class="reference-match-results"></div>
+<div class="reference-secure">ⓘ &nbsp; Your information is secure. We never share your CV with employers without your permission.</div>
+</div></section></main><footer><div class="container copy">© 2026 JobSeek · Your data stays under your control.</div></footer><script src="app.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-client.js"></script>
 <script src="job-matching.js"></script>
 <script>
