@@ -156,5 +156,12 @@ function render(){
   }).join('')||'<p class="none">No matching published jobs found. Try a different keyword, country, state/city or job type.</p>';
 }
 document.getElementById('filter').onclick=()=>{render();document.getElementById('list').scrollIntoView({behavior:'smooth',block:'start'});};document.getElementById('clearFilters').onclick=()=>{document.getElementById('keyword').value='';countrySelect.value='';document.getElementById('region').value='';document.getElementById('jobType').value='';document.getElementById('visa').value='';activeCategory='All';lastSearchTokens=[];buildChips();render()};['keyword','region'].forEach(id=>{const el=document.getElementById(id);el.onkeydown=e=>{if(e.key==='Enter')render()};el.oninput=()=>render()});[countrySelect,document.getElementById('jobType'),document.getElementById('visa')].forEach(x=>x.onchange=render);load();
+</script>
+<script>
+(function(){
+  const typeRadios=[...document.querySelectorAll('input[name="jt"]')], typeSelect=document.getElementById('jobType'), visaOnly=document.getElementById('visaOnly'), visa=document.getElementById('visa');
+  typeRadios.forEach(x=>x.addEventListener('change',()=>{typeSelect.value=x.value; if(window.render)window.render();}));
+  visaOnly?.addEventListener('change',()=>{visa.value=visaOnly.checked?'yes':''; if(window.render)window.render();});
+})();
 </script></body></html>
 </body></html>
