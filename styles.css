@@ -762,3 +762,15 @@ body:not(.home-page):not(.jobs-page) .job-details-shell{}
 .founder-hero{overflow:hidden;border-radius:20px;min-height:430px}
 .founder-hero img{display:block;opacity:1;visibility:visible!important}
 @media(max-width:560px){.reference-home-grid{min-height:0}.reference-woman.founder-hero{min-height:360px;margin-top:8px}.reference-woman.founder-hero img{width:min(100%,340px);height:360px;margin:0 auto}.founder-hero>div:last-child{left:12px!important;right:12px!important;bottom:12px!important}}
+
+
+/* Professional founder profile + featured vacancy cards */
+.founder-profile .details-card{min-height:92px;display:flex;flex-direction:column;gap:6px}
+.founder-profile .details-card small{color:#65758a;line-height:1.5}
+.reference-job .outline{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:11px;padding:9px 11px;border:1px solid #cbd8e7;border-radius:7px;color:#49637f;background:#fff}
+@media(max-width:700px){
+  .founder-profile{padding:48px 0!important}
+  .founder-profile>div>div[style*="grid-template-columns:minmax"]{grid-template-columns:1fr!important}
+  .founder-profile img{max-height:430px!important}
+  .founder-profile .details-card{min-height:0}
+}
