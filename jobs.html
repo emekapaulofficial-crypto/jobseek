@@ -1,71 +1,22 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Search active vacancies worldwide on JobSeek.">
-<title>Jobs | JobSeek</title>
-<link rel="stylesheet" href="styles.css">
-</head>
-<body class="jobs-page">
-<header><div class="container nav">
-  <a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a>
-  <button id="menu" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
-  <nav id="nav"></nav>
-</div></header>
-<main>
-<section class="jobs-hero">
-  <div class="container">
-    <p class="eyebrow">JOBSEEK OPPORTUNITIES</p>
-    <div class="jobs-hero-copy">
-      <h1>Find your next opportunity.</h1>
-      <p>Search verified and active vacancies across Nigeria and international markets. Open any job to see the exact vacancy requirements and application route.</p>
-    </div>
-  </div>
-</section>
-<section class="jobs-results">
-  <div class="container">
-    <div class="jobs-workspace">
-      <aside class="job-filter-sidebar">
-        <div class="filter-title"><strong>Filters</strong><button id="clearFilters" type="button">Clear all</button></div>
-        <label>Search jobs</label>
-        <div class="filter-input">⌕<input id="keyword" placeholder="Job title, skill..."></div>
-        <label>Location</label>
-        <div class="filter-input">⌖<input id="region" list="locationSuggestions" placeholder="All locations"><datalist id="locationSuggestions"></datalist></div>
-        <label>Country</label>
-        <select id="country"><option value="">All countries</option></select>
-        <div class="filter-check-group">
-          <span>Job type</span>
-          <label><input type="radio" name="jt" value="" checked> All</label>
-          <label><input type="radio" name="jt" value="Full-Time"> Full-time</label>
-          <label><input type="radio" name="jt" value="Part-Time"> Part-time</label>
-          <label><input type="radio" name="jt" value="Contract"> Contract</label>
-          <label><input type="radio" name="jt" value="Internship"> Internship</label>
-        </div>
-        <select id="jobType" aria-label="Job type" style="display:none"><option value="">All job types</option><option>Full-Time</option><option>Part-Time</option><option>Contract</option><option>Temporary</option><option>Internship</option></select>
-        <div class="filter-check-group">
-          <span>Visa sponsorship</span>
-          <label><input type="checkbox" id="visaOnly"> Only show visa sponsored</label>
-        </div>
-        <select id="visa" aria-label="Visa sponsorship" style="display:none"><option value="">All sponsorship status</option><option value="yes">Visa sponsorship explicitly stated</option><option value="no">No sponsorship evidence</option></select>
-        <div class="filter-check-group">
-          <span>Categories</span>
-          <div id="chips"></div>
-        </div>
-        <button class="btn filter-apply" id="filter" type="button">Search jobs</button>
-      </aside>
-      <div class="jobs-content">
-        <div class="results-head">
-          <div><h2 id="count">Loading…</h2><p id="activeFilter" class="results-sub"></p></div>
-          <div class="sort-label">Most Recent <span>⌄</span><small id="sourceStatus">Connecting…</small></div>
-        </div>
-        <div id="list" class="jobs jobs-list"><p class="none">Loading all published JobSeek vacancies…</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-</main>
-<footer><div class="container copy">© 2026 JobSeek · Always verify employer and application details before submitting.</div></footer>
-<script src="app.js"></script>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Jobs | JobSeek</title><link rel="stylesheet" href="styles.css?v=20260924-ui3"></head>
+<body class="jobs-page reference-jobs-ui"><header><div class="container nav"><a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a><button id="menu" type="button" aria-label="Open navigation" aria-expanded="false">☰</button><nav id="nav"></nav><div class="nav-user"><span>♧</span><span class="avatar">JD</span><span>Good morning,<br><b>John Doe</b></span><span>⌄</span></div></div></header>
+<main><section class="reference-jobs-area"><div class="container reference-jobs-layout">
+<aside class="reference-filter"><div class="filter-heading"><b>Filters</b><button id="clearFilters">Clear all</button></div>
+<label>Search jobs...</label><div class="reference-input">⌕ <input id="keyword" placeholder="Search jobs..."></div>
+<label>Location</label><select id="country"><option>All Locations</option><option>United Kingdom</option><option>United States</option><option>Canada</option><option>Germany</option><option>Nigeria</option><option>Remote</option></select>
+<div class="reference-check"><span>☐ United Kingdom</span><span>☐ United States</span><span>☐ Canada</span><span>☐ Germany</span><span>☐ Nigeria</span><span>☐ Remote</span></div>
+<label>Job Type</label><div class="reference-check"><label><input type="radio" name="jt" value="" checked> Full-time</label><label><input type="radio" name="jt" value="Part-Time"> Part-time</label><label><input type="radio" name="jt" value="Contract"> Contract</label><label><input type="radio" name="jt" value="Internship"> Internship</label></div>
+<label>Salary Range</label><select><option>Any Salary</option></select>
+<label>Visa Sponsorship</label><label class="toggle-line"><input id="visaOnly" type="checkbox"> Only show visa sponsored <i></i></label>
+<label>Categories</label><div id="chips" class="reference-check category-list"></div>
+<button id="filter" class="reference-blue-btn" style="width:100%;margin-top:15px">Search Jobs</button>
+</aside>
+<section class="reference-results"><div class="reference-results-head"><div><h1 id="count">1,248 Jobs Found</h1></div><select><option>Most Recent</option><option>Best Match</option></select></div><div id="list" class="reference-job-list"><div class="reference-job-card"><div class="job-brand microsoft">▦</div><div class="job-info"><h3>Software Engineer</h3><p>Microsoft</p><small>⌖ London, UK &nbsp; ▣ Full-time &nbsp; ▣ £60,000 – £90,000 / year</small><span>✓ Visa sponsorship available</span></div><b class="match-pill">92% Match</b><a class="reference-blue-btn small" href="#">View Details</a></div>
+<div class="reference-job-card"><div class="job-brand monzo">M</div><div class="job-info"><h3>Senior Financial Crime Investigator</h3><p>Monzo</p><small>⌖ London, UK &nbsp; ▣ Full-time &nbsp; ▣ £45,000 – £65,000 / year</small><span>✓ Visa sponsorship available</span></div><b class="match-pill">87% Match</b><a class="reference-blue-btn small" href="#">View Details</a></div>
+<div class="reference-job-card"><div class="job-brand stripe">stripe</div><div class="job-info"><h3>Full Stack Engineer</h3><p>Stripe</p><small>⌖ Remote &nbsp; ▣ Full-time &nbsp; ▣ $90,000 – $120,000 / year</small><span>✓ Visa sponsorship available</span></div><b class="match-pill">84% Match</b><a class="reference-blue-btn small" href="#">View Details</a></div>
+<div class="reference-job-card"><div class="job-brand amazon">amazon</div><div class="job-info"><h3>Data Analyst</h3><p>Amazon</p><small>⌖ Berlin, Germany &nbsp; ▣ Full-time &nbsp; ▣ €60,000 – €70,000 / year</small></div><b class="match-pill">78% Match</b><a class="reference-blue-btn small" href="#">View Details</a></div>
+<div class="reference-job-card"><div class="job-brand nhs">NHS</div><div class="job-info"><h3>Registered Nurse</h3><p>NHS</p><small>⌖ Manchester, UK &nbsp; ▣ Full-time &nbsp; ▣ £28,000 – £40,000 / year</small></div><b class="match-pill">76% Match</b><a class="reference-blue-btn small" href="#">View Details</a></div>
+<div class="reference-job-card"><div class="job-brand apple">●</div><div class="job-info"><h3>iOS Developer</h3><p>Apple</p><small>⌖ Cupertino, USA &nbsp; ▣ Full-time &nbsp; ▣ $100,000 – $150,000 / year</small></div><b class="match-pill">72% Match</b><a class="reference-blue-btn small" href="#">View Details</a></div></div></section></div></section></main><footer><div class="container copy">© 2026 JobSeek · Verified vacancies and application tools.</div></footer><script src="app.js"></script>
 <script>
 let all=[],activeCategory='All',lastSearchTokens=[];
 const initialParams=new URLSearchParams(location.search);
