@@ -13,3 +13,122 @@ table{font-size:13px}th{font-size:11px;text-transform:uppercase;letter-spacing:.
 @media(max-width:560px){.container{width:min(100% - 20px,520px)}header .nav{min-height:64px}.nav nav{top:64px}.logo{width:34px;height:34px}.section,.dark{padding:46px 0}.hero{padding:42px 0}.hero h1{font-size:40px;letter-spacing:-1.7px}.lead{font-size:16px}.countries{grid-template-columns:1fr}.foot{grid-template-columns:1fr;padding:38px 0}.admin-kpis{grid-template-columns:1fr 1fr}.admin-kpi{padding:13px}.admin-kpi b{font-size:23px}.admin-sidebar{top:64px}.btn,.outline{min-height:46px}.job{padding:18px}.job p{overflow-wrap:anywhere}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}.job:hover,.countries a:hover,.countries div:hover{transform:none}}
 @media(hover:none){.job:hover{transform:none;box-shadow:0 3px 14px rgba(15,35,64,.035)}}
+
+
+/* =========================================================
+   JobSeek 2026 UX refresh — desktop + mobile navigation
+   ========================================================= */
+:root{
+  --js-radius:16px;
+  --js-border:#dfe7f1;
+  --js-surface:#ffffff;
+  --js-bg:#f5f8fc;
+  --js-blue:#155eef;
+  --js-blue-dark:#0d3fa8;
+  --js-navy:#081a33;
+  --js-muted:#66758a;
+  --js-shadow:0 12px 32px rgba(15,35,64,.08);
+}
+body{background:var(--js-bg)}
+header{position:sticky;top:0;z-index:100}
+header .nav{min-height:72px}
+.site-nav{display:flex;align-items:center;justify-content:flex-end;gap:3px}
+.site-nav a{display:inline-flex;align-items:center;gap:7px;padding:9px 10px;border-radius:10px;color:#43536a;font-size:13px;font-weight:750;transition:background .18s,color .18s,transform .18s}
+.site-nav a:hover{background:#edf4ff;color:var(--js-blue)}
+.site-nav a[aria-current=page]{background:#eaf2ff;color:var(--js-blue)}
+.nav-icon{display:none;font-size:14px}
+#menu{display:none;border:0;cursor:pointer;font-size:22px;line-height:1}
+.admin-site-nav a{padding:10px 11px}
+.admin-site-nav .nav-icon{display:inline}
+main{overflow:visible}
+.section{scroll-margin-top:92px}
+.search{position:relative;z-index:2}
+.search input,.search select{min-height:42px}
+.job,.card,.admin-panel,.admin-kpi{border-color:var(--js-border);border-radius:var(--js-radius)}
+.job h3,.job h2{letter-spacing:-.4px}
+.job p{line-height:1.65}
+.hero-actions{display:flex;flex-wrap:wrap;gap:10px}
+.btn,.outline{border-radius:11px}
+.outline{display:inline-flex;align-items:center;justify-content:center;padding:11px 15px;border:1px solid var(--js-border);background:#fff}
+footer{background:#fff}
+.foot{border-top:1px solid var(--js-border)}
+/* Better long forms */
+form label{color:#4c5d73;font-weight:700;font-size:13px}
+form input,form select,form textarea,input,select,textarea{
+  border:1px solid #ccd8e6;
+  border-radius:10px;
+  min-height:44px;
+  padding:10px 12px;
+  background:#fff;
+}
+textarea{min-height:110px}
+form input[type=checkbox],input[type=checkbox],input[type=radio]{min-height:auto;width:auto}
+/* Admin workspace */
+.admin-topbar{position:sticky;top:0;z-index:110;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--js-border);box-shadow:0 4px 18px rgba(15,35,64,.05)}
+.admin-topbar-inner{min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.admin-topbar-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.admin-shell{grid-template-columns:250px minmax(0,1fr);gap:24px}
+.admin-sidebar{top:88px;padding:10px;border-radius:18px}
+.admin-sidebar .nav-label{display:block;padding:9px 11px 5px;color:#94a0b0;font-size:10px;font-weight:900;letter-spacing:1px;text-transform:uppercase}
+.admin-sidebar a{min-height:42px}
+.admin-content{padding-bottom:30px}
+.admin-toolbar{background:transparent}
+.admin-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}
+.admin-kpi,.admin-panel{box-shadow:0 6px 22px rgba(15,35,64,.055)}
+.admin-panel{overflow:hidden}
+.admin-panel>h2{font-size:24px}
+.admin-panel details{border-top:1px solid #edf1f5}
+.admin-panel summary{padding:13px 0}
+.admin-actions .outline{white-space:nowrap}
+.table-wrap{box-shadow:0 4px 18px rgba(15,35,64,.05)}
+/* Mobile navigation: large touch targets, no tiny links */
+@media(max-width:980px){
+  .site-nav{position:absolute;top:72px;left:12px;right:12px;display:none;flex-direction:column;align-items:stretch;gap:3px;padding:10px;background:rgba(255,255,255,.99);border:1px solid var(--js-border);border-radius:16px;box-shadow:0 20px 45px rgba(15,35,64,.16);max-height:calc(100vh - 88px);overflow:auto}
+  .site-nav.open{display:flex}
+  .site-nav a{min-height:46px;padding:12px 14px;font-size:14px}
+  .site-nav a .nav-icon{display:inline}
+  #menu{display:inline-flex;width:44px;height:44px;align-items:center;justify-content:center;border-radius:12px;background:#edf4ff;color:var(--js-navy)}
+  header .nav{position:relative}
+  .admin-topbar-inner{min-height:60px}
+  .admin-shell{grid-template-columns:1fr}
+  .admin-sidebar{position:sticky;top:60px;z-index:90;display:flex;align-items:center;overflow-x:auto;gap:5px;padding:7px;border-radius:13px}
+  .admin-sidebar .nav-label{display:none}
+  .admin-sidebar a{white-space:nowrap;flex:0 0 auto}
+  .admin-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .admin-toolbar{gap:12px}
+}
+@media(max-width:600px){
+  .container{width:min(calc(100% - 20px),560px)}
+  header .nav{min-height:64px}
+  .site-nav{top:64px;left:8px;right:8px}
+  .brand{font-size:19px}
+  .hero h1{font-size:clamp(36px,11vw,48px)}
+  .hero-actions{display:grid;grid-template-columns:1fr}
+  .hero-actions .btn,.hero-actions .outline{width:100%}
+  .search{border-radius:14px;margin-top:20px}
+  .search>div{padding:9px 10px}
+  .search input,.search select{font-size:15px}
+  .head{margin-bottom:20px}
+  .countries{gap:10px}
+  .job{padding:17px}
+  .grid-2,.row2{grid-template-columns:1fr}
+  .admin-topbar-inner{align-items:flex-start;padding:8px 0}
+  .admin-topbar-actions{width:100%}
+  .admin-topbar-actions .outline,.admin-topbar-actions .btn{flex:1}
+  .admin-kpis{grid-template-columns:1fr 1fr;gap:8px}
+  .admin-kpi{padding:12px}
+  .admin-kpi b{font-size:22px}
+  .admin-panel{padding:15px}
+  .admin-panel h2{font-size:20px}
+  .admin-sidebar{top:60px}
+  .admin-actions{width:100%}
+  .admin-actions>*{flex:1}
+  table{min-width:720px}
+}
+@media(max-width:380px){
+  .admin-kpis{grid-template-columns:1fr}
+  .admin-topbar-actions{display:grid;grid-template-columns:1fr 1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  .site-nav a,.btn,.outline{transition:none}
+}
