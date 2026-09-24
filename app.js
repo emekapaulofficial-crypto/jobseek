@@ -61,6 +61,7 @@
     const publicLinks=[
       ['index.html','Home','⌂'],
       ['jobs.html','Jobs','⌕'],
+      ['index.html#founder','Founder','◉'],
       ['ats-cv-builder.html','CV & Tools','✦'],
       ['pricing.html','Pricing','◈'],
       ['employer.html','For Employers','▣']
