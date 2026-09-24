@@ -175,7 +175,7 @@ document.addEventListener('change',async e=>{const t=e.target;if(t.dataset.emplo
     const title=excelText(r['job title']||r['title']||r['position']);
     const company=excelText(r['company']||r['company name']||r['employer']);
     const location=excelText(r['location']||r['job location']||r['country']);
-    const description=excelText(r['description']||r['job description']||r['details']);const responsibilities=excelText(r['responsibilities']||r['duties']||r['job responsibilities']);const requirements=excelText(r['requirements']||r['qualifications']||r['required skills']||r['job requirements']);
+    const description=excelText(r['description']||r['job description']||r['details']);const responsibilities=excelText(r['responsibilities']||r['duties']||r['job responsibilities']);let requirements=excelText(r['requirements']||r['qualifications']||r['required skills']||r['job requirements']);if(!requirements){requirements=extractRequirementEvidence(description,responsibilities)||'';}
     const category=excelText(r['category']||r['job category']) || excelCategory(title+' '+description+' '+location);
     const posted=iso(r['posted date']||r['date posted']||r['posted at']);
     const closing=iso(r['closing date']||r['deadline']||r['application deadline'],true);
@@ -222,7 +222,7 @@ document.addEventListener('change',async e=>{const t=e.target;if(t.dataset.emplo
           '<strong>Row '+(i+2)+': '+esc(j.title||'Title missing')+'</strong>'+
           '<p class="micro">'+esc(j.company||'Company missing')+' · '+esc(j.location||'Location missing')+' · '+esc(j.category)+'</p>'+
           '<p class="micro">Posted: '+esc(j.posted_at?new Date(j.posted_at).toLocaleDateString():'')+' · Visa: '+(j.visa_sponsorship?'Yes':'No')+'</p>'+
-          '<p class="micro">Apply: '+esc(j.apply_url||'NOT FOUND')+'</p>'+
+          '<p class="micro">Apply: '+esc(j.apply_url||'NOT FOUND')+'</p>'+ '<p class="micro"><strong>Exact requirements:</strong> '+esc(j.requirements||'NOT FOUND — do not publish until supplied or safely extracted from the vacancy.')+'</p>'+ '<p class="micro"><strong>Responsibilities:</strong> '+esc(j.responsibilities||'Not supplied')+'</p>'+
           (errs.length?'<p style="margin:6px 0"><strong>Needs fixing:</strong> '+esc(errs.join(', '))+'</p>':'')+
           '</div>';
       }).join('')+
