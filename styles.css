@@ -757,3 +757,8 @@ body:not(.home-page):not(.jobs-page) .job-details-shell{}
 .reference-woman img{width:420px;height:500px;object-fit:cover;object-position:center top;border-radius:28px;display:block;opacity:1;visibility:visible;box-shadow:0 22px 55px rgba(0,0,0,.28)}
 @media(max-width:900px){.reference-woman img{width:330px;height:390px}}
 @media(max-width:600px){.reference-woman img{width:270px;height:330px;border-radius:22px}}
+
+/* Founder hero visibility fix */
+.founder-hero{overflow:hidden;border-radius:20px;min-height:430px}
+.founder-hero img{display:block;opacity:1;visibility:visible!important}
+@media(max-width:560px){.reference-home-grid{min-height:0}.reference-woman.founder-hero{min-height:360px;margin-top:8px}.reference-woman.founder-hero img{width:min(100%,340px);height:360px;margin:0 auto}.founder-hero>div:last-child{left:12px!important;right:12px!important;bottom:12px!important}}
