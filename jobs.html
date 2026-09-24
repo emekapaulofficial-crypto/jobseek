@@ -1,13 +1,71 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Search active vacancies worldwide on JobSeek."><title>Find Jobs | JobSeek</title><link rel="stylesheet" href="styles.css"></head><body class="jobs-page">
-<header><div class="container nav"><a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a><button id="menu" aria-label="Menu">☰</button><nav id="nav"></nav><a class="nav-signin" href="auth.html">Sign in</a></div></header>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Search active vacancies worldwide on JobSeek.">
+<title>Jobs | JobSeek</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="jobs-page">
+<header><div class="container nav">
+  <a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a>
+  <button id="menu" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
+  <nav id="nav"></nav>
+</div></header>
 <main>
-<section class="jobs-hero"><div class="container"><div class="jobs-hero-copy"><p class="eyebrow">GLOBAL OPPORTUNITIES</p><h1>Find your next opportunity.</h1><p>Search active vacancies across Nigeria and international markets. Open each job to see its exact requirements and verified application route when available.</p></div>
-<div class="jobs-filter-card">
-<div class="filter-row-main"><div class="filter-field"><label>Keyword</label><div class="filter-input">⌕<input id="keyword" placeholder="Job title, skill or company"></div></div><div class="filter-field"><label>Country</label><div class="filter-input">🌍<select id="country"><option value="">All countries</option></select></div></div><div class="filter-field"><label>Location</label><div class="filter-input">⌖<input id="region" list="locationSuggestions" placeholder="City, state or region"><datalist id="locationSuggestions"></datalist></div></div><button class="btn" id="filter">Search</button></div>
-<div class="filter-row-secondary"><div><label>Job type</label><select id="jobType"><option value="">All job types</option><option>Full-Time</option><option>Part-Time</option><option>Contract</option><option>Temporary</option><option>Internship</option></select></div><div><label>Visa sponsorship</label><select id="visa"><option value="">All sponsorship status</option><option value="yes">Visa sponsorship explicitly stated</option><option value="no">No sponsorship evidence</option></select></div><button class="outline" id="clearFilters" type="button">Clear filters</button></div>
-<div id="chips" class="chips"></div></div></div></section>
-<section class="section jobs-results"><div class="container"><div class="results-head"><div><p class="eyebrow">FRESH LISTINGS</p><h2>Active vacancies</h2><p id="activeFilter" class="results-sub"></p></div><div class="results-count"><strong id="count">Loading…</strong><span id="sourceStatus">Connecting to fresh job sources…</span></div></div><div id="list" class="jobs jobs-list"><p class="none">Loading all published JobSeek vacancies…</p></div></div></section>
-</main><footer><div class="container copy">© 2026 JobSeek · Always verify employer and application details before submitting.</div></footer>
+<section class="jobs-hero">
+  <div class="container">
+    <p class="eyebrow">JOBSEEK OPPORTUNITIES</p>
+    <div class="jobs-hero-copy">
+      <h1>Find your next opportunity.</h1>
+      <p>Search verified and active vacancies across Nigeria and international markets. Open any job to see the exact vacancy requirements and application route.</p>
+    </div>
+  </div>
+</section>
+<section class="jobs-results">
+  <div class="container">
+    <div class="jobs-workspace">
+      <aside class="job-filter-sidebar">
+        <div class="filter-title"><strong>Filters</strong><button id="clearFilters" type="button">Clear all</button></div>
+        <label>Search jobs</label>
+        <div class="filter-input">⌕<input id="keyword" placeholder="Job title, skill..."></div>
+        <label>Location</label>
+        <div class="filter-input">⌖<input id="region" list="locationSuggestions" placeholder="All locations"><datalist id="locationSuggestions"></datalist></div>
+        <label>Country</label>
+        <select id="country"><option value="">All countries</option></select>
+        <div class="filter-check-group">
+          <span>Job type</span>
+          <label><input type="radio" name="jt" value="" checked> All</label>
+          <label><input type="radio" name="jt" value="Full-Time"> Full-time</label>
+          <label><input type="radio" name="jt" value="Part-Time"> Part-time</label>
+          <label><input type="radio" name="jt" value="Contract"> Contract</label>
+          <label><input type="radio" name="jt" value="Internship"> Internship</label>
+        </div>
+        <select id="jobType" aria-label="Job type" style="display:none"><option value="">All job types</option><option>Full-Time</option><option>Part-Time</option><option>Contract</option><option>Temporary</option><option>Internship</option></select>
+        <div class="filter-check-group">
+          <span>Visa sponsorship</span>
+          <label><input type="checkbox" id="visaOnly"> Only show visa sponsored</label>
+        </div>
+        <select id="visa" aria-label="Visa sponsorship" style="display:none"><option value="">All sponsorship status</option><option value="yes">Visa sponsorship explicitly stated</option><option value="no">No sponsorship evidence</option></select>
+        <div class="filter-check-group">
+          <span>Categories</span>
+          <div id="chips"></div>
+        </div>
+        <button class="btn filter-apply" id="filter" type="button">Search jobs</button>
+      </aside>
+      <div class="jobs-content">
+        <div class="results-head">
+          <div><h2 id="count">Loading…</h2><p id="activeFilter" class="results-sub"></p></div>
+          <div class="sort-label">Most Recent <span>⌄</span><small id="sourceStatus">Connecting…</small></div>
+        </div>
+        <div id="list" class="jobs jobs-list"><p class="none">Loading all published JobSeek vacancies…</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer><div class="container copy">© 2026 JobSeek · Always verify employer and application details before submitting.</div></footer>
+<script src="app.js"></script>
 <script>
 let all=[],activeCategory='All',lastSearchTokens=[];
 const initialParams=new URLSearchParams(location.search);
