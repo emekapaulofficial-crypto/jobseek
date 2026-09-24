@@ -1,25 +1,39 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Personalized JobSeek recommendations powered by your recruitment profile.">
-<title>JobSeek | Smart Job Matches</title>
-<link rel="stylesheet" href="styles.css">
-<style>
-.match-hero{padding:22px;margin:18px 0;background:#f7faff}.match-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}.match-score{font-size:30px;font-weight:800}.factor{font-size:12px;display:inline-block;padding:5px 8px;margin:3px;border:1px solid #ddd;border-radius:999px}.match-bar{height:8px;background:#e5e7eb;border-radius:8px;overflow:hidden}.match-bar>span{display:block;height:100%;background:currentColor}.muted{color:#667085}.job-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-</style>
-</head>
-<body><header><div class="container nav"><a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a><button id="menu" aria-label="Open navigation" aria-expanded="false">☰</button><nav id="nav"><a href="jobs.html">Find Jobs</a><a href="candidate-dashboard.html">Dashboard</a><a href="job-matches.html">My Matches</a><a href="ats-cv-builder.html">CV Builder</a><a href="application-assistant.html">Application Assistant</a></nav></div></header>
-<main class="section"><div class="container">
-<p class="eyebrow">JOBSEEK SMART MATCH</p>
-<h1>Jobs matched to you</h1>
-<p class="lead">Your profile is compared with JobSeek's global AI-discovered vacancies and verified agency placements. Match scores are guidance, not a guarantee of employment.</p>
-<div id="profileSummary" class="match-hero">Loading your recruitment profile…</div>
-<div class="search" style="margin:18px 0"><div><label>Minimum match</label><select id="minimum"><option value="0">Any match</option><option value="60">60%+</option><option value="70" selected>70%+</option><option value="80">80%+</option><option value="90">90%+</option></select></div><div><label>Keyword</label><input id="keyword" placeholder="e.g. electrician, developer"></div><button class="btn" id="refresh">Refresh matches</button></div>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="JobSeek AI job match scanner."><title>AI Job Match Scanner | JobSeek</title><link rel="stylesheet" href="styles.css"></head>
+<body class="scanner-page">
+<header><div class="container nav"><a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a><button id="menu" aria-label="Open navigation" aria-expanded="false">☰</button><nav id="nav"></nav></div></header>
+<main>
+<section class="scanner-hero"><div class="container">
+<p class="eyebrow" style="text-align:center;color:#9dccff">AI JOB MATCH SCANNER</p>
+<h1>Find the jobs that fit your CV.</h1>
+<p>Upload your CV or use your saved JobSeek profile. JobSeek compares your information with current vacancy requirements and shows potential matches.</p>
+</div></section>
+<section class="section" style="padding-top:0"><div class="container">
+<div class="scanner-upload">
+<div class="scanner-drop" id="dropZone">
+<div class="upload-icon">↥</div><h2 style="font-size:18px;margin:10px 0 4px">Upload your CV</h2>
+<p class="micro">Drag & drop your CV here, or click to browse.</p>
+<input id="cvUpload" type="file" accept=".pdf,.doc,.docx,.txt,.md" style="display:none">
+<button class="btn" id="chooseCv" type="button">Choose CV</button>
+<p id="cvFileStatus" class="micro" style="margin:10px 0 0">Supported: PDF, DOC, DOCX, TXT, MD</p>
+</div>
+<div id="profileSummary" class="notice" style="margin-top:12px">Loading your JobSeek profile…</div>
+<div class="scanner-how">
+<div class="scanner-step"><b>1</b><div><b>Upload CV</b><p>Add your latest CV or use your saved profile.</p></div></div>
+<div class="scanner-step"><b>2</b><div><b>We scan</b><p>Compare skills, experience and preferences.</p></div></div>
+<div class="scanner-step"><b>3</b><div><b>Get matched</b><p>See vacancies that may fit your profile.</p></div></div>
+</div>
+</div>
+<div class="scanner-controls" style="margin:18px 0;display:flex;gap:10px;align-items:end;flex-wrap:wrap">
+<div><label>Minimum match</label><select id="minimum"><option value="0">Any match</option><option value="60">60%+</option><option value="70" selected>70%+</option><option value="80">80%+</option><option value="90">90%+</option></select></div>
+<div style="flex:1;min-width:220px"><label>Search within matches</label><input id="keyword" placeholder="Software engineer, finance, construction…"></div>
+<button class="btn" id="refresh" type="button">Scan for matches</button>
+</div>
 <div id="status" class="micro">Calculating personalized recommendations…</div>
 <div id="content" class="match-grid" style="margin-top:14px"></div>
-<p style="margin-top:24px"><a href="candidate-dashboard.html">← Candidate dashboard</a> · <a href="jobs.html">Browse all jobs</a></p>
-</div></main>
+</div></section>
+</main>
 <script src="app.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-client.js"></script>
 <script src="job-matching.js"></script>
