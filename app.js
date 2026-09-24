@@ -60,12 +60,9 @@
     ];
     const publicLinks=[
       ['jobs.html','Find Jobs','🔎'],
-      ['candidate-dashboard.html','Dashboard','📊'],
-      ['jobs.html?category=Construction','Construction','🏗️'],
       ['job-matches.html','My Matches','🎯'],
       ['ats-cv-builder.html','CV Builder','📄'],
       ['application-assistant.html','Application Assistant','📝'],
-      ['job-alerts.html','Job Alerts','🔔'],
       ['employer.html','For Employers','🏢'],
       ['pricing.html','Plans','⭐']
     ];
