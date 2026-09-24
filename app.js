@@ -59,18 +59,26 @@
       ['index.html','Website','🌐']
     ];
     const publicLinks=[
-      ['jobs.html','Find Jobs','🔎'],
-      ['job-matches.html','My Matches','🎯'],
-      ['ats-cv-builder.html','CV Builder','📄'],
-      ['application-assistant.html','Application Assistant','📝'],
-      ['employer.html','For Employers','🏢'],
-      ['pricing.html','Plans','⭐']
+      ['index.html','Home','⌂'],
+      ['jobs.html','Jobs','⌕'],
+      ['ats-cv-builder.html','CV & Tools','✦'],
+      ['pricing.html','Pricing','◈'],
+      ['employer.html','For Employers','▣']
     ];
     const authLinks=[['jobs.html','Browse Jobs','🔎'],['pricing.html','Plans','⭐'],['auth.html','Sign in','→']];
     const links=isAdmin?adminLinks:(isAuth?authLinks:publicLinks);
 
     nav.id='nav'; nav.className='site-nav'+(isAdmin?' admin-site-nav':'');
     nav.innerHTML=links.map(([href,label,icon])=>'<a href="'+href+'" data-nav-link="'+href.split('?')[0]+'"><span class="nav-icon" aria-hidden="true">'+icon+'</span><span>'+label+'</span></a>').join('');
+    if(!isAdmin){
+      let actions=wrap.querySelector('.nav-actions');
+      if(!actions){
+        actions=document.createElement('div');
+        actions.className='nav-actions';
+        wrap.appendChild(actions);
+      }
+      actions.innerHTML='<a class="nav-login" href="auth.html">Log In</a><a class="nav-signup" href="auth.html?mode=signup">Sign Up</a>';
+    }
 
     const current=path;
     nav.querySelectorAll('a[data-nav-link]').forEach(a=>{
