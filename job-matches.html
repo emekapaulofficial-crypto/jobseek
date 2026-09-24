@@ -45,4 +45,13 @@ async function init(){if(!JobSeekSupabase.configured){$('status').textContent='S
 async function render(){ $('status').textContent='Finding your best matches…';$('content').innerHTML='';const jobs=await loadJobs();const min=Number($('minimum').value);const k=$('keyword').value.toLowerCase().trim();const matches=jobs.map(job=>({job,...JobSeekMatcher.match(profile,job)})).filter(m=>m.score>=min&&(!k||`${m.job.title} ${m.job.description||''} ${m.job.company||''}`.toLowerCase().includes(k))).sort((a,b)=>b.score-a.score);$('status').textContent=`${matches.length} personalized matches · based on your current profile`;$('content').innerHTML=matches.slice(0,60).map(jobCard).join('')||'<div class="job" style="padding:20px"><strong>No matches yet.</strong><p>Try lowering the minimum match, broadening your keyword, or adding more skills and preferred countries to your profile.</p><a class="btn" href="candidate-dashboard.html">Improve my profile</a></div>'}
 $('refresh').onclick=render;['minimum','keyword'].forEach(id=>$(id).addEventListener('change',render));$('keyword').addEventListener('keydown',e=>{if(e.key==='Enter')render()});init();
 </script>
-</body></html>
+<script>
+(function(){
+ const input=document.getElementById('cvUpload'),choose=document.getElementById('chooseCv'),zone=document.getElementById('dropZone'),status=document.getElementById('cvFileStatus');
+ choose.onclick=()=>input.click();
+ input.onchange=()=>{const f=input.files?.[0]; if(f)status.textContent=f.name+' selected — JobSeek will use your saved profile and vacancy data for matching.'};
+ ['dragenter','dragover'].forEach(e=>zone.addEventListener(e,x=>{x.preventDefault();zone.style.borderColor='#1268e8'}));
+ ['dragleave','drop'].forEach(e=>zone.addEventListener(e,x=>{x.preventDefault();zone.style.borderColor='#b8cae0'}));
+ zone.addEventListener('drop',e=>{const f=e.dataTransfer.files?.[0];if(f){input.files=e.dataTransfer.files;status.textContent=f.name+' selected — click Scan for matches.'}});
+})();
+</script></body></html>
