@@ -70,7 +70,7 @@
 
     nav.id='nav'; nav.className='site-nav'+(isAdmin?' admin-site-nav':'');
     nav.innerHTML=links.map(([href,label,icon])=>'<a href="'+href+'" data-nav-link="'+href.split('?')[0]+'"><span class="nav-icon" aria-hidden="true">'+icon+'</span><span>'+label+'</span></a>').join('');
-    if(!isAdmin){
+    if(!isAdmin && !isAuth){
       let actions=wrap.querySelector('.nav-actions');
       if(!actions){
         actions=document.createElement('div');
