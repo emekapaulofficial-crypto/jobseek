@@ -1,41 +1,19 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Job Details | JobSeek</title><link rel="stylesheet" href="styles.css"></head>
-<body class="job-details-page">
-<header><div class="container nav">
-<a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a>
-<button id="menu" aria-label="Open navigation" aria-expanded="false">☰</button><nav id="nav"></nav>
-</div></header>
-<main>
-<section class="job-details-hero"><div class="container">
-<a class="back-link" href="jobs.html">← Back to search</a>
-<div class="job-details-grid" style="margin-top:16px">
-<div>
-<p class="eyebrow">JOB DETAILS</p><h1 id="title" style="font-size:32px;margin:0 0 7px">Loading job…</h1>
-<p id="meta" class="lead" style="margin:0;font-size:14px"></p>
-<div class="job-details-meta"><span id="verification">Checking verification…</span><span id="dates">Loading dates…</span></div>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Job Details | JobSeek</title><link rel="stylesheet" href="styles.css?v=20260924-ui3"></head>
+<body class="job-details-page reference-details-ui"><header><div class="container nav"><a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a><button id="menu" aria-label="Open navigation" aria-expanded="false">☰</button><nav id="nav"></nav><div class="nav-user"><span>♧</span><span class="avatar">JD</span><span>Good morning,<br><b>John Doe</b></span><span>⌄</span></div></div></header>
+<main><section class="details-head"><div class="container"><a class="back-link" href="jobs.html">← Back to search</a><div class="details-title-row"><div class="details-brand">▦</div><div><p class="eyebrow">JOB DETAILS</p><h1 id="title">Software Engineer</h1><p id="meta">Microsoft · London, UK</p><div class="details-meta"><span>⌖ London, UK</span><span>▣ Full-time</span><span>▣ £60,000 – £90,000 / year</span></div></div><div class="details-actions"><a id="selfApply" class="reference-blue-btn" href="#">Apply on Employer Website</a><a class="outline" href="#">Save Job</a></div></div></div></section>
+<section class="details-tabs"><div class="container"><a class="active">Overview</a><a>About Company</a><a>Requirements</a><a>Benefits</a></div></section>
+<section class="details-body"><div class="container details-grid">
+<div class="details-main">
+<div class="details-card"><h2>About the Role</h2><p id="desc">We are looking for a skilled Software Engineer to join our team and help build innovative solutions that empower millions of people around the world.</p><h3>Key Responsibilities</h3><div id="responsibilities" class="detail-bullets"><p>• Design, develop and maintain scalable software applications</p><p>• Collaborate with cross-functional teams</p><p>• Participate in code reviews and improve system performance</p><p>• Contribute to architectural decisions</p></div></div>
+<div class="details-card"><h2>About Microsoft</h2><p>Microsoft is a global technology company, creating tools and platforms that help people and businesses achieve more.</p></div>
 </div>
-</div></div></section>
-<section class="section" style="padding-top:24px"><div class="container job-details-grid">
-<div class="job-details-main">
-<div class="job-details-card"><h2>About the role</h2><p id="desc">Loading vacancy description…</p><p class="micro" id="source"></p><p class="micro" id="route"></p></div>
-<div class="job-details-card"><h2>Exact vacancy requirements</h2><p class="micro">These are the requirements supplied by the vacancy or safely extracted from its text. JobSeek does not invent qualifications, experience or skills.</p><div id="requirements" class="requirement-box">Loading requirements…</div>
-<h3 style="margin-top:20px">Responsibilities / duties</h3><div id="responsibilities" class="requirement-box">Loading responsibilities…</div></div>
-<div class="job-details-card"><h2>Important vacancy information</h2><p class="micro">Review the employer's original listing before applying. Visa sponsorship is displayed only when supported by vacancy evidence. A JobSeek match does not guarantee qualification, employment or visa approval.</p></div>
-</div>
-<aside class="job-details-side">
-<div class="job-details-card apply-panel"><span class="tag">JOBSEEK APPLICATION WORKSPACE</span><h2 style="margin-top:12px">Ready to apply?</h2><p class="micro">Prepare your CV and application around this exact vacancy, then continue to the original employer route when it is verified.</p>
-<a id="selfApply" class="btn" target="_blank" rel="noopener noreferrer">Start application</a>
-<a id="build" class="outline">Build complete application</a>
-<a id="dashboard" class="outline" href="candidate-dashboard.html">My dashboard</a>
-<hr style="border:0;border-top:1px solid #edf1f5;margin:15px 0">
-<a id="admin" class="outline">Request JobSeek administration</a>
-</div>
+<aside class="details-side">
+<div class="details-card before"><h2>Before You Apply</h2><ol><li>Visit the employer's website using the button above.</li><li>Copy the full job requirements and qualifications.</li><li>Paste them into JobSeek for an AI analysis.</li><li>Get your tailored CV, cover letter and application checklist.</li></ol><div class="details-note">ⓘ JobSeek helps you find and prepare applications. We do not handle applications for employers.</div></div>
+<div class="details-card"><h2>Job Information</h2><dl><dt>Posted</dt><dd id="postedInfo">12 Sep 2026</dd><dt>Deadline</dt><dd id="dates">12 Oct 2026</dd><dt>Location</dt><dd>London, UK</dd></dl></div>
+<div class="details-card"><h2>Exact Vacancy Requirements</h2><div id="requirements" class="requirement-box">Requirements supplied by the vacancy will appear here.</div><p id="verification" class="micro"></p><p id="source" class="micro"></p><p id="route" class="micro"></p></div>
+<div><a id="build" class="reference-blue-btn" style="width:100%;box-sizing:border-box" href="#">Prepare my application</a><a id="admin" class="outline" style="width:100%;box-sizing:border-box;margin-top:7px" href="#">Request JobSeek assistance</a></div>
 </aside>
-</div></section>
-</main>
-<script src="app.js"></script>
-<script src="supabase-client.js"></script><script>
+</div></section></main><footer><div class="container copy">© 2026 JobSeek · Review the original employer vacancy before applying.</div></footer><script src="supabase-client.js"></script><script>
 const q=new URLSearchParams(location.search),$=id=>document.getElementById(id);
 const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const dateValue=j=>j.closing_date||j.closing_at||j.application_deadline||j.end_date||'';function extractRequirementEvidence(text){const source=String(text||'').replace(/\r/g,'');const lines=source.split(/\n|[•▪●]/).map(x=>x.trim()).filter(Boolean);const pat=/(requirements?|qualifications?|required skills?|skills?|experience|education|certifications?|duties?|responsibilities?)/i;const strong=/\b(must|required|preferred|minimum|years? of experience|degree|diploma|certificate|license|licen[cs]e|proficien|ability to|knowledge of|experience with|experience in)\b/i;const hits=lines.filter(x=>pat.test(x)||strong.test(x));if(hits.length)return [...new Set(hits)].slice(0,40).join('\n');const sentences=source.split(/(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(x=>x.length>18&&strong.test(x));return sentences.slice(0,25).join('\n');}\n
