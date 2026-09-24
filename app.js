@@ -43,7 +43,7 @@
       wrap.appendChild(menu);
     }
 
-    let nav=wrap.querySelector('#nav');
+    let nav=wrap.querySelector('#nav') || wrap.querySelector('nav');
     if(!nav){
       nav=document.createElement('nav');
       nav.id='nav';
@@ -72,7 +72,7 @@
     const authLinks=[['jobs.html','Browse Jobs','🔎'],['pricing.html','Plans','⭐'],['auth.html','Sign in','→']];
     const links=isAdmin?adminLinks:(isAuth?authLinks:publicLinks);
 
-    nav.className='site-nav'+(isAdmin?' admin-site-nav':'');
+    nav.id='nav'; nav.className='site-nav'+(isAdmin?' admin-site-nav':'');
     nav.innerHTML=links.map(([href,label,icon])=>'<a href="'+href+'" data-nav-link="'+href.split('?')[0]+'"><span class="nav-icon" aria-hidden="true">'+icon+'</span><span>'+label+'</span></a>').join('');
 
     const current=path;
