@@ -24,6 +24,8 @@ function buildChips(){const cats=['All',...new Set(all.map(j=>j.category||'Gener
 function normalizeType(j){return String(j.employment_type||j.job_type||'').replace(/[\[\]'\"]+/g,'').trim().toLowerCase()}
 async function fetchFeed(url){const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),12000);try{const r=await fetch(url+'?v='+Date.now(),{cache:'no-store',headers:{Accept:'application/json'},signal:controller.signal});if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();return Array.isArray(d)?d:(d.jobs||[])}finally{clearTimeout(timer)}}
 function applyInitialSearch(){
+  const category=initialParams.get('category')||'';
+  if(category)activeCategory=decodeURIComponent(category);
   const keyword=initialParams.get('keyword')||initialParams.get('q')||'';
   const country=initialParams.get('country')||'';
   const region=initialParams.get('region')||initialParams.get('location')||'';
