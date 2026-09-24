@@ -1,65 +1,18 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>JobSeek | Candidate Dashboard</title><link rel="stylesheet" href="styles.css"></head>
-<body class="candidate-dashboard-page">
-<header><div class="container nav">
-<a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a>
-<button id="menu" aria-label="Open navigation" aria-expanded="false">☰</button><nav id="nav"></nav>
-</div></header>
-<main>
-<div class="dashboard-shell">
-<aside class="dashboard-sidebar">
-<div class="side-title">Workspace</div>
-<a class="active" href="candidate-dashboard.html">⌂ Dashboard</a>
-<a href="job-matches.html">◎ My Matches</a>
-<a href="candidate-documents.html">▣ My CV</a>
-<a href="jobs.html">⌕ Find Jobs</a>
-<a href="application-assistant.html">✦ Applications</a>
-<div class="side-title">Tools</div>
-<a href="ats-cv-builder.html">▤ CV Builder</a>
-<a href="job-alerts.html">◉ Notifications</a>
-<a href="profile-builder.html">⚙ Settings</a>
-</aside>
-<section class="dashboard-content">
-<div class="dashboard-top"><div><p class="eyebrow" style="margin-bottom:4px">JOBSEEK CANDIDATE DASHBOARD</p><h1 id="welcome" style="font-size:27px;margin:0">Welcome back!</h1><p class="micro">Here's your job search summary and latest matches.</p></div><button class="outline" id="logout">Log out</button></div>
-<div class="dashboard-kpis">
-<div class="dashboard-kpi"><small>TOTAL MATCHES</small><strong id="dashMatches">—</strong><em>Personalized</em></div>
-<div class="dashboard-kpi"><small>STRONG MATCHES</small><strong id="dashStrong">—</strong><em>80%+ fit</em></div>
-<div class="dashboard-kpi"><small>APPLICATIONS</small><strong id="dashApps">—</strong><em>Track progress</em></div>
-<div class="dashboard-kpi"><small>PROFILE COMPLETION</small><strong id="dashProfile">—</strong><div class="profile-meter"><span id="dashProfileBar" style="width:0"></span></div></div>
-</div>
-<div class="dashboard-main-grid">
-<div class="dashboard-panel">
-<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><div><p class="eyebrow" style="margin-bottom:4px">YOUR TOP JOB MATCHES</p><h2>Recommended opportunities</h2></div><a class="text-link" href="job-matches.html">View all</a></div>
-<div id="recommendationList" style="margin-top:10px">Calculating your best matches…</div>
-</div>
-<div>
-<div id="strength" class="dashboard-panel dashboard-profile-card">
-<p class="eyebrow" style="margin-bottom:5px">PROFILE STRENGTH</p><h2 style="font-size:18px">Recruitment readiness</h2>
-<div id="score" style="font-size:34px;font-weight:900;color:#1268e8;margin-top:6px">—%</div>
-<div class="profile-meter"><span id="bar" style="width:0"></span></div>
-<p id="strengthText" class="micro">Checking your profile…</p><ul id="missing" style="font-size:10px;color:#6c7c90;padding-left:17px"></ul>
-<a class="btn" href="candidate-documents.html" style="width:100%;margin-top:8px">Complete my profile</a>
-</div>
-<div class="dashboard-panel" style="margin-top:14px">
-<p class="eyebrow" style="margin-bottom:5px">QUICK ACTIONS</p>
-<a class="outline" href="ats-cv-builder.html" style="width:100%;margin-bottom:7px">Build ATS CV</a>
-<a class="outline" href="jobs.html" style="width:100%;margin-bottom:7px">Find more jobs</a>
-<a class="outline" href="application-assistant.html" style="width:100%">Application Assistant</a>
-</div>
-</div>
-</div>
-<div class="dashboard-notice" style="margin-top:14px">✓ <strong>Your information is secure.</strong> JobSeek uses your profile to help identify potential matches. Always review and approve your application before submitting.</div>
-<section id="downloads" class="dashboard-panel" style="margin-top:14px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><p class="eyebrow" style="margin-bottom:4px">MY DOCUMENTS</p><h2>CV & documents</h2></div><div><button class="btn" type="button" id="downloadProfile">Download profile</button> <button class="outline" type="button" id="printProfile">Print</button></div></div><div id="dashboardDownloads" style="margin-top:10px">Loading your documents…</div></section>
-<div id="notice" class="dashboard-panel" style="margin-top:14px">Loading your profile…</div>
-<form id="profileForm" class="dashboard-panel" style="margin-top:14px;display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))">
-<h2 style="grid-column:1/-1">My profile</h2>
-<label>Full name<input id="full_name"></label><label>Phone<input id="phone"></label><label>Nationality<input id="nationality"></label><label>Country of residence<input id="country_of_residence"></label><label>City<input id="city"></label><label>Profession<input id="profession"></label><label>Target job<input id="target_job"></label><label>Years of experience<input id="years_experience" type="number" min="0" step="0.5"></label><label>Education<input id="education"></label><label>Visa status<input id="visa_status"></label><label>Availability<input id="availability"></label><label>Skills<input id="skills" placeholder="JavaScript, accounting, welding…"></label><label>Languages<input id="languages"></label><label>Preferred countries<input id="preferred_countries" placeholder="Canada, UK, Germany…"></label><label>Preferred job types<input id="preferred_job_types" placeholder="Full-time, Remote…"></label>
-<div style="grid-column:1/-1"><button class="btn" type="submit">Save profile</button><span id="saveStatus" class="micro" style="margin-left:10px"></span></div>
-</form>
-<div class="dashboard-panel" style="margin-top:14px"><p class="eyebrow" style="margin-bottom:4px">APPLICATION TRACKING</p><h2>Recent activity</h2><div id="applications">No applications loaded yet.</div></div>
-</section></div></main>
-<script src="app.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-client.js"></script><script src="job-matching.js"></script>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JobSeek | Dashboard</title><link rel="stylesheet" href="styles.css?v=20260924-ui3"></head>
+<body class="candidate-dashboard-page reference-dashboard-ui"><header><div class="container nav"><a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a><button id="menu" aria-label="Open navigation" aria-expanded="false">☰</button><nav id="nav"></nav><div class="nav-user"><span>♧</span><span class="avatar">JD</span><span>Good morning,<br><b>John Doe</b></span><span>⌄</span></div></div></header>
+<main><div class="dashboard-shell">
+<aside class="dashboard-sidebar reference-sidebar"><div class="side-title">Workspace</div><a class="active" href="candidate-dashboard.html">⌂ &nbsp; Dashboard</a><a href="candidate-documents.html">▣ &nbsp; My CV</a><a href="job-matches.html">◎ &nbsp; Job Matches</a><a href="jobs.html">♡ &nbsp; Saved Jobs</a><a href="application-assistant.html">▤ &nbsp; Applications</a><a href="job-alerts.html">♧ &nbsp; Notifications <em>3</em></a><a href="profile-builder.html">⚙ &nbsp; Settings</a></aside>
+<section class="dashboard-content reference-dashboard-content">
+<div class="reference-welcome"><div><h1 id="welcome">Welcome back, John!</h1><p>Here's your job search summary and latest matches.</p></div></div>
+<div class="reference-kpis"><div><small>Total Matches</small><strong id="dashMatches">17</strong><em>+3 new</em></div><div><small>Strong Matches</small><strong id="dashStrong">5</strong><em>You're a great fit</em></div><div><small>Applications</small><strong id="dashApps">4</strong><em>2 pending</em></div><div><small>Profile Completion</small><strong id="dashProfile">80%</strong><div class="profile-meter"><span id="dashProfileBar" style="width:80%"></span></div></div></div>
+<div class="reference-dashboard-grid"><div class="dashboard-panel reference-match-panel"><div class="reference-panel-head"><div><h2>Your Top Job Matches</h2></div><a href="job-matches.html">View all</a></div><div id="recommendationList" class="reference-dashboard-jobs"><div class="dashboard-job-row"><div class="dashboard-job-logo">▦</div><div><h3>Software Engineer</h3><p>Microsoft · London, UK</p><span class="dashboard-match">93% Strong Match</span></div><a class="reference-blue-btn small" href="jobs.html">Apply</a></div><div class="dashboard-job-row"><div class="dashboard-job-logo">M</div><div><h3>Senior Financial Crime Investigator</h3><p>Monzo · London, UK</p><span class="dashboard-match">87% Strong Match</span></div><a class="reference-blue-btn small" href="jobs.html">Apply</a></div><div class="dashboard-job-row"><div class="dashboard-job-logo stripe">stripe</div><div><h3>Full Stack Engineer</h3><p>Stripe · Remote</p><span class="dashboard-match">84% Strong Match</span></div><a class="reference-blue-btn small" href="jobs.html">Apply</a></div><div class="dashboard-job-row"><div class="dashboard-job-logo">a</div><div><h3>Data Analyst</h3><p>Amazon · Berlin, Germany</p><span class="dashboard-match yellow">78% Possible Match</span></div><a class="reference-blue-btn small" href="jobs.html">Apply</a></div></div></div>
+<div><div id="strength" class="dashboard-panel reference-profile"><div class="profile-head"><span class="avatar">JD</span><div><b>John Doe</b><small>john.doe@email.com</small></div></div><h2>Profile Strength</h2><strong id="score">80%</strong><div class="profile-meter"><span id="bar" style="width:80%"></span></div><p id="strengthText">Your profile is looking strong.</p><ul id="missing"></ul><a class="outline" href="profile-builder.html">Improve profile</a></div>
+<div class="dashboard-panel reference-quick"><h2>Quick Actions</h2><a href="job-matches.html">◎ &nbsp; Find my matches</a><a href="ats-cv-builder.html">▤ &nbsp; Build ATS CV</a><a href="application-assistant.html">✦ &nbsp; Application Assistant</a></div></div></div>
+<div class="dashboard-notice reference-notice">✓ &nbsp; <b>You have 3 new job matches!</b><span>Based on your CV, we found new opportunities that match your profile.</span><a class="reference-blue-btn small" href="job-matches.html">View Matches</a></div>
+<section id="downloads" class="dashboard-panel reference-activity"><div class="reference-panel-head"><h2>Recent Activity</h2><a href="application-assistant.html">View all</a></div><div id="applications">Loading your recent applications…</div><div id="dashboardDownloads" style="display:none"></div><button id="downloadProfile" style="display:none"></button><button id="printProfile" style="display:none"></button></section>
+<div id="notice" class="dashboard-panel" style="display:none"></div>
+<form id="profileForm" style="display:none"><input id="full_name"><input id="phone"><input id="nationality"><input id="country_of_residence"><input id="city"><input id="profession"><input id="target_job"><input id="years_experience"><input id="education"><input id="visa_status"><input id="availability"><input id="skills"><input id="languages"><input id="preferred_countries"><input id="preferred_job_types"></form>
+</section></div></main><footer><div class="container copy">© 2026 JobSeek · Your dashboard keeps your search organized.</div></footer><script src="app.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-client.js"></script><script src="job-matching.js"></script>
 <script>
 const fields=['full_name','phone','nationality','country_of_residence','city','profession','target_job','years_experience','education','visa_status','availability'];const arrays=['skills','languages','preferred_countries','preferred_job_types'];let client,user,profile,docs=[];const $=id=>document.getElementById(id);function value(id){return $(id).value.trim()}function arr(id){return value(id).split(',').map(x=>x.trim()).filter(Boolean)}function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function calculate(){const checks=[['full_name','Full name'],['phone','Phone'],['country_of_residence','Country of residence'],['profession','Profession'],['target_job','Target job'],['years_experience','Work experience'],['education','Education'],['skills','Skills'],['languages','Languages'],['preferred_countries','Preferred countries'],['availability','Availability']];let score=0,missing=[];checks.forEach(([f,n])=>{const v=profile?.[f];if(v!==null&&v!==undefined&&String(v).trim()&&(Array.isArray(v)?v.length:true))score+=Math.round(60/checks.length);else missing.push(n)});const docTypes=new Set(docs.map(d=>d.document_type));if(docTypes.has('cv'))score+=10;else missing.push('CV');if(docTypes.has('passport'))score+=10;else missing.push('Passport bio page');if(docTypes.has('certificate')||docTypes.has('qualification'))score+=10;else missing.push('Certificate/qualification');score=Math.min(100,score);$('score').textContent=score+'%';$('bar').style.width=score+'%';$('strengthText').textContent=score>=70?'Your profile has reached the JobSeek 70% recruitment-readiness target. Keep improving it for stronger matching.':'Complete the missing items to reach the 70% recruitment-readiness target.';$('missing').innerHTML=missing.map(x=>`<li>${esc(x)}</li>`).join('')}
