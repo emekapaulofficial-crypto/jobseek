@@ -9,7 +9,7 @@
 .match-hero{padding:22px;margin:18px 0;background:#f7faff}.match-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}.match-score{font-size:30px;font-weight:800}.factor{font-size:12px;display:inline-block;padding:5px 8px;margin:3px;border:1px solid #ddd;border-radius:999px}.match-bar{height:8px;background:#e5e7eb;border-radius:8px;overflow:hidden}.match-bar>span{display:block;height:100%;background:currentColor}.muted{color:#667085}.job-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 </style>
 </head>
-<body>
+<body><header><div class="container nav"><a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a><button id="menu" aria-label="Open navigation" aria-expanded="false">☰</button><nav id="nav"><a href="jobs.html">Find Jobs</a><a href="candidate-dashboard.html">Dashboard</a><a href="job-matches.html">My Matches</a><a href="ats-cv-builder.html">CV Builder</a><a href="application-assistant.html">Application Assistant</a></nav></div></header>
 <main class="section"><div class="container">
 <p class="eyebrow">JOBSEEK SMART MATCH</p>
 <h1>Jobs matched to you</h1>
@@ -20,7 +20,7 @@
 <div id="content" class="match-grid" style="margin-top:14px"></div>
 <p style="margin-top:24px"><a href="candidate-dashboard.html">← Candidate dashboard</a> · <a href="jobs.html">Browse all jobs</a></p>
 </div></main>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-client.js"></script>
 <script src="job-matching.js"></script>
 <script>
