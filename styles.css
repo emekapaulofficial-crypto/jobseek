@@ -472,3 +472,14 @@ body:not(.home-page):not(.jobs-page) .job-details-shell{}
 .jobs-page .jobs-list .job{position:relative}
 @media(max-width:980px){.jobs-workspace{grid-template-columns:1fr}.job-filter-sidebar{position:static}.jobs-content{min-width:0}.jobs-page .jobs-list{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.jobs-page .jobs-list{grid-template-columns:1fr}.sort-label{display:none}}
+
+
+/* Final polish for supporting product pages */
+.auth-page,.pricing-page,.application-page{background:#f5f8fc}
+.auth-page main,.pricing-page main,.application-page main{background:#f5f8fc}
+.auth-page .section,.pricing-page .section{padding-top:48px}
+.auth-page .job{border-radius:14px;box-shadow:var(--ui-shadow)}
+.pricing-page .hero{background:linear-gradient(135deg,#063d86,#0b5abd);color:#fff}
+.pricing-page .hero h1{color:#fff}.pricing-page .hero .lead{color:#dcecff}
+.application-page .card{border-radius:13px;border-color:#dfe7f0;box-shadow:0 6px 20px rgba(15,35,64,.05)}
+.application-page .requirements-card{border-top:3px solid #1268e8}
