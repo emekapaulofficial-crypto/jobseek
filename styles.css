@@ -1051,3 +1051,39 @@ button,.btn,.outline,a.reference-blue-btn,a.reference-search-btn{
   .reference-dashboard-jobs h3{font-size:15px}
   .reference-dashboard-jobs p{font-size:13px}
 }
+
+/* JobSeek mobile jobs filter drawer */
+.mobile-filter-toggle{display:none}
+@media(max-width:700px){
+  .reference-jobs-layout{display:block}
+  .mobile-filter-toggle{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    width:100%;min-height:52px;margin:0 0 12px;padding:13px 16px;
+    border:1px solid #cfdbea;border-radius:12px;background:#fff;color:#10233d;
+    font:700 16px/1.4 inherit;cursor:pointer;
+    box-shadow:0 4px 16px rgba(15,35,64,.06);
+  }
+  .mobile-filter-toggle small{font-size:13px;color:#155eef;font-weight:700}
+  .reference-filter{
+    display:none;
+    margin-bottom:16px;
+    max-height:calc(100vh - 140px);
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+    border:1px solid #dfe7f1;
+    box-shadow:0 12px 32px rgba(15,35,64,.10);
+  }
+  .reference-filter.mobile-open{display:block}
+  .reference-filter .filter-heading{
+    position:sticky;top:0;z-index:2;background:#fff;
+    padding-bottom:12px;border-bottom:1px solid #edf1f5;
+  }
+  .reference-filter label{font-size:14px}
+  .reference-filter .reference-check{font-size:14px;line-height:1.7}
+  .reference-filter select,
+  .reference-filter input:not([type="radio"]):not([type="checkbox"]){
+    font-size:16px;min-height:48px;
+  }
+  .reference-filter .reference-blue-btn{min-height:50px;font-size:15px}
+  .reference-results{padding-top:4px}
+}
