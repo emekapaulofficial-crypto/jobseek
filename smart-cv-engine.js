@@ -86,7 +86,8 @@
     const location=input.location||"[City, State]";
     const skills=(Array.isArray(input.skills)?input.skills:String(input.skills||"").split(/[,;\n]+/)).map(x=>x.trim()).filter(Boolean);
     const matchedJobSkills=job.keywords.filter(k=>skills.some(s=>norm(s).includes(k)||k.includes(norm(s))));
-    // Keep employer requirements separate from candidate evidence; never claim a vacancy skill unless the candidate supplied it.\n    const finalSkills=unique([...skills,...matchedJobSkills]).slice(0,18);
+    // Keep employer requirements separate from candidate evidence; never claim a vacancy skill unless the candidate supplied it.
+    const finalSkills=unique([...skills,...matchedJobSkills]).slice(0,18);
     const summary=input.summary && !VAGUE.some(v=>norm(input.summary).includes(v))
       ? input.summary
       : titleCase(role)+" focused on "+job.keywords.slice(0,6).map(titleCase).join(", ")+". Brings a structured, evidence-based approach to analysing data, solving business questions and communicating findings. Tailored to the specific employer requirements supplied for this vacancy.";
