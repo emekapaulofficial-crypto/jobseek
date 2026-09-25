@@ -1,14 +1,115 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JobSeek | Candidate Account</title><link rel="stylesheet" href="styles.css"></head>
-<body class="auth-page"><header><div class="container nav"><a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a><a class="outline" href="jobs.html" style="width:auto">Browse jobs</a></div></header><main class="section"><div class="container" style="max-width:620px">
-<p class="eyebrow">JOBSEEK RECRUITMENT</p><h1>Candidate account</h1><p class="lead">Create your free JobSeek account to save your recruitment profile, documents and application progress.</p>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JobSeek | Sign in</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="auth-page">
+<header><div class="container nav">
+<a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a>
+<a class="outline" href="jobs.html" style="width:auto">Browse jobs</a>
+</div></header>
+<main class="section"><div class="container" style="max-width:680px">
+<p class="eyebrow">JOBSEEK RECRUITMENT</p>
+<h1>Sign in to JobSeek</h1>
+<p class="lead">Choose the account type you use. Job seekers and employers have separate account areas and dashboards.</p>
+
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:22px 0">
+<button type="button" id="candidateRole" class="role-choice active" aria-pressed="true"><strong>👤 Job Seeker</strong><small>Find jobs, manage your CV and applications.</small></button>
+<button type="button" id="employerRole" class="role-choice" aria-pressed="false"><strong>🏢 Employer</strong><small>Manage your company and post vacancies.</small></button>
+</div>
+
 <div class="job" style="padding:24px">
-<div style="display:flex;gap:8px;margin-bottom:18px"><button class="btn" id="loginTab">Log in</button><button class="outline" id="signupTab">Create account</button></div>
-<form id="authForm"><label>Email</label><input id="email" type="email" required autocomplete="email" style="width:100%;padding:12px;margin:6px 0 14px"><label>Password</label><input id="password" type="password" required minlength="6" autocomplete="current-password" style="width:100%;padding:12px;margin:6px 0 14px"><div id="nameWrap" hidden><label>Full name</label><input id="fullName" autocomplete="name" style="width:100%;padding:12px;margin:6px 0 14px"></div><button class="btn" id="submitBtn" type="submit">Log in</button></form><p id="message" class="micro" role="status"></p><p class="micro">By continuing, you agree to JobSeek's terms. Candidate recruitment fees: <strong>₦0 / $0</strong>. JobSeek uses an employer-pays recruitment model.</p></div>
-<p><a href="index.html">← Back to JobSeek</a></p><p class="micro">Main admin access is protected. If no JobSeek admin exists yet, the first authenticated owner can initialize the admin role from the secure admin setup.</p></div></main>
-<script src="app.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-client.js"></script><script>
-const form=document.getElementById('authForm'), msg=document.getElementById('message'), nameWrap=document.getElementById('nameWrap'), fullName=document.getElementById('fullName'), submit=document.getElementById('submitBtn'); let mode=new URLSearchParams(location.search).get('mode')==='signup'?'signup':'login';
-function setMode(m){mode=m;nameWrap.hidden=m==='login';submit.textContent=m==='login'?'Log in':'Create free account';document.getElementById('loginTab').className=m==='login'?'btn':'outline';document.getElementById('signupTab').className=m==='signup'?'btn':'outline'}
-document.getElementById('loginTab').onclick=()=>setMode('login');document.getElementById('signupTab').onclick=()=>setMode('signup');setMode(mode);
-form.onsubmit=async e=>{e.preventDefault();msg.textContent='Please wait…';try{if(!JobSeekSupabase.configured)throw Error('Supabase public key is not configured yet.');const client=supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key);let result;if(mode==='login')result=await client.auth.signInWithPassword({email:email.value,password:password.value});else result=await client.auth.signUp({email:email.value,password:password.value,options:{data:{full_name:fullName.value,role:'candidate'}}});if(result.error)throw result.error;msg.textContent=mode==='login'?'Login successful. Redirecting…':'Account created. Check your email if confirmation is required.';if(mode==='login'){const u=await client.auth.getUser();if(u.data.user){const ar=await client.from('jobseek_accounts').select('role').eq('id',u.data.user.id).maybeSingle();if(ar.data?.role==='admin'||ar.data?.role==='agent'){location.replace('admin-dashboard.html');return}location.replace('candidate-dashboard.html')}}else{const u=await client.auth.getUser();if(u.data.user){location.replace('candidate-dashboard.html')}else{msg.textContent='Account created. Please confirm your email, then sign in to continue.'}}}catch(err){msg.textContent=err.message||'Authentication failed.'}};
-</script></body></html>
+<div style="display:flex;gap:8px;margin-bottom:18px">
+<button class="btn" id="loginTab" type="button">Log in</button>
+<button class="outline" id="signupTab" type="button">Create account</button>
+</div>
+<form id="authForm">
+<label>Email</label>
+<input id="email" type="email" required autocomplete="email" style="width:100%;padding:12px;margin:6px 0 14px">
+<label>Password</label>
+<input id="password" type="password" required minlength="6" autocomplete="current-password" style="width:100%;padding:12px;margin:6px 0 14px">
+<div id="nameWrap" hidden><label>Full name</label><input id="fullName" autocomplete="name" style="width:100%;padding:12px;margin:6px 0 14px"></div>
+<div id="companyWrap" hidden><label>Company name</label><input id="companyName" autocomplete="organization" style="width:100%;padding:12px;margin:6px 0 14px"></div>
+<button class="btn" id="submitBtn" type="submit">Log in as Job Seeker</button>
+</form>
+<p id="message" class="micro" role="status"></p>
+<p class="micro">Your account type controls which dashboard you enter. Do not create an employer account if you are applying as a job seeker.</p>
+</div>
+<p><a href="index.html">← Back to JobSeek</a></p>
+</div></main>
+<style>
+.role-choice{width:100%;text-align:left;border:2px solid #d8e1ed;background:#fff;border-radius:14px;padding:16px;cursor:pointer;display:flex;flex-direction:column;gap:6px;color:#10233d}
+.role-choice strong{font-size:17px}.role-choice small{color:#607086;line-height:1.5}
+.role-choice.active{border-color:#155eef;box-shadow:0 6px 20px rgba(21,94,239,.12);background:#f7fbff}
+@media(max-width:560px){.role-choice{padding:13px}.role-choice strong{font-size:15px}}
+</style>
+<script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<script>
+const form=document.getElementById('authForm'),msg=document.getElementById('message'),nameWrap=document.getElementById('nameWrap'),companyWrap=document.getElementById('companyWrap'),fullName=document.getElementById('fullName'),companyName=document.getElementById('companyName'),submit=document.getElementById('submitBtn');
+let mode=new URLSearchParams(location.search).get('mode')==='signup'?'signup':'login';
+let accountType=new URLSearchParams(location.search).get('role')==='employer'?'employer':'candidate';
+const roleLabel=()=>accountType==='employer'?'Employer':'Job Seeker';
+function setRole(role){
+ accountType=role;
+ document.getElementById('candidateRole').className=role==='candidate'?'role-choice active':'role-choice';
+ document.getElementById('employerRole').className=role==='employer'?'role-choice active':'role-choice';
+ document.getElementById('candidateRole').setAttribute('aria-pressed',String(role==='candidate'));
+ document.getElementById('employerRole').setAttribute('aria-pressed',String(role==='employer'));
+ updateMode();
+}
+function updateMode(){
+ nameWrap.hidden=mode==='login';
+ companyWrap.hidden=mode==='login'||accountType!=='employer';
+ submit.textContent=mode==='login'?'Log in as '+roleLabel():'Create '+roleLabel()+' account';
+ document.getElementById('loginTab').className=mode==='login'?'btn':'outline';
+ document.getElementById('signupTab').className=mode==='signup'?'btn':'outline';
+}
+document.getElementById('candidateRole').onclick=()=>setRole('candidate');
+document.getElementById('employerRole').onclick=()=>setRole('employer');
+document.getElementById('loginTab').onclick=()=>{mode='login';updateMode()};
+document.getElementById('signupTab').onclick=()=>{mode='signup';updateMode()};
+setRole(accountType);
+
+async function accountRole(client,uid){
+ const r=await client.from('jobseek_accounts').select('role').eq('id',uid).maybeSingle();
+ if(r.error)throw r.error;
+ return r.data?.role||null;
+}
+function goForRole(role){
+ if(role==='admin'||role==='agent')return location.replace('admin-dashboard.html');
+ if(role==='employer')return location.replace('employer-portal.html');
+ return location.replace('candidate-dashboard.html');
+}
+form.onsubmit=async e=>{
+ e.preventDefault();msg.textContent='Please wait…';
+ try{
+  if(!JobSeekSupabase.configured)throw Error('Supabase public key is not configured yet.');
+  const client=supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key);
+  let result;
+  if(mode==='login'){
+   result=await client.auth.signInWithPassword({email:email.value,password:password.value});
+   if(result.error)throw result.error;
+   const role=await accountRole(client,result.data.user.id);
+   if(role!==accountType && !((role==='admin'||role==='agent')&&accountType==='candidate')){
+    await client.auth.signOut();
+    throw Error('This email belongs to a '+(role==='employer'?'Employer':'Job Seeker')+' account. Please choose the correct sign in option.');
+   }
+   msg.textContent='Login successful. Redirecting…';goForRole(role);
+  }else{
+   const metadata={full_name:fullName.value.trim(),role:accountType};
+   result=await client.auth.signUp({email:email.value,password:password.value,options:{data:metadata}});
+   if(result.error)throw result.error;
+   if(result.data.user){
+    msg.textContent=result.data.session?'Account created. Redirecting…':'Account created. Check your email if confirmation is required.';
+    if(result.data.session)goForRole(accountType);
+   }
+  }
+ }catch(err){msg.textContent=err.message||'Authentication failed.'}
+};
+</script>
+</body></html>
