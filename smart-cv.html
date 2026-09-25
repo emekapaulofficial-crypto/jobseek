@@ -7,22 +7,24 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-client.js"></script>
 <script src="smart-cv-engine.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.min.mjs" type="module"></script>
 <script>
+window.__jobseekCvBootError = null;
 window.addEventListener('error', function(e){
-  var s=document.getElementById('root');
-  if(s && !s.dataset.engineError && e.message){
-    s.dataset.engineError='1';
-    s.innerHTML='<div style="max-width:760px;margin:80px auto;padding:28px;background:white;border:1px solid #e5e7eb;border-radius:20px;font-family:system-ui"><h1 style="margin:0 0 10px">JobSeek Smart CV</h1><p style="color:#b91c1c;font-weight:700">The CV engine could not start.</p><p>Please refresh the page. If the problem continues, the page will still provide the basic CV builder after the engine scripts finish loading.</p><button onclick="location.reload()" style="padding:12px 18px;border:0;border-radius:10px;background:#2563eb;color:white;font-weight:700">Reload CV Engine</button></div>';
-  }
+  if(e && e.filename && /smart-cv-engine\.js|supabase-client\.js/.test(e.filename)) window.__jobseekCvBootError = e.message || 'Engine script error';
 });
 </script>
 <style>body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.score-ring{background:conic-gradient(var(--ring) calc(var(--score)*1%),#e5e7eb 0)}.doc{white-space:pre-wrap;font-family:Arial,sans-serif}.tab{min-height:420px}</style>
 </head><body class="bg-slate-50 text-slate-900"><div id="root"></div>
 <script>
 const {useState,useEffect}=React;
-if(!window.JobSeekSmartCV){document.getElementById('root').innerHTML='<div style="padding:40px;font-family:system-ui"><h2>Smart CV Engine is loading…</h2><p>Please refresh once. If this message remains, the engine file is unavailable.</p></div>'; throw new Error('JobSeekSmartCV unavailable');}
-const client=window.supabase?.createClient(JobSeekSupabase.url,JobSeekSupabase.key);
+const cvEngine=window.JobSeekSmartCV;
+const supabaseConfig=window.JobSeekSupabase||{};
+const client=(window.supabase&&typeof window.supabase.createClient==='function'&&supabaseConfig.url&&supabaseConfig.key)
+  ? window.supabase.createClient(supabaseConfig.url,supabaseConfig.key) : null;
+if(!cvEngine){
+  document.getElementById('root').innerHTML='<div style="max-width:760px;margin:60px auto;padding:28px;background:white;border:1px solid #e5e7eb;border-radius:20px;font-family:system-ui"><h1 style="margin:0 0 10px">JobSeek Smart CV</h1><p style="color:#b91c1c;font-weight:700">The Smart CV engine file did not load.</p><p style="color:#475569">The page itself is working. Please check your GitHub Pages deployment and refresh this page.</p><button onclick="location.reload()" style="margin-top:14px;padding:12px 18px;border:0;border-radius:10px;background:#2563eb;color:white;font-weight:700">Reload CV Engine</button></div>';
+}else{
+
 function App(){
  const [user,setUser]=useState(null),[profile,setProfile]=useState(null),[targetRole,setTargetRole]=useState(''),[company,setCompany]=useState(''),[cvText,setCvText]=useState(''),[result,setResult]=useState(null),[docs,setDocs]=useState(null),[tab,setTab]=useState('cv'),[busy,setBusy]=useState(false),[status,setStatus]=useState('');
  const [form,setForm]=useState({name:'',email:'',phone:'',location:'',title:'',summary:'',skills:'',experience:'',education:'',certifications:''});
@@ -96,4 +98,5 @@ function App(){
 }
 function field(label,value,onChange,placeholder){return React.createElement('div',null,React.createElement('label',{className:'font-bold text-sm'},label),React.createElement('input',{value,onChange:e=>onChange(e.target.value),placeholder,className:'mt-1 w-full border rounded-xl p-3'}));}
 ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+}
 </script></body></html>
