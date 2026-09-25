@@ -1,50 +1,136 @@
-/* JobSeek Smart CV & Application Engine v1 — LOCKED */
-(function(){
-'use strict';
-const ROLE_KEYWORDS={
-'product manager':['product roadmap','prd','agile','scrum','user research','figma','wireframe','jira','mvp','user story','stakeholder','analytics','product lifecycle'],
-'developer':['javascript','react','node.js','api','git','github'],
-'software developer':['javascript','react','node.js','api','git','github'],
-'designer':['figma','ui/ux','prototype','wireframe','adobe'],
-'ui/ux designer':['figma','ui/ux','prototype','wireframe','adobe']
-};
-const ACTIONS=['managed','launched','built','led','increased','designed','achieved','created','developed','implemented','delivered','coordinated','improved','optimized','analysed','analyzed','deployed','automated','supervised'];
-const VAGUE=['i can do this and that','am good in all i do','this and that','etc','i can do anything','hardworking','any work','am good','anything','good in all i do'];
-const norm=s=>String(s||'').toLowerCase().replace(/\s+/g,' ').trim();
-const words=s=>norm(s).match(/[a-z0-9+#./-]+/g)||[];
-const unique=a=>[...new Set(a)];
-const titleCase=s=>String(s||'').replace(/\b([a-z])/g,m=>m.toUpperCase());
-function roleKey(role){const r=norm(role);return ROLE_KEYWORDS[r]?r:(Object.keys(ROLE_KEYWORDS).find(k=>r.includes(k))||r);}
-function roleKeywords(role,extra=''){const base=ROLE_KEYWORDS[roleKey(role)]||[];const extras=norm(extra).split(/[,;\n]+/).map(x=>x.trim()).filter(x=>x.length>3).slice(0,20);return unique([...base,...extras]);}
-function extractJobRequirements(jobDescription,targetRole){const text=String(jobDescription||''),lower=norm(text);const role=roleKey(targetRole);const roleTerms=ROLE_KEYWORDS[role]||[];const common=['communication','leadership','management','analysis','research','customer','client','stakeholder','project','team','strategy','reporting','excel','microsoft office','sql','python','javascript','react','node.js','api','git','github','figma','jira','agile','scrum','sales','marketing','operations','finance','accounting','recruitment','compliance','documentation','presentation'];const found=unique([...roleTerms,...common].filter(k=>lower.includes(k)));const bullets=text.split(/\n|•|\.|;/).map(x=>x.trim()).filter(x=>x.length>25&&/(responsib|require|qualif|experience|skill|knowledge|ability|must|should|will|duties|role)/i.test(x)).slice(0,12);return {keywords:found,requirements:bullets,summary:text.slice(0,900)};}\nfunction scoreCV(cvText,targetRole,jobDescription=''){
- const text=String(cvText||''),lower=norm(text),feedback=[],positives=[];let score=100;
- VAGUE.forEach(p=>{const hits=lower.split(p).length-1;if(hits){score-=20*hits;for(let i=0;i<hits;i++)feedback.push('Avoid vague phrase: "'+p+'"');}});
- [['experience','Professional Experience'],['education','Education'],['professional summary','Professional Summary']].forEach(([n,l])=>{if(!lower.includes(n)){score-=10;feedback.push('Missing '+l);}});
- const wc=words(text).length;if(wc<100){score-=15;feedback.push('CV is under 100 words; add enough professional evidence.');}else if(wc>=150)positives.push('CV has professional length.');
- const nums=text.match(/(?:\b\d+(?:\.\d+)?%?\b|\b\d+[+]?\s*(?:users|customers|clients|months?|years?|people|projects?)\b)/gi)||[];
- if(!nums.length){score-=20;feedback.push('No measurable results — add numbers, percentages, scale or time.');}else positives.push('Measurable evidence detected.');
- const actionHits=ACTIONS.filter(v=>lower.includes(v));if(!actionHits.length){score-=10;feedback.push('Use action verbs such as Managed, Led, Built, Launched, Designed or Achieved.');}else positives.push('Action verbs detected: '+actionHits.slice(0,6).join(', ')+'.');
- if(/\b(?:am|u|wont|won't)\b/i.test(text)){score-=5;feedback.push('Replace slang/informal wording such as "am", "u" or "wont".');}
- const jd=extractJobRequirements(jobDescription,targetRole),keywords=unique([...roleKeywords(targetRole),...jd.keywords]);if(keywords.length){const matched=keywords.filter(k=>lower.includes(k));const pct=matched.length/keywords.length;if(pct<.4){feedback.push('Low keyword match for '+(targetRole||'the target role')+', ATS may reject this CV.');score-=10;}else positives.push('ATS keyword match: '+Math.round(pct*100)+'%.');}
- if(!/\b(?:19|20)\d{2}\b/.test(text)&&lower.includes('experience')){score-=5;feedback.push('Add dates to education and work experience.');}
- const clean=Math.max(0,Math.min(100,score)),level=clean>=80?'STRONG':clean>=50?'AVERAGE':'WEAK';
- return {score:clean,level,feedback:unique(feedback),positives:unique(positives),matchedKeywords:keywords.filter(k=>lower.includes(k)),keywordCoverage:keywords.length?Math.round(keywords.filter(k=>lower.includes(k)).length/keywords.length*100):0,wordCount:wc,applicationEligible:clean>=50,jobRequirements:jd};
-}
-function gapSkills(role){const k=roleKey(role);if(ROLE_KEYWORDS[k]?.length)return ROLE_KEYWORDS[k].slice(0,10).map(titleCase);return ['Communication','Project Coordination','Problem Solving','Stakeholder Management','Research','Documentation','Data Analysis','Microsoft Office','Team Collaboration','Time Management'];}
-function professionalExperience(role,location){return '[Product/role-related project or internship] — [Company/Organisation] — [Add Dates] — '+(location||'[Location]')+'\n• Led [project/task] using '+gapSkills(role).slice(0,3).join(', ')+' to support [target outcome].\n• Conducted [research/customer/user] work with [30+ participants/users] and documented findings for stakeholders.\n• Built or improved [project/product/process], achieving [Add measurable result].\n• Coordinated [team/workstream] and tracked delivery using [Tool].';}
-function tailorText(text,jobDescription,targetRole){const jd=extractJobRequirements(jobDescription,targetRole);if(!jd.keywords.length)return String(text||'');const existing=norm(text);const missing=jd.keywords.filter(k=>!existing.includes(k)).slice(0,8);if(!missing.length)return String(text||'');return String(text||'')+'\n\nTARGET JOB ALIGNMENT — review before use:\nRelevant employer keywords: '+missing.join(', ')+'. Only add these to your final CV if they truthfully match your real skills or experience.';}\nfunction smartFill(input={}){
- const role=input.targetRole||input.title||'Professional',location=input.location||'[City, State]',jobDescription=input.jobDescription||'',jd=extractJobRequirements(jobDescription,role),name=titleCase(input.name||'[Full Name]'),email=input.email||'[Professional Email]',phone=input.phone||'[Phone]';
- const education=input.education||'[Institution Name] — [Qualification / Degree] — [Add Year]';
- const skills=(Array.isArray(input.skills)?input.skills:String(input.skills||'').split(/[,;\n]+/)).map(x=>x.trim()).filter(x=>x&&!VAGUE.includes(norm(x)));
- const finalSkills=unique([...skills,...gapSkills(role),...jd.keywords.map(titleCase)]).slice(0,16);
- const exp=input.experience&&!VAGUE.some(v=>norm(input.experience).includes(v))?input.experience:professionalExperience(role,location);
- const summary=input.summary&&!VAGUE.some(v=>norm(input.summary).includes(v))?input.summary:titleCase(role)+' with a developing professional foundation in '+finalSkills.slice(0,4).join(', ')+'. Brings experience from [projects, internships, academic or professional work] and a focus on delivering measurable results. Prepared to contribute to '+titleCase(role)+' responsibilities through structured problem solving, collaboration and continuous improvement. Based in '+location+'.';
- const guessed=[];if(!input.name)guessed.push('name');if(!input.email)guessed.push('email');if(!input.phone)guessed.push('phone');if(!input.location)guessed.push('location');if(!input.education)guessed.push('education');if(!input.experience||VAGUE.some(v=>norm(input.experience).includes(v)))guessed.push('experience');if(!input.skills||!skills.length)guessed.push('skills');if(!input.summary||VAGUE.some(v=>norm(input.summary).includes(v)))guessed.push('summary');
- const alignment=jd.keywords.length?'\nTarget employer requirements to verify: '+jd.keywords.slice(0,10).map(titleCase).join(', '):''; const cv=[name,email,phone,location,'Target Role: '+titleCase(role),'','PROFESSIONAL SUMMARY',summary,alignment,'','CORE SKILLS',finalSkills.map(s=>'• '+titleCase(s)).join('\n'),'','PROFESSIONAL EXPERIENCE',exp,'','EDUCATION',education,'','CERTIFICATIONS',input.certifications||'[Add relevant certification or "None" if applicable]'].join('\n');
- return {cv,summary,skills:finalSkills,experience:exp,education,guessedFields:guessed,jobRequirements:jd};
-}
-function coverLetter(data={}){const company=data.company||'[Company Name]',manager=data.hiringManager||'[Hiring Manager]',role=data.role||'[Role]',name=data.name||'[Full Name]',skills=(data.skills||[]).slice(0,5).join(', ')||'[relevant skills]';return 'Dear '+manager+',\n\nI am writing to apply for the '+role+' position at '+company+'. I have tailored this application to the employer requirements provided for this vacancy. The role highlights '+(req||skills)+'. My relevant background includes '+skills+'.\n\nMy background includes '+(data.experience||'[relevant experience, project or internship]')+'. I would bring a practical, organised approach, strong communication and a commitment to measurable results. I have tailored my application to the requirements provided for this role.\n\nI would welcome the opportunity to discuss how my background could support '+company+' and the '+role+' team. Thank you for considering my application.\n\nKind regards,\n'+name;}
-function applicationEmail(data={}){const company=data.company||'[Company Name]',role=data.role||'[Role]',name=data.name||'[Full Name]',req=(data.jobRequirements||[]).slice(0,5).join(', ');return 'Subject: Application for '+role+' — '+name+'\n\nDear '+(data.hiringManager||'[Hiring Manager]')+',\n\nPlease find my application for the '+role+' position at '+company+'. I have reviewed the vacancy requirements, including '+(req||'the stated role requirements')+', and tailored my application accordingly. I have attached my CV and cover letter for your review.\n\nMy background includes '+(data.experience||'[relevant experience or project]')+', with skills in '+((data.skills||[]).slice(0,6).join(', ')||'[relevant skills]')+'.\n\nThank you for your consideration. I would be pleased to discuss my application further.\n\nKind regards,\n'+name+'\n'+(data.email||'[Professional Email]')+'\n'+(data.phone||'[Phone]');}
-function linkedin(data={}){const role=data.role||'[Target Role]',name=data.name||'[Full Name]';return name+' | '+role+'\n\nI am a '+role+' professional building experience across '+((data.skills||[]).slice(0,6).join(', ')||'[relevant skills]')+'. My background includes '+(data.experience||'[professional, academic, project or internship experience]')+'. I enjoy solving practical problems, collaborating with teams and turning requirements into measurable outcomes.\n\nI am open to opportunities where I can contribute, learn and grow in '+role+'.';}
-window.JobSeekSmartCV={version:'smart-cv-v2-TAILORED-LOCKED',scoreCV,smartFill,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements,tailorText};
+/* JobSeek Smart CV & Application Engine v3 — vacancy tailored */
+(function () {
+  'use strict';
+
+  const ROLE_KEYWORDS = {
+    "product manager":["product roadmap","prd","agile","scrum","user research","figma","wireframe","jira","mvp","user story","stakeholder","analytics","product lifecycle"],
+    "developer":["javascript","react","node.js","api","git","github"],
+    "software developer":["javascript","react","node.js","api","git","github"],
+    "designer":["figma","ui/ux","prototype","wireframe","adobe"],
+    "ui/ux designer":["figma","ui/ux","prototype","wireframe","adobe"]
+  };
+  const COMMON = ["communication","leadership","management","analysis","research","customer","client","stakeholder","project","team","strategy","reporting","excel","microsoft office","sql","python","javascript","react","node.js","api","git","github","figma","jira","agile","scrum","sales","marketing","operations","finance","accounting","recruitment","compliance","documentation","presentation"];
+  const ACTIONS = ["managed","launched","built","led","increased","designed","achieved","created","developed","implemented","delivered","coordinated","improved","optimized","analysed","analyzed","deployed","automated","supervised"];
+  const VAGUE = ["i can do this and that","am good in all i do","this and that","etc","i can do anything","hardworking","any work","am good","anything","good in all i do"];
+
+  const norm = s => String(s || "").toLowerCase().replace(/\s+/g," ").trim();
+  const unique = a => [...new Set(a)];
+  const titleCase = s => String(s || "").replace(/\b([a-z])/g,m=>m.toUpperCase());
+  const words = s => norm(s).match(/[a-z0-9+#./-]+/g) || [];
+
+  function roleKey(role) {
+    const r = norm(role);
+    return ROLE_KEYWORDS[r] ? r : (Object.keys(ROLE_KEYWORDS).find(k=>r.includes(k)) || r);
+  }
+  function roleKeywords(role, extra="") {
+    const base = ROLE_KEYWORDS[roleKey(role)] || [];
+    const extras = String(extra).split(/[,;\n]+/).map(x=>norm(x)).filter(x=>x.length>3);
+    return unique([...base,...extras]);
+  }
+
+  function extractJobRequirements(jobDescription,targetRole) {
+    const text = String(jobDescription || "");
+    const lower = norm(text);
+    const roleTerms = ROLE_KEYWORDS[roleKey(targetRole)] || [];
+    const found = unique([...roleTerms,...COMMON].filter(k=>lower.includes(k)));
+    const lines = text.split(/\n|•/).map(x=>x.trim()).filter(Boolean);
+    const requirements = lines.filter(x=>x.length>25 && /(responsib|require|qualif|experience|skill|knowledge|ability|must|should|duties|role|preferred)/i.test(x)).slice(0,15);
+    return { keywords:found, requirements, summary:text.slice(0,1200) };
+  }
+
+  function scoreCV(cvText,targetRole,jobDescription="") {
+    const text=String(cvText||"");
+    const lower=norm(text);
+    const feedback=[],positives=[];
+    let score=100;
+    VAGUE.forEach(p=>{const hits=lower.split(p).length-1;if(hits){score-=15*hits;for(let i=0;i<hits;i++)feedback.push('Avoid vague phrase: "'+p+'"');}});
+    [["experience","Professional Experience"],["education","Education"],["professional summary","Professional Summary"]].forEach(([n,l])=>{if(!lower.includes(n)){score-=10;feedback.push("Missing "+l);}});
+    const wc=words(text).length;
+    if(wc<100){score-=15;feedback.push("CV is under 100 words; add professional evidence.");}
+    else if(wc>=150) positives.push("CV has professional length.");
+    const nums=text.match(/\b\d+(?:\.\d+)?%?\b/g)||[];
+    if(!nums.length){score-=15;feedback.push("Add measurable results such as numbers, percentages, scale or time.");}
+    else positives.push("Measurable evidence detected.");
+    const actionHits=ACTIONS.filter(v=>lower.includes(v));
+    if(!actionHits.length){score-=10;feedback.push("Use strong action verbs such as Managed, Led, Built, Launched or Achieved.");}
+    else positives.push("Action verbs detected: "+actionHits.slice(0,6).join(", ")+".");
+    const jd=extractJobRequirements(jobDescription,targetRole);
+    const keywords=unique([...roleKeywords(targetRole),...jd.keywords]);
+    const matched=keywords.filter(k=>lower.includes(k));
+    const coverage=keywords.length?Math.round(matched.length/keywords.length*100):0;
+    if(keywords.length){
+      if(coverage<40){score-=15;feedback.push("Low match to the exact employer vacancy requirements.");}
+      else if(coverage<70){score-=5;feedback.push("Moderate match to the exact employer vacancy requirements.");}
+      else positives.push("Strong vacancy keyword match: "+coverage+"%.");
+    }
+    const clean=Math.max(0,Math.min(100,score));
+    return {score:clean,level:clean>=80?"STRONG":clean>=50?"AVERAGE":"WEAK",feedback:unique(feedback),positives:unique(positives),matchedKeywords:matched,keywordCoverage:coverage,wordCount:wc,applicationEligible:clean>=50,jobRequirements:jd};
+  }
+
+  function gapSkills(role) {
+    const k=roleKey(role);
+    return (ROLE_KEYWORDS[k]||["communication","project coordination","problem solving","stakeholder management","research","documentation","data analysis","team collaboration"]).slice(0,10).map(titleCase);
+  }
+
+  function professionalExperience(role,location,job) {
+    const req=job.keywords.slice(0,5).map(titleCase).join(", ");
+    return "[Add your real role/project] — [Company/Organisation] — [Dates] — "+location+"\n"+
+      "• Describe your real work using evidence relevant to this vacancy: "+(req||gapSkills(role).slice(0,3).join(", "))+".\n"+
+      "• Add a measurable result, scope, users/customers, budget, time or percentage where truthful.\n"+
+      "• Add tools, responsibilities and outcomes that genuinely match the employer requirements.";
+  }
+
+  function smartFill(input={}) {
+    const role=input.targetRole||input.title||"Professional";
+    const job=extractJobRequirements(input.jobDescription||"",role);
+    const location=input.location||"[City, State]";
+    const skills=(Array.isArray(input.skills)?input.skills:String(input.skills||"").split(/[,;\n]+/)).map(x=>x.trim()).filter(Boolean);
+    const matchedJobSkills=job.keywords.filter(k=>skills.some(s=>norm(s).includes(k)||k.includes(norm(s))));
+    const finalSkills=unique([...matchedJobSkills,...skills,...gapSkills(role),...job.keywords.map(titleCase)]).slice(0,18);
+    const summary=input.summary && !VAGUE.some(v=>norm(input.summary).includes(v))
+      ? input.summary
+      : titleCase(role)+" professional with experience and skills aligned to the employer vacancy. Relevant areas include "+finalSkills.slice(0,6).join(", ")+". Add only verified achievements, qualifications and responsibilities from your real background.";
+    const experience=input.experience && !VAGUE.some(v=>norm(input.experience).includes(v))
+      ? input.experience
+      : professionalExperience(role,location,job);
+    const education=input.education||"[Institution] — [Qualification/Degree] — [Year]";
+    const guessed=[];
+    ["name","email","phone","location","education"].forEach(k=>{if(!input[k])guessed.push(k);});
+    if(!input.experience||VAGUE.some(v=>norm(input.experience).includes(v)))guessed.push("experience");
+    if(!input.skills)guessed.push("skills");
+    if(!input.summary||VAGUE.some(v=>norm(input.summary).includes(v)))guessed.push("summary");
+    const cv=[
+      input.name||"[Full Name]",input.email||"[Professional Email]",input.phone||"[Phone]",location,
+      "Target Role: "+titleCase(role),"","PROFESSIONAL SUMMARY",summary,
+      "","CORE SKILLS",finalSkills.map(s=>"• "+titleCase(s)).join("\n"),
+      "","PROFESSIONAL EXPERIENCE",experience,
+      "","EDUCATION",education,
+      "","CERTIFICATIONS",input.certifications||"[Add relevant certification or None]"
+    ].join("\n");
+    return {cv,summary,skills:finalSkills,experience,education,guessedFields:guessed,jobRequirements:job};
+  }
+
+  function coverLetter(data={}) {
+    const req=(data.jobRequirements||[]).slice(0,4).join(", ");
+    return "Dear "+(data.hiringManager||"[Hiring Manager]")+",\n\n"+
+      "I am applying for the "+(data.role||"[Role]")+" position at "+(data.company||"[Company Name]")+". I reviewed the vacancy and tailored this application around the stated requirements, including "+(req||"the responsibilities described in the vacancy")+".\n\n"+
+      "My relevant background includes "+(data.experience||"[verified relevant experience]")+". My skills include "+((data.skills||[]).slice(0,6).join(", ")||"[verified relevant skills]")+". I would welcome the opportunity to discuss how my actual experience can support the team.\n\n"+
+      "Kind regards,\n"+(data.name||"[Full Name]");
+  }
+
+  function applicationEmail(data={}) {
+    const req=(data.jobRequirements||[]).slice(0,5).join(", ");
+    return "Subject: Application for "+(data.role||"[Role]")+" — "+(data.name||"[Full Name]")+"\n\n"+
+      "Dear "+(data.hiringManager||"[Hiring Manager]")+",\n\n"+
+      "Please find my application for the "+(data.role||"[Role]")+" position at "+(data.company||"[Company Name]")+". I reviewed the exact vacancy requirements, including "+(req||"the stated role requirements")+", and tailored my application to them.\n\n"+
+      "Relevant verified skills: "+((data.skills||[]).slice(0,6).join(", ")||"[relevant skills]")+".\n\nThank you for your consideration.\n\nKind regards,\n"+(data.name||"[Full Name]")+"\n"+(data.email||"[Professional Email]")+"\n"+(data.phone||"[Phone]");
+  }
+
+  function linkedin(data={}) {
+    return (data.name||"[Full Name]")+" | "+(data.role||"[Target Role]")+"\n\n"+
+      "Professional profile focused on "+((data.skills||[]).slice(0,6).join(", ")||"[verified skills]")+
+      ". I am interested in opportunities where I can apply verified experience to real employer requirements and deliver measurable results.";
+  }
+
+  window.JobSeekSmartCV={version:"smart-cv-v3-TAILORED-LOCKED",scoreCV,smartFill,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements};
 })();
