@@ -9,7 +9,7 @@ function buildHeader(){
  let m=w.querySelector('#menu');if(!m){m=document.createElement('button');m.id='menu';m.type='button';m.setAttribute('aria-label','Open navigation');m.setAttribute('aria-expanded','false');m.textContent='☰';w.appendChild(m)}
  let n=w.querySelector('#nav')||w.querySelector('nav');if(!n){n=document.createElement('nav');n.id='nav';w.appendChild(n)}
  const admin=[['admin-dashboard.html','Overview','🏠'],['admin-candidates.html','Candidates','👥'],['admin-documents.html','Documents','📄'],['admin-services.html','Revenue','💳'],['jobs.html','Public Jobs','🔎'],['index.html','Website','🌐']];
- const pub=[['index.html','Home','⌂'],['jobs.html','Jobs','⌕'],['index.html#founder','Founder','◉'],['ats-cv-builder.html','CV & Application Tools','✦'],['application-tools.html','Application Pack','✓'],['pricing.html','Pricing','◈'],['employer.html','For Employers','▣']];
+ const pub=[['index.html','Home','⌂'],['jobs.html','Jobs','⌕'],['index.html#founder','Founder','◉'],['ats-cv-builder.html','CV & Application Tools','✦'],['pricing.html','Pricing','◈'],['employer.html','For Employers','▣']];
  const auth=[['jobs.html','Browse Jobs','🔎'],['pricing.html','Plans','⭐'],['auth.html','Sign in','→']],links=isAdmin?admin:(isAuth?auth:pub);
  n.className='site-nav'+(isAdmin?' admin-site-nav':'');n.innerHTML=links.map(x=>'<a href="'+x[0]+'" data-nav-link="'+x[0].split('?')[0]+'"><span class="nav-icon" aria-hidden="true">'+x[2]+'</span><span>'+x[1]+'</span></a>').join('');
  if(!isAdmin&&!isAuth){let a=w.querySelector('.nav-actions');if(!a){a=document.createElement('div');a.className='nav-actions';w.appendChild(a)}a.innerHTML='<a class="nav-login" href="auth.html">Log In</a><a class="nav-signup" href="auth.html?mode=signup">Sign Up</a>'}
