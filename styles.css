@@ -774,3 +774,65 @@ body:not(.home-page):not(.jobs-page) .job-details-shell{}
   .founder-profile img{max-height:430px!important}
   .founder-profile .details-card{min-height:0}
 }
+
+
+/* JobSeek Accessibility Readability Upgrade — 2026-09-25 */
+
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{font-size:16px;line-height:1.6}
+p,li,dd,dt,label,input,select,textarea,button{line-height:1.55}
+button,input,select,textarea{font-size:inherit}
+nav a{font-size:14px}.brand{font-size:23px}
+.btn,.outline,.reference-blue-btn,.reference-search-btn{font-size:14px;min-height:46px}
+.eyebrow{font-size:12px}.lead,.reference-lead{font-size:17px;line-height:1.7}
+.micro{font-size:13px;line-height:1.6}small{font-size:12px}
+.job h3{font-size:19px;line-height:1.35}.job p{font-size:15px;line-height:1.65}
+.tag,.mini-tag{font-size:11px;padding:6px 10px}.meta span{font-size:12px}
+.search label,.reference-search label{font-size:11px}
+.search input,.search select,.reference-search input,.reference-search select{font-size:16px;min-height:34px}
+.section{padding:76px 0}.head h2,h2{font-size:38px}
+.countries b{font-size:17px}.countries span{font-size:13px}.foot p,.copy{font-size:13px}
+input,select,textarea{min-height:46px;padding:10px 12px}
+.reference-filter{font-size:14px}.reference-filter>label,.filter-heading{font-size:13px}
+.reference-input{height:46px;font-size:16px}.reference-input input{font-size:15px}
+.reference-filter select{height:46px;font-size:14px}.reference-check{font-size:13px;line-height:1.7}
+.reference-results-head h1{font-size:28px}.reference-results-head select{font-size:13px;min-height:42px}
+.reference-job-card{padding:18px}.reference-job-card .job-info h3,.job-info h3{font-size:18px;line-height:1.4}
+.reference-job-card .job-info p,.job-info p{font-size:14px;line-height:1.6}
+.reference-job-card .job-info small,.job-info small{font-size:12px}.match-pill{font-size:11px}
+.details-title-row h1{font-size:34px;line-height:1.2}.details-title-row #meta{font-size:15px}
+.details-meta span{font-size:13px}.details-tabs a{font-size:13px;padding:16px 4px}
+.details-card{padding:24px}.details-card h2{font-size:21px}.details-card h3{font-size:16px}
+.details-card p,.detail-bullets p{font-size:14px;line-height:1.75}.before li{font-size:14px;line-height:1.7}
+.details-note{font-size:12px;line-height:1.6}.details-card dt,.details-card dd{font-size:13px}
+.requirement-box{font-size:14px;line-height:1.75}.details-side .reference-blue-btn{font-size:13px;padding:12px}
+.details-side .outline{font-size:12px;padding:11px}
+.reference-dashboard-content{font-size:14px}.reference-welcome h1{font-size:30px}.reference-welcome p{font-size:13px}
+.reference-kpis small{font-size:11px}.reference-kpis strong{font-size:28px}.reference-kpis em{font-size:10px}
+.reference-panel-head h2,.reference-profile h2,.reference-quick h2,.reference-activity h2{font-size:17px}
+.reference-panel-head a{font-size:12px}.reference-dashboard-jobs h3{font-size:14px}.reference-dashboard-jobs p{font-size:12px}
+.reference-dashboard-jobs .dashboard-match{font-size:10px}.reference-dashboard-jobs .small{font-size:11px}
+.profile-head b{font-size:12px}.profile-head small{font-size:10px}.reference-profile>strong{font-size:34px}
+.reference-profile p{font-size:12px}.reference-profile ul{font-size:11px;line-height:1.65}.reference-profile .outline{font-size:11px}
+.reference-quick a{font-size:12px;padding:11px}.reference-notice{font-size:11px}.reference-notice .small{font-size:11px}
+.reference-activity #applications{font-size:11px}.reference-scanner-hero h1{font-size:36px}.reference-scanner-hero p{font-size:15px}
+.reference-drop h2{font-size:19px}.reference-drop p{font-size:13px}.reference-drop small{font-size:11px}
+.reference-profile-summary{font-size:13px}.reference-how b{font-size:13px}.reference-how small{font-size:11px}
+.reference-scan-controls label{font-size:12px}.reference-scan-controls select,.reference-scan-controls input{height:42px;font-size:13px}
+.reference-secure{font-size:12px}.auth-page .card{font-size:15px}.auth-page label{font-size:14px}.auth-page input{font-size:16px;min-height:48px}
+@media(max-width:900px){
+body{font-size:16px}nav a{font-size:15px}.nav nav a{padding:14px}
+.hero h1,.reference-copy h1{font-size:clamp(42px,10vw,58px)}.lead,.reference-lead{font-size:17px}
+.section,.dark{padding:62px 0}.head h2,h2{font-size:32px}.job h3{font-size:20px}.job p{font-size:15px}
+.reference-results-head h1{font-size:27px}.details-title-row h1{font-size:30px}
+}
+@media(max-width:600px){
+.container{width:min(100% - 24px,520px)}.brand{font-size:21px}body{font-size:16px}
+.hero h1,.reference-copy h1{font-size:40px}.lead,.reference-lead{font-size:16px}.head h2,h2{font-size:29px}
+.job{padding:20px}.job h3{font-size:19px}.job p{font-size:15px}
+.reference-job-card .job-info h3,.job-info h3{font-size:18px}.reference-job-card .job-info p,.job-info p{font-size:14px}
+.details-title-row h1{font-size:27px}.details-card{padding:20px}.details-card p,.detail-bullets p,.before li{font-size:14px}
+.requirement-box{font-size:14px}.reference-welcome h1{font-size:25px}.reference-kpis strong{font-size:25px}
+.reference-panel-head h2,.reference-profile h2,.reference-quick h2,.reference-activity h2{font-size:16px}
+.reference-dashboard-jobs h3{font-size:14px}.reference-dashboard-jobs p{font-size:12px}
+}
