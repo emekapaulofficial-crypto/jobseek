@@ -86,7 +86,7 @@
     const location=input.location||"[City, State]";
     const skills=(Array.isArray(input.skills)?input.skills:String(input.skills||"").split(/[,;\n]+/)).map(x=>x.trim()).filter(Boolean);
     const matchedJobSkills=job.keywords.filter(k=>skills.some(s=>norm(s).includes(k)||k.includes(norm(s))));
-    const finalSkills=unique([...matchedJobSkills,...skills,...gapSkills(role),...job.keywords.map(titleCase)]).slice(0,18);
+    // Keep employer requirements separate from candidate evidence; never claim a vacancy skill unless the candidate supplied it.\n    const finalSkills=unique([...skills,...matchedJobSkills]).slice(0,18);
     const summary=input.summary && !VAGUE.some(v=>norm(input.summary).includes(v))
       ? input.summary
       : titleCase(role)+" focused on "+job.keywords.slice(0,6).map(titleCase).join(", ")+". Brings a structured, evidence-based approach to analysing data, solving business questions and communicating findings. Tailored to the specific employer requirements supplied for this vacancy.";
@@ -111,11 +111,32 @@
   }
 
   function coverLetter(data={}) {
-    const req=(data.jobRequirements||[]).slice(0,4).join(", ");
-    return "Dear "+(data.hiringManager||"[Hiring Manager]")+",\n\n"+
-      "I am applying for the "+(data.role||"[Role]")+" position at "+(data.company||"[Company Name]")+". I reviewed the vacancy and tailored this application around the stated requirements, including "+(req||"the responsibilities described in the vacancy")+".\n\n"+
-      "My relevant background includes "+(data.experience||"[verified relevant experience]")+". My skills include "+((data.skills||[]).slice(0,6).join(", ")||"[verified relevant skills]")+". I would welcome the opportunity to discuss how my actual experience can support the team.\n\n"+
-      "Kind regards,\n"+(data.name||"[Full Name]");
+    const jdText=String(data.jobDescription||"");
+    const job=extractJobRequirements(jdText,data.role||"");
+    const req=(data.jobRequirements||job.keywords||[]).slice(0,6);
+    const skills=Array.isArray(data.skills)?data.skills.filter(Boolean):[];
+    const exp=String(data.experience||"").trim();
+    const evidence=unique([...skills,...(data.matchedKeywords||[])]).slice(0,6);
+    const role=data.role||"the position";
+    const company=data.company||"[Company Name]";
+    const opening=req.length
+      ? "After reviewing the vacancy, I understand that this role focuses on "+req.slice(0,4).map(titleCase).join(", ")+". I have tailored my application to those specific requirements rather than using a general cover letter."
+      : "After reviewing the vacancy, I have tailored my application to the responsibilities and requirements described for this specific role.";
+    const evidenceLine=evidence.length
+      ? "The relevant evidence I have provided includes "+evidence.map(titleCase).join(", ")+"."
+      : "I have included only the skills and experience I can verify from the candidate information supplied, and I would be pleased to discuss the areas that match your requirements.";
+    const experienceLine=exp && !/^\\[.*\\]$/.test(exp)
+      ? "My stated experience is: "+exp+"."
+      : "My experience section identifies the candidate's actual roles, responsibilities and measurable results so that the application can be reviewed against your requirements without inventing qualifications.";
+    const roleFocus=req.length
+      ? "In particular, I would be interested in contributing to the vacancy's requirements around "+req.slice(0,3).map(titleCase).join(", ")+"."
+      : "I would welcome the opportunity to discuss how my verified background aligns with the role.";
+    return "Dear "+(data.hiringManager||"[Hiring Manager]")+",\\n\\n"+
+      "I am applying for the "+role+" position at "+company+". "+opening+"\\n\\n"+
+      evidenceLine+" "+experienceLine+"\\n\\n"+
+      roleFocus+" I understand the importance of meeting the employer's stated requirements while being accurate about my own experience and qualifications.\\n\\n"+
+      "Thank you for considering my application. I would welcome the opportunity to discuss my fit for the role and provide any additional evidence required.\\n\\n"+
+      "Kind regards,\\n"+(data.name||"[Full Name]");
   }
 
   function applicationEmail(data={}) {
@@ -132,5 +153,5 @@
       ". I am interested in opportunities where I can apply verified experience to real employer requirements and deliver measurable results.";
   }
 
-  window.JobSeekSmartCV={version:"smart-cv-v4-JD-TAILORED-LOCKED",scoreCV,smartFill,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements};
+  window.JobSeekSmartCV={version:"smart-cv-v5-COVER-LETTER-TAILORED-LOCKED",scoreCV,smartFill,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements};
 })();
