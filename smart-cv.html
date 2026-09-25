@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JobSeek | Smart CV & Application Engine</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<script src="smart-cv-engine.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.min.mjs" type="module"></script>
+<style>body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.score-ring{background:conic-gradient(var(--ring) calc(var(--score)*1%),#e5e7eb 0)}.doc{white-space:pre-wrap;font-family:Arial,sans-serif}.tab{min-height:420px}</style>
+</head><body class="bg-slate-50 text-slate-900"><div id="root"></div>
+<script>
+const {useState,useEffect}=React;
+const client=window.supabase?.createClient(JobSeekSupabase.url,JobSeekSupabase.key);
+function App(){
+ const [user,setUser]=useState(null),[profile,setProfile]=useState(null),[targetRole,setTargetRole]=useState(''),[company,setCompany]=useState(''),[cvText,setCvText]=useState(''),[result,setResult]=useState(null),[docs,setDocs]=useState(null),[tab,setTab]=useState('cv'),[busy,setBusy]=useState(false),[status,setStatus]=useState('');
+ const [form,setForm]=useState({name:'',email:'',phone:'',location:'',title:'',summary:'',skills:'',experience:'',education:'',certifications:''});
+ useEffect(()=>{(async()=>{if(!client)return;const r=await client.auth.getUser();if(r.data.user){setUser(r.data.user);const p=await client.from('candidate_profiles').select('*').eq('user_id',r.data.user.id).maybeSingle();if(p.data){setProfile(p.data);setForm(f=>({...f,name:p.data.full_name||'',email:r.data.user.email||'',phone:p.data.phone||'',location:[p.data.city,p.data.country_of_residence].filter(Boolean).join(', '),title:p.data.profession||p.data.target_job||'',skills:(p.data.skills||[]).join(', '),education:p.data.education||''}));setTargetRole(p.data.target_job||p.data.profession||'');}}})();},[]);
+ const update=(k,v)=>setForm(f=>({...f,[k]:v}));
+ function fullText(){return [form.name,form.email,form.phone,form.location,'Target Role: '+targetRole,'Professional Summary',form.summary,'Core Skills',form.skills,'Professional Experience',form.experience,'Education',form.education,'Certifications',form.certifications].filter(Boolean).join('\n');}
+ async function analyze(){
+   setBusy(true);setStatus('Scoring CV…');
+   const text=cvText.trim()||fullText();const base=JobSeekSmartCV.scoreCV(text,targetRole);
+   const required=[['name','Full Name'],['email','Professional Email'],['phone','Phone'],['location','Location'],['title','Target Role'],['summary','Professional Summary'],['skills','Core Skills'],['experience','Professional Experience'],['education','Education']];
+   const fb=[...base.feedback],pos=[...base.positives];let score=base.score;
+   required.forEach(([k,l])=>{if(!String(k==='title'?targetRole:form[k]||'').trim()){score-=3;fb.push('Missing '+l+'.');}});
+   if(!/\b(?:19|20)\d{2}\b/.test(text)&&form.experience){fb.push('Add dates to experience and education.');score=Math.max(0,score-3);}
+   score=Math.max(0,Math.min(100,score));const level=score>=80?'STRONG':score>=50?'AVERAGE':'WEAK';
+   const final={...base,score,level,feedback:[...new Set(fb)],positives:[...new Set(pos)],applicationEligible:score>=50};
+   setResult(final);setStatus(final.applicationEligible?'CV scored. You can generate the application pack.':'CV rejected by the JobSeek CV gate. Fix it with AI before applying.');setBusy(false);
+   if(user&&profile) await saveResult(final,text);
+ }
+ async function saveResult(r,text,generated={}){
+   if(!user||!profile)return;
+   const payload={candidate_id:profile.id,target_role:targetRole||form.title||'Professional',target_company:company||null,location:form.location||null,education:form.education||null,source_cv_text:text,final_score:r.score,score_level:r.level,feedback:[...r.feedback.map(x=>({type:'feedback',text:x})),...r.positives.map(x=>({type:'positive',text:x}))],generated_cv:generated.cv||'',cover_letter:generated.cover||'',application_email:generated.email||'',linkedin_summary:generated.linkedin||'',guessed_fields:generated.guessed||[],engine_version:JobSeekSmartCV.version,locked:true,application_eligible:r.applicationEligible,updated_at:new Date().toISOString()};
+   const existing=await client.from('jobseek_smart_cv_profiles').select('id').eq('candidate_id',profile.id).eq('target_role',payload.target_role).maybeSingle();
+   let q=existing.data?client.from('jobseek_smart_cv_profiles').update(payload).eq('id',existing.data.id):client.from('jobseek_smart_cv_profiles').insert(payload);
+   const x=await q;if(x.error)setStatus('Saved locally, but database save failed: '+x.error.message);
+ }
+ function fix(){
+   const filled=JobSeekSmartCV.smartFill({...form,targetRole,location:form.location,skills:form.skills});
+   setForm(f=>({...f,summary:filled.summary,skills:filled.skills.join(', '),experience:filled.experience,education:filled.education}));
+   setCvText(filled.cv);setTab('cv');setStatus('JobSeek AI filled the missing sections. Anything guessed is marked with [brackets] so you can edit it.');
+   const scored=JobSeekSmartCV.scoreCV(filled.cv,targetRole);setResult(scored);if(user&&profile)saveResult(scored,filled.cv,{cv:filled.cv,guessed:filled.guessedFields});
+ }
+ async function generateDocs(){
+   if(!result?.applicationEligible){setStatus('Fix the CV first. Weak CVs are blocked by the application gate.');return}
+   const filled=JobSeekSmartCV.smartFill({...form,targetRole});const data={...form,role:targetRole||form.title,company,hiringManager:'[Hiring Manager]',skills:filled.skills,experience:filled.experience};
+   const generated={cv:filled.cv,cover:JobSeekSmartCV.coverLetter(data),email:JobSeekSmartCV.applicationEmail(data),linkedin:JobSeekSmartCV.linkedin(data),guessed:filled.guessedFields};
+   setForm(f=>({...f,summary:filled.summary,skills:filled.skills.join(', '),experience:filled.experience,education:filled.education}));
+   setCvText(filled.cv);setDocs(generated);setTab('cover');await saveResult(result,filled.cv,generated);setStatus('Professional CV, Cover Letter, Application Email and LinkedIn Summary generated.');}
+ async function upload(e){
+   const file=e.target.files?.[0];if(!file)return;setBusy(true);setStatus('Reading CV…');
+   try{
+    if(file.type==='text/plain'||file.name.toLowerCase().endsWith('.txt')){setCvText(await file.text());setStatus('CV text loaded. Click Score My CV.');}
+    else if(file.type==='application/pdf'){
+      const pdfjs=await import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.min.mjs');const data=new Uint8Array(await file.arrayBuffer());const pdf=await pdfjs.getDocument({data}).promise;let out='';for(let i=1;i<=pdf.numPages;i++){const page=await pdf.getPage(i);const content=await page.getTextContent();out+=content.items.map(x=>x.str).join(' ')+'\n';}setCvText(out);setStatus('PDF CV text extracted. Click Score My CV.');}
+    else {setStatus('For this version, upload PDF or TXT CV files. You can also paste the CV text below.');}
+   }catch(err){setStatus('Could not read this CV: '+err.message)}finally{setBusy(false);}
+ }
+ const ring=result?(result.level==='STRONG'?'#16a34a':result.level==='AVERAGE'?'#eab308':'#dc2626'):'#2563eb';
+ return React.createElement('div',{className:'min-h-screen'},
+  React.createElement('header',{className:'bg-white border-b sticky top-0 z-20'},React.createElement('div',{className:'max-w-6xl mx-auto px-4 py-4 flex items-center justify-between'},React.createElement('a',{href:'index.html',className:'font-black text-2xl text-slate-900'},'Job',React.createElement('span',{className:'text-blue-600'},'Seek')),React.createElement('span',{className:'text-xs font-bold bg-slate-100 px-3 py-2 rounded-full'},'SMART CV ENGINE • '+JobSeekSmartCV.version))),
+  React.createElement('main',{className:'max-w-6xl mx-auto px-4 py-8'},
+   React.createElement('div',{className:'mb-7'},React.createElement('p',{className:'text-blue-600 font-bold text-sm'},'JOBSEEK — FIND • APPLY • GROW'),React.createElement('h1',{className:'text-4xl md:text-5xl font-black mt-2'},'Smart CV & Application Engine'),React.createElement('p',{className:'text-slate-600 mt-3 max-w-3xl'},'Score your CV, identify ATS weaknesses, repair gaps and generate a professional application pack. Guessed information is always marked with [brackets].')),
+   React.createElement('div',{className:'grid lg:grid-cols-3 gap-6'},
+    React.createElement('section',{className:'lg:col-span-2 space-y-5'},
+     React.createElement('div',{className:'bg-white rounded-3xl border p-5 shadow-sm'},React.createElement('div',{className:'grid md:grid-cols-2 gap-4'},
+      field('Target Role',targetRole,setTargetRole,'e.g. Product Manager'),field('Company',company,setCompany,'Optional — [Company Name] will be used if blank')),
+      React.createElement('div',{className:'md:col-span-2'},React.createElement('label',{className:'font-bold text-sm'},'Upload CV (PDF/TXT)'),React.createElement('input',{type:'file',accept:'.pdf,.txt,application/pdf,text/plain',onChange:upload,className:'mt-2 block w-full border rounded-xl p-3'})),
+      React.createElement('textarea',{value:cvText,onChange:e=>setCvText(e.target.value),placeholder:'Paste CV text here, or build it from the candidate form below…',className:'md:col-span-2 w-full min-h-44 border rounded-2xl p-4 focus:ring-2 focus:ring-blue-500 outline-none'}),
+      React.createElement('div',{className:'flex flex-wrap gap-3'},React.createElement('button',{onClick:analyze,disabled:busy,className:'px-5 py-3 rounded-xl bg-blue-600 text-white font-bold'},busy?'Working…':'Score My CV'),React.createElement('button',{onClick:fix,className:'px-5 py-3 rounded-xl bg-slate-900 text-white font-bold'},'Fix My CV with AI — 1 Click'),React.createElement('button',{onClick:generateDocs,disabled:!result?.applicationEligible,className:'px-5 py-3 rounded-xl border font-bold disabled:opacity-40'},'Generate Application Pack'))),
+     React.createElement('div',{className:'bg-white rounded-3xl border p-5 shadow-sm'},React.createElement('h2',{className:'text-xl font-black mb-4'},'Candidate details & gap filling'),React.createElement('div',{className:'grid md:grid-cols-2 gap-4'},...[
+       ['name','Full Name'],['email','Professional Email'],['phone','Phone'],['location','City, State'],['title','Professional Title'],['summary','Professional Summary'],['skills','Core Skills (comma separated)'],['experience','Work Experience'],['education','Education'],['certifications','Certifications']
+      ].map(([k,l])=>React.createElement('div',{className:k==='summary'||k==='skills'||k==='experience'||k==='education'||k==='certifications'?'md:col-span-2':''},React.createElement('label',{className:'font-bold text-sm'},l),React.createElement(k==='summary'||k==='skills'||k==='experience'||k==='education'||k==='certifications'?'textarea':'input',{value:form[k],onChange:e=>update(k,e.target.value),className:'mt-1 w-full border rounded-xl p-3 min-h-20',placeholder:'Leave blank if you need JobSeek AI to fill a professional placeholder.'})))),
+     React.createElement('div',{className:'bg-white rounded-3xl border p-5 shadow-sm'},React.createElement('h2',{className:'text-xl font-black'},'Generated documents'),React.createElement('div',{className:'flex flex-wrap gap-2 my-4'},...['cv','cover','email','linkedin'].map(x=>React.createElement('button',{onClick:()=>setTab(x),className:'px-4 py-2 rounded-full '+(tab===x?'bg-blue-600 text-white':'bg-slate-100')},x==='cv'?'CV':x==='cover'?'Cover Letter':x==='email'?'Application Email':'LinkedIn Summary')),React.createElement('div',{className:'tab bg-slate-50 rounded-2xl p-5 border doc'},docs?(docs[tab]||'Generate the application pack first.'):'Click Generate Application Pack after your CV reaches Average or Strong.') )),
+    React.createElement('aside',{className:'space-y-5'},
+      React.createElement('div',{className:'bg-white rounded-3xl border p-6 shadow-sm text-center'},React.createElement('p',{className:'font-bold text-slate-500'},'ATS SCORE'),result?React.createElement('div',{className:'mx-auto my-5 w-40 h-40 rounded-full score-ring p-3',style:{'--score':result.score,'--ring':ring}},React.createElement('div',{className:'bg-white w-full h-full rounded-full flex flex-col items-center justify-center'},React.createElement('b',{className:'text-5xl'},result.score),React.createElement('span',{className:'font-bold'},result.level))):React.createElement('div',{className:'text-6xl font-black text-slate-200 my-10'},'—'),result&&React.createElement('div',{className:'text-left'},React.createElement('div',{className:'rounded-xl p-3 '+(result.applicationEligible?'bg-green-50 text-green-800':'bg-red-50 text-red-800')},result.applicationEligible?'✓ Application gate: OPEN':'✕ CV GATE: REJECTED — FIX CV FIRST'),React.createElement('h3',{className:'font-black mt-5 mb-2'},'Feedback'),result.feedback.map(x=>React.createElement('p',{className:'text-sm mb-2'},'❌ ',x)),result.positives.map(x=>React.createElement('p',{className:'text-sm text-green-700 mb-2'},'✅ ',x))),
+      React.createElement('div',{className:'bg-slate-900 text-white rounded-3xl p-6'},React.createElement('h2',{className:'font-black text-xl'},'Engine rules locked'),React.createElement('p',{className:'text-slate-300 text-sm mt-2'},'Scoring and gap-filling logic is stored in smart-cv-engine.js as JobSeek Smart CV Engine v1. The UI does not replace or weaken the scoring rules.'),React.createElement('ul',{className:'text-sm text-slate-300 mt-4 space-y-2'},React.createElement('li',null,'• 80–100 Strong'),React.createElement('li',null,'• 50–79 Average'),React.createElement('li',null,'• 0–49 Weak / rejected by application gate'),React.createElement('li',null,'• Guessed data uses [brackets]'))),
+      React.createElement('div',{className:'text-sm text-slate-500'},status)
+     )
+    )
+   )
+  );
+}
+function field(label,value,onChange,placeholder){return React.createElement('div',null,React.createElement('label',{className:'font-bold text-sm'},label),React.createElement('input',{value,onChange:e=>onChange(e.target.value),placeholder,className:'mt-1 w-full border rounded-xl p-3'}));}
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+</script></body></html>
