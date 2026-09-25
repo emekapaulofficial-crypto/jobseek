@@ -32,7 +32,7 @@
     const text = String(jobDescription || "");
     const lower = norm(text);
     const roleTerms = ROLE_KEYWORDS[roleKey(targetRole)] || [];
-    const phrasePatterns=["statistical models","predictive models","scoring systems","segmentation methods","machine-learning solutions","design and evaluate experiments","appropriate metrics","data quality","reproducible data-analysis workflows","production systems","model behaviour","rules-based methods","analytical or modelling problems"]; const found=unique([...roleTerms,...COMMON,...phrasePatterns].filter(k=>lower.includes(k)));
+    const phrasePatterns=["statistical models","predictive models","scoring systems","segmentation methods","machine-learning solutions","machine learning","design and evaluate experiments","experiments","appropriate metrics","metrics","data quality","reproducible data-analysis workflows","production systems","model behaviour","rules-based methods","analytical or modelling problems","datasets","data analysis","data-analysis","operational data","product data","business questions","modelling","model performance"]; const found=unique([...phrasePatterns,...roleTerms,...COMMON].filter(k=>lower.includes(k)));
     const lines = text.split(/\n|•/).map(x=>x.trim()).filter(Boolean);
     const requirements = lines.filter(x=>x.length>25 && /(responsib|require|qualif|experience|skill|knowledge|ability|must|should|duties|role|preferred)/i.test(x)).slice(0,15);
     return { keywords:found, requirements, summary:text.slice(0,1200) };
