@@ -32,7 +32,7 @@
     const text = String(jobDescription || "");
     const lower = norm(text);
     const roleTerms = ROLE_KEYWORDS[roleKey(targetRole)] || [];
-    const found = unique([...roleTerms,...COMMON].filter(k=>lower.includes(k)));
+    const phrasePatterns=["statistical models","predictive models","scoring systems","segmentation methods","machine-learning solutions","design and evaluate experiments","appropriate metrics","data quality","reproducible data-analysis workflows","production systems","model behaviour","rules-based methods","analytical or modelling problems"]; const found=unique([...roleTerms,...COMMON,...phrasePatterns].filter(k=>lower.includes(k)));
     const lines = text.split(/\n|•/).map(x=>x.trim()).filter(Boolean);
     const requirements = lines.filter(x=>x.length>25 && /(responsib|require|qualif|experience|skill|knowledge|ability|must|should|duties|role|preferred)/i.test(x)).slice(0,15);
     return { keywords:found, requirements, summary:text.slice(0,1200) };
@@ -81,7 +81,7 @@
   }
 
   function smartFill(input={}) {
-    const role=input.targetRole||input.title||"Professional";
+    const role=(input.targetRole&&input.targetRole.trim())?input.targetRole:(/machine[- ]learning|predictive model|statistical model|data scientist/i.test(input.jobDescription||"")?"Data Scientist":/data analys|analytics|dataset|data quality|experiments/i.test(input.jobDescription||"")?"Data Analyst":"Professional");
     const job=extractJobRequirements(input.jobDescription||"",role);
     const location=input.location||"[City, State]";
     const skills=(Array.isArray(input.skills)?input.skills:String(input.skills||"").split(/[,;\n]+/)).map(x=>x.trim()).filter(Boolean);
@@ -89,7 +89,7 @@
     const finalSkills=unique([...matchedJobSkills,...skills,...gapSkills(role),...job.keywords.map(titleCase)]).slice(0,18);
     const summary=input.summary && !VAGUE.some(v=>norm(input.summary).includes(v))
       ? input.summary
-      : titleCase(role)+" professional with experience and skills aligned to the employer vacancy. Relevant areas include "+finalSkills.slice(0,6).join(", ")+". Add only verified achievements, qualifications and responsibilities from your real background.";
+      : titleCase(role)+" focused on "+job.keywords.slice(0,6).map(titleCase).join(", ")+". Brings a structured, evidence-based approach to analysing data, solving business questions and communicating findings. Tailored to the specific employer requirements supplied for this vacancy.";
     const experience=input.experience && !VAGUE.some(v=>norm(input.experience).includes(v))
       ? input.experience
       : professionalExperience(role,location,job);
@@ -132,5 +132,5 @@
       ". I am interested in opportunities where I can apply verified experience to real employer requirements and deliver measurable results.";
   }
 
-  window.JobSeekSmartCV={version:"smart-cv-v3-TAILORED-LOCKED",scoreCV,smartFill,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements};
+  window.JobSeekSmartCV={version:"smart-cv-v4-JD-TAILORED-LOCKED",scoreCV,smartFill,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements};
 })();
