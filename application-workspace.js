@@ -39,28 +39,6 @@
     };
   }
 
-  function renderPack() {
-    const d = getData();
-    const pack = $('packContent');
-    if (!pack) return;
-    pack.innerHTML = `
-      <h3>${esc(d.title)}</h3>
-      <p>${esc(d.company)}${d.location ? ' · ' + esc(d.location) : ''}</p>
-      <p><strong>Application Readiness:</strong> ${esc(d.score)}</p>
-      <hr>
-      <h3>CV</h3><div style="white-space:pre-wrap">${esc(d.cv) || 'Not provided'}</div>
-      <h3>Cover Letter</h3><div style="white-space:pre-wrap">${esc(d.cover) || 'Not provided'}</div>
-      <h3>Professional Links</h3>
-      <p>Portfolio: ${d.portfolio ? `<a href="${esc(d.portfolio)}" target="_blank" rel="noopener noreferrer">${esc(d.portfolio)}</a>` : 'Not provided'}</p>
-      <p>LinkedIn: ${d.linkedin ? `<a href="${esc(d.linkedin)}" target="_blank" rel="noopener noreferrer">${esc(d.linkedin)}</a>` : 'Not provided'}</p>
-      <p>Indeed: ${d.indeed ? `<a href="${esc(d.indeed)}" target="_blank" rel="noopener noreferrer">${esc(d.indeed)}</a>` : 'Not provided'}</p>
-      <h3>Vacancy</h3>
-      <p>Posted: ${esc(d.posted) || 'Not specified'}<br>
-      Closing: ${esc(d.closing) || 'Not specified'}<br>
-      Visa sponsorship: ${esc(d.visa) || 'Not specified'}<br>
-      Source: ${esc(d.source) || 'Not specified'}<br>
-      Original/application link: ${d.apply ? `<a href="${esc(d.apply)}" target="_blank" rel="noopener noreferrer">Open original listing</a>` : 'Not provided'}</p>`;
-  }
 
   function score() {
     let total = 10;
@@ -73,7 +51,6 @@
     });
     if ($('score')) $('score').textContent = `${Math.min(total, 100)}%`;
     if ($('checks')) $('checks').innerHTML = checks.join('');
-    renderPack();
   }
 
   function save() {
