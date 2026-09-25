@@ -18,5 +18,25 @@ function buildHeader(){
  n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{n.classList.remove('open');m.setAttribute('aria-expanded','false');m.textContent='☰'}));
 }
 function legacySearch(){const q=document.getElementById('q'),loc=document.getElementById('loc');document.getElementById('searchBtn')?.addEventListener('click',()=>{if(q&&loc)location.href='jobs.html?keyword='+encodeURIComponent(q.value.trim())+'&region='+encodeURIComponent(loc.value.trim())});[q,loc].forEach(x=>x?.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('searchBtn')?.click()}))}
-function init(){buildHeader();legacySearch()}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+function init(){buildHeader();legacySearch();initMobileJobsFilters()}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
+function initMobileJobsFilters(){
+ const filter=document.querySelector('.reference-filter');
+ if(!filter||!document.querySelector('.jobs-page'))return;
+ const toggle=document.createElement('button');
+ toggle.type='button';
+ toggle.className='mobile-filter-toggle';
+ toggle.setAttribute('aria-expanded','false');
+ toggle.setAttribute('aria-controls','jobseek-mobile-filters');
+ toggle.innerHTML='<span>⚙ Filters</span><small>Open filters</small>';
+ filter.id='jobseek-mobile-filters';
+ filter.parentNode.insertBefore(toggle,filter);
+ const setOpen=open=>{
+   filter.classList.toggle('mobile-open',open);
+   toggle.setAttribute('aria-expanded',String(open));
+   toggle.innerHTML=open?'<span>✕ Filters</span><small>Close filters</small>':'<span>⚙ Filters</span><small>Open filters</small>';
+ };
+ toggle.addEventListener('click',()=>setOpen(!filter.classList.contains('mobile-open')));
+ filter.querySelector('#filter')?.addEventListener('click',()=>setOpen(false),true);
+ filter.querySelector('#clearFilters')?.addEventListener('click',()=>setOpen(false),true);
+}
