@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-24T21:51:17.670476+00:00",
+  "updated_at": "2026-09-25T00:05:13.379064+00:00",
   "source": "Supabase public published manual jobs",
   "check_interval": "15 minutes",
   "note": "CLOSED means the robot found a strong closed/not-found signal. JobSeek does not automatically remove jobs; an admin must review and close/remove them from the public feed.",
@@ -17,7 +17,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/openai/577e6673-0a4a-491b-9a0d-facbdd3bdf3c",
       "evidence": "",
-      "checked_at": "2026-09-24T21:51:16.870499+00:00"
+      "checked_at": "2026-09-25T00:05:12.206737+00:00"
     },
     {
       "id": "2388cee0-7b89-4edc-83fd-b5f744d15b1e",
@@ -29,7 +29,7 @@
       "http_status": 200,
       "final_url": "https://maybaker.azurewebsites.net/career",
       "evidence": "",
-      "checked_at": "2026-09-24T21:51:16.871368+00:00"
+      "checked_at": "2026-09-25T00:05:12.207317+00:00"
     },
     {
       "id": "ac74bfaa-8867-44a1-b859-89c09dbf98d8",
@@ -41,7 +41,7 @@
       "http_status": 200,
       "final_url": "https://stripe.com/careers/listing/full-stack-engineer-link/8062305?gh_jid=8062305",
       "evidence": "",
-      "checked_at": "2026-09-24T21:51:16.870155+00:00"
+      "checked_at": "2026-09-25T00:05:12.206448+00:00"
     },
     {
       "id": "c3482750-f081-4901-99ca-6ffce09a03ef",
@@ -53,7 +53,7 @@
       "http_status": 200,
       "final_url": "https://maybaker.azurewebsites.net/career",
       "evidence": "",
-      "checked_at": "2026-09-24T21:51:16.871806+00:00"
+      "checked_at": "2026-09-25T00:05:12.207587+00:00"
     },
     {
       "id": "f23cc7f7-8848-4b16-97fa-ae97b0889155",
@@ -65,7 +65,7 @@
       "http_status": 200,
       "final_url": "https://www.form3.tech/company/vacancies/8628358002/senior-cloud-security-engineer-ai-resilience-security-enhancements-contract",
       "evidence": "",
-      "checked_at": "2026-09-24T21:51:16.871092+00:00"
+      "checked_at": "2026-09-25T00:05:12.207153+00:00"
     },
     {
       "id": "eac2b1db-441e-4869-85e2-877701e77bef",
@@ -77,7 +77,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/monzo/jobs/8207682",
       "evidence": "",
-      "checked_at": "2026-09-24T21:51:16.870812+00:00"
+      "checked_at": "2026-09-25T00:05:12.206955+00:00"
     }
   ]
 }
