@@ -154,7 +154,27 @@
       ". I am interested in opportunities where I can apply verified experience to real employer requirements and deliver measurable results.";
   }
 
-  function parseResumeText(text){const t=String(text||''),o={name:'',email:'',phone:'',location:'',title:'',summary:'',skills:'',experience:'',education:'',certifications:'',projects:''},lines=t.split(/\\r?\\n/).map(x=>x.trim()).filter(Boolean);o.email=(t.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}/i)||[])[0]||'';o.phone=(t.match(/(?:\\+?\\d[\\d\\s().-]{7,}\\d)/)||[])[0]||'';const hs={summary:/^(professional summary|summary|profile|objective)$/i,experience:/^(professional experience|work experience|employment|experience)$/i,education:/^(education|academic background)$/i,skills:/^(core skills|technical skills|skills|competencies)$/i,certifications:/^(certifications?|licenses?)$/i,projects:/^(projects?|portfolio)$/i},b={},map={};let cur='';lines.forEach(line=>{const h=Object.keys(hs).find(k=>hs[k].test(line));if(h){cur=h;b[cur]=[];return}if(cur)(b[cur]||(b[cur]=[])).push(line)});o.summary=(b.summary||[]).join('\\n');o.experience=(b.experience||[]).join('\\n');o.education=(b.education||[]).join('\\n');o.skills=(b.skills||[]).join(', ');o.certifications=(b.certifications||[]).join('\\n');o.projects=(b.projects||[]).join('\\n');o.name=lines.find(x=>x.length>2&&x.length<70&&!/@/.test(x)&&!Object.values(hs).some(r=>r.test(x)))||'';o.title=lines.find(x=>/data analyst|data scientist|software engineer|developer|product manager|designer|accountant|project manager|electrician|marketing/i.test(x))||'';return o}
+  function parseResumeText(text){
+    const t=String(text||'').replace(/\r/g,'');
+    const o={name:'',email:'',phone:'',location:'',title:'',summary:'',skills:'',experience:'',education:'',certifications:'',projects:''};
+    const lines=t.split(/\n/).map(x=>x.trim()).filter(Boolean);
+    o.email=(t.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)||[])[0]||'';
+    o.phone=(t.match(/(?:\+?\d[\d\s().-]{7,}\d)/)||[])[0]||'';
+    const hs={summary:/^(professional summary|summary|profile|objective)$/i,experience:/^(professional experience|work experience|employment|experience)$/i,education:/^(education|academic background)$/i,skills:/^(core skills|technical skills|skills|competencies)$/i,certifications:/^(certifications?|licenses?|professional certifications)$/i,projects:/^(projects?|portfolio|selected projects)$/i,location:/^(location|address|city)$/i};
+    const b={}; let cur='';
+    lines.forEach(line=>{const h=Object.keys(hs).find(k=>hs[k].test(line));if(h){cur=h;b[cur]=[];return}if(cur)(b[cur]||(b[cur]=[])).push(line);});
+    o.summary=(b.summary||[]).join('\n');
+    o.experience=(b.experience||[]).join('\n');
+    o.education=(b.education||[]).join('\n');
+    o.skills=(b.skills||[]).join(', ');
+    o.certifications=(b.certifications||[]).join('\n');
+    o.projects=(b.projects||[]).join('\n');
+    o.location=(b.location||[]).join(', ');
+    o.name=lines.find(x=>x.length>2&&x.length<70&&!/@/.test(x)&&!Object.values(hs).some(r=>r.test(x))&&!/^(phone|email|mobile|tel)\s*:/i.test(x))||'';
+    o.title=lines.find(x=>/senior geologist|geologist|data analyst|data scientist|software engineer|developer|product manager|designer|accountant|project manager|electrician|marketing/i.test(x))||'';
+    if(!o.location){const loc=lines.find(x=>/\b(lagos|abuja|port harcourt|ibadan|enugu|benin|kano|kaduna|warri|delta|nigeria)\b/i.test(x)&&x!==o.name);if(loc)o.location=loc;}
+    return o;
+  }
 function readability(text){const w=words(text).length,s=String(text).split(/[.!?]+/).filter(x=>x.trim()).length,a=s?w/s:w;return{wordCount:w,sentenceCount:s,avgWordsPerSentence:Math.round(a*10)/10,tooLong:a>28}}
 function atsChecks(text){const l=norm(text),issues=[],positives=[];if(!/@/.test(text))issues.push('Add professional contact information.');if(/header|footer/i.test(l))issues.push('Keep critical contact details out of headers and footers when possible.');if(/\\b(photo|age|date of birth|marital status|religion)\\b/i.test(l))issues.push('Consider removing unnecessary personal details.');else positives.push('No obvious unnecessary personal-detail fields detected.');return{issues,positives}}
 const _scoreCV=scoreCV;
