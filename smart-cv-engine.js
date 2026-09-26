@@ -172,9 +172,45 @@
     if(!o.location){const loc=lines.find(x=>/\b(lagos|abuja|port harcourt|ibadan|enugu|benin|kano|kaduna|warri|delta|nigeria)\b/i.test(x)&&x!==o.name);if(loc)o.location=loc;}
     return o;
   }
+function buildImprovementPlan(cvText,targetRole='',jobDescription=''){
+  const text=String(cvText||'').trim();
+  const analysis=scoreCVv6(text,targetRole,jobDescription);
+  const missing=analysis.missingKeywords||[];
+  const questions={
+    strategy:'Have you planned, improved or evaluated a geological process, project or field-development activity? Give the real situation and your contribution.',
+    reporting:'Have you prepared technical reports, geological maps, well reports, dashboards or management updates? What did you produce?',
+    operations:'Have you supported drilling, workover, logging, completion, coring, perforation, fishing, sidetracking or other well operations? Describe what you actually did.',
+    compliance:'Have you worked with HSSE, regulatory requirements, SPE-PRMS, NUPRC or another documented standard/control? State your actual experience.',
+    documentation:'What technical documentation have you personally prepared or reviewed?',
+    leadership:'Have you mentored people or led a technical workstream/project? State your actual responsibility and team/project size if known.',
+    management:'Have you coordinated people, vendors, service companies, clients, budgets or competing technical priorities? Give the real example.',
+    analysis:'What geological, geophysical, well or reservoir data have you analysed, and what decision or outcome did the analysis support?',
+    project:'Describe one relevant subsurface, exploration, appraisal, development or operations project you personally contributed to and the result.',
+    team:'How have you worked with reservoir engineers, petrophysicists, drilling engineers, production teams or other disciplines?',
+    software:'Which industry software have you actually used, for how long, and at what level?'
+  };
+  const keywordMap={strategy:['field development planning','development planning'],reporting:['technical reports','technical report'],operations:['operations geology','drilling','workover','well operations'],compliance:['hsse','compliance','spe-prms','nuprc'],documentation:['documentation','reports'],leadership:['leadership','mentor','mentoring'],management:['management','managed','coordination'],analysis:['interpretation','analysis','data integration'],project:['project'],team:['multidisciplinary','cross-discipline'],software:['petrel','software']};
+  const plan=[];
+  Object.keys(keywordMap).forEach(key=>{
+    const related=missing.filter(m=>keywordMap[key].some(k=>m.toLowerCase().includes(k)));
+    if(related.length) plan.push({keyword:related.slice(0,3).join(', '),question:questions[key],answer:''});
+  });
+  missing.slice(0,8).forEach(k=>{
+    if(!plan.some(x=>x.keyword.toLowerCase().includes(k.toLowerCase()))) plan.push({keyword:k,question:'Do you have genuine experience with '+k+'? If yes, describe exactly what you did and any real result. If not, leave this blank.',answer:''});
+  });
+  return {analysis,plan:plan.slice(0,12)};
+}
+function applyImprovementAnswers(input={},plan=[]){
+  const data=Object.assign({},input);
+  const answers=(plan||[]).filter(x=>String(x.answer||'').trim()).map(x=>({keyword:x.keyword,answer:String(x.answer).trim()}));
+  const base=String(data.cv||'').trim();
+  const additions=answers.map(x=>'- '+x.answer).join('\n');
+  const cv=base+(additions?(base?'\n\nVerified CV improvements\n':'Verified CV improvements\n')+additions:'');
+  return Object.assign(data,{cv,summary:data.summary||'',skills:data.skills||'',experience:data.experience||'',education:data.education||''});
+}
 function readability(text){const w=words(text).length,s=String(text).split(/[.!?]+/).filter(x=>x.trim()).length,a=s?w/s:w;return{wordCount:w,sentenceCount:s,avgWordsPerSentence:Math.round(a*10)/10,tooLong:a>28}}
 function atsChecks(text){const l=norm(text),issues=[],positives=[];if(!/@/.test(text))issues.push('Add professional contact information.');if(/header|footer/i.test(l))issues.push('Keep critical contact details out of headers and footers when possible.');if(/\\b(photo|age|date of birth|marital status|religion)\\b/i.test(l))issues.push('Consider removing unnecessary personal details.');else positives.push('No obvious unnecessary personal-detail fields detected.');return{issues,positives}}
 const _scoreCV=scoreCV;
 function scoreCVv6(text,role,jd){const r=_scoreCV(text,role,jd),rd=readability(text),at=atsChecks(text),lower=norm(text),keys=unique([...(roleKeywords(role)||[]),...((r.jobRequirements&&r.jobRequirements.keywords)||[])]),matched=keys.filter(k=>lower.includes(k)),missing=keys.filter(k=>!lower.includes(k));return Object.assign({},r,{readability:rd,ats:at,matchedKeywords:matched,missingKeywords:missing,keywordCoverage:keys.length?Math.round(matched.length/keys.length*100):0})}
-window.JobSeekSmartCV={version:"smart-cv-v7-import-button",scoreCV:scoreCVv6,smartFill,buildImprovementPlan,applyImprovementAnswers,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements,parseResumeText};
+window.JobSeekSmartCV={version:"smart-cv-v8-coach",scoreCV:scoreCVv6,smartFill,buildImprovementPlan,applyImprovementAnswers,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements,parseResumeText};
 })();
