@@ -156,20 +156,17 @@
 
   function parseResumeText(text){
     const t=String(text||'').replace(/\r/g,'');
+    const clean=x=>String(x||'').replace(/^\s*(?:#{1,6}\s*)/,'').replace(/\*\*/g,'').replace(/__+/g,'').trim();
     const o={name:'',email:'',phone:'',location:'',title:'',summary:'',skills:'',experience:'',education:'',certifications:'',projects:''};
-    const lines=t.split(/\n/).map(x=>x.trim()).filter(Boolean);
+    const rawLines=t.split(/\n/).map(clean).filter(Boolean);
+    const lines=rawLines.map(x=>x.replace(/^[-•]\s*/,'').trim()).filter(Boolean);
     o.email=(t.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)||[])[0]||'';
     o.phone=(t.match(/(?:\+?\d[\d\s().-]{7,}\d)/)||[])[0]||'';
-    const hs={summary:/^(professional summary|summary|profile|objective)$/i,experience:/^(professional experience|work experience|employment|experience)$/i,education:/^(education|academic background)$/i,skills:/^(core skills|technical skills|skills|competencies)$/i,certifications:/^(certifications?|licenses?|professional certifications)$/i,projects:/^(projects?|portfolio|selected projects)$/i,location:/^(location|address|city)$/i};
+    const hs={summary:/^(professional summary|summary|profile|objective)$/i,experience:/^(professional experience|work experience|employment|experience)$/i,education:/^(education|academic background)$/i,skills:/^(core skills|technical skills|skills|competencies|core competencies)$/i,certifications:/^(certifications?|licenses?|professional certifications)$/i,projects:/^(projects?|portfolio|selected projects)$/i,location:/^(location|address|city)$/i};
     const b={}; let cur='';
     lines.forEach(line=>{const h=Object.keys(hs).find(k=>hs[k].test(line));if(h){cur=h;b[cur]=[];return}if(cur)(b[cur]||(b[cur]=[])).push(line);});
-    o.summary=(b.summary||[]).join('\n');
-    o.experience=(b.experience||[]).join('\n');
-    o.education=(b.education||[]).join('\n');
-    o.skills=(b.skills||[]).join(', ');
-    o.certifications=(b.certifications||[]).join('\n');
-    o.projects=(b.projects||[]).join('\n');
-    o.location=(b.location||[]).join(', ');
+    o.summary=(b.summary||[]).join('\n'); o.experience=(b.experience||[]).join('\n'); o.education=(b.education||[]).join('\n');
+    o.skills=(b.skills||[]).join(', '); o.certifications=(b.certifications||[]).join('\n'); o.projects=(b.projects||[]).join('\n'); o.location=(b.location||[]).join(', ');
     o.name=lines.find(x=>x.length>2&&x.length<70&&!/@/.test(x)&&!Object.values(hs).some(r=>r.test(x))&&!/^(phone|email|mobile|tel)\s*:/i.test(x))||'';
     o.title=lines.find(x=>/senior geologist|geologist|data analyst|data scientist|software engineer|developer|product manager|designer|accountant|project manager|electrician|marketing/i.test(x))||'';
     if(!o.location){const loc=lines.find(x=>/\b(lagos|abuja|port harcourt|ibadan|enugu|benin|kano|kaduna|warri|delta|nigeria)\b/i.test(x)&&x!==o.name);if(loc)o.location=loc;}
