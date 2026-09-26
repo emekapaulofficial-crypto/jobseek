@@ -7,27 +7,22 @@
 </style></head>
 <body><header class="no-print"><div class="head"><div class="brand">Job<span class="blue">Seek</span> <span class="muted small">CV ENGINE</span></div><div class="toolbar"><button class="outline" id="newCv">New CV</button><button class="outline" id="saveCv">Save</button><button class="outline" id="loadCv">Load</button><button class="primary" id="printCv">Export / Print PDF</button></div></div></header>
 <main id="app" class="wrap">
-<p class="blue no-print"><b>JOBSEEK — CV ENGINE</b></p><h1 class="no-print">Build, tailor and check your CV</h1><p class="muted no-print">Create a structured CV, compare it with the exact vacancy, check ATS/readability issues and see the finished document live. JobSeek never invents your experience; generated placeholders stay marked with [brackets].</p><div class="grid"><section>
-<div class="card"><div class="row"><div class="field"><label>Target Role</label><input id="role" placeholder="e.g. Product Manager"></div><div class="field"><label>Company</label><input id="company" placeholder="Employer name"></div></div>
-<div class="field"><label>Employer Job Description / Vacancy Requirements <span style="color:#dc2626">*</span></label><textarea id="jobDescription" style="min-height:180px" placeholder="Paste the EXACT employer vacancy here. The engine will extract responsibilities, skills and keywords and tailor this application to THIS job."></textarea><p class="muted small">Each vacancy must have its own job description. The engine will not reuse the previous application's requirements.</p></div>
-<div class="field"><label>Upload CV (PDF or TXT)</label><input id="file" type="file" accept=".pdf,.txt,application/pdf,text/plain"></div>
-<div class="field"><label>CV Text</label><textarea id="cv" placeholder="Paste your CV here, or use the form below."></textarea></div>
-<button class="primary" id="score">Score My CV</button><button class="dark" id="fix">Fix My CV — 1 Click</button><button class="outline" id="generate">Generate Application Pack</button>
-<p id="status" class="muted small"></p></div>
-<div class="card"><h2>Candidate details & gap filling</h2><div class="row">
-<div class="field"><label>Full Name</label><input id="name"></div><div class="field"><label>Professional Email</label><input id="email"></div>
-<div class="field"><label>Phone</label><input id="phone"></div><div class="field"><label>City, State</label><input id="location"></div>
-<div class="field"><label>Professional Title</label><input id="title"></div><div class="field"><label>Certifications</label><input id="certifications"></div>
-</div>
-<div class="field"><label>Professional Summary</label><textarea id="summary"></textarea></div>
-<div class="field"><label>Core Skills</label><textarea id="skills"></textarea></div>
-<div class="field"><label>Work Experience</label><textarea id="experience"></textarea></div>
-<div class="field"><label>Education</label><textarea id="education"></textarea></div></div>
-<div class="card"><h2>Generated documents</h2><div class="tabs"><button data-tab="cv">CV</button><button data-tab="cover">Cover Letter</button><button data-tab="email">Application Email</button><button data-tab="linkedin">LinkedIn Summary</button></div><pre id="document">Generate the application pack after your CV reaches Average or Strong.</pre></div>
+<p class="blue no-print"><b>JOBSEEK — CV ENGINE</b></p><h1 class="no-print">Build, tailor and check your CV</h1>
+<p class="muted no-print">Create a structured CV, compare it with the exact vacancy, check ATS/readability issues and see the finished document live.</p>
+<div class="grid"><section>
+<div class="card editor-panel"><h2>1. Target the vacancy</h2><div class="row"><div class="field"><label>Target Role</label><input id="role" placeholder="e.g. Data Analyst"></div><div class="field"><label>Company</label><input id="company" placeholder="Employer name"></div></div><div class="field"><label>Exact employer job description / requirements *</label><textarea id="jobDescription" style="min-height:170px" placeholder="Paste the exact vacancy here. This is what the matching engine uses."></textarea></div><div class="toolbar"><button class="primary" id="score">Analyse CV & ATS</button><button class="dark" id="fix">Tailor / Repair CV</button><button class="outline" id="generate">Generate Application Pack</button></div><p id="status" class="muted small">Start by pasting the exact vacancy.</p></div>
+<div class="card editor-panel"><h2>2. Import or enter your CV</h2><label>Upload CV (PDF or TXT)</label><input id="file" type="file" accept=".pdf,.txt,application/pdf,text/plain"><div class="field" style="margin-top:12px"><label>Full CV text</label><textarea id="cv" placeholder="Paste your existing CV here."></textarea></div><button class="outline" id="parseCv">Read CV into fields</button></div>
+<div class="card editor-panel"><h2>3. Candidate information</h2><div class="row"><div class="field"><label>Full Name</label><input id="name"></div><div class="field"><label>Professional Email</label><input id="email"></div><div class="field"><label>Phone</label><input id="phone"></div><div class="field"><label>City / Location</label><input id="location"></div><div class="field"><label>Professional Title</label><input id="title"></div><div class="field"><label>Certifications</label><input id="certifications"></div></div><div class="field"><label>Professional Summary</label><textarea id="summary"></textarea></div><div class="field"><label>Core Skills (comma separated)</label><textarea id="skills"></textarea></div><div class="field"><label>Work Experience</label><textarea id="experience"></textarea></div><div class="field"><label>Education</label><textarea id="education"></textarea></div><div class="field"><label>Projects</label><textarea id="projects"></textarea></div></div>
+<div class="card editor-panel"><h2>4. CV design & structure</h2><div class="template-row"><button class="template active" data-template="classic">Classic ATS</button><button class="template" data-template="modern">Modern</button><button class="template" data-template="minimal">Minimal</button></div><p class="muted small">Classic keeps the layout deliberately simple for ATS readability.</p><b class="small">Section order</b><div id="sectionList"></div></div>
+<div class="card editor-panel"><h2>5. Application documents</h2><div class="tabs"><button data-tab="cv" class="active">CV</button><button data-tab="cover">Cover Letter</button><button data-tab="email">Application Email</button><button data-tab="linkedin">LinkedIn Summary</button></div><div id="document" class="doc">Analyse the CV or generate the application pack.</div></div>
+<div class="card editor-panel"><h2>Live CV preview</h2><div id="preview" class="preview-shell"></div></div>
 </section>
-<aside><div class="card"><h3>ATS SCORE</h3><div id="scoreValue" class="score">—</div><div id="gate" class="gate closed">CV not scored yet</div><h3>Feedback</h3><div id="feedback" class="small"></div></div>
-<div class="card"><h3>Engine rules locked</h3><p class="muted small">JobSeek Smart CV Engine v3 is the vacancy-tailoring and scoring engine. Guessed information is marked with [brackets].</p><ul class="small"><li>80–100 Strong</li><li>50–79 Average</li><li>0–49 Weak / application blocked</li></ul></div></aside></div></main>
-<script src="smart-cv-engine.js?v=20260926-6"></script><script>
+<aside class="sticky">
+<div class="card"><h2>ATS / vacancy analysis</h2><div id="scoreValue" class="score">—</div><div id="gate" class="gate closed">CV not analysed</div><div class="meter"><i id="scoreBar"></i></div><p id="scoreMeta" class="muted small"></p><h3>Matched keywords</h3><div id="matches"></div><h3>Missing / useful keywords</h3><div id="missing"></div></div>
+<div class="card"><h2>Quality checks</h2><div id="checks"><p class="muted small">Analysis results appear here.</p></div></div>
+<div class="card"><h2>Tailoring feedback</h2><div id="feedback"><p class="muted small">No analysis yet.</p></div></div>
+<div class="card"><h2>Accuracy rule</h2><p class="muted small">Review every generated field. JobSeek uses [brackets] when genuine information is missing and should never be treated as a claim about the candidate.</p></div>
+</aside></div></main><script src="smart-cv-engine.js?v=20260926-6"></script><script>
 (function(){
 'use strict';
 const $=id=>document.getElementById(id),val=id=>$(id)?.value||'',esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
