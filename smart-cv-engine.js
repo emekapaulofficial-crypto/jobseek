@@ -81,34 +81,50 @@
   }
 
   function smartFill(input={}) {
-    const role=(input.targetRole&&input.targetRole.trim())?input.targetRole:(/machine[- ]learning|predictive model|statistical model|data scientist/i.test(input.jobDescription||"")?"Data Scientist":/data analys|analytics|dataset|data quality|experiments/i.test(input.jobDescription||"")?"Data Analyst":"Professional");
-    const job=extractJobRequirements(input.jobDescription||"",role);
-    const location=input.location||"[City, State]";
-    const skills=(Array.isArray(input.skills)?input.skills:String(input.skills||"").split(/[,;\n]+/)).map(x=>x.trim()).filter(Boolean);
-    const matchedJobSkills=job.keywords.filter(k=>skills.some(s=>norm(s).includes(k)||k.includes(norm(s))));
-    // Keep employer requirements separate from candidate evidence; never claim a vacancy skill unless the candidate supplied it.
-    const finalSkills=unique([...skills,...matchedJobSkills]).slice(0,18);
-    const summary=input.summary && !VAGUE.some(v=>norm(input.summary).includes(v))
-      ? input.summary
-      : titleCase(role)+" focused on "+job.keywords.slice(0,6).map(titleCase).join(", ")+". Brings a structured, evidence-based approach to analysing data, solving business questions and communicating findings. Tailored to the specific employer requirements supplied for this vacancy.";
-    const experience=input.experience && !VAGUE.some(v=>norm(input.experience).includes(v))
-      ? input.experience
-      : professionalExperience(role,location,job);
-    const education=input.education||"[Institution] — [Qualification/Degree] — [Year]";
+    // If the user uploaded/pasted a CV, use it as the source of truth before repairing.
+    // Never replace real candidate information with generic placeholders when it can be extracted.
+    let source=Object.assign({},input);
+    if(String(input.cv||'').trim()){
+      const parsed=parseResumeText(input.cv);
+      ['name','email','phone','location','title','summary','skills','experience','education','certifications','projects'].forEach(k=>{
+        if(!String(source[k]||'').trim() && String(parsed[k]||'').trim()) source[k]=parsed[k];
+      });
+    }
+    const jd=String(source.jobDescription||'');
+    const roleFromJD=(jd.match(/(?:title|position)\s*:\s*([^\n\r]+)/i)||[])[1]?.trim()||'';
+    const role=(source.targetRole&&source.targetRole.trim())?source.targetRole.trim():(roleFromJD||source.title||'Professional');
+    const job=extractJobRequirements(jd,role);
+    const skills=(Array.isArray(source.skills)?source.skills:String(source.skills||"").split(/[,;\n]+/)).map(x=>x.trim()).filter(Boolean);
+    // Only retain skills supplied by the candidate. Employer keywords are used for analysis,
+    // not silently added as candidate skills.
+    const finalSkills=unique(skills).slice(0,24);
+    const existingSummary=String(source.summary||'').trim();
+    const existingExperience=String(source.experience||'').trim();
+    const summary=existingSummary && !VAGUE.some(v=>norm(existingSummary).includes(v))
+      ? existingSummary
+      : existingExperience
+        ? "Professional with verified experience in "+(source.title||role)+". "+existingExperience.split(/\n+/)[0]
+        : "";
+    const experience=existingExperience || "";
+    const education=String(source.education||'').trim();
+    const certifications=String(source.certifications||'').trim();
+    const projects=String(source.projects||'').trim();
     const guessed=[];
-    ["name","email","phone","location","education"].forEach(k=>{if(!input[k])guessed.push(k);});
-    if(!input.experience||VAGUE.some(v=>norm(input.experience).includes(v)))guessed.push("experience");
-    if(!input.skills)guessed.push("skills");
-    if(!input.summary||VAGUE.some(v=>norm(input.summary).includes(v)))guessed.push("summary");
+    ["name","email","phone","location","education"].forEach(k=>{if(!String(source[k]||'').trim())guessed.push(k);});
+    if(!experience)guessed.push("experience");
+    if(!skills.length)guessed.push("skills");
+    if(!summary)guessed.push("summary");
+    if(!certifications)guessed.push("certifications");
     const cv=[
-      input.name||"[Full Name]",input.email||"[Professional Email]",input.phone||"[Phone]",location,
-      "Target Role: "+titleCase(role),"","PROFESSIONAL SUMMARY",summary,
-      "","CORE SKILLS",finalSkills.map(s=>"• "+titleCase(s)).join("\n"),
-      "","PROFESSIONAL EXPERIENCE",experience,
-      "","EDUCATION",education,
-      "","CERTIFICATIONS",input.certifications||"[Add relevant certification or None]"
-    ].join("\n");
-    return {cv,summary,skills:finalSkills,experience,education,guessedFields:guessed,jobRequirements:job,targetRole:role};
+      source.name||"[Full Name]",source.email||"[Professional Email]",source.phone||"[Phone]",source.location||"",
+      "Target Role: "+role,"","PROFESSIONAL SUMMARY",summary||"[Add a professional summary based on your verified experience]",
+      "","CORE SKILLS",finalSkills.length?finalSkills.map(x=>"• "+x).join("\n"):"[Add verified skills]",
+      "","PROFESSIONAL EXPERIENCE",experience||"[Add your verified work experience]",
+      "","EDUCATION",education||"[Add your verified education]",
+      "","CERTIFICATIONS",certifications||"[Add verified certifications or state None]"
+    ];
+    if(projects)cv.push("","PROJECTS",projects);
+    return {cv:cv.join("\n"),summary,skills:finalSkills,experience,education,certifications,projects,guessedFields:guessed,jobRequirements:job,targetRole:role};
   }
 
   function coverLetter(data={}) {
@@ -212,5 +228,5 @@ function readability(text){const w=words(text).length,s=String(text).split(/[.!?
 function atsChecks(text){const l=norm(text),issues=[],positives=[];if(!/@/.test(text))issues.push('Add professional contact information.');if(/header|footer/i.test(l))issues.push('Keep critical contact details out of headers and footers when possible.');if(/\\b(photo|age|date of birth|marital status|religion)\\b/i.test(l))issues.push('Consider removing unnecessary personal details.');else positives.push('No obvious unnecessary personal-detail fields detected.');return{issues,positives}}
 const _scoreCV=scoreCV;
 function scoreCVv6(text,role,jd){const r=_scoreCV(text,role,jd),rd=readability(text),at=atsChecks(text),lower=norm(text),keys=unique([...(roleKeywords(role)||[]),...((r.jobRequirements&&r.jobRequirements.keywords)||[])]),matched=keys.filter(k=>lower.includes(k)),missing=keys.filter(k=>!lower.includes(k));return Object.assign({},r,{readability:rd,ats:at,matchedKeywords:matched,missingKeywords:missing,keywordCoverage:keys.length?Math.round(matched.length/keys.length*100):0})}
-window.JobSeekSmartCV={version:"smart-cv-v8-coach",scoreCV:scoreCVv6,smartFill,buildImprovementPlan,applyImprovementAnswers,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements,parseResumeText};
+window.JobSeekSmartCV={version:"smart-cv-v9-safe-repair",scoreCV:scoreCVv6,smartFill,buildImprovementPlan,applyImprovementAnswers,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements,parseResumeText};
 })();
