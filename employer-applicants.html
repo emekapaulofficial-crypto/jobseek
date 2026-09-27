@@ -3,12 +3,17 @@ const client=supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key),$=id
 async function init(){
  const u=await client.auth.getUser();if(!u.data.user){location.href='auth.html?role=employer';return}
  const role=await client.from('jobseek_accounts').select('role').eq('id',u.data.user.id).maybeSingle();
- if(role.error||role.data?.role!=='employer'){ $('status').textContent='Employer access required.';return}
- const r=await client.from('applications').select('id,final_score,score_level,score_feedback,status,submitted_at,cover_message,candidate_profiles(full_name,profession,target_job,years_experience,education,skills),agency_jobs!inner(id,title,employer_id)').order('final_score',{ascending:false,nullsFirst:false});
+ if(role.error||role.data?.role!=='employer'){$('status').textContent='Employer access required.';return}
+ const er=await client.from('employers').select('id,company_name').eq('user_id',u.data.user.id).maybeSingle();
+ if(er.error||!er.data){$('status').textContent='Employer verification profile not found.';return}
+ const jobs=await client.from('agency_jobs').select('id,title,country').eq('employer_id',er.data.id);
+ const ids=(jobs.data||[]).map(j=>j.id);if(!ids.length){$('status').textContent='No vacancies have been submitted for this employer yet.';return}
+ const r=await client.from('applications').select('id,final_score,score_level,score_feedback,status,submitted_at,cover_message,candidate_profiles(id,user_id,full_name,profession,target_job,years_experience,education,skills),agency_jobs!inner(id,title,country,employer_id)').in('agency_job_id',ids).order('final_score',{ascending:false,nullsFirst:false});
  if(r.error){$('status').textContent='Could not load applicants: '+r.error.message;return}
- const own=r.data.filter(x=>x.agency_jobs?.employer_id);
- $('status').textContent=own.length+' applicant(s) loaded. Sorted by final CV score.';
- $('list').innerHTML=own.length?own.map((a,i)=>{const p=a.candidate_profiles||{},s=a.final_score??0,l=s>=80?'STRONG':s>=50?'AVERAGE':'WEAK';return '<article class="job" style="padding:20px;margin:14px 0"><div style="display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap"><div><h2 style="margin:0">'+esc(p.full_name||'Candidate')+'</h2><p>'+esc(p.profession||p.target_job||'')+' · '+esc(a.agency_jobs?.title||'')+'</p></div><strong style="font-size:30px">'+s+'</strong></div><p><b>Badge:</b> '+(s>=90?'Top Applicant':s>=80?'Strong Match':s>=50?'Review Candidate':'CV Gate Rejected')+' · <b>Level:</b> '+l+'</p><p><b>Experience:</b> '+esc(p.years_experience||0)+' years · <b>Skills:</b> '+esc((p.skills||[]).join(', ')||'—')+'</p><p><b>Application:</b> '+esc(a.status||'submitted')+'</p></article>'}).join(''):'No applicants found for this employer.';
-}
-init();
+ const cps=(r.data||[]).map(x=>x.candidate_profiles).filter(Boolean);const userIds=[...new Set(cps.map(x=>x.user_id))];
+ const av= userIds.length ? await client.from('jobseek_accounts').select('id,avatar_url,full_name').in('id',userIds) : {data:[]};
+ const avatars=new Map((av.data||[]).map(x=>[x.id,x.avatar_url]));
+ $('status').textContent=(r.data||[]).length+' applicant(s) loaded for '+er.data.company_name+'.';
+ $('list').innerHTML=r.data?.length?r.data.map(a=>{const p=a.candidate_profiles||{},s=a.final_score??0,l=s>=80?'STRONG':s>=50?'AVERAGE':'WEAK',pic=avatars.get(p.user_id);return '<article class="job" style="padding:20px;margin:14px 0"><div style="display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap"><div style="display:flex;gap:14px;align-items:center"><div>'+(pic?'<img src="'+esc(pic)+'" alt="Candidate profile picture" style="width:64px;height:64px;border-radius:50%;object-fit:cover">':'<div style="width:64px;height:64px;border-radius:50%;background:#e8eef7;display:grid;place-items:center;font-weight:800">'+esc((p.full_name||'C').slice(0,1).toUpperCase())+'</div>')+'</div><div><h2 style="margin:0">'+esc(p.full_name||'Candidate')+'</h2><p>'+esc(p.profession||p.target_job||'')+' · '+esc(a.agency_jobs?.title||'')+'</p></div></div><strong style="font-size:30px">'+s+'</strong></div><p><b>Match:</b> '+(s>=90?'Very strong compatibility':s>=80?'Strong compatibility':s>=50?'Partial compatibility':'CV Gate')+' · <b>Level:</b> '+l+'</p><p><b>Experience:</b> '+esc(p.years_experience||0)+' years · <b>Skills:</b> '+esc((p.skills||[]).join(', ')||'—')+'</p><p><b>Application:</b> '+esc(a.status||'submitted')+'</p></article>'}).join(''):'No applicants found for your employer account.';
+}init();
 </script></body></html>
