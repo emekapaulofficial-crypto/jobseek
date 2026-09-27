@@ -164,9 +164,46 @@
     }
 
     var result = pages.join('\n\n').trim();
-    if (!result) {
-      throw new Error('This PDF is scanned/image-only. Please paste the CV text or use a text-based PDF.');
+    if (result.replace(/\\s+/g,'').length >= 80) return result;
+
+    // Scanned/image-only PDF fallback: render each page and OCR it locally in the browser.
+    status('Scanned CV detected. Loading free OCR engine…', true);
+    var Tesseract = window.Tesseract;
+    if (!Tesseract) {
+      Tesseract = await new Promise(function(resolve, reject) {
+        var s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
+        s.async = true;
+        s.onload = function(){ window.Tesseract ? resolve(window.Tesseract) : reject(new Error('OCR engine did not start.')); };
+        s.onerror = function(){ reject(new Error('Could not load the OCR engine. Check your internet connection.')); };
+        document.head.appendChild(s);
+      });
     }
+    var ocrPages = [];
+    for (var p = 1; p <= pdf.numPages; p++) {
+      status('Reading scanned CV page ' + p + ' of ' + pdf.numPages + ' with OCR…', true);
+      var scanPage = await pdf.getPage(p);
+      var base = scanPage.getViewport({scale:1});
+      var scale = Math.min(2, Math.max(1.35, 1800 / base.width));
+      var viewport = scanPage.getViewport({scale:scale});
+      var canvas = document.createElement('canvas');
+      canvas.width = Math.floor(viewport.width);
+      canvas.height = Math.floor(viewport.height);
+      var ctx = canvas.getContext('2d', {willReadFrequently:true});
+      await scanPage.render({canvasContext:ctx, viewport:viewport}).promise;
+      var ocr = await Tesseract.recognize(canvas, 'eng', {
+        logger:function(m){
+          if(m && m.status === 'recognizing text' && typeof m.progress === 'number') {
+            status('OCR page ' + p + ' of ' + pdf.numPages + ' — ' + Math.round(m.progress*100) + '%…', true);
+          }
+        }
+      });
+      var pageText = String((ocr && ocr.data && ocr.data.text) || '').trim();
+      if(pageText) ocrPages.push(pageText);
+      canvas.width = 1; canvas.height = 1;
+    }
+    result = ocrPages.join('\n\n').trim();
+    if (!result) throw new Error('OCR could not read this scanned CV. Please use a clearer scan or paste the CV text.');
     return result;
   }
 
