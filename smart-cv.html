@@ -313,4 +313,95 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  set(localStorage.getItem(key)==='1');
  btn.onclick=()=>set(grid.style.display!=='none');
 })();
+</script><script>
+(function(){
+  function bootImportFix(){
+    const btn=document.getElementById('parseCv');
+    const file=document.getElementById('file');
+    const cv=document.getElementById('cv');
+    const statusEl=document.getElementById('status');
+    if(!btn||!file||!cv)return;
+    if(btn.dataset.importFixBound==='1')return;
+    btn.dataset.importFixBound='1';
+
+    const setStatus=(msg,good)=>{
+      if(statusEl){statusEl.textContent=msg;statusEl.className='small '+(good?'go':'danger');}
+    };
+
+    const clean=x=>String(x||'').replace(/^\s*(?:#{1,6}\s*)/,'').replace(/\*\*/g,'').trim();
+    const parseText=text=>{
+      let t=String(text||'').replace(/\r/g,'');
+      t=t.replace(/\b(PROFILE SUMMARY|PROFESSIONAL SUMMARY|SUMMARY|WORK EXPERIENCE|PROFESSIONAL EXPERIENCE|EMPLOYMENT|EXPERIENCE|EDUCATION|ACADEMIC BACKGROUND|SKILLS|CORE SKILLS|TECHNICAL SKILLS|COMPETENCIES|CERTIFICATIONS|PROJECTS|SELECTED PROJECTS)\b/gi,'\n$1\n');
+      const lines=t.split(/\n/).map(clean).map(x=>x.replace(/^[-•]\s*/,'').trim()).filter(Boolean);
+      const o={name:'',email:'',phone:'',location:'',title:'',summary:'',skills:'',experience:'',education:'',certifications:'',projects:''};
+      const groups={summary:/^(professional summary|summary|profile|objective)$/i,experience:/^(professional experience|work experience|employment|experience)$/i,education:/^(education|academic background)$/i,skills:/^(core skills|technical skills|skills|competencies)$/i,certifications:/^(certifications?|licenses?)$/i,projects:/^(projects?|portfolio|selected projects)$/i};
+      const b={};let cur='';
+      lines.forEach(line=>{const k=Object.keys(groups).find(k=>groups[k].test(line));if(k){cur=k;b[k]=[];return}if(cur)b[cur].push(line);});
+      o.email=(t.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)||[])[0]||'';
+      o.phone=(t.match(/(?:\+?\d[\d\s().-]{7,}\d)/)||[])[0]||'';
+      o.name=lines.find(x=>x.length>2&&x.length<70&&!/@/.test(x)&&!Object.values(groups).some(re=>re.test(x)))||'';
+      o.summary=(b.summary||[]).join('\n');o.experience=(b.experience||[]).join('\n');o.education=(b.education||[]).join('\n');
+      o.skills=(b.skills||[]).join(', ');o.certifications=(b.certifications||[]).join('\n');o.projects=(b.projects||[]).join('\n');
+      o.title=lines.find(x=>/engineer|developer|designer|manager|analyst|accountant|marketing|farmer|electrician|technician|writer/i.test(x)&&x!==o.name)||'';
+      return o;
+    };
+    const apply=text=>{
+      cv.value=text;
+      let parsed=null;
+      try{parsed=(window.JobSeekSmartCV&&typeof window.JobSeekSmartCV.parseResumeText==='function')?window.JobSeekSmartCV.parseResumeText(text):parseText(text);}catch(e){parsed=parseText(text);}
+      ['name','email','phone','location','title','summary','experience','education','projects','certifications'].forEach(k=>{const el=document.getElementById(k);if(el&&parsed[k])el.value=parsed[k];});
+      const skills=document.getElementById('skills');if(skills&&parsed.skills)skills.value=Array.isArray(parsed.skills)?parsed.skills.join(', '):parsed.skills;
+      cv.dispatchEvent(new Event('input',{bubbles:true}));
+      setStatus('CV imported successfully. Your candidate fields have been filled.',true);
+    };
+
+    btn.addEventListener('click',async function(e){
+      e.preventDefault();e.stopPropagation();
+      setStatus('Importing CV…',true);
+      const selected=file.files&&file.files[0];
+      if(!selected){
+        if(cv.value.trim()){apply(cv.value.trim());return;}
+        setStatus('Please select a PDF/TXT file first, or paste your CV text.',false);return;
+      }
+      if(selected.type==='text/plain'||/\.txt$/i.test(selected.name)){
+        const reader=new FileReader();
+        reader.onload=()=>apply(String(reader.result||''));
+        reader.onerror=()=>setStatus('Could not read the TXT file. Please try again.',false);
+        reader.readAsText(selected);return;
+      }
+      if(selected.type!=='application/pdf'&&!/\.pdf$/i.test(selected.name)){
+        setStatus('Please select a PDF or TXT CV.',false);return;
+      }
+      try{
+        let pdfjs=window.pdfjsLib;
+        if(!pdfjs){
+          setStatus('Loading PDF reader…',true);
+          pdfjs=await new Promise((resolve,reject)=>{
+            const s=document.createElement('script');
+            s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+            s.onload=()=>window.pdfjsLib?resolve(window.pdfjsLib):reject(new Error('PDF reader did not start'));
+            s.onerror=()=>reject(new Error('PDF reader could not be loaded'));
+            document.head.appendChild(s);
+            setTimeout(()=>reject(new Error('PDF reader timed out.')),12000);
+          });
+        }
+        pdfjs.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        const data=await selected.arrayBuffer();
+        const pdf=await pdfjs.getDocument({data:new Uint8Array(data),useWorkerFetch:false,isEvalSupported:true}).promise;
+        let pages=[];
+        for(let n=1;n<=pdf.numPages;n++){
+          const page=await pdf.getPage(n);
+          const content=await page.getTextContent();
+          pages.push(content.items.map(x=>x.str||'').join(' '));
+        }
+        const extracted=pages.join('\n\n').trim();
+        if(!extracted){setStatus('This PDF appears to be scanned/image-only. Please paste the CV text or use a text-based PDF.',false);return;}
+        apply(extracted);
+      }catch(err){
+        setStatus('PDF import failed. Please paste the CV text as a backup. '+(err&&err.message?err.message:''),false);
+      }
+    },true);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bootImportFix);else bootImportFix();
+})();
 </script></body></html>
