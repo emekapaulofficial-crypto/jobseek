@@ -68,6 +68,7 @@
     if(titleLine)o.title=titleLine;
     return o;
   };
+  window.JobSeekParseStandalone=parseStandalone;
   async function pdfLib(){
     if(window.pdfjsLib)return window.pdfjsLib;
     await new Promise((resolve,reject)=>{
@@ -142,7 +143,7 @@ function preview(){
   let f=form();
   try{
     if(source){
-      const parsed=parseStandalone(source);
+      const parsed=window.JobSeekParseStandalone?window.JobSeekParseStandalone(source):{};
       ['name','email','phone','location','title','summary','skills','experience','education','projects','certifications'].forEach(k=>{
         if(!f[k] && parsed[k]) f[k]=parsed[k];
       });
