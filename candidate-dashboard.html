@@ -34,7 +34,7 @@ async function init(){
  profile=r.data;
  if(profile){fields.forEach(f=>$(f).value=profile[f]??'');arrays.forEach(f=>$(f).value=(profile[f]||[]).join(', '))}
  else {$('notice').textContent='Complete your profile so JobSeek can score your recruitment readiness.'}
- const d=await client.from('jobseek_documents').select('id,document_type,file_name,verification_status,storage_path').eq('candidate_id',user.id);
+ const d=profile?.id?await client.from('jobseek_documents').select('id,document_type,file_name,verification_status,storage_path').eq('candidate_id',profile.id):{data:[],error:null};
  docs=d.data||[];
  await calculateAndRender();
  renderDownloads();
@@ -46,15 +46,26 @@ function renderAvatar(url){
  if(url){$('profileAvatar').src=url;$('profileAvatar').style.display='block';$('profileAvatarFallback').style.display='none';$('navAvatar').style.backgroundImage='url("'+String(url).replace(/"/g,'&quot;')+'")';$('navAvatar').style.backgroundSize='cover';$('navAvatar').style.backgroundPosition='center';$('navAvatar').textContent='';}
 }
 async function uploadAvatar(){
- const f=$('avatarFile').files?.[0]; if(!f)return alert('Please choose a profile picture first.');
- if(f.size>5*1024*1024)return alert('Maximum profile picture size is 5 MB.');
- const ext=(f.name.split('.').pop()||'jpg').toLowerCase(),path=user.id+'/jobseek-profile.'+ext;
- const up=await client.storage.from('avatars').upload(path,f,{contentType:f.type||'image/jpeg',upsert:true});
- if(up.error)return alert('Profile picture upload failed: '+up.error.message);
- const url=client.storage.from('avatars').getPublicUrl(path).data.publicUrl;
- const u=await client.from('jobseek_accounts').update({avatar_url:url}).eq('id',user.id);
- if(u.error)return alert('Could not save profile picture: '+u.error.message);
- renderAvatar(url); alert('Profile picture updated.');
+ try{
+  const f=$('avatarFile').files?.[0];
+  if(!f){$('avatarFileName').textContent='Please choose a profile picture first.';return}
+  if(!/^image\\/(jpeg|png|webp)$/.test(f.type)){ $('avatarFileName').textContent='Please choose a JPG, PNG or WebP image.';return }
+  if(f.size>5*1024*1024){$('avatarFileName').textContent='Maximum profile picture size is 5 MB.';return}
+  $('uploadAvatar').disabled=true;$('uploadAvatar').textContent='Uploading…';
+  const ext=(f.name.split('.').pop()||'jpg').toLowerCase();
+  const path=user.id+'/jobseek-profile-'+Date.now()+'.'+ext;
+  const up=await client.storage.from('avatars').upload(path,f,{contentType:f.type,cacheControl:'3600',upsert:false});
+  if(up.error)throw up.error;
+  const url=client.storage.from('avatars').getPublicUrl(path).data.publicUrl;
+  if(!url)throw new Error('Could not create the profile picture URL.');
+  const u=await client.from('jobseek_accounts').update({avatar_url:url}).eq('id',user.id);
+  if(u.error)throw u.error;
+  renderAvatar(url);$('avatarFileName').textContent=f.name+' — uploaded ✓';
+ }catch(err){
+  $('avatarFileName').textContent='Upload failed: '+(err?.message||String(err));
+ }finally{
+  $('uploadAvatar').disabled=false;$('uploadAvatar').textContent='Upload picture';
+ }
 }
 async function getSavedCount(){const r=await client.from('jobseek_saved_jobs').select('id',{count:'exact',head:true}).eq('user_id',user.id);return r.count||0}
 async function loadSavedJobs(){const count=await getSavedCount();$('savedJobsCount')?.replaceChildren(document.createTextNode(String(count)))}
