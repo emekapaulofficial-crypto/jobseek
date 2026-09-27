@@ -18,19 +18,29 @@ function buildHeader(){
  m.onclick=()=>{const o=n.classList.toggle('open');m.setAttribute('aria-expanded',o?'true':'false');m.textContent=o?'✕':'☰'};
  n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{n.classList.remove('open');m.setAttribute('aria-expanded','false');m.textContent='☰'}));
 }
+function loadScript(src){return new Promise((resolve,reject)=>{const existing=[...document.scripts].find(s=>s.src&&s.src.includes(src));if(existing){if(src.includes('supabase-js')&&window.supabase)return resolve();if(src.includes('supabase-client')&&window.JobSeekSupabase)return resolve();existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',reject,{once:true});return}const s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=reject;document.head.appendChild(s)})}
+async function ensureAuthClient(){
+  if(window.supabase?.createClient&&window.JobSeekSupabase?.configured)return true;
+  try{
+    if(!window.supabase?.createClient)await loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2');
+    if(!window.JobSeekSupabase?.configured)await loadScript('supabase-client.js');
+    return Boolean(window.supabase?.createClient&&window.JobSeekSupabase?.configured);
+  }catch(_){return false}
+}
 function legacySearch(){const q=document.getElementById('q'),loc=document.getElementById('loc');document.getElementById('searchBtn')?.addEventListener('click',()=>{if(q&&loc)location.href='jobs.html?keyword='+encodeURIComponent(q.value.trim())+'&region='+encodeURIComponent(loc.value.trim())});[q,loc].forEach(x=>x?.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('searchBtn')?.click()}))}
 async function syncAuthNavigation(){
-  // Supabase is loaded after app.js on most pages, so wait briefly for the shared client.
-  for(let i=0;i<60;i++){
-    if(window.supabase?.createClient && window.JobSeekSupabase?.configured)break;
-    await new Promise(resolve=>setTimeout(resolve,100));
-  }
-  if(!window.supabase?.createClient || !window.JobSeekSupabase?.configured)return;
+  const actions=document.querySelector('.nav-actions');
+  if(actions){actions.style.visibility='hidden';}
+  const ready=await ensureAuthClient();
+  if(!ready){if(actions)actions.style.visibility='visible';return;}
   try{
     const client=window.supabase.createClient(window.JobSeekSupabase.url,window.JobSeekSupabase.key);
     const session=await client.auth.getSession();
     const current=session?.data?.session?.user;
-    if(!current)return;
+    if(!current){
+      if(actions){actions.innerHTML='<a class="nav-login" href="auth.html">Log In</a><a class="nav-signup" href="auth.html?mode=signup">Sign Up</a>';actions.style.visibility='visible';}
+      return;
+    }
     let role='candidate',fullName=current.user_metadata?.full_name||current.email||'Account';
     try{
       const account=await client.from('jobseek_accounts').select('role,full_name').eq('id',current.id).maybeSingle();
@@ -45,10 +55,12 @@ async function syncAuthNavigation(){
       nav.innerHTML+='<a href="'+dashboard+'" data-auth-dashboard="true"><span class="nav-icon">◈</span><span>'+label+'</span></a>';
       nav.querySelectorAll('a[data-nav-link]').forEach(a=>a.style.display='none');
     }
-    const actions=document.querySelector('.nav-actions');
-    if(actions){
+    const actionsBox=document.querySelector('.nav-actions');
+    if(actionsBox){
+      const actions=actionsBox;
       actions.querySelectorAll('.nav-login,.nav-signup').forEach(el=>el.remove());
       actions.innerHTML='<span class="nav-account" title="'+String(fullName).replace(/"/g,'&quot;')+'">Hi, '+String(fullName).split(' ')[0]+'</span><button type="button" class="nav-logout" id="globalLogout">Log out</button>';
+      actions.style.visibility='visible';
       document.getElementById('globalLogout')?.addEventListener('click',async()=>{
         await client.auth.signOut();
         location.href='index.html';
@@ -67,7 +79,7 @@ async function syncAuthNavigation(){
       localLogout.textContent='Log out';
       localLogout.onclick=async()=>{await client.auth.signOut();location.href='index.html'};
     }
-  }catch(err){/* Keep public navigation usable if auth lookup fails. */}
+  }catch(err){if(actions)actions.style.visibility='visible';/* Keep public navigation usable if auth lookup fails. */}
 }
 function init(){buildHeader();legacySearch();initMobileJobsFilters();syncAuthNavigation()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
