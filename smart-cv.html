@@ -104,7 +104,7 @@
   function bind(){}
 })();
 </script>
-<script src="smart-cv-engine.js?v=20260927-16"></script><script>
+<script src="smart-cv-engine.js?v=20260927-17"></script><script>
 (function(){
 'use strict';
 const $=id=>document.getElementById(id),val=id=>$(id)?.value||'',esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -188,7 +188,39 @@ function fix(){if(!val('jobDescription').trim()){status('Paste the exact employe
 function generate(){if(!result||!result.applicationEligible){status('Analyse or repair the CV until the application gate is open.',false);return}let f=form(),x=JobSeekSmartCV.smartFill(Object.assign(f,{targetRole:val('role'),jobDescription:val('jobDescription')}));docs={cv:x.cv,cover:JobSeekSmartCV.coverLetter({...f,role:x.targetRole,company:val('company'),skills:x.skills,jobDescription:val('jobDescription'),jobRequirements:x.jobRequirements.keywords,matchedKeywords:result.matchedKeywords}),email:JobSeekSmartCV.applicationEmail({...f,role:x.targetRole,company:val('company'),skills:x.skills}),linkedin:JobSeekSmartCV.linkedin({...f,role:x.targetRole,skills:x.skills})};$('cv').value=x.cv;setForm({summary:x.summary,skills:x.skills,experience:x.experience,education:x.education});preview();$('document').textContent=docs[tab];status('Application pack generated.',true)}
 function save(){localStorage.setItem('jobseek_cv_engine_v2',JSON.stringify({form:form(),role:val('role'),company:val('company'),template,order,cv:val('cv')}));status('CV saved on this device.',true)}
 function load(){try{let x=JSON.parse(localStorage.getItem('jobseek_cv_engine_v2')||'null');if(!x){status('No saved CV found.',false);return}setForm(x.form||{});$('role').value=x.role||'';$('company').value=x.company||'';$('cv').value=x.cv||'';template=x.template||'classic';order=x.order||order;document.querySelectorAll('[data-template]').forEach(b=>b.classList.toggle('active',b.dataset.template===template));renderSections();preview();status('Saved CV loaded.',true)}catch(e){status('Could not load saved CV.',false)}}
-function importCVToFields(autoAnalyse=true){try{if(!window.JobSeekSmartCV||typeof JobSeekSmartCV.parseResumeText!=='function'){status('CV analyser is not ready. Please refresh the page and try again.',false);return false}const text=val('cv').trim();if(!text){status('Please upload a PDF/TXT or paste your CV first.',false);return false}const x=JobSeekSmartCV.parseResumeText(text);setForm(x);preview();if(autoAnalyse&&val('jobDescription').trim()){result=JobSeekSmartCV.scoreCV(text,val('role'),val('jobDescription'));coach=JobSeekSmartCV.buildImprovementPlan(text,val('role'),val('jobDescription'));renderAnalysis();renderCoach();status('CV imported and analysed against the vacancy.',true)}else{status('CV imported successfully. Your fields are now filled — add the vacancy, then click Analyse CV & ATS.',true)}return true}catch(err){status('CV import failed: '+(err?.message||String(err)),false);return false}}
+function standaloneParseCV(text){
+  let t=String(text||'').replace(/\r/g,'');
+  const headings=/\b(PROFILE SUMMARY|PROFESSIONAL SUMMARY|SUMMARY|WORK EXPERIENCE|PROFESSIONAL EXPERIENCE|EMPLOYMENT|EXPERIENCE|EDUCATION|ACADEMIC BACKGROUND|SKILLS|CORE SKILLS|TECHNICAL SKILLS|COMPETENCIES|CERTIFICATIONS|PROFESSIONAL CERTIFICATIONS|PROJECTS|SELECTED PROJECTS|INTERESTS & MOTIVATION|ADDITIONAL INFORMATION)\b/gi;
+  t=t.replace(headings,'\n$1\n').replace(/(Email\s*:|Phone\s*:|WhatsApp\s*:|Location\s*:|Address\s*:|Nationality\s*:)/gi,'\n$1 ');
+  const clean=x=>String(x||'').replace(/^\s*(?:#{1,6}\s*)/,'').replace(/\*\*/g,'').trim();
+  const lines=t.split(/\n/).map(clean).map(x=>x.replace(/^[-•]\s*/,'').trim()).filter(Boolean);
+  const o={name:'',email:'',phone:'',location:'',title:'',summary:'',skills:'',experience:'',education:'',certifications:'',projects:''};
+  const hs={
+    summary:/^(professional summary|summary|profile|objective)$/i,
+    experience:/^(professional experience|work experience|employment|experience)$/i,
+    education:/^(education|academic background)$/i,
+    skills:/^(core skills|technical skills|skills|competencies|core competencies)$/i,
+    certifications:/^(certifications?|licenses?|professional certifications)$/i,
+    projects:/^(projects?|portfolio|selected projects)$/i,
+    location:/^(location|address|city)$/i
+  };
+  const b={}; let cur='';
+  lines.forEach(line=>{const h=Object.keys(hs).find(k=>hs[k].test(line));if(h){cur=h;b[cur]=[];return}if(cur)(b[cur]||(b[cur]=[])).push(line)});
+  o.email=(t.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)||[])[0]||'';
+  o.phone=(t.match(/(?:\+?\d[\d\s().-]{7,}\d)/)||[])[0]||'';
+  o.summary=(b.summary||[]).join('\n');
+  o.experience=(b.experience||[]).join('\n');
+  o.education=(b.education||[]).join('\n');
+  o.skills=(b.skills||[]).join(', ');
+  o.certifications=(b.certifications||[]).join('\n');
+  o.projects=(b.projects||[]).join('\n');
+  o.location=(b.location||[]).join(', ');
+  o.name=lines.find(x=>x.length>2&&x.length<70&&!/@/.test(x)&&!Object.values(hs).some(r=>r.test(x))&&!/^(phone|email|mobile|tel)\s*:/i.test(x))||'';
+  o.title=lines.find(x=>/senior geologist|geologist|data analyst|data scientist|software engineer|developer|product manager|designer|accountant|project manager|electrician|marketing/i.test(x))||'';
+  if(!o.location){const loc=lines.find(x=>/\b(lagos|abuja|port harcourt|ibadan|enugu|benin|kano|kaduna|warri|delta|nigeria)\b/i.test(x)&&x!==o.name);if(loc)o.location=loc}
+  return o;
+}
+function importCVToFields(autoAnalyse=true){try{const text=val('cv').trim();if(!text){status('Please upload a PDF/TXT or paste your CV first.',false);return false}const parser=(window.JobSeekSmartCV&&typeof window.JobSeekSmartCV.parseResumeText==='function')?window.JobSeekSmartCV.parseResumeText:standaloneParseCV;const x=parser(text);setForm(x);preview();if(autoAnalyse&&val('jobDescription').trim()){result=JobSeekSmartCV.scoreCV(text,val('role'),val('jobDescription'));coach=JobSeekSmartCV.buildImprovementPlan(text,val('role'),val('jobDescription'));renderAnalysis();renderCoach();status('CV imported and analysed against the vacancy.',true)}else{status('CV imported successfully. Your fields are now filled — add the vacancy, then click Analyse CV & ATS.',true)}return true}catch(err){status('CV import failed: '+(err?.message||String(err)),false);return false}}
 function downloadBlob(blob,filename){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 function cvFileName(ext){return ((val('name')||'JobSeek-CV').trim().replace(/[^a-z0-9]+/gi,'-')||'JobSeek-CV')+'.'+ext}
 async function loadExportLibs(){if(!window.html2canvas){await new Promise((res,rej)=>{let x=document.createElement('script');x.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';x.onload=res;x.onerror=rej;document.head.appendChild(x)})}if(!window.jspdf){await new Promise((res,rej)=>{let x=document.createElement('script');x.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';x.onload=res;x.onerror=rej;document.head.appendChild(x)})}}
