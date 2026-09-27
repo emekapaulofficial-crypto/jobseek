@@ -11,7 +11,7 @@
 <p class="muted no-print">Create a structured CV, compare it with the exact vacancy, check ATS/readability issues and see the finished document live.</p>
 <div class="grid"><section>
 <div class="card editor-panel"><h2>1. Target the vacancy</h2><div class="row"><div class="field"><label>Target Role</label><input id="role" placeholder="e.g. Data Analyst"></div><div class="field"><label>Company</label><input id="company" placeholder="Employer name"></div></div><div class="field"><label>Exact employer job description / requirements *</label><textarea id="jobDescription" style="min-height:170px" placeholder="Paste the exact vacancy here. This is what the matching engine uses."></textarea></div><div class="toolbar"><button class="primary" id="score">Analyse CV & ATS</button><button class="dark" id="fix">Tailor / Repair CV</button><button class="outline" id="generate">Generate Application Pack</button></div><p id="status" class="muted small">Start by pasting the exact vacancy.</p></div>
-<div class="card editor-panel"><h2>2. Import or enter your CV</h2><label>Upload CV (PDF or TXT)</label><input id="file" type="file" accept=".pdf,.txt,application/pdf,text/plain"><div class="field" style="margin-top:12px"><label>Full CV text</label><textarea id="cv" placeholder="Paste your existing CV here."></textarea></div><div class="toolbar" style="margin-top:10px"><button class="primary" id="parseCv">Import CV & Fill Fields</button><button class="outline" id="clearImport">Clear Imported CV</button></div><p class="muted small">Upload a PDF/TXT or paste your CV above, then use the blue button. JobSeek will fill the candidate fields automatically.</p></div>
+<div class="card editor-panel"><h2>2. Import or enter your CV</h2><label>Upload CV (PDF or TXT)</label><input id="file" type="file" accept=".pdf,.txt,application/pdf,text/plain"><div class="field" style="margin-top:12px"><label>Full CV text</label><textarea id="cv" placeholder="Paste your existing CV here."></textarea></div><div class="toolbar" style="margin-top:10px"><button type="button" class="primary" id="parseCv">Import CV & Fill Fields</button><button class="outline" id="clearImport">Clear Imported CV</button></div><p class="muted small">Upload a PDF/TXT or paste your CV above, then use the blue button. JobSeek will fill the candidate fields automatically.</p></div>
 <div class="card editor-panel"><h2>3. Candidate information</h2><div class="row"><div class="field"><label>Full Name</label><input id="name"></div><div class="field"><label>Professional Email</label><input id="email"></div><div class="field"><label>Phone</label><input id="phone"></div><div class="field"><label>City / Location</label><input id="location"></div><div class="field"><label>Professional Title</label><input id="title"></div><div class="field"><label>Certifications</label><input id="certifications"></div></div><div class="field"><label>Professional Summary</label><textarea id="summary"></textarea></div><div class="field"><label>Core Skills (comma separated)</label><textarea id="skills"></textarea></div><div class="field"><label>Work Experience</label><textarea id="experience"></textarea></div><div class="field"><label>Education</label><textarea id="education"></textarea></div><div class="field"><label>Projects</label><textarea id="projects"></textarea></div></div>
 <div class="card editor-panel"><h2>4. CV design & structure</h2><div class="template-row"><button class="template active" data-template="classic">Classic ATS</button><button class="template" data-template="modern">Modern</button><button class="template" data-template="minimal">Minimal</button></div><p class="muted small">Classic keeps the layout deliberately simple for ATS readability.</p><b class="small">Section order</b><div id="sectionList"></div></div>
 <div class="card editor-panel"><h2>6. Improve your CV for this vacancy</h2><p class="muted small">Answer only what is true about your experience. JobSeek will not add a vacancy requirement as a fact unless you confirm it.</p><div id="coachSummary" class="improve-summary">Analyse your CV to see personalised improvement questions.</div><div id="coach"></div><button class="primary" id="applyImprovements">Improve CV with verified answers</button><button class="outline" id="clearImprovements">Clear answers</button><p class="coach-note">Review every change before applying.</p></div><div class="card editor-panel"><h2>5. Application documents</h2><div class="tabs"><button data-tab="cv" class="active">CV</button><button data-tab="cover">Cover Letter</button><button data-tab="email">Application Email</button><button data-tab="linkedin">LinkedIn Summary</button></div><div id="document" class="doc">Analyse the CV or generate the application pack.</div></div>
@@ -22,7 +22,104 @@
 <div class="card"><h2>Quality checks</h2><div id="checks"><p class="muted small">Analysis results appear here.</p></div></div>
 <div class="card"><h2>Tailoring feedback</h2><div id="feedback"><p class="muted small">No analysis yet.</p></div></div>
 <div class="card"><h2>Accuracy rule</h2><p class="muted small">Review every generated field. JobSeek uses [brackets] when genuine information is missing and should never be treated as a claim about the candidate.</p></div>
-</aside></div></main><script src="smart-cv-engine.js?v=20260927-15"></script><script>
+</aside></div></main><script>
+(function(){
+  'use strict';
+  const byId=id=>document.getElementById(id);
+  const setVal=(id,v)=>{const el=byId(id);if(el)el.value=v||''};
+  const statusMsg=(msg,ok)=>{const el=byId('status');if(el){el.textContent=msg;el.className=ok?'muted small success':'muted small';}};
+  const clean=s=>String(s||'').replace(/^\s*(?:#{1,6}\s*)/,'').replace(/\*\*/g,'').replace(/__+/g,'').trim();
+  const parseStandalone=text=>{
+    let t=String(text||'').replace(/\r/g,'');
+    t=t.replace(/\b(PROFILE SUMMARY|PROFESSIONAL SUMMARY|SUMMARY|WORK EXPERIENCE|PROFESSIONAL EXPERIENCE|EMPLOYMENT|EDUCATION|ACADEMIC BACKGROUND|SKILLS|CORE SKILLS|TECHNICAL SKILLS|COMPETENCIES|CERTIFICATIONS|PROFESSIONAL CERTIFICATIONS|PROJECTS|SELECTED PROJECTS|INTERESTS & MOTIVATION|ADDITIONAL INFORMATION)\b/gi,'\n$1\n');
+    t=t.replace(/(Email\s*:|Phone\s*:|WhatsApp\s*:|Location\s*:|Address\s*:|Nationality\s*:)/gi,'\n$1 ');
+    const lines=t.split(/\n+/).map(clean).filter(Boolean);
+    const o={name:'',email:'',phone:'',location:'',title:'',summary:'',skills:'',experience:'',education:'',certifications:'',projects:''};
+    o.email=(t.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)||[])[0]||'';
+    o.phone=(t.match(/(?:\+?\d[\d\s().-]{7,}\d)/)||[])[0]||'';
+    const headings={summary:/^(profile summary|professional summary|summary|profile|objective)$/i,experience:/^(work experience|professional experience|employment|experience)$/i,education:/^(education|academic background)$/i,skills:/^(skills|core skills|technical skills|competencies|core competencies)$/i,certifications:/^(certifications?|licenses?|professional certifications)$/i,projects:/^(projects?|portfolio|selected projects)$/i};
+    let section='';
+    const buckets={summary:[],experience:[],education:[],skills:[],certifications:[],projects:[]};
+    for(const raw of lines){
+      const line=raw.replace(/^[-•▪◦]\s*/,'').trim();
+      const h=Object.keys(headings).find(k=>headings[k].test(line));
+      if(h){section=h;continue}
+      const m=line.match(/^(Location|Address|City)\s*:\s*(.+)$/i);
+      if(m){o.location=m[2].trim();continue}
+      if(/^(Email|Phone|WhatsApp)\s*:/i.test(line))continue;
+      if(section)buckets[section].push(raw);
+    }
+    o.summary=buckets.summary.join('\n');
+    o.experience=buckets.experience.join('\n');
+    o.education=buckets.education.join('\n');
+    o.skills=buckets.skills.join(', ');
+    o.certifications=buckets.certifications.join('\n');
+    o.projects=buckets.projects.join('\n');
+    if(!o.location){
+      const loc=lines.find(x=>/\b(nigeria|lagos|abuja|akure|ibadan|port harcourt|enugu|benin|warri|delta|ondo)\b/i.test(x)&&!/@/.test(x));
+      if(loc)o.location=loc.replace(/^(location|address|city)\s*:\s*/i,'').trim();
+    }
+    const nameLine=lines.find(x=>x.length>2&&x.length<60&&!/@/.test(x)&&!/^\+?\d/.test(x)&&!/^(profile|summary|work experience|professional experience|education|skills|certifications|projects|location|address|phone|email|whatsapp)$/i.test(x));
+    if(nameLine)o.name=nameLine;
+    const titleLine=lines.find(x=>/entrepreneur|skilled tradesman|team lead|geologist|data analyst|engineer|developer|manager|electrician|accountant|designer/i.test(x)&&x!==o.name);
+    if(titleLine)o.title=titleLine;
+    return o;
+  };
+  async function pdfLib(){
+    if(window.pdfjsLib)return window.pdfjsLib;
+    await new Promise((resolve,reject)=>{
+      const s=document.createElement('script');
+      s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+      s.onload=()=>window.pdfjsLib?resolve():reject(new Error('PDF reader did not initialize'));
+      s.onerror=()=>reject(new Error('PDF reader could not be loaded'));
+      document.head.appendChild(s);
+    });
+    return window.pdfjsLib;
+  }
+  async function extract(file){
+    if(/\.txt$/i.test(file.name)||file.type==='text/plain')return await file.text();
+    if(!/\.pdf$/i.test(file.name)&&file.type!=='application/pdf')throw new Error('Please select a PDF or TXT file.');
+    const pdfjs=await pdfLib();
+    pdfjs.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const pdf=await pdfjs.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise;
+    const pages=[];
+    for(let i=1;i<=pdf.numPages;i++){
+      const page=await pdf.getPage(i);
+      const content=await page.getTextContent();
+      const items=content.items||[];
+      pages.push(items.map(x=>x.str||'').join(' ').trim());
+    }
+    const text=pages.filter(Boolean).join('\n\n').trim();
+    if(!text)throw new Error('This PDF has no selectable text. Please use a text-based PDF or paste the CV text.');
+    return text;
+  }
+  function fill(o){
+    setVal('name',o.name);setVal('email',o.email);setVal('phone',o.phone);setVal('location',o.location);setVal('title',o.title);setVal('summary',o.summary);setVal('skills',o.skills);setVal('experience',o.experience);setVal('education',o.education);setVal('certifications',o.certifications);setVal('projects',o.projects);
+  }
+  function bind(){
+    const b=byId('parseCv'),file=byId('file'),cv=byId('cv');
+    if(!b||!file||!cv)return;
+    b.addEventListener('click',async function(ev){
+      ev.preventDefault();ev.stopImmediatePropagation();
+      try{
+        const selected=file.files&&file.files[0];
+        if(!selected){
+          const pasted=cv.value.trim();
+          if(!pasted){statusMsg('Please choose your CV file first, or paste your CV text.',false);return}
+          fill(parseStandalone(pasted));statusMsg('CV imported and fields filled successfully.',true);return;
+        }
+        statusMsg('Reading '+selected.name+'…',true);
+        const text=await extract(selected);
+        cv.value=text;
+        fill(parseStandalone(text));
+        statusMsg('CV imported and fields filled successfully.',true);
+      }catch(err){statusMsg('CV import failed: '+(err&&err.message?err.message:String(err)),false)}
+    },true);
+  }
+  bind();
+})();
+</script>
+<script src="smart-cv-engine.js?v=20260927-15"></script><script>
 (function(){
 'use strict';
 const $=id=>document.getElementById(id),val=id=>$(id)?.value||'',esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
