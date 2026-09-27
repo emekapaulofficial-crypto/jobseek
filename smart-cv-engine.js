@@ -231,7 +231,7 @@ function applyImprovementAnswers(input={},plan=[]){
   return Object.assign(data,{cv,summary:data.summary||'',skills:data.skills||'',experience:data.experience||'',education:data.education||''});
 }
 function readability(text){const w=words(text).length,s=String(text).split(/[.!?]+/).filter(x=>x.trim()).length,a=s?w/s:w;return{wordCount:w,sentenceCount:s,avgWordsPerSentence:Math.round(a*10)/10,tooLong:a>28}}
-function atsChecks(text){const l=norm(text),issues=[],positives=[];if(!/@/.test(text))issues.push('Add professional contact information.');if(/header|footer/i.test(l))issues.push('Keep critical contact details out of headers and footers when possible.');if(/\\b(photo|age|date of birth|marital status|religion)\\b/i.test(l))issues.push('Consider removing unnecessary personal details.');else positives.push('No obvious unnecessary personal-detail fields detected.');return{issues,positives}}
+function atsChecks(text){const l=norm(text),issues=[],positives=[];if(!/@/.test(text))issues.push('Add professional contact information.');if(/header|footer/i.test(l))issues.push('Keep critical contact details out of headers and footers when possible.');if(/\b(photo|age|date of birth|marital status|religion)\b/i.test(l))issues.push('Consider removing unnecessary personal details.');else positives.push('No obvious unnecessary personal-detail fields detected.');return{issues,positives}}
 const _scoreCV=scoreCV;
 function scoreCVv6(text,role,jd){
   const r=_scoreCV(text,role,jd),rd=readability(text),at=atsChecks(text),lower=norm(text);
@@ -259,10 +259,10 @@ function scoreCVv6(text,role,jd){
     let hits=terms.filter(t=>lower.includes(t));
     // Normalize common degree wording so BSc/BS/BA/BEng can satisfy
     // equivalent "bachelor's/bachelor degree" requirements.
-    if(/\\b(bachelor|bachelors|undergraduate|degree)\\b/i.test(line) && /\\b(bsc|b\\.sc\\.?|bs|b\\.s\\.?|ba|b\\.a\\.?|beng|b\\.eng\\.?|btech|b\\.tech\\.?)\\b/i.test(text)){
+    if(/\b(bachelor|bachelors|undergraduate|degree)\b/i.test(line) && /\b(bsc|b\.sc\.?|bs|b\.s\.?|ba|b\.a\.?|beng|b\.eng\.?|btech|b\.tech\.?)\b/i.test(text)){
       hits=unique([...hits,'degree']);
     }
-    const reqYears=(line.match(/(?:at least|minimum of|min\\.?|over|more than)?\\s*(\\d+)\\+?\\s*years?/i)||[])[1];
+    const reqYears=(line.match(/(?:at least|minimum of|min\.?|over|more than)?\\s*(\\d+)\\+?\\s*years?/i)||[])[1];
     const candidateYears=(text.match(/(?:over|more than|at least|minimum of)?\\s*(\\d+)\\+?\\s*years?/gi)||[]).map(x=>parseInt(x.match(/\\d+/)[0],10));
     if(reqYears && candidateYears.some(y=>y>=Number(reqYears))) hits=unique([...hits,'years']);
     return {matched:hits.length>=Math.max(1,Math.ceil(Math.min(terms.length,4)*0.5)),ratio:hits.length/terms.length,terms,hits};
