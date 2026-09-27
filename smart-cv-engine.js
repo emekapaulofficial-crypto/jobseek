@@ -175,9 +175,9 @@
     // PDF text extraction often returns the whole page as one long line.
     // Insert section boundaries before parsing so fields never swallow the entire CV.
     const headings=/\b(PROFILE SUMMARY|PROFESSIONAL SUMMARY|SUMMARY|WORK EXPERIENCE|PROFESSIONAL EXPERIENCE|EMPLOYMENT|EDUCATION|ACADEMIC BACKGROUND|SKILLS|CORE SKILLS|TECHNICAL SKILLS|COMPETENCIES|CERTIFICATIONS|PROFESSIONAL CERTIFICATIONS|PROJECTS|SELECTED PROJECTS|INTERESTS & MOTIVATION|ADDITIONAL INFORMATION)\b/gi;
-    t=t.replace(headings,(m)=>'\\n'+m+'\\n');
-    t=t.replace(/(Email\s*:|Phone\s*:|WhatsApp\s*:|Location\s*:|Address\s*:|Nationality\s*:)/gi,'\\n$1 ');
-    t=t.replace(/\\n{2,}/g,'\\n');
+    t=t.replace(headings,(m)=>'\n'+m+'\n');
+    t=t.replace(/(Email\s*:|Phone\s*:|WhatsApp\s*:|Location\s*:|Address\s*:|Nationality\s*:)/gi,'\n$1 ');
+    t=t.replace(/\n{2,}/g,'\n');
     const clean=x=>String(x||'').replace(/^\s*(?:#{1,6}\s*)/,'').replace(/\*\*/g,'').replace(/__+/g,'').trim();
     const o={name:'',email:'',phone:'',location:'',title:'',summary:'',skills:'',experience:'',education:'',certifications:'',projects:''};
     const rawLines=t.split(/\n/).map(clean).filter(Boolean);
@@ -234,5 +234,5 @@ function readability(text){const w=words(text).length,s=String(text).split(/[.!?
 function atsChecks(text){const l=norm(text),issues=[],positives=[];if(!/@/.test(text))issues.push('Add professional contact information.');if(/header|footer/i.test(l))issues.push('Keep critical contact details out of headers and footers when possible.');if(/\\b(photo|age|date of birth|marital status|religion)\\b/i.test(l))issues.push('Consider removing unnecessary personal details.');else positives.push('No obvious unnecessary personal-detail fields detected.');return{issues,positives}}
 const _scoreCV=scoreCV;
 function scoreCVv6(text,role,jd){const r=_scoreCV(text,role,jd),rd=readability(text),at=atsChecks(text),lower=norm(text),keys=unique([...(roleKeywords(role)||[]),...((r.jobRequirements&&r.jobRequirements.keywords)||[])]),matched=keys.filter(k=>lower.includes(k)),missing=keys.filter(k=>!lower.includes(k));return Object.assign({},r,{readability:rd,ats:at,matchedKeywords:matched,missingKeywords:missing,keywordCoverage:keys.length?Math.round(matched.length/keys.length*100):0})}
-window.JobSeekSmartCV={version:"smart-cv-v10-professional-preview",scoreCV:scoreCVv6,smartFill,buildImprovementPlan,applyImprovementAnswers,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements,parseResumeText};
+window.JobSeekSmartCV={version:"smart-cv-v11-import-core-fix",scoreCV:scoreCVv6,smartFill,buildImprovementPlan,applyImprovementAnswers,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements,parseResumeText};
 })();
