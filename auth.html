@@ -94,12 +94,17 @@ form.onsubmit=async e=>{
   if(mode==='login'){
    result=await client.auth.signInWithPassword({email:email.value,password:password.value});
    if(result.error)throw result.error;
-   const role=await accountRole(client,result.data.user.id);
+   // The account row is created by the database trigger. If an older account
+   // has no JobSeek row yet, keep the authenticated session and use the role
+   // the person selected instead of leaving them stranded on this page.
+   let role=await accountRole(client,result.data.user.id);
+   role=role||accountType;
    if(role!==accountType && !((role==='admin'||role==='agent')&&accountType==='candidate')){
     await client.auth.signOut();
     throw Error('This email belongs to a '+(role==='employer'?'Employer':'Job Seeker')+' account. Please choose the correct sign in option.');
    }
-   msg.textContent='Login successful. Redirecting…';goForRole(role);
+   msg.textContent='Login successful. Opening your dashboard…';
+   setTimeout(()=>goForRole(role),50);
   }else{
    const metadata={full_name:fullName.value.trim(),role:accountType};
    result=await client.auth.signUp({email:email.value,password:password.value,options:{data:metadata}});
@@ -112,12 +117,16 @@ form.onsubmit=async e=>{
     const current=await client.auth.getSession();
     session=current.data?.session||null;
    }
+   // Some Supabase configurations return the user without a session from
+   // signUp(). Try an immediate password sign-in before showing any message.
+   if(!session && result.data.user){
+    const retry=await client.auth.signInWithPassword({email:email.value.trim(),password:password.value});
+    if(!retry.error)session=retry.data?.session||null;
+   }
    if(session){
-    msg.textContent='Account created. Signing you in…';
-    goForRole(accountType);
+    msg.textContent='Account created. Opening your dashboard…';
+    setTimeout(()=>goForRole(accountType),50);
    }else{
-    // Hosted Supabase projects can require email confirmation. A browser cannot
-    // create a session until that confirmation is completed.
     msg.textContent='Account created. Please confirm your email, then sign in.';
    }
    }
