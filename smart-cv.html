@@ -101,27 +101,7 @@
     setVal('name',o.name);setVal('email',o.email);setVal('phone',o.phone);setVal('location',o.location);setVal('title',o.title);setVal('summary',o.summary);setVal('skills',o.skills);setVal('experience',o.experience);setVal('education',o.education);setVal('certifications',o.certifications);setVal('projects',o.projects);
      if(typeof window.JobSeekPreview==='function')window.JobSeekPreview();
   }
-  function bind(){
-    const b=byId('parseCv'),file=byId('file'),cv=byId('cv');
-    if(!b||!file||!cv)return;
-    b.addEventListener('click',async function(ev){
-      ev.preventDefault();ev.stopImmediatePropagation();
-      try{
-        const selected=file.files&&file.files[0];
-        if(!selected){
-          const pasted=cv.value.trim();
-          if(!pasted){statusMsg('Please choose your CV file first, or paste your CV text.',false);return}
-          fill(parseStandalone(pasted));statusMsg('CV imported and fields filled successfully.',true);return;
-        }
-        statusMsg('Reading '+selected.name+'…',true);
-        const text=await extract(selected);
-        cv.value=text;
-        fill(parseStandalone(text));
-        statusMsg('CV imported and fields filled successfully.',true);
-      }catch(err){statusMsg('CV import failed: '+(err&&err.message?err.message:String(err)),false)}
-    },true);
-  }
-  bind();
+  function bind(){}
 })();
 </script>
 <script src="smart-cv-engine.js?v=20260927-15"></script><script>
