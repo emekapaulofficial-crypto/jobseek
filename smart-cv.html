@@ -132,7 +132,21 @@ function status(s,good){$('status').textContent=s;$('status').className='small '
 function renderSections(){$('sectionList').innerHTML=order.map((k,i)=>'<div class="section-chip"><span>'+labels[k]+'</span><span><button class="outline" data-up="'+i+'">↑</button><button class="outline" data-down="'+i+'">↓</button></span></div>').join('');document.querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>move(+b.dataset.up,-1));document.querySelectorAll('[data-down]').forEach(b=>b.onclick=()=>move(+b.dataset.down,1))}
 function move(i,d){let j=i+d;if(j<0||j>=order.length)return;[order[i],order[j]]=[order[j],order[i]];renderSections();preview()}
 function richText(text){let a=String(text||'').replace(/\r/g,'').split(/\n+/).map(x=>x.trim()).filter(Boolean);let html='';a.forEach(x=>{let y=x.replace(/^[-•▪◦]\s*/,'').trim();if(!y)return;if(/^(?:[-•▪◦])/.test(x)||/^[•▪◦]/.test(x))html+='<li>'+esc(y)+'</li>';else if(/^[A-Z][A-Z &]+$/.test(y)&&y.length<60)html+='<h4>'+esc(y)+'</h4>';else html+='<p>'+esc(y)+'</p>'});return html}\nfunction sec(k,f){let c='';if(k==='summary')c=richText(f.summary);if(k==='skills')c='<ul>'+String(f.skills||'').split(/[,;\n]+/).filter(Boolean).map(x=>'<li>'+esc(x.trim())+'</li>').join('')+'</ul>';if(k==='experience')c=richText(f.experience);if(k==='education')c=richText(f.education);if(k==='projects')c=richText(f.projects);if(k==='certifications')c=richText(f.certifications);if(!String(c).replace(/<[^>]+>/g,'').trim())return '';return '<section class="resume-section"><h3>'+labels[k]+'</h3>'+c+'</section>'}
-function preview(){let f=form();$('preview').innerHTML='<div class="resume-page '+template+'"><div class="resume-name">'+esc(f.name||'[Full Name]')+'</div><div class="resume-title">'+esc(f.title||val('role')||'[Target Role]')+'</div><div class="resume-contact">'+esc([f.email,f.phone,f.location].filter(Boolean).join(' · '))+'</div>'+order.map(k=>sec(k,f)).join('')+'</div>'}
+function preview(){
+  const host=$('preview');
+  if(!host)return;
+  try{
+    let f=form();
+    const cvText=val('cv').trim();
+    if(cvText && !f.name && !f.summary && !f.experience && !f.education && !f.skills){
+      f=Object.assign(f,parseStandalone(cvText));
+    }
+    const contact=[f.email,f.phone,f.location].filter(Boolean).join(' · ');
+    host.innerHTML='<div class="resume-page '+template+'"><div class="resume-name">'+esc(f.name||'[Full Name]')+'</div><div class="resume-title">'+esc(f.title||val('role')||'[Target Role]')+'</div><div class="resume-contact">'+esc(contact||'Email · Phone · Location')+'</div>'+order.map(k=>sec(k,f)).join('')+'</div>';
+  }catch(err){
+    host.innerHTML='<div style="padding:24px;background:#fff;border:1px solid #fecaca;border-radius:12px;color:#991b1b"><b>CV preview could not be rendered.</b><p style="margin:8px 0 0">'+esc(err&&err.message?err.message:String(err))+'</p></div>';
+  }
+}
 function renderAnalysis(){if(!result)return;$('scoreValue').textContent=result.score+' '+result.level;$('scoreBar').style.width=result.score+'%';$('gate').textContent=result.applicationEligible?'✓ APPLICATION GATE: OPEN':'✕ CV GATE: FIX CV FIRST';$('gate').className='gate '+(result.applicationEligible?'open':'closed');$('scoreMeta').textContent=result.wordCount+' words · '+result.keywordCoverage+'% vacancy keyword coverage · average sentence '+result.readability.avgWordsPerSentence+' words';$('matches').innerHTML=result.matchedKeywords.length?result.matchedKeywords.map(x=>'<span class="pill match">'+esc(x)+'</span>').join(''):'<span class="muted small">No strong matches yet.</span>';$('missing').innerHTML=result.missingKeywords.length?result.missingKeywords.slice(0,18).map(x=>'<span class="pill miss">'+esc(x)+'</span>').join(''):'<span class="good small">No major missing keywords.</span>';let c=[];result.positives.forEach(x=>c.push('<div class="check good">✓ '+esc(x)+'</div>'));result.feedback.forEach(x=>c.push('<div class="check danger">! '+esc(x)+'</div>'));$('checks').innerHTML=c.join('')||'<p class="muted">No issues detected.</p>';$('feedback').innerHTML=result.feedback.map(x=>'<p class="danger">✕ '+esc(x)+'</p>').join('')+result.positives.map(x=>'<p class="good">✓ '+esc(x)+'</p>').join('');if(docs)$('document').textContent=docs[tab]||''}
 function renderCoach(){if(!coach)return;let a=coach.analysis;$('coachSummary').innerHTML='<b>'+a.score+' score now.</b> '+coach.plan.length+' improvement opportunities. Answer only the questions that match your real experience.';$('coach').innerHTML=coach.plan.map((x,i)=>'<div class="coach-item"><div class="coach-key">'+esc(x.keyword)+'</div><div class="coach-q">'+esc(x.question)+'</div><textarea data-coach="'+i+'" placeholder="Your genuine experience or result...">'+esc(x.answer||'')+'</textarea></div>').join('')}function buildCoach(){let t=val('cv').trim()||fullText();coach=JobSeekSmartCV.buildImprovementPlan(t,val('role'),val('jobDescription'));renderCoach()}function applyCoach(){if(!coach){buildCoach();status('Improvement questions are ready below. Answer the questions that are true, then click Improve CV with verified answers.',true);return}document.querySelectorAll('[data-coach]').forEach(el=>{coach.plan[+el.dataset.coach].answer=el.value});let x=JobSeekSmartCV.applyImprovementAnswers(Object.assign(form(),{targetRole:val('role'),jobDescription:val('jobDescription')}),coach.plan);$('cv').value=x.cv;setForm({summary:x.summary,skills:x.skills,experience:x.experience,education:x.education});result=JobSeekSmartCV.scoreCV(x.cv,x.targetRole,val('jobDescription'));coach=JobSeekSmartCV.buildImprovementPlan(x.cv,x.targetRole,val('jobDescription'));renderAnalysis();renderCoach();preview();status('Verified improvements applied. Review and analyse again before applying.',true)}function clearCoach(){if(coach){coach.plan.forEach(x=>x.answer='');renderCoach()}}function analyse(){if(!val('jobDescription').trim()){status('Paste the exact employer vacancy before analysing.',false);return}let text=val('cv').trim()||fullText();result=JobSeekSmartCV.scoreCV(text,val('role'),val('jobDescription'));coach=JobSeekSmartCV.buildImprovementPlan(text,val('role'),val('jobDescription'));renderAnalysis();renderCoach();preview();status('CV analysed against this vacancy.',true)}
 function fix(){if(!val('jobDescription').trim()){status('Paste the exact employer vacancy before tailoring.',false);return}let x=JobSeekSmartCV.smartFill(Object.assign(form(),{targetRole:val('role'),jobDescription:val('jobDescription')}));setForm({summary:x.summary,skills:x.skills,experience:x.experience,education:x.education});$('cv').value=x.cv;result=JobSeekSmartCV.scoreCV(x.cv,x.targetRole,val('jobDescription'));renderAnalysis();preview();status('CV tailored. Review every [bracketed] placeholder before applying.',true)}
@@ -204,6 +218,31 @@ async function loadPdfJs(){
   }
   throw lastErr||new Error('Could not load the PDF reader.');
 }
-document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));if(docs)$('document').textContent=docs[tab]||''});document.querySelectorAll('[data-template]').forEach(b=>b.onclick=()=>{template=b.dataset.template;document.querySelectorAll('[data-template]').forEach(x=>x.classList.toggle('active',x===b));preview()});document.querySelectorAll('input,textarea').forEach(x=>x.addEventListener('input',preview));renderSections();preview();
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));if(docs)$('document').textContent=docs[tab]||''});document.querySelectorAll('[data-template]').forEach(b=>b.onclick=()=>{template=b.dataset.template;document.querySelectorAll('[data-template]').forEach(x=>x.classList.toggle('active',x===b));preview()});document.querySelectorAll('input,textarea').forEach(x=>x.addEventListener('input',()=>{
+  if(x.id==='cv'){
+    const text=x.value.trim();
+    if(text && !val('name') && !val('summary') && !val('experience') && !val('education') && !val('skills')){
+      try{setForm(parseStandalone(text))}catch(e){}
+    }
+  }
+  preview();
+}));
+const cvFile=$('file');
+if(cvFile)cvFile.addEventListener('change',async()=>{
+  const file=cvFile.files&&cvFile.files[0];
+  if(!file)return;
+  try{
+    status('Reading '+file.name+'…',true);
+    const text=await extract(file);
+    $('cv').value=text;
+    setForm(parseStandalone(text));
+    preview();
+    status('CV loaded. Live preview updated automatically.',true);
+  }catch(err){
+    status('CV preview import failed: '+(err&&err.message?err.message:String(err)),false);
+    preview();
+  }
+});
+renderSections();preview();
 })();
 </script></body></html>
