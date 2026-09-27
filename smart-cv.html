@@ -99,6 +99,7 @@
   }
   function fill(o){
     setVal('name',o.name);setVal('email',o.email);setVal('phone',o.phone);setVal('location',o.location);setVal('title',o.title);setVal('summary',o.summary);setVal('skills',o.skills);setVal('experience',o.experience);setVal('education',o.education);setVal('certifications',o.certifications);setVal('projects',o.projects);
+     if(typeof window.JobSeekPreview==='function')window.JobSeekPreview();
   }
   function bind(){
     const b=byId('parseCv'),file=byId('file'),cv=byId('cv');
