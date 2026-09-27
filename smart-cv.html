@@ -334,6 +334,8 @@ async function ocrScannedPdfFast(pdf){
   }
   return out.join('\\n\\n').trim();
 }
+$('parseCv').onclick=importButtonAction;
+$('clearImport').onclick=()=>{$('file').value='';$('cv').value='';setForm({name:'',email:'',phone:'',location:'',title:'',summary:'',skills:'',experience:'',education:'',projects:'',certifications:''});preview();status('Imported CV cleared.',true)};
 function initCVPreview(){document.getElementById('downloadPdf')?.addEventListener('click',downloadPDF);document.getElementById('downloadDoc')?.addEventListener('click',downloadDOC);document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));if(docs)$('document').textContent=docs[tab]||''});document.querySelectorAll('[data-template]').forEach(b=>b.onclick=(e)=>{e.preventDefault();template=b.dataset.template;document.querySelectorAll('[data-template]').forEach(x=>x.classList.toggle('active',x===b));preview()});document.querySelectorAll('input,textarea').forEach(x=>x.addEventListener('input',()=>{
   if(x.id==='cv'){
     const text=x.value.trim();
