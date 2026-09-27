@@ -109,5 +109,16 @@ document.getElementById('filter').onclick=()=>{render();document.getElementById(
   typeRadios.forEach(x=>x.addEventListener('change',()=>{typeSelect.value=x.value; if(window.render)window.render();}));
   visaOnly?.addEventListener('change',()=>{visa.value=visaOnly.checked?'yes':''; if(window.render)window.render();});
 })();
+</script><script>
+(function(){
+ async function saveJob(id,button){
+  if(!window.JobSeekSupabase?.configured){location.href='auth.html?mode=login&role=candidate';return}
+  const db=supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  const u=await db.auth.getUser();if(!u.data.user){location.href='auth.html?mode=login&role=candidate';return}
+  const r=await db.rpc('jobseek_save_job',{p_job_id:id});if(r.error){alert(r.error.message);return}
+  button.textContent='✓ Saved';button.disabled=true;
+ }
+ document.addEventListener('click',e=>{const b=e.target.closest('.save-job-public');if(b)saveJob(b.dataset.saveJob,b)});
+})();
 </script></body></html>
 </body></html>
