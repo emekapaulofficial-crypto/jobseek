@@ -1087,3 +1087,6 @@ button,.btn,.outline,a.reference-blue-btn,a.reference-search-btn{
   .reference-filter .reference-blue-btn{min-height:50px;font-size:15px}
   .reference-results{padding-top:4px}
 }
+
+/* Professional authenticated navigation */
+.nav-actions{display:flex;align-items:center;gap:10px;margin-left:auto}.nav-account{font-size:13px;font-weight:700;color:#18304d;white-space:nowrap}.nav-logout{border:1px solid #d5deea;background:#fff;color:#18304d;border-radius:10px;padding:9px 14px;font-weight:700;cursor:pointer}.nav-logout:hover{background:#f5f8fc}.nav-actions .nav-login,.nav-actions .nav-signup{white-space:nowrap}
