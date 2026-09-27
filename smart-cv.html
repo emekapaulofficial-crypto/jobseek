@@ -415,7 +415,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     btn.dataset.importFixBound='1';
 
     const setStatus=(msg,good)=>{
-      if(statusEl){statusEl.textContent=msg;statusEl.className='small '+(good?'go':'danger');}
+      if(statusEl){statusEl.textContent=msg;statusEl.className='muted small '+(good?'success':'danger');}
     };
 
     const clean=x=>String(x||'').replace(/^\s*(?:#{1,6}\s*)/,'').replace(/\*\*/g,'').trim();
@@ -436,13 +436,55 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
       return o;
     };
     const apply=text=>{
+      text=String(text||'').trim();
+      if(!text){setStatus('No readable CV text was found.',false);return;}
       cv.value=text;
       let parsed=null;
       try{parsed=(window.JobSeekSmartCV&&typeof window.JobSeekSmartCV.parseResumeText==='function')?window.JobSeekSmartCV.parseResumeText(text):parseText(text);}catch(e){parsed=parseText(text);}
-      ['name','email','phone','location','title','summary','experience','education','projects','certifications'].forEach(k=>{const el=document.getElementById(k);if(el&&parsed[k])el.value=parsed[k];});
-      const skills=document.getElementById('skills');if(skills&&parsed.skills)skills.value=Array.isArray(parsed.skills)?parsed.skills.join(', '):parsed.skills;
+      ['name','email','phone','location','title','summary','experience','education','projects','certifications'].forEach(k=>{const el=document.getElementById(k);if(el&&parsed[k]){el.value=Array.isArray(parsed[k])?parsed[k].join(', '):String(parsed[k]);el.dispatchEvent(new Event('input',{bubbles:true}));}});
+      const skills=document.getElementById('skills');if(skills&&parsed.skills){skills.value=Array.isArray(parsed.skills)?parsed.skills.join(', '):String(parsed.skills);skills.dispatchEvent(new Event('input',{bubbles:true}));}
       cv.dispatchEvent(new Event('input',{bubbles:true}));
-      setStatus('CV imported successfully. Your candidate fields have been filled.',true);
+      if(typeof window.JobSeekPreview==='function'){try{window.JobSeekPreview()}catch(e){}}
+      setStatus('CV imported successfully. Your candidate fields have been filled. Review them before saving.',true);
+    };
+
+    const loadOCR=async()=>{
+      if(window.Tesseract)return window.Tesseract;
+      setStatus('Scanned CV detected. Loading free OCR engine…',true);
+      return await new Promise((resolve,reject)=>{
+        const s=document.createElement('script');
+        s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
+        s.async=true;
+        s.onload=()=>window.Tesseract?resolve(window.Tesseract):reject(new Error('OCR engine did not start'));
+        s.onerror=()=>reject(new Error('Could not load the OCR engine. Check your internet connection and try again.'));
+        document.head.appendChild(s);
+      });
+    };
+
+    const ocrScannedPdf=async(pdf)=>{
+      const T=await loadOCR();
+      let out=[];
+      const total=pdf.numPages;
+      for(let n=1;n<=total;n++){
+        setStatus('Reading scanned CV page '+n+' of '+total+' with OCR…',true);
+        const page=await pdf.getPage(n);
+        const viewport=page.getViewport({scale:Math.min(2,Math.max(1.35,1800/page.getViewport({scale:1}).width))});
+        const canvas=document.createElement('canvas');
+        const ctx=canvas.getContext('2d',{willReadFrequently:true});
+        canvas.width=Math.floor(viewport.width);canvas.height=Math.floor(viewport.height);
+        await page.render({canvasContext:ctx,viewport}).promise;
+        const result=await T.recognize(canvas,'eng',{
+          logger:m=>{
+            if(m&&m.status==='recognizing text'&&typeof m.progress==='number'){
+              setStatus('OCR page '+n+' of '+total+' — '+Math.round(m.progress*100)+'%…',true);
+            }
+          }
+        });
+        const text=String(result?.data?.text||'').trim();
+        if(text)out.push(text);
+        canvas.width=1;canvas.height=1;
+      }
+      return out.join('\\n\\n').trim();
     };
 
     btn.addEventListener('click',async function(e){
@@ -484,8 +526,15 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
           const content=await page.getTextContent();
           pages.push(content.items.map(x=>x.str||'').join(' '));
         }
-        const extracted=pages.join('\n\n').trim();
-        if(!extracted){setStatus('This PDF appears to be scanned/image-only. Please paste the CV text or use a text-based PDF.',false);return;}
+        let extracted=pages.join('\n\n').trim();
+        // A PDF can open successfully while containing only page images.
+        // Try normal PDF text extraction first; if it is empty or implausibly short, run client-side OCR.
+        if(extracted.replace(/\\s+/g,'').length<80){
+          extracted=await ocrScannedPdf(pdf);
+          if(extracted.replace(/\\s+/g,'').length<20){
+            setStatus('OCR could not find enough readable text in this scanned CV. Please use a clearer scan or paste the CV text.',false);return;
+          }
+        }
         apply(extracted);
       }catch(err){
         setStatus('PDF import failed. Please paste the CV text as a backup. '+(err&&err.message?err.message:''),false);
