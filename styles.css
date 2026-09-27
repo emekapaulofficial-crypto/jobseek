@@ -1090,3 +1090,40 @@ button,.btn,.outline,a.reference-blue-btn,a.reference-search-btn{
 
 /* Professional authenticated navigation */
 .nav-actions{display:flex;align-items:center;gap:10px;margin-left:auto}.nav-account{font-size:13px;font-weight:700;color:#18304d;white-space:nowrap}.nav-logout{border:1px solid #d5deea;background:#fff;color:#18304d;border-radius:10px;padding:9px 14px;font-weight:700;cursor:pointer}.nav-logout:hover{background:#f5f8fc}.nav-actions .nav-login,.nav-actions .nav-signup{white-space:nowrap}
+
+
+/* Compact, consistent JobSeek header */
+header{height:60px}
+.nav{height:60px;gap:14px}
+.brand{font-size:20px}
+.logo{width:32px;height:32px;border-radius:8px}
+.nav-actions{gap:7px}
+.nav-account{font-size:12px}
+.nav-logout{padding:7px 10px;font-size:13px}
+#menu{font-size:22px;padding:6px;line-height:1}
+@media(max-width:900px){
+  header{height:58px}
+  .nav{height:58px}
+  #menu{display:block;margin-left:auto}
+  .nav-actions{margin-left:0}
+  .nav-account{max-width:92px;overflow:hidden;text-overflow:ellipsis}
+  .nav-actions .nav-login,.nav-actions .nav-signup{padding:7px 9px;font-size:13px}
+  nav.site-nav{
+    position:absolute;top:58px;left:0;right:0;display:none;flex-direction:column;align-items:stretch;gap:0;
+    background:#fff;border-bottom:1px solid var(--line);box-shadow:0 10px 22px rgba(8,26,51,.10);
+    padding:6px 12px;max-height:calc(100vh - 58px);overflow:auto
+  }
+  nav.site-nav.open{display:flex}
+  nav.site-nav a{padding:11px 10px;font-size:14px;border-bottom:1px solid #eef2f6}
+  nav.site-nav a:last-child{border-bottom:0}
+}
+@media(max-width:560px){
+  header{height:56px}
+  .nav{height:56px;width:calc(100% - 20px);gap:8px}
+  .brand{font-size:18px}
+  .logo{width:30px;height:30px}
+  .nav-account{display:none}
+  .nav-logout{padding:6px 9px;font-size:12px}
+  .nav-actions .nav-login,.nav-actions .nav-signup{padding:6px 8px;font-size:12px}
+  nav.site-nav{top:56px}
+}
