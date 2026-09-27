@@ -1127,3 +1127,29 @@ header{height:60px}
   .nav-actions .nav-login,.nav-actions .nav-signup{padding:6px 8px;font-size:12px}
   nav.site-nav{top:56px}
 }
+
+
+/* Final compact header: collapsed on phone and laptop */
+header{height:60px}
+.nav{height:60px;position:relative;justify-content:flex-start}
+#menu{display:block;margin-left:8px;order:2;background:#fff;border:1px solid var(--line);border-radius:8px;width:38px;height:38px;padding:0;line-height:1}
+.nav-actions{margin-left:auto;order:3}
+nav.site-nav{
+  position:absolute;top:60px;left:0;right:0;display:none;flex-direction:column;align-items:stretch;gap:0;
+  background:#fff;border:1px solid var(--line);border-top:0;border-radius:0 0 12px 12px;
+  box-shadow:0 12px 28px rgba(8,26,51,.12);padding:6px 12px;max-height:calc(100vh - 60px);overflow:auto;
+}
+nav.site-nav.open{display:flex}
+nav.site-nav a{padding:11px 10px;font-size:14px;border-bottom:1px solid #eef2f6}
+nav.site-nav a:last-child{border-bottom:0}
+@media(max-width:600px){
+  header{height:56px}
+  .nav{height:56px;width:calc(100% - 20px);gap:7px}
+  .brand{font-size:18px}
+  .logo{width:30px;height:30px}
+  #menu{width:36px;height:36px;font-size:21px}
+  nav.site-nav{top:56px}
+  .nav-account{display:none}
+  .nav-logout{padding:6px 9px;font-size:12px}
+  .nav-actions .nav-login,.nav-actions .nav-signup{padding:6px 8px;font-size:12px}
+}
