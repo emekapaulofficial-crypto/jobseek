@@ -53,7 +53,7 @@ async function syncAuthNavigation(){
       const dashboard=role==='admin'||role==='agent'?'admin-dashboard.html':role==='employer'?'employer-portal.html':'candidate-dashboard.html';
       const label=role==='admin'||role==='agent'?'Admin Dashboard':role==='employer'?'Employer Dashboard':'My Dashboard';
       nav.innerHTML+='<a href="'+dashboard+'" data-auth-dashboard="true"><span class="nav-icon">◈</span><span>'+label+'</span></a>';
-      nav.querySelectorAll('a[data-nav-link]').forEach(a=>a.style.display='none');
+      nav.querySelectorAll('a[data-nav-link="auth.html"]').forEach(a=>a.remove());
     }
     const actionsBox=document.querySelector('.nav-actions');
     if(actionsBox){
@@ -68,7 +68,7 @@ async function syncAuthNavigation(){
     }
     // Candidate dashboard has its own account header/logout control.
     if(isAuth){
-      const target=role==='admin'||role==='agent'?'admin-dashboard.html':role==='employer'?'employer-portal.html':'candidate-dashboard.html';
+      const target=role==='admin'||role==='agent'?'index.html':role==='employer'?'employer-portal.html':'candidate-dashboard.html';
       if(location.pathname.split('/').pop().toLowerCase()==='auth.html')location.replace(target);
       return;
     }
