@@ -81,7 +81,7 @@ document.getElementById('forgotPassword').onclick=async()=>{
  if(!JobSeekSupabase.configured){msg.textContent='Supabase is not configured.';return}
  msg.textContent='Sending password reset link…';
  try{
-  const resetUrl=new URL('reset-password.html',document.baseURI).href; const reset=await supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}).auth.resetPasswordForEmail(emailValue,{redirectTo:resetUrl});
+  const resetUrl='https://emekapaulofficial-crypto.github.io/jobseek/reset-password.html'; const reset=await supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}).auth.resetPasswordForEmail(emailValue,{redirectTo:resetUrl});
   if(reset.error)throw reset.error;
   msg.textContent='Password reset link sent. Check your email and open the link to create a new password.';
  }catch(err){msg.textContent=err.message||'Could not send password reset email.'}
