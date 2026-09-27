@@ -233,6 +233,100 @@ function applyImprovementAnswers(input={},plan=[]){
 function readability(text){const w=words(text).length,s=String(text).split(/[.!?]+/).filter(x=>x.trim()).length,a=s?w/s:w;return{wordCount:w,sentenceCount:s,avgWordsPerSentence:Math.round(a*10)/10,tooLong:a>28}}
 function atsChecks(text){const l=norm(text),issues=[],positives=[];if(!/@/.test(text))issues.push('Add professional contact information.');if(/header|footer/i.test(l))issues.push('Keep critical contact details out of headers and footers when possible.');if(/\\b(photo|age|date of birth|marital status|religion)\\b/i.test(l))issues.push('Consider removing unnecessary personal details.');else positives.push('No obvious unnecessary personal-detail fields detected.');return{issues,positives}}
 const _scoreCV=scoreCV;
-function scoreCVv6(text,role,jd){const r=_scoreCV(text,role,jd),rd=readability(text),at=atsChecks(text),lower=norm(text),keys=unique([...(roleKeywords(role)||[]),...((r.jobRequirements&&r.jobRequirements.keywords)||[])]),matched=keys.filter(k=>lower.includes(k)),missing=keys.filter(k=>!lower.includes(k));return Object.assign({},r,{readability:rd,ats:at,matchedKeywords:matched,missingKeywords:missing,keywordCoverage:keys.length?Math.round(matched.length/keys.length*100):0})}
+function scoreCVv6(text,role,jd){
+  const r=_scoreCV(text,role,jd),rd=readability(text),at=atsChecks(text),lower=norm(text);
+  const job=extractJobRequirements(jd,role);
+  const keys=unique([...(roleKeywords(role)||[]),...(job.keywords||[])]);
+  const matched=keys.filter(k=>lower.includes(norm(k)));
+  const missing=keys.filter(k=>!lower.includes(norm(k)));
+
+  // Requirement-level matching: keyword presence alone is not enough.
+  // We identify explicit employer requirements, mandatory language, qualifications,
+  // experience thresholds and concrete skills, then compare them with the candidate CV.
+  const stop=new Set("the a an and or of to in for with from on at as is are be being this that their they you your our we will can should must have has had it its by into about over under within using use used work working role position candidate candidates required requirements preferred qualification qualifications experience years year".split(" "));
+  const cleanWords=s=>unique(norm(s).match(/[a-z0-9+#./-]{3,}/g)||[]).filter(w=>!stop.has(w));
+  const lines=String(jd||"").split(/\n|•|(?<=[.!?])\s+/).map(x=>x.trim()).filter(x=>x.length>18);
+  const reqLines=lines.filter(x=>/(required|must|minimum|essential|qualif|experience|degree|bachelor|master|diploma|certif|years|proficien|knowledge|skills?|ability|responsib|preferred|desirable)/i.test(x)).slice(0,30);
+
+  function requirementTerms(line){
+    const phraseHits=keys.filter(k=>norm(line).includes(norm(k))).map(norm);
+    const terms=cleanWords(line);
+    return unique([...phraseHits,...terms.filter(t=>t.length>=4)]).slice(0,12);
+  }
+  function lineMatch(line){
+    const terms=requirementTerms(line);
+    if(!terms.length)return {matched:false,ratio:0,terms:[]};
+    const hits=terms.filter(t=>lower.includes(t));
+    return {matched:hits.length>=Math.max(1,Math.ceil(Math.min(terms.length,4)*0.5)),ratio:hits.length/terms.length,terms,hits};
+  }
+
+  const requirementResults=reqLines.map(line=>{
+    const m=lineMatch(line);
+    const mandatory=/(required|must|minimum|essential|mandatory)/i.test(line);
+    const degree=/(bachelor|master|mba|phd|degree|diploma)/i.test(line);
+    const yearsReq=(line.match(/(?:at least|minimum of|min\.?|over|more than)?\s*(\d+)\+?\s*years?/i)||[])[1];
+    let candidateYears=null;
+    const yearMatches=lower.match(/(?:over|more than|at least|minimum of)?\s*(\d+)\+?\s*years?/g)||[];
+    if(yearMatches.length) candidateYears=Math.max(...yearMatches.map(x=>parseInt(x.match(/\d+/)[0],10)));
+    const yearsMismatch=!!yearsReq && (!candidateYears || candidateYears<Number(yearsReq));
+    const failed=(!m.matched || m.ratio<0.35 || yearsMismatch);
+    return {requirement:line,mandatory,degree,yearsRequired:yearsReq?Number(yearsReq):null,candidateYears,matched:m.matched&&!yearsMismatch,ratio:m.ratio,matchedTerms:m.hits,missingTerms:m.terms.filter(t=>!m.hits.includes(t)),failed};
+  });
+
+  // Stronger matching for concrete vacancy keywords.
+  const keywordCoverage=keys.length?Math.round(matched.length/keys.length*100):0;
+  const applicable=requirementResults.length;
+  const reqMatched=requirementResults.filter(x=>x.matched).length;
+  const reqCoverage=applicable?Math.round(reqMatched/applicable*100):keywordCoverage;
+  const hardGaps=requirementResults.filter(x=>x.failed && (x.mandatory||x.degree||x.yearsRequired)).map(x=>x.requirement);
+  const otherGaps=requirementResults.filter(x=>x.failed && !hardGaps.includes(x.requirement)).map(x=>x.requirement);
+  let compatibilityStatus="NO_VACANCY_DATA",compatibilityLabel="Vacancy requirements not analysed",compatibilityMessage="Paste the exact employer vacancy so JobSeek can compare the CV against the real requirements.";
+  if(String(jd||"").trim()){
+    if(hardGaps.length || reqCoverage<35){
+      compatibilityStatus="NOT_COMPATIBLE";
+      compatibilityLabel="CV does not currently match this vacancy";
+      compatibilityMessage="The CV is missing or does not demonstrate one or more important vacancy requirements. Review the gaps before applying.";
+    }else if(reqCoverage<60){
+      compatibilityStatus="WEAK_MATCH";
+      compatibilityLabel="CV is not well tailored to this vacancy";
+      compatibilityMessage="The CV matches some requirements, but important parts of the vacancy are not clearly demonstrated.";
+    }else if(reqCoverage<80){
+      compatibilityStatus="PARTIAL_MATCH";
+      compatibilityLabel="CV is partially tailored to this vacancy";
+      compatibilityMessage="The CV demonstrates a reasonable portion of the requirements, but some relevant requirements should be addressed.";
+    }else{
+      compatibilityStatus="STRONG_MATCH";
+      compatibilityLabel="CV is strongly tailored to this vacancy";
+      compatibilityMessage="The CV demonstrates most of the requirements identified from this vacancy.";
+    }
+  }
+
+  const enhancedFeedback=[...r.feedback];
+  if(compatibilityStatus==="NOT_COMPATIBLE") enhancedFeedback.push("CV does not currently match the vacancy requirements. Do not treat missing requirements as satisfied.");
+  else if(compatibilityStatus==="WEAK_MATCH") enhancedFeedback.push("CV is not well tailored to the exact vacancy requirements.");
+  else if(compatibilityStatus==="PARTIAL_MATCH") enhancedFeedback.push("CV is partially tailored to the exact vacancy requirements.");
+  if(hardGaps.length) enhancedFeedback.push("Important requirement gaps detected: "+hardGaps.slice(0,3).join(" | "));
+  if(otherGaps.length) enhancedFeedback.push("Requirements needing evidence: "+otherGaps.slice(0,3).join(" | "));
+
+  const clean=Math.max(0,Math.min(100,r.score));
+  const applicationEligible=clean>=50 && !["NOT_COMPATIBLE","WEAK_MATCH"].includes(compatibilityStatus);
+  return Object.assign({},r,{
+    score:clean,
+    level:clean>=80?"STRONG":clean>=50?"AVERAGE":"WEAK",
+    feedback:unique(enhancedFeedback),
+    readability:rd,ats:at,
+    matchedKeywords:matched,
+    missingKeywords:missing,
+    keywordCoverage,
+    requirementCoverage:reqCoverage,
+    vacancyCompatibility:compatibilityStatus,
+    vacancyCompatibilityLabel:compatibilityLabel,
+    vacancyCompatibilityMessage:compatibilityMessage,
+    hardRequirementGaps:hardGaps,
+    requirementGaps:otherGaps,
+    requirementResults,
+    applicationEligible
+  });
+}
 window.JobSeekSmartCV={version:"smart-cv-v11-import-core-fix",scoreCV:scoreCVv6,smartFill,buildImprovementPlan,applyImprovementAnswers,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements,parseResumeText};
 })();
