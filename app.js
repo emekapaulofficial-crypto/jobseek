@@ -12,7 +12,7 @@ function buildHeader(){
  const pub=[['index.html','Home','⌂'],['jobs.html','Jobs','⌕'],['ats-cv-builder.html','CV & Application Tools','✦'],['pricing.html','Pricing','◈'],['employer.html','For Employers','▣']];
  const auth=[['jobs.html','Browse Jobs','🔎'],['pricing.html','Plans','⭐'],['auth.html','Sign in','→']],links=isAdmin?admin:(isAuth?auth:pub);
  n.className='site-nav'+(isAdmin?' admin-site-nav':'');n.innerHTML=links.map(x=>'<a href="'+x[0]+'" data-nav-link="'+x[0].split('?')[0]+'"><span class="nav-icon" aria-hidden="true">'+x[2]+'</span><span>'+x[1]+'</span></a>').join('');
- if(!isAdmin&&!isAuth){let a=w.querySelector('.nav-actions');if(!a){a=document.createElement('div');a.className='nav-actions';w.appendChild(a)}a.innerHTML='<a class="nav-login" href="auth.html">Log In</a><a class="nav-signup" href="auth.html?mode=signup">Sign Up</a>'}
+ if(!isAdmin){let a=w.querySelector('.nav-actions');if(!a){a=document.createElement('div');a.className='nav-actions';w.appendChild(a)}if(!isAuth)a.innerHTML='<a class="nav-login" href="auth.html">Log In</a><a class="nav-signup" href="auth.html?mode=signup">Sign Up</a>'}
  n.querySelectorAll('a[data-nav-link]').forEach(a=>{if((a.dataset.navLink||'').toLowerCase()===path)a.setAttribute('aria-current','page')});
  m.onclick=()=>{const o=n.classList.toggle('open');m.setAttribute('aria-expanded',o?'true':'false');m.textContent=o?'✕':'☰'};
  n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{n.classList.remove('open');m.setAttribute('aria-expanded','false');m.textContent='☰'}));
@@ -52,6 +52,11 @@ async function syncAuthNavigation(){
       });
     }
     // Candidate dashboard has its own account header/logout control.
+    if(isAuth){
+      const target=role==='admin'||role==='agent'?'admin-dashboard.html':role==='employer'?'employer-portal.html':'candidate-dashboard.html';
+      if(location.pathname.split('/').pop().toLowerCase()==='auth.html')location.replace(target);
+      return;
+    }
     const localLogout=document.getElementById('logout');
     if(localLogout){
       localLogout.style.display='inline-flex';
