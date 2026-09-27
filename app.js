@@ -18,7 +18,51 @@ function buildHeader(){
  n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{n.classList.remove('open');m.setAttribute('aria-expanded','false');m.textContent='☰'}));
 }
 function legacySearch(){const q=document.getElementById('q'),loc=document.getElementById('loc');document.getElementById('searchBtn')?.addEventListener('click',()=>{if(q&&loc)location.href='jobs.html?keyword='+encodeURIComponent(q.value.trim())+'&region='+encodeURIComponent(loc.value.trim())});[q,loc].forEach(x=>x?.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('searchBtn')?.click()}))}
-function init(){buildHeader();legacySearch();initMobileJobsFilters()}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+async function syncAuthNavigation(){
+  // Supabase is loaded after app.js on most pages, so wait briefly for the shared client.
+  for(let i=0;i<60;i++){
+    if(window.supabase?.createClient && window.JobSeekSupabase?.configured)break;
+    await new Promise(resolve=>setTimeout(resolve,100));
+  }
+  if(!window.supabase?.createClient || !window.JobSeekSupabase?.configured)return;
+  try{
+    const client=window.supabase.createClient(window.JobSeekSupabase.url,window.JobSeekSupabase.key);
+    const session=await client.auth.getSession();
+    const current=session?.data?.session?.user;
+    if(!current)return;
+    let role='candidate',fullName=current.user_metadata?.full_name||current.email||'Account';
+    try{
+      const account=await client.from('jobseek_accounts').select('role,full_name').eq('id',current.id).maybeSingle();
+      if(account?.data?.role)role=account.data.role;
+      if(account?.data?.full_name)fullName=account.data.full_name;
+    }catch(_){}
+    const nav=document.getElementById('nav');
+    if(nav){
+      const dashboard=role==='admin'||role==='agent'?'admin-dashboard.html':role==='employer'?'employer-portal.html':'candidate-dashboard.html';
+      const label=role==='admin'||role==='agent'?'Admin Dashboard':role==='employer'?'Employer Dashboard':'My Dashboard';
+      nav.innerHTML+='<a href="'+dashboard+'" data-auth-dashboard="true"><span class="nav-icon">◈</span><span>'+label+'</span></a>';
+      nav.querySelectorAll('a[data-nav-link]').forEach(a=>a.style.display='none');
+    }
+    const actions=document.querySelector('.nav-actions');
+    if(actions){
+      actions.innerHTML='<span class="nav-account" title="'+String(fullName).replace(/"/g,'&quot;')+'">Hi, '+String(fullName).split(' ')[0]+'</span><button type="button" class="nav-logout" id="globalLogout">Log out</button>';
+      document.getElementById('globalLogout')?.addEventListener('click',async()=>{
+        await client.auth.signOut();
+        location.href='index.html';
+      });
+    }
+    // Candidate dashboard has its own account header/logout control.
+    const localLogout=document.getElementById('logout');
+    if(localLogout){
+      localLogout.style.display='inline-flex';
+      localLogout.type='button';
+      localLogout.textContent='Log out';
+      localLogout.onclick=async()=>{await client.auth.signOut();location.href='index.html'};
+    }
+  }catch(err){/* Keep public navigation usable if auth lookup fails. */}
+}
+function init(){buildHeader();legacySearch();initMobileJobsFilters();syncAuthNavigation()}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 function initMobileJobsFilters(){
  const filter=document.querySelector('.reference-filter');
