@@ -256,7 +256,12 @@ function scoreCVv6(text,role,jd){
   function lineMatch(line){
     const terms=requirementTerms(line);
     if(!terms.length)return {matched:false,ratio:0,terms:[]};
-    const hits=terms.filter(t=>lower.includes(t));
+    let hits=terms.filter(t=>lower.includes(t));
+    // Normalize common degree wording so BSc/BS/BA/BEng can satisfy
+    // equivalent "bachelor's/bachelor degree" requirements.
+    if(/\\b(bachelor|bachelors|undergraduate|degree)\\b/i.test(line) && /\\b(bsc|b\\.sc\\.?|bs|b\\.s\\.?|ba|b\\.a\\.?|beng|b\\.eng\\.?|btech|b\\.tech\\.?)\\b/i.test(text)){
+      hits=unique([...hits,'degree']);
+    }
     return {matched:hits.length>=Math.max(1,Math.ceil(Math.min(terms.length,4)*0.5)),ratio:hits.length/terms.length,terms,hits};
   }
 
