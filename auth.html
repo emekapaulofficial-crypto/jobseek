@@ -77,7 +77,7 @@ setRole(accountType);
 
 async function accountRole(client,uid){
  const r=await client.from('jobseek_accounts').select('role').eq('id',uid).maybeSingle();
- if(r.error)throw r.error;
+ if(r.error)return null;
  return r.data?.role||null;
 }
 function goForRole(role){
@@ -85,11 +85,24 @@ function goForRole(role){
  if(role==='employer')return location.replace('employer-portal.html');
  return location.replace('candidate-dashboard.html');
 }
+let authRedirecting=false;
+function attachAuthRedirect(client){
+ client.auth.onAuthStateChange((event,session)=>{
+   if(authRedirecting||!session?.user||event==='SIGNED_OUT')return;
+   if(location.pathname.split('/').pop().toLowerCase()!=='auth.html')return;
+   authRedirecting=true;
+   (async()=>{
+     const role=await accountRole(client,session.user.id) || accountType || 'candidate';
+     goForRole(role);
+   })().catch(()=>{authRedirecting=false});
+ });
+}
 form.onsubmit=async e=>{
  e.preventDefault();msg.textContent='Please wait…';
  try{
   if(!JobSeekSupabase.configured)throw Error('Supabase public key is not configured yet.');
-  const client=supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key);
+  const client=supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  attachAuthRedirect(client);
   let result;
   if(mode==='login'){
    result=await client.auth.signInWithPassword({email:email.value,password:password.value});
@@ -100,11 +113,10 @@ form.onsubmit=async e=>{
    let role=await accountRole(client,result.data.user.id);
    role=role||accountType;
    if(role!==accountType && !((role==='admin'||role==='agent')&&accountType==='candidate')){
-    await client.auth.signOut();
-    throw Error('This email belongs to a '+(role==='employer'?'Employer':'Job Seeker')+' account. Please choose the correct sign in option.');
+    msg.textContent='Login successful. Opening the account dashboard…';
    }
    msg.textContent='Login successful. Opening your dashboard…';
-   setTimeout(()=>goForRole(role),50);
+   setTimeout(()=>goForRole(role),150);
   }else{
    const metadata={full_name:fullName.value.trim(),role:accountType};
    result=await client.auth.signUp({email:email.value,password:password.value,options:{data:metadata}});
@@ -125,7 +137,7 @@ form.onsubmit=async e=>{
    }
    if(session){
     msg.textContent='Account created. Opening your dashboard…';
-    setTimeout(()=>goForRole(accountType),50);
+    setTimeout(()=>goForRole(accountType),150);
    }else{
     msg.textContent='Account created. Please confirm your email, then sign in.';
    }
