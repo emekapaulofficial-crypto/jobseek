@@ -30,7 +30,7 @@
 <label>Email</label>
 <input id="email" type="email" required autocomplete="email" style="width:100%;padding:12px;margin:6px 0 14px">
 <label>Password</label>
-<input id="password" type="password" required minlength="6" autocomplete="current-password" style="width:100%;padding:12px;margin:6px 0 8px"><div style="text-align:right;margin-bottom:14px"><button type="button" id="forgotPassword" class="outline" style="border:0;padding:0;background:transparent">Forgot password?</button></div>
+<input id="password" type="password" required minlength="6" autocomplete="current-password" style="width:100%;padding:12px;margin:6px 0 8px">
 <div id="nameWrap" hidden><label>Full name</label><input id="fullName" autocomplete="name" style="width:100%;padding:12px;margin:6px 0 14px"></div>
 <div id="companyWrap" hidden><label>Company name</label><input id="companyName" autocomplete="organization" style="width:100%;padding:12px;margin:6px 0 14px"></div>
 <button class="btn" id="submitBtn" type="submit">Log in as Job Seeker</button>
@@ -74,18 +74,6 @@ document.getElementById('employerRole').onclick=()=>setRole('employer');
 document.getElementById('loginTab').onclick=()=>{mode='login';updateMode()};
 document.getElementById('signupTab').onclick=()=>{mode='signup';updateMode()};
 setRole(accountType);
-
-document.getElementById('forgotPassword').onclick=async()=>{
- const emailValue=email.value.trim();
- if(!emailValue){msg.textContent='Enter your email address first, then click Forgot password.';email.focus();return}
- if(!JobSeekSupabase.configured){msg.textContent='Supabase is not configured.';return}
- msg.textContent='Sending password reset link…';
- try{
-  const resetUrl=new URL('reset-password.html',window.location.href).href; const reset=await supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:'pkce'}}).auth.resetPasswordForEmail(emailValue,{redirectTo:resetUrl});
-  if(reset.error)throw reset.error;
-  msg.textContent='Password reset link sent. Check your email and open the link to create a new password.';
- }catch(err){msg.textContent=err.message||'Could not send password reset email.'}
-};
 
 async function accountRole(client,uid){
  const r=await client.from('jobseek_accounts').select('role').eq('id',uid).maybeSingle();
