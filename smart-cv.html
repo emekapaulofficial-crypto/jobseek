@@ -286,4 +286,12 @@ renderSections();preview();setTimeout(preview,100);
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initCVPreview);else initCVPreview();
 })();
+</script><script>
+(function(){
+ const key='jobseek_cv_engine_collapsed',btn=document.getElementById('cvEngineToggle'),grid=document.querySelector('.grid');
+ if(!btn||!grid)return;
+ const set=v=>{grid.style.display=v?'none':'';btn.setAttribute('aria-expanded',String(!v));btn.textContent=v?'▸ Open CV Engine':'▾ Collapse CV Engine';localStorage.setItem(key,v?'1':'0')};
+ set(localStorage.getItem(key)==='1');
+ btn.onclick=()=>set(grid.style.display!=='none');
+})();
 </script></body></html>
