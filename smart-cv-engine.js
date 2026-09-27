@@ -212,45 +212,103 @@ function buildImprovementPlan(cvText,targetRole='',jobDescription=''){
   return {analysis,plan:plan.slice(0,12)};
 }
 function applyImprovementAnswers(input={},plan=[]){
+  // Safe improvement mode: preserve the candidate's original CV content and
+  // only append information the candidate explicitly verified.
   const data=Object.assign({},input);
-  const answers=(plan||[]).filter(x=>String(x.answer||'').trim()).map(x=>({keyword:String(x.keyword||''),answer:String(x.answer).trim()}));
-  const existing={
-    summary:String(data.summary||'').trim(),
-    skills:Array.isArray(data.skills)?data.skills.map(String):String(data.skills||'').split(/[,;\\n]+/).map(x=>x.trim()).filter(Boolean),
-    experience:String(data.experience||'').trim(),
-    education:String(data.education||'').trim(),
-    projects:String(data.projects||'').trim(),
-    certifications:String(data.certifications||'').trim()
+  const answers=(plan||[]).filter(x=>String(x.answer||'').trim()).map(x=>({
+    keyword:String(x.keyword||'').trim(),
+    answer:String(x.answer||'').trim()
+  }));
+
+  const cleanAnswer=a=>String(a)
+    .replace(/^(answer|response)\s*:\s*/i,'')
+    .replace(/^[-•]+\s*/,'')
+    .trim();
+
+  let summary=String(data.summary||'').trim();
+  let experience=String(data.experience||'').trim();
+  let education=String(data.education||'').trim();
+  let projects=String(data.projects||'').trim();
+  let certifications=String(data.certifications||'').trim();
+  const skills=(Array.isArray(data.skills)
+    ? data.skills.map(String)
+    : String(data.skills||'').split(/[,;\n]+/))
+    .map(x=>x.trim()).filter(Boolean);
+
+  const appendUnique=(current,text)=>{
+    const n=norm(text);
+    if(!n)return current;
+    if(norm(current).includes(n))return current;
+    return current ? current+'\n• '+text : '• '+text;
   };
-  let summary=existing.summary, experience=existing.experience, projects=existing.projects;
-  const skills=existing.skills.slice();
-  const cleanAnswer=a=>a.replace(/^(answer|response)\\s*:\\s*/i,'').replace(/^[-•]+\\s*/,'').trim();
-  answers.forEach(x=>{
-    const a=cleanAnswer(x.answer); if(!a)return;
-    const k=norm(x.keyword);
+
+  answers.forEach(item=>{
+    const a=cleanAnswer(item.answer);
+    if(!a)return;
+    const k=norm(item.keyword);
+
+    // Never turn a negative answer into a CV claim.
+    if(/^(no|none|not yet|no experience|i do not|i don't|not applicable)\b/i.test(a)) return;
+
     if(/skill|software|tool|technical/i.test(k)){
-      a.split(/[,;\\n]+/).map(v=>v.trim()).filter(v=>v.length>2&&v.length<80).forEach(v=>{if(!skills.some(s=>norm(s)===norm(v)))skills.push(v)});
-    }else if(/project|strategy|analysis|operations|reporting|compliance|documentation|management/i.test(k)){
-      projects+=(projects?'\\n':'')+'• '+a;
+      a.split(/[,;\n]+/)
+        .map(v=>v.trim())
+        .filter(v=>v.length>2 && v.length<80)
+        .forEach(v=>{
+          if(!skills.some(s=>norm(s)===norm(v))) skills.push(v);
+        });
+    }else if(/project/i.test(k)){
+      projects=appendUnique(projects,a);
+    }else if(/certif|license|qualification/i.test(k)){
+      certifications=appendUnique(certifications,a);
     }else{
-      experience+=(experience?'\\n':'')+'• '+a;
+      // Evidence, responsibilities, results and verified vacancy-related
+      // experience belong in Experience. Existing text is never replaced.
+      experience=appendUnique(experience,a);
     }
   });
+
   const finalSkills=unique(skills).slice(0,30);
+
+  // Keep the original summary intact. Only create one when it was genuinely
+  // missing; never replace a user's stronger existing summary.
   if(!summary && (experience||finalSkills.length)){
-    summary='Professional with verified experience in '+(data.title||data.targetRole||'the target role')+'. '+(finalSkills.length?'Core strengths include '+finalSkills.slice(0,5).join(', ')+'.':'');
+    summary='Professional with verified experience in '+(data.title||data.targetRole||'the target role')+
+      (finalSkills.length ? '. Core strengths include '+finalSkills.slice(0,5).join(', ')+'.' : '');
   }
+
   const target=data.targetRole||data.title||'Professional';
   const cv=[
-    data.name||'[Full Name]',data.email||'[Professional Email]',data.phone||'[Phone]',data.location||'',
-    'Target Role: '+target,'','PROFESSIONAL SUMMARY',summary||'[Add a professional summary based on your verified experience]',
-    '','CORE SKILLS',finalSkills.length?finalSkills.map(x=>'• '+x).join('\\n'):'[Add verified skills]',
-    '','PROFESSIONAL EXPERIENCE',experience||'[Add your verified work experience]',
-    '','EDUCATION',existing.education||'[Add your verified education]',
-    '','CERTIFICATIONS',existing.certifications||'[Add verified certifications or state None]'
+    data.name||'[Full Name]',
+    data.email||'[Professional Email]',
+    data.phone||'[Phone]',
+    data.location||'',
+    'Target Role: '+target,
+    '',
+    'PROFESSIONAL SUMMARY',
+    summary||'[Add a professional summary based on your verified experience]',
+    '',
+    'CORE SKILLS',
+    finalSkills.length?finalSkills.map(x=>'• '+x).join('\n'):'[Add verified skills]',
+    '',
+    'PROFESSIONAL EXPERIENCE',
+    experience||'[Add your verified work experience]',
+    '',
+    'EDUCATION',
+    education||'[Add your verified education]'
   ];
+  if(certifications)cv.push('','CERTIFICATIONS',certifications);
   if(projects)cv.push('','PROJECTS',projects);
-  return Object.assign(data,{cv:cv.join('\\n'),summary,skills:finalSkills,experience,education:existing.education,projects,certifications:existing.certifications});
+
+  return Object.assign(data,{
+    cv:cv.join('\n'),
+    summary,
+    skills:finalSkills,
+    experience,
+    education,
+    projects,
+    certifications
+  });
 }
 function readability(text){const w=words(text).length,s=String(text).split(/[.!?]+/).filter(x=>x.trim()).length,a=s?w/s:w;return{wordCount:w,sentenceCount:s,avgWordsPerSentence:Math.round(a*10)/10,tooLong:a>28}}
 function atsChecks(text){const l=norm(text),issues=[],positives=[];if(!/@/.test(text))issues.push('Add professional contact information.');if(/header|footer/i.test(l))issues.push('Keep critical contact details out of headers and footers when possible.');if(/\b(photo|age|date of birth|marital status|religion)\b/i.test(l))issues.push('Consider removing unnecessary personal details.');else positives.push('No obvious unnecessary personal-detail fields detected.');return{issues,positives}}
@@ -358,5 +416,5 @@ function scoreCVv6(text,role,jd){
     applicationEligible
   });
 }
-window.JobSeekSmartCV={version:"smart-cv-v11-import-core-fix",scoreCV:scoreCVv6,smartFill,buildImprovementPlan,applyImprovementAnswers,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements,parseResumeText};
+window.JobSeekSmartCV={version:"smart-cv-v12-safe-improvements",scoreCV:scoreCVv6,smartFill,buildImprovementPlan,applyImprovementAnswers,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements,parseResumeText};
 })();
