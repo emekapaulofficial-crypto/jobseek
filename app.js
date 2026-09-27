@@ -1,6 +1,6 @@
 /* JobSeek global navigation + shared UI */
 (function(){
-const path=(location.pathname.split('/').pop()||'index.html').toLowerCase(),adminPages=['admin-candidates.html','admin-documents.html','admin-services.html','employer-portal.html'],isAdmin=adminPages.includes(path),isAuth=path==='auth.html';
+const path=(location.pathname.split('/').pop()||'index.html').toLowerCase(),adminPages=['admin-candidates.html','admin-documents.html','admin-services.html'],isAdmin=adminPages.includes(path),isAuth=path==='auth.html';
 function buildHeader(){
  if(path==='admin-dashboard.html')return;
  let h=document.querySelector('header');if(!h){h=document.createElement('header');document.body.prepend(h)}
