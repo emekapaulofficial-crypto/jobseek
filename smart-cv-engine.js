@@ -262,8 +262,8 @@ function scoreCVv6(text,role,jd){
     if(/\b(bachelor|bachelors|undergraduate|degree)\b/i.test(line) && /\b(bsc|b\.sc\.?|bs|b\.s\.?|ba|b\.a\.?|beng|b\.eng\.?|btech|b\.tech\.?)\b/i.test(text)){
       hits=unique([...hits,'degree']);
     }
-    const reqYears=(line.match(/(?:at least|minimum of|min\.?|over|more than)?\\s*(\\d+)\\+?\\s*years?/i)||[])[1];
-    const candidateYears=(text.match(/(?:over|more than|at least|minimum of)?\\s*(\\d+)\\+?\\s*years?/gi)||[]).map(x=>parseInt(x.match(/\\d+/)[0],10));
+    const reqYears=(line.match(/(?:at least|minimum of|min\.?|over|more than)?\s*(\d+)\+?\s*years?/i)||[])[1];
+    const candidateYears=(text.match(/(?:over|more than|at least|minimum of)?\s*(\d+)\+?\s*years?/gi)||[]).map(x=>parseInt(x.match(/\d+/)[0],10));
     if(reqYears && candidateYears.some(y=>y>=Number(reqYears))) hits=unique([...hits,'years']);
     return {matched:hits.length>=Math.max(1,Math.ceil(Math.min(terms.length,4)*0.5)),ratio:hits.length/terms.length,terms,hits};
   }
