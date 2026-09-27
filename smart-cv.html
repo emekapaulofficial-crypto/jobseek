@@ -22,7 +22,7 @@
 <div class="card"><h2>Quality checks</h2><div id="checks"><p class="muted small">Analysis results appear here.</p></div></div>
 <div class="card"><h2>Tailoring feedback</h2><div id="feedback"><p class="muted small">No analysis yet.</p></div></div>
 <div class="card"><h2>Accuracy rule</h2><p class="muted small">Review every generated field. JobSeek uses [brackets] when genuine information is missing and should never be treated as a claim about the candidate.</p></div>
-</aside></div></main><script src="smart-cv-engine.js?v=20260927-13"></script><script>
+</aside></div></main><script src="smart-cv-engine.js?v=20260927-14"></script><script>
 (function(){
 'use strict';
 const $=id=>document.getElementById(id),val=id=>$(id)?.value||'',esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -43,11 +43,69 @@ function generate(){if(!result||!result.applicationEligible){status('Analyse or 
 function save(){localStorage.setItem('jobseek_cv_engine_v2',JSON.stringify({form:form(),role:val('role'),company:val('company'),template,order,cv:val('cv')}));status('CV saved on this device.',true)}
 function load(){try{let x=JSON.parse(localStorage.getItem('jobseek_cv_engine_v2')||'null');if(!x){status('No saved CV found.',false);return}setForm(x.form||{});$('role').value=x.role||'';$('company').value=x.company||'';$('cv').value=x.cv||'';template=x.template||'classic';order=x.order||order;document.querySelectorAll('[data-template]').forEach(b=>b.classList.toggle('active',b.dataset.template===template));renderSections();preview();status('Saved CV loaded.',true)}catch(e){status('Could not load saved CV.',false)}}
 function importCVToFields(autoAnalyse=true){try{if(!window.JobSeekSmartCV||typeof JobSeekSmartCV.parseResumeText!=='function'){status('CV analyser is not ready. Please refresh the page and try again.',false);return false}const text=val('cv').trim();if(!text){status('Please upload a PDF/TXT or paste your CV first.',false);return false}const x=JobSeekSmartCV.parseResumeText(text);setForm(x);preview();if(autoAnalyse&&val('jobDescription').trim()){result=JobSeekSmartCV.scoreCV(text,val('role'),val('jobDescription'));coach=JobSeekSmartCV.buildImprovementPlan(text,val('role'),val('jobDescription'));renderAnalysis();renderCoach();status('CV imported and analysed against the vacancy.',true)}else{status('CV imported successfully. Your fields are now filled — add the vacancy, then click Analyse CV & ATS.',true)}return true}catch(err){status('CV import failed: '+(err?.message||String(err)),false);return false}}
-$('score').onclick=analyse;$('fix').onclick=fix;$('generate').onclick=generate;$('applyImprovements').onclick=applyCoach;$('clearImprovements').onclick=clearCoach;$('saveCv').onclick=save;$('loadCv').onclick=load;$('printCv').onclick=()=>{preview();window.print()};async function importButtonAction(e){if(e)e.preventDefault();const file=$('file').files?.[0];if(file){const ok=await readSelectedCV();if(!ok)return}else{const text=val('cv').trim();if(!text){status('Please choose your CV file first, or paste your CV text.',false);return}importCVToFields(true)}}
+$('score').onclick=analyse;$('fix').onclick=fix;$('generate').onclick=generate;$('applyImprovements').onclick=applyCoach;$('clearImprovements').onclick=clearCoach;$('saveCv').onclick=save;$('loadCv').onclick=load;$('printCv').onclick=()=>{preview();window.print()};async function importButtonAction(e){
+  if(e)e.preventDefault();
+  const file=$('file').files?.[0];
+  try{
+    if(!file){
+      const pasted=val('cv').trim();
+      if(!pasted){status('Please choose your CV file first, or paste your CV text.',false);return}
+      importCVToFields(true); return;
+    }
+    status('Importing '+file.name+'…',true);
+    const ok=await readSelectedCV();
+    if(!ok)return;
+  }catch(err){status('Import failed: '+(err?.message||String(err)),false)}
+}
 $('parseCv').onclick=importButtonAction;
-$('clearImport').onclick=()=>{$('file').value='';$('cv').value='';setForm({name:'',email:'',phone:'',location:'',title:'',summary:'',skills:'',experience:'',education:'',projects:'',certifications:''});preview();status('Imported CV cleared.',true)};async function loadPdfJs(){if(window.pdfjsLib)return window.pdfjsLib;return await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';s.onload=()=>window.pdfjsLib?resolve(window.pdfjsLib):reject(new Error('PDF reader loaded but is unavailable'));s.onerror=()=>reject(new Error('Could not load the PDF reader. Please check your internet connection and try again.'));document.head.appendChild(s)})}
-async function readSelectedCV(){const f=$('file').files?.[0];if(!f){status('Please choose your CV file first.',false);return false}try{if(f.name.toLowerCase().endsWith('.txt')||f.type==='text/plain'){$('cv').value=await f.text()}else{status('Reading your PDF CV…',true);const pdfjs=await loadPdfJs();if(pdfjs.GlobalWorkerOptions)pdfjs.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';const pdf=await pdfjs.getDocument({data:new Uint8Array(await f.arrayBuffer())}).promise;let out='';for(let i=1;i<=pdf.numPages;i++){const pg=await pdf.getPage(i),ct=await pg.getTextContent();out+=ct.items.map(x=>x.str).join(' ')+'\\n'}if(!out.trim())throw new Error('This PDF contains no readable text. If it is a scanned/image CV, please upload a text-based PDF or paste the CV text.');$('cv').value=out}return importCVToFields(true)}catch(e){status('Could not read CV: '+(e?.message||String(e)),false);return false}}
-$('file').onchange=async e=>{if(e.target.files?.length){await readSelectedCV()}};
-$('parseCv').onclick=async()=>{if(!$('cv').value.trim()&&$('file').files?.length){await readSelectedCV()}else{importCVToFields(true)}};document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));if(docs)$('document').textContent=docs[tab]||''});document.querySelectorAll('[data-template]').forEach(b=>b.onclick=()=>{template=b.dataset.template;document.querySelectorAll('[data-template]').forEach(x=>x.classList.toggle('active',x===b));preview()});document.querySelectorAll('input,textarea').forEach(x=>x.addEventListener('input',preview));renderSections();preview();
+$('clearImport').onclick=()=>{$('file').value='';$('cv').value='';setForm({name:'',email:'',phone:'',location:'',title:'',summary:'',skills:'',experience:'',education:'',projects:'',certifications:''});preview();status('Imported CV cleared.',true)};
+async function loadPdfJs(){
+  if(window.pdfjsLib)return window.pdfjsLib;
+  const urls=[
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
+    'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js',
+    'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js'
+  ];
+  let lastErr=null;
+  for(const url of urls){
+    try{
+      await new Promise((resolve,reject)=>{
+        const s=document.createElement('script');
+        s.src=url;
+        s.onload=()=>window.pdfjsLib?resolve():reject(new Error('PDF reader API unavailable'));
+        s.onerror=()=>reject(new Error('PDF reader could not be loaded'));
+        document.head.appendChild(s);
+      });
+      if(window.pdfjsLib)return window.pdfjsLib;
+    }catch(e){lastErr=e}
+  }
+  throw new Error((lastErr&&lastErr.message)||'Could not load the PDF reader. Please paste the CV text instead.');
+}
+async function readSelectedCV(){
+  const f=$('file').files?.[0];
+  if(!f){status('Please choose your CV file first.',false);return false}
+  try{
+    if(f.name.toLowerCase().endsWith('.txt')||f.type==='text/plain'){
+      $('cv').value=await f.text();
+    }else{
+      status('Reading your PDF CV…',true);
+      const pdfjs=await loadPdfJs();
+      if(pdfjs.GlobalWorkerOptions)pdfjs.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      const pdf=await pdfjs.getDocument({data:new Uint8Array(await f.arrayBuffer()),useWorkerFetch:false,isEvalSupported:true}).promise;
+      let out='';
+      for(let i=1;i<=pdf.numPages;i++){
+        const pg=await pdf.getPage(i),ct=await pg.getTextContent();
+        out+=ct.items.map(x=>x.str).join(' ')+'\n';
+      }
+      if(!out.trim())throw new Error('This PDF has no readable text. If it is a scanned CV, please upload a text-based PDF or paste the CV text.');
+      $('cv').value=out;
+    }
+    return importCVToFields(true);
+  }catch(e){
+    status('Could not read CV: '+(e?.message||String(e)),false);
+    return false;
+  }
+}
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));if(docs)$('document').textContent=docs[tab]||''});document.querySelectorAll('[data-template]').forEach(b=>b.onclick=()=>{template=b.dataset.template;document.querySelectorAll('[data-template]').forEach(x=>x.classList.toggle('active',x===b));preview()});document.querySelectorAll('input,textarea').forEach(x=>x.addEventListener('input',preview));renderSections();preview();
 })();
 </script></body></html>
