@@ -7,23 +7,34 @@ const JOBSEEK_SUPABASE_KEY = window.JOBSEEK_SUPABASE_KEY || 'sb_publishable_E40Q
 window.JobSeekSupabase = {
   configured: Boolean(JOBSEEK_SUPABASE_URL && JOBSEEK_SUPABASE_KEY),
   url: JOBSEEK_SUPABASE_URL,
-  key: JOBSEEK_SUPABASE_KEY
+  key: JOBSEEK_SUPABASE_KEY,
+  getClient(options = {}) {
+    if (!window.supabase?.createClient || !JOBSEEK_SUPABASE_KEY) {
+      throw new Error('Supabase client is not configured.');
+    }
+    return window.supabase.createClient(JOBSEEK_SUPABASE_URL, JOBSEEK_SUPABASE_KEY, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+        flowType: 'pkce'
+      },
+      ...options
+    });
+  }
 };
 
 window.JobSeekAuth = {
   async signUp(email, password, metadata = {}) {
-    if (!window.supabase?.createClient || !JOBSEEK_SUPABASE_KEY) throw new Error('Supabase client is not configured.');
-    const client = window.supabase.createClient(JOBSEEK_SUPABASE_URL, JOBSEEK_SUPABASE_KEY);
+    const client = JobSeekSupabase.getClient();
     return client.auth.signUp({ email, password, options: { data: metadata } });
   },
   async signIn(email, password) {
-    if (!window.supabase?.createClient || !JOBSEEK_SUPABASE_KEY) throw new Error('Supabase client is not configured.');
-    const client = window.supabase.createClient(JOBSEEK_SUPABASE_URL, JOBSEEK_SUPABASE_KEY);
+    const client = JobSeekSupabase.getClient();
     return client.auth.signInWithPassword({ email, password });
   },
   async signOut() {
-    if (!window.supabase?.createClient || !JOBSEEK_SUPABASE_KEY) throw new Error('Supabase client is not configured.');
-    const client = window.supabase.createClient(JOBSEEK_SUPABASE_URL, JOBSEEK_SUPABASE_KEY);
+    const client = JobSeekSupabase.getClient();
     return client.auth.signOut();
   }
 };
