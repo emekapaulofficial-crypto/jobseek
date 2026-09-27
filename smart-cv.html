@@ -22,7 +22,7 @@
 <div class="card"><h2>Quality checks</h2><div id="checks"><p class="muted small">Analysis results appear here.</p></div></div>
 <div class="card"><h2>Tailoring feedback</h2><div id="feedback"><p class="muted small">No analysis yet.</p></div></div>
 <div class="card"><h2>Accuracy rule</h2><p class="muted small">Review every generated field. JobSeek uses [brackets] when genuine information is missing and should never be treated as a claim about the candidate.</p></div>
-</aside></div></main><script src="smart-cv-engine.js?v=20260927-14"></script><script>
+</aside></div></main><script src="smart-cv-engine.js?v=20260927-15"></script><script>
 (function(){
 'use strict';
 const $=id=>document.getElementById(id),val=id=>$(id)?.value||'',esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -46,16 +46,41 @@ function importCVToFields(autoAnalyse=true){try{if(!window.JobSeekSmartCV||typeo
 $('score').onclick=analyse;$('fix').onclick=fix;$('generate').onclick=generate;$('applyImprovements').onclick=applyCoach;$('clearImprovements').onclick=clearCoach;$('saveCv').onclick=save;$('loadCv').onclick=load;$('printCv').onclick=()=>{preview();window.print()};async function importButtonAction(e){
   if(e)e.preventDefault();
   const file=$('file').files?.[0];
+  if(!file){
+    const pasted=val('cv').trim();
+    if(!pasted){status('Please choose your CV file first, or paste your CV text.',false);return}
+    importCVToFields(false); return;
+  }
+  status('Reading '+file.name+'…',true);
   try{
-    if(!file){
-      const pasted=val('cv').trim();
-      if(!pasted){status('Please choose your CV file first, or paste your CV text.',false);return}
-      importCVToFields(true); return;
+    if(/\.txt$/i.test(file.name)||file.type==='text/plain'){
+      const reader=new FileReader();
+      reader.onload=()=>{ $('cv').value=String(reader.result||''); importCVToFields(false); };
+      reader.onerror=()=>status('Could not read the selected TXT file.',false);
+      reader.readAsText(file);
+      return;
     }
-    status('Importing '+file.name+'…',true);
-    const ok=await readSelectedCV();
-    if(!ok)return;
-  }catch(err){status('Import failed: '+(err?.message||String(err)),false)}
+    if(!/\.pdf$/i.test(file.name)&&file.type!=='application/pdf'){
+      status('Please select a PDF or TXT CV.',false);return;
+    }
+    const pdfjs=await loadPdfJs();
+    if(pdfjs.GlobalWorkerOptions)pdfjs.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const data=await file.arrayBuffer();
+    const pdf=await pdfjs.getDocument({data:new Uint8Array(data),useWorkerFetch:false,isEvalSupported:true}).promise;
+    let out=[];
+    for(let pageNo=1;pageNo<=pdf.numPages;pageNo++){
+      const page=await pdf.getPage(pageNo);
+      const content=await page.getTextContent();
+      const pageText=content.items.map(item=>item.str||'').join(' ').trim();
+      if(pageText)out.push(pageText);
+    }
+    const text=out.join('\n\n').trim();
+    if(!text){status('The PDF was opened but no text could be extracted. If this is a scanned CV, please use a text-based PDF or paste the CV text.',false);return}
+    $('cv').value=text;
+    importCVToFields(false);
+  }catch(err){
+    status('CV import failed: '+(err?.message||String(err)),false);
+  }
 }
 $('parseCv').onclick=importButtonAction;
 $('clearImport').onclick=()=>{$('file').value='';$('cv').value='';setForm({name:'',email:'',phone:'',location:'',title:'',summary:'',skills:'',experience:'',education:'',projects:'',certifications:''});preview();status('Imported CV cleared.',true)};
@@ -70,41 +95,17 @@ async function loadPdfJs(){
   for(const url of urls){
     try{
       await new Promise((resolve,reject)=>{
-        const s=document.createElement('script');
-        s.src=url;
-        s.onload=()=>window.pdfjsLib?resolve():reject(new Error('PDF reader API unavailable'));
-        s.onerror=()=>reject(new Error('PDF reader could not be loaded'));
-        document.head.appendChild(s);
+        const script=document.createElement('script');
+        script.src=url;
+        script.async=true;
+        script.onload=()=>window.pdfjsLib?resolve():reject(new Error('PDF reader API unavailable'));
+        script.onerror=()=>reject(new Error('Could not load PDF reader from '+url));
+        document.head.appendChild(script);
       });
       if(window.pdfjsLib)return window.pdfjsLib;
-    }catch(e){lastErr=e}
+    }catch(err){lastErr=err}
   }
-  throw new Error((lastErr&&lastErr.message)||'Could not load the PDF reader. Please paste the CV text instead.');
-}
-async function readSelectedCV(){
-  const f=$('file').files?.[0];
-  if(!f){status('Please choose your CV file first.',false);return false}
-  try{
-    if(f.name.toLowerCase().endsWith('.txt')||f.type==='text/plain'){
-      $('cv').value=await f.text();
-    }else{
-      status('Reading your PDF CV…',true);
-      const pdfjs=await loadPdfJs();
-      if(pdfjs.GlobalWorkerOptions)pdfjs.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-      const pdf=await pdfjs.getDocument({data:new Uint8Array(await f.arrayBuffer()),useWorkerFetch:false,isEvalSupported:true}).promise;
-      let out='';
-      for(let i=1;i<=pdf.numPages;i++){
-        const pg=await pdf.getPage(i),ct=await pg.getTextContent();
-        out+=ct.items.map(x=>x.str).join(' ')+'\n';
-      }
-      if(!out.trim())throw new Error('This PDF has no readable text. If it is a scanned CV, please upload a text-based PDF or paste the CV text.');
-      $('cv').value=out;
-    }
-    return importCVToFields(true);
-  }catch(e){
-    status('Could not read CV: '+(e?.message||String(e)),false);
-    return false;
-  }
+  throw lastErr||new Error('Could not load the PDF reader.');
 }
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));if(docs)$('document').textContent=docs[tab]||''});document.querySelectorAll('[data-template]').forEach(b=>b.onclick=()=>{template=b.dataset.template;document.querySelectorAll('[data-template]').forEach(x=>x.classList.toggle('active',x===b));preview()});document.querySelectorAll('input,textarea').forEach(x=>x.addEventListener('input',preview));renderSections();preview();
 })();
