@@ -262,6 +262,28 @@
       }
     }, true);
 
+    var clearBtn = id('clearImport');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        var file = id('file'), cv = id('cv');
+        if (file) file.value = '';
+        if (cv) cv.value = '';
+        ['name','email','phone','location','title','summary','skills','experience','education','projects','certifications']
+          .forEach(function(k) {
+            var el = id(k);
+            if (el) {
+              el.value = '';
+              el.dispatchEvent(new Event('input', {bubbles:true}));
+            }
+          });
+        if (typeof window.JobSeekPreview === 'function') {
+          try { window.JobSeekPreview(); } catch (_) {}
+        }
+        status('Imported CV cleared.', true);
+      });
+    }
+
     status('Import system ready — choose a PDF/TXT CV or paste your CV text.', true);
   }
 
