@@ -198,37 +198,59 @@ function buildImprovementPlan(cvText,targetRole='',jobDescription=''){
   const text=String(cvText||'').trim();
   const analysis=scoreCVv6(text,targetRole,jobDescription);
   const missing=analysis.missingKeywords||[];
-  const questions={
-    strategy:'Have you planned, improved or evaluated a geological process, project or field-development activity? Give the real situation and your contribution.',
-    reporting:'Have you prepared technical reports, geological maps, well reports, dashboards or management updates? What did you produce?',
-    operations:'Have you supported drilling, workover, logging, completion, coring, perforation, fishing, sidetracking or other well operations? Describe what you actually did.',
-    compliance:'Have you worked with HSSE, regulatory requirements, SPE-PRMS, NUPRC or another documented standard/control? State your actual experience.',
-    documentation:'What technical documentation have you personally prepared or reviewed?',
-    leadership:'Have you mentored people or led a technical workstream/project? State your actual responsibility and team/project size if known.',
-    management:'Have you coordinated people, vendors, service companies, clients, budgets or competing technical priorities? Give the real example.',
-    analysis:'What geological, geophysical, well or reservoir data have you analysed, and what decision or outcome did the analysis support?',
-    project:'Describe one relevant subsurface, exploration, appraisal, development or operations project you personally contributed to and the result.',
-    team:'How have you worked with reservoir engineers, petrophysicists, drilling engineers, production teams or other disciplines?',
-    software:'Which industry software have you actually used, for how long, and at what level?'
-  };
-  const keywordMap={strategy:['field development planning','development planning'],reporting:['technical reports','technical report'],operations:['operations geology','drilling','workover','well operations'],compliance:['hsse','compliance','spe-prms','nuprc'],documentation:['documentation','reports'],leadership:['leadership','mentor','mentoring'],management:['management','managed','coordination'],analysis:['interpretation','analysis','data integration'],project:['project'],team:['multidisciplinary','cross-discipline'],software:['petrel','software']};
   const plan=[];
-  Object.keys(keywordMap).forEach(key=>{
-    const related=missing.filter(m=>keywordMap[key].some(k=>m.toLowerCase().includes(k)));
-    if(related.length) plan.push({keyword:related.slice(0,3).join(', '),question:questions[key],answer:''});
+  const add=(keyword,question)=>{if(!keyword)return;if(plan.some(x=>norm(x.keyword)===norm(keyword)))return;plan.push({keyword,question,answer:''})};
+  missing.slice(0,10).forEach(k=>{
+    const pretty=titleCase(k);
+    add(k,'Do you have genuine experience with '+pretty+'? If yes, describe exactly what you did, the context, tools used and any real result. If not, leave this blank.');
   });
-  missing.slice(0,8).forEach(k=>{
-    if(!plan.some(x=>x.keyword.toLowerCase().includes(k.toLowerCase()))) plan.push({keyword:k,question:'Do you have genuine experience with '+k+'? If yes, describe exactly what you did and any real result. If not, leave this blank.',answer:''});
+  (analysis.requirementResults||[]).filter(x=>x.failed).slice(0,6).forEach(x=>{
+    const key=(x.missingTerms||[]).slice(0,3).join(', ')||x.requirement.slice(0,70);
+    add(key,'This vacancy asks for: '+x.requirement+' Do you have real evidence for this requirement? Describe your actual responsibility, result or qualification. Do not add it if you do not have it.');
   });
+  if(!plan.length && text) add('evidence','What is one measurable result from your real experience that would make this CV stronger for the target role?');
   return {analysis,plan:plan.slice(0,12)};
 }
 function applyImprovementAnswers(input={},plan=[]){
   const data=Object.assign({},input);
-  const answers=(plan||[]).filter(x=>String(x.answer||'').trim()).map(x=>({keyword:x.keyword,answer:String(x.answer).trim()}));
-  const base=String(data.cv||'').trim();
-  const additions=answers.map(x=>'- '+x.answer).join('\n');
-  const cv=base+(additions?(base?'\n\nVerified CV improvements\n':'Verified CV improvements\n')+additions:'');
-  return Object.assign(data,{cv,summary:data.summary||'',skills:data.skills||'',experience:data.experience||'',education:data.education||''});
+  const answers=(plan||[]).filter(x=>String(x.answer||'').trim()).map(x=>({keyword:String(x.keyword||''),answer:String(x.answer).trim()}));
+  const existing={
+    summary:String(data.summary||'').trim(),
+    skills:Array.isArray(data.skills)?data.skills.map(String):String(data.skills||'').split(/[,;\\n]+/).map(x=>x.trim()).filter(Boolean),
+    experience:String(data.experience||'').trim(),
+    education:String(data.education||'').trim(),
+    projects:String(data.projects||'').trim(),
+    certifications:String(data.certifications||'').trim()
+  };
+  let summary=existing.summary, experience=existing.experience, projects=existing.projects;
+  const skills=existing.skills.slice();
+  const cleanAnswer=a=>a.replace(/^(answer|response)\\s*:\\s*/i,'').replace(/^[-•]+\\s*/,'').trim();
+  answers.forEach(x=>{
+    const a=cleanAnswer(x.answer); if(!a)return;
+    const k=norm(x.keyword);
+    if(/skill|software|tool|technical/i.test(k)){
+      a.split(/[,;\\n]+/).map(v=>v.trim()).filter(v=>v.length>2&&v.length<80).forEach(v=>{if(!skills.some(s=>norm(s)===norm(v)))skills.push(v)});
+    }else if(/project|strategy|analysis|operations|reporting|compliance|documentation|management/i.test(k)){
+      projects+=(projects?'\\n':'')+'• '+a;
+    }else{
+      experience+=(experience?'\\n':'')+'• '+a;
+    }
+  });
+  const finalSkills=unique(skills).slice(0,30);
+  if(!summary && (experience||finalSkills.length)){
+    summary='Professional with verified experience in '+(data.title||data.targetRole||'the target role')+'. '+(finalSkills.length?'Core strengths include '+finalSkills.slice(0,5).join(', ')+'.':'');
+  }
+  const target=data.targetRole||data.title||'Professional';
+  const cv=[
+    data.name||'[Full Name]',data.email||'[Professional Email]',data.phone||'[Phone]',data.location||'',
+    'Target Role: '+target,'','PROFESSIONAL SUMMARY',summary||'[Add a professional summary based on your verified experience]',
+    '','CORE SKILLS',finalSkills.length?finalSkills.map(x=>'• '+x).join('\\n'):'[Add verified skills]',
+    '','PROFESSIONAL EXPERIENCE',experience||'[Add your verified work experience]',
+    '','EDUCATION',existing.education||'[Add your verified education]',
+    '','CERTIFICATIONS',existing.certifications||'[Add verified certifications or state None]'
+  ];
+  if(projects)cv.push('','PROJECTS',projects);
+  return Object.assign(data,{cv:cv.join('\\n'),summary,skills:finalSkills,experience,education:existing.education,projects,certifications:existing.certifications});
 }
 function readability(text){const w=words(text).length,s=String(text).split(/[.!?]+/).filter(x=>x.trim()).length,a=s?w/s:w;return{wordCount:w,sentenceCount:s,avgWordsPerSentence:Math.round(a*10)/10,tooLong:a>28}}
 function atsChecks(text){const l=norm(text),issues=[],positives=[];if(!/@/.test(text))issues.push('Add professional contact information.');if(/header|footer/i.test(l))issues.push('Keep critical contact details out of headers and footers when possible.');if(/\b(photo|age|date of birth|marital status|religion)\b/i.test(l))issues.push('Consider removing unnecessary personal details.');else positives.push('No obvious unnecessary personal-detail fields detected.');return{issues,positives}}
