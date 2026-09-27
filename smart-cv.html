@@ -14,7 +14,7 @@
 <p class="muted no-print">Create a structured CV, compare it with the exact vacancy, check ATS/readability issues and see the finished document live.</p>
 <div class="grid"><section>
 <div class="card editor-panel"><h2>1. Target the vacancy</h2><div class="row"><div class="field"><label>Target Role</label><input id="role" placeholder="e.g. Data Analyst"></div><div class="field"><label>Company</label><input id="company" placeholder="Employer name"></div></div><div class="field"><label>Exact employer job description / requirements *</label><textarea id="jobDescription" style="min-height:170px" placeholder="Paste the exact vacancy here. This is what the matching engine uses."></textarea></div><div class="toolbar"><button class="primary" id="score">Analyse CV & ATS</button><button class="dark" id="fix">Tailor / Repair CV</button><button class="outline" id="generate">Generate Application Pack</button></div><p id="status" class="muted small">Start by pasting the exact vacancy.</p></div>
-<div class="card editor-panel"><h2>2. Import or enter your CV</h2><label>Upload CV (PDF or TXT)</label><input id="file" type="file" accept=".pdf,.txt,application/pdf,text/plain"><div class="field" style="margin-top:12px"><label>Full CV text</label><textarea id="cv" placeholder="Paste your existing CV here."></textarea></div><div class="toolbar" style="margin-top:10px"><button type="button" class="primary" id="parseCv">Import CV & Fill Fields</button><button class="outline" id="clearImport">Clear Imported CV</button></div><p class="muted small">Upload a PDF/TXT or paste your CV above, then use the blue button. JobSeek will fill the candidate fields automatically.</p></div>
+<div class="card editor-panel"><h2>2. Import or enter your CV</h2><label>Upload CV (PDF or TXT)</label><input id="file" type="file" accept=".pdf,.txt,application/pdf,text/plain"><div class="field" style="margin-top:12px"><label>Full CV text</label><textarea id="cv" placeholder="Paste your existing CV here."></textarea></div><div class="toolbar" style="margin-top:10px"><button type="button" class="primary" id="parseCv" onclick="window.JobSeekImportNow && window.JobSeekImportNow(event)">Import CV & Fill Fields</button><button class="outline" id="clearImport">Clear Imported CV</button></div><p class="muted small">Upload a PDF/TXT or paste your CV above, then use the blue button. JobSeek will fill the candidate fields automatically.</p></div>
 <div class="card editor-panel"><h2>3. Candidate information</h2><div class="row"><div class="field"><label>Full Name</label><input id="name"></div><div class="field"><label>Professional Email</label><input id="email"></div><div class="field"><label>Phone</label><input id="phone"></div><div class="field"><label>City / Location</label><input id="location"></div><div class="field"><label>Professional Title</label><input id="title"></div><div class="field"><label>Certifications</label><input id="certifications"></div></div><div class="field"><label>Professional Summary</label><textarea id="summary"></textarea></div><div class="field"><label>Core Skills (comma separated)</label><textarea id="skills"></textarea></div><div class="field"><label>Work Experience</label><textarea id="experience"></textarea></div><div class="field"><label>Education</label><textarea id="education"></textarea></div><div class="field"><label>Projects</label><textarea id="projects"></textarea></div></div>
 <div class="card editor-panel"><h2>4. CV design & structure</h2><div class="template-row"><button type="button" class="template active" data-template="classic">Classic ATS</button><button type="button" class="template" data-template="modern">Modern</button><button type="button" class="template" data-template="minimal">Minimal</button></div><p class="muted small">Classic keeps the layout deliberately simple for ATS readability.</p><b class="small">Section order</b><div id="sectionList"></div></div>
 <div class="card editor-panel"><h2>6. Improve your CV for this vacancy</h2><p class="muted small">Answer only what is true about your experience. JobSeek will not add a vacancy requirement as a fact unless you confirm it.</p><div id="coachSummary" class="improve-summary">Analyse your CV to see personalised improvement questions.</div><div id="coach"></div><button class="primary" id="applyImprovements">Improve CV with verified answers</button><button class="outline" id="clearImprovements">Clear answers</button><p class="coach-note">Review every change before applying.</p></div><div class="card editor-panel"><h2>5. Application documents</h2><div class="tabs"><button data-tab="cv" class="active">CV</button><button data-tab="cover">Cover Letter</button><button data-tab="email">Application Email</button><button data-tab="linkedin">LinkedIn Summary</button></div><div id="document" class="doc">Analyse the CV or generate the application pack.</div></div>
@@ -26,6 +26,96 @@
 <div class="card"><h2>Tailoring feedback</h2><div id="feedback"><p class="muted small">No analysis yet.</p></div></div>
 <div class="card"><h2>Accuracy rule</h2><p class="muted small">Review every generated field. JobSeek uses [brackets] when genuine information is missing and should never be treated as a claim about the candidate.</p></div>
 </aside></div></main><script>
+(function(){
+  "use strict";
+  window.JobSeekImportNow = async function(event){
+    try{
+      if(event){ event.preventDefault(); event.stopPropagation(); }
+      const file=document.getElementById("file"), cv=document.getElementById("cv"), status=document.getElementById("status");
+      const setStatus=(message,ok)=>{
+        if(status){ status.textContent=message; status.className="muted small "+(ok?"success":"danger"); }
+      };
+      if(!file || !cv){ setStatus("Import controls are unavailable. Please refresh JobSeek.",false); return; }
+
+      const applyText=(raw)=>{
+        const text=String(raw||"").trim();
+        if(!text){ setStatus("No readable CV text was found. Please paste the CV text.",false); return; }
+        cv.value=text;
+        let parsed={};
+        try{
+          if(window.JobSeekSmartCV && typeof window.JobSeekSmartCV.parseResumeText==="function") parsed=window.JobSeekSmartCV.parseResumeText(text)||{};
+          else if(typeof window.JobSeekParseStandalone==="function") parsed=window.JobSeekParseStandalone(text)||{};
+        }catch(_){}
+        ["name","email","phone","location","title","summary","skills","experience","education","projects","certifications"].forEach(k=>{
+          const el=document.getElementById(k);
+          if(el && parsed[k]) el.value=Array.isArray(parsed[k])?parsed[k].join(", "):parsed[k];
+        });
+        cv.dispatchEvent(new Event("input",{bubbles:true}));
+        setStatus("CV imported successfully. Your candidate fields have been filled.",true);
+      };
+
+      const selected=file.files && file.files[0];
+      if(!selected){
+        if(cv.value.trim()){ applyText(cv.value.trim()); return; }
+        setStatus("Please choose your CV file first, or paste your CV text.",false); return;
+      }
+
+      if(selected.type==="text/plain" || /\.txt$/i.test(selected.name)){
+        setStatus("Reading CV…",true);
+        const reader=new FileReader();
+        reader.onload=()=>applyText(reader.result||"");
+        reader.onerror=()=>setStatus("Could not read the TXT file. Please try again.",false);
+        reader.readAsText(selected); return;
+      }
+
+      if(selected.type!=="application/pdf" && !/\.pdf$/i.test(selected.name)){
+        setStatus("Please select a PDF or TXT CV.",false); return;
+      }
+
+      setStatus("Opening PDF reader…",true);
+      let pdfjs=window.pdfjsLib, lastError=null;
+      if(!pdfjs){
+        const sources=[
+          "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js",
+          "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js",
+          "https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"
+        ];
+        for(const src of sources){
+          try{
+            pdfjs=await new Promise((resolve,reject)=>{
+              const s=document.createElement("script");
+              s.src=src; s.async=true;
+              s.onload=()=>window.pdfjsLib?resolve(window.pdfjsLib):reject(new Error("PDF reader API unavailable"));
+              s.onerror=()=>reject(new Error("Could not load PDF reader"));
+              document.head.appendChild(s);
+              setTimeout(()=>reject(new Error("PDF reader timed out")),10000);
+            });
+            if(pdfjs) break;
+          }catch(err){ lastError=err; }
+        }
+      }
+      if(!pdfjs) throw (lastError||new Error("PDF reader could not be loaded"));
+      if(pdfjs.GlobalWorkerOptions) pdfjs.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+      const buffer=await selected.arrayBuffer();
+      const pdf=await pdfjs.getDocument({data:new Uint8Array(buffer),useWorkerFetch:false,isEvalSupported:true}).promise;
+      const pages=[];
+      for(let pageNumber=1;pageNumber<=pdf.numPages;pageNumber++){
+        const page=await pdf.getPage(pageNumber);
+        const content=await page.getTextContent();
+        const text=content.items.map(item=>item.str||"").join(" ").trim();
+        if(text) pages.push(text);
+      }
+      const extracted=pages.join("\n\n").trim();
+      if(!extracted){ setStatus("This PDF is scanned/image-only. Please paste the CV text or use a text-based PDF.",false); return; }
+      applyText(extracted);
+    }catch(error){
+      setStatus("PDF import failed: "+(error&&error.message?error.message:"unknown error")+". You can paste the CV text below as a backup.",false);
+    }
+  };
+})();
+</script>
+<script>
 (function(){
   'use strict';
   const byId=id=>document.getElementById(id);
