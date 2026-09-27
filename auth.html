@@ -81,7 +81,7 @@ async function accountRole(client,uid){
  return r.data?.role||null;
 }
 function goForRole(role){
- if(role==='admin'||role==='agent')return location.replace('admin-dashboard.html');
+ if(role==='admin'||role==='agent')return location.replace('index.html');
  if(role==='employer')return location.replace('employer-portal.html');
  return location.replace('candidate-dashboard.html');
 }
