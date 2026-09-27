@@ -105,8 +105,8 @@
       });
 
     if (cv) cv.dispatchEvent(new Event('input', {bubbles:true}));
-    status('CV imported successfully. Your candidate fields have been filled.', true);
-    var preview = window.preview;
+    status('CV imported successfully. Your candidate fields and live preview have been filled.', true);
+    var preview = window.JobSeekPreview || window.preview;
     if (typeof preview === 'function') { try { preview(); } catch (_) {} }
   }
 
@@ -164,7 +164,7 @@
     }
 
     var result = pages.join('\n\n').trim();
-    if (result.replace(/\\s+/g,'').length >= 80) return result;
+    if (result.replace(/\s+/g,'').length >= 80) return result;
 
     // Scanned/image-only PDF fallback: render each page and OCR it locally in the browser.
     status('Scanned CV detected. Loading free OCR engine…', true);
