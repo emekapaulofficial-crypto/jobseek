@@ -105,8 +105,21 @@ form.onsubmit=async e=>{
    result=await client.auth.signUp({email:email.value,password:password.value,options:{data:metadata}});
    if(result.error)throw result.error;
    if(result.data.user){
-    msg.textContent=result.data.session?'Account created. Redirecting…':'Account created. Check your email if confirmation is required.';
-    if(result.data.session)goForRole(accountType);
+    // When email confirmation is disabled, Supabase returns a live session immediately.
+   // Always wait for the session before deciding where to send the new account.
+   let session=result.data.session||null;
+   if(!session){
+    const current=await client.auth.getSession();
+    session=current.data?.session||null;
+   }
+   if(session){
+    msg.textContent='Account created. Signing you in…';
+    goForRole(accountType);
+   }else{
+    // Hosted Supabase projects can require email confirmation. A browser cannot
+    // create a session until that confirmation is completed.
+    msg.textContent='Account created. Please confirm your email, then sign in.';
+   }
    }
   }
  }catch(err){msg.textContent=err.message||'Authentication failed.'}
