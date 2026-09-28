@@ -416,5 +416,508 @@ function scoreCVv6(text,role,jd){
     applicationEligible
   });
 }
-window.JobSeekSmartCV={version:"smart-cv-v12-safe-improvements",scoreCV:scoreCVv6,smartFill,buildImprovementPlan,applyImprovementAnswers,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements,parseResumeText};
+  /* =========================================================
+   PAUL AI — JobSeek Career Recruiter Assistant
+   Safe Extension Module
+   ========================================================= */
+
+const PaulAI = {
+
+  name: "Paul",
+
+  version: "1.0",
+
+  analyse(cv, jobDescription, userRole="candidate") {
+
+    const analysis = scoreCVv6(
+      cv,
+      userRole,
+      jobDescription
+    );
+
+    const missing = analysis.missingKeywords || [];
+
+    const gaps = analysis.requirementGaps || [];
+
+    let message = "";
+
+    if (!jobDescription.trim()) {
+
+      message =
+      "Hi, I am Paul. Please paste the employer's job description first. I need the exact vacancy requirements before I can review how your CV matches the role.";
+
+      return {
+        message,
+        score: analysis.score
+      };
+    }
+
+
+    message +=
+    "Hi, I reviewed your CV against this vacancy.\n\n";
+
+
+    if (analysis.vacancyCompatibility === "STRONG_MATCH") {
+
+      message +=
+      "Your CV shows strong alignment with this role. The next step is making sure your achievements and results are clearly written.\n\n";
+
+    }
+
+    else if (
+      analysis.vacancyCompatibility === "PARTIAL_MATCH"
+    ) {
+
+      message +=
+      "Your CV matches some important parts of this job, but some requirements are not clearly demonstrated yet.\n\n";
+
+    }
+
+    else {
+
+      message +=
+      "Your CV is not currently showing enough evidence for this vacancy. Do not worry — we can improve the structure and highlight your real experience better.\n\n";
+
+    }
+
+
+    if(missing.length){
+
+      message +=
+      "The employer is looking for these areas that are missing or unclear:\n";
+
+      missing
+      .slice(0,8)
+      .forEach(skill=>{
+
+        message +=
+        "• "+titleCase(skill)+"\n";
+
+      });
+
+
+      message +=
+      "\nIf you have real experience with any of these, add the project, tools used, responsibility and result. Do not add skills you have never used.\n\n";
+
+    }
+
+
+    if(gaps.length){
+
+      message +=
+      "Important vacancy points to review:\n";
+
+      gaps
+      .slice(0,5)
+      .forEach(item=>{
+
+        message +=
+        "• "+item+"\n";
+
+      });
+
+      message += "\n";
+
+    }
+
+
+    if(analysis.score < 80){
+
+      message +=
+      "My recommendation: improve your professional summary, add measurable achievements, include relevant tools, and rewrite experience using action results.";
+
+    }
+
+    else {
+
+      message +=
+      "Your CV structure is already strong. Focus on tailoring small details for this specific employer.";
+
+    }
+
+
+    return {
+
+      assistant:"Paul AI",
+
+      score:analysis.score,
+
+      compatibility:
+      analysis.vacancyCompatibilityLabel,
+
+      message,
+
+      missingSkills:missing,
+
+      recommendations:analysis.feedback
+
+    };
+
+  },
+
+
+  /* Human style CV improvement request */
+
+  coach(cv,job){
+
+    const result=this.analyse(cv,job);
+
+
+    return {
+
+      reply:
+      "I have reviewed your application. I will help you improve it step by step while keeping everything truthful.",
+
+      analysis:result
+
+    };
+
+  },
+
+
+  /* Subscription placeholder
+     Connected later to Supabase */
+
+  usageStatus(){
+
+    return {
+
+      freeLimit:2,
+
+      message:
+      "Paul AI free users can use the assistant 2 times every month. Subscription users have full access."
+
+    };
+
+  },
+
+
+  adminAccess(){
+
+    return true;
+
+  }
+
+};/* =========================================================
+   PAUL AI ADVANCED JOB SKILL RECOGNITION
+   ========================================================= */
+
+const ADVANCED_SKILLS = {
+
+  "excel":[
+    "microsoft excel",
+    "advanced excel",
+    "excel formulas",
+    "pivot tables",
+    "power query",
+    "excel dashboard",
+    "data analysis excel",
+    "vlookup",
+    "xlookup",
+    "macros"
+  ],
+
+  "data":[
+    "data analysis",
+    "data reporting",
+    "data visualization",
+    "statistics",
+    "analytics"
+  ],
+
+  "office":[
+    "microsoft office",
+    "word",
+    "powerpoint",
+    "outlook"
+  ]
+
+};
+
+
+
+function detectAdvancedSkills(text){
+
+  const lower = norm(text);
+
+  let found=[];
+
+
+  Object.keys(ADVANCED_SKILLS)
+  .forEach(category=>{
+
+    ADVANCED_SKILLS[category]
+    .forEach(skill=>{
+
+      if(lower.includes(skill)){
+
+        found.push(skill);
+
+      }
+
+    });
+
+  });
+
+
+  return unique(found);
+
+}
+
+
+
+/* Enhanced vacancy comparison */
+
+function paulVacancyAnalysis(cv,job,role=""){
+
+  const base =
+  scoreCVv6(
+    cv,
+    role,
+    job
+  );
+
+
+  const detectedSkills =
+  detectAdvancedSkills(cv);
+
+
+
+  const requiredSkills =
+  detectAdvancedSkills(job);
+
+
+
+  const missingAdvanced =
+  requiredSkills.filter(
+    skill =>
+    !detectedSkills.includes(skill)
+  );
+
+
+
+  let advice=[];
+
+
+
+  if(missingAdvanced.length){
+
+    advice.push(
+      "The employer requested these technical skills but your CV does not clearly prove them: "
+      +
+      missingAdvanced.join(", ")
+    );
+
+  }
+
+
+
+  if(!detectedSkills.length){
+
+    advice.push(
+      "Your CV should show specific tools, software and technical abilities instead of only general statements."
+    );
+
+  }
+
+
+
+  return {
+
+    score:base.score,
+
+    compatibility:
+    base.vacancyCompatibilityLabel,
+
+
+    matched:
+    base.matchedKeywords,
+
+
+    missing:
+    base.missingKeywords,
+
+
+    advancedSkills:
+    detectedSkills,
+
+
+    recommendations:
+    [
+      ...base.feedback,
+      ...advice
+    ]
+
+  };
+
+}
+
+
+
+/* Attach extra ability to Paul */
+
+PaulAI.jobReview=function(cv,job,role){
+
+  return paulVacancyAnalysis(
+    cv,
+    job,
+    role
+  );
+
+};/* =========================================================
+   PAUL AI SUBSCRIPTION & ACCESS CONTROL
+   Supabase Ready Structure
+   ========================================================= */
+
+
+const PaulAccess = {
+
+
+  user:{
+    id:null,
+    email:null,
+    role:"user"
+  },
+
+
+  limit:2,
+
+
+  async checkAccess(){
+
+    /*
+      Later connect this function to Supabase:
+
+      Table example:
+
+      paul_usage
+
+      id
+      user_id
+      month
+      usage_count
+      subscription_status
+      role
+
+    */
+
+
+    if(this.user.role==="admin"){
+
+      return {
+        allowed:true,
+        reason:"Admin unlimited access"
+      };
+
+    }
+
+
+
+    if(this.user.subscription==="active"){
+
+      return {
+        allowed:true,
+        reason:"Active Paul AI subscriber"
+      };
+
+    }
+
+
+
+    return {
+
+      allowed:true,
+
+      remaining:this.limit,
+
+      reason:
+      "Free Paul AI access"
+
+    };
+
+  },
+
+
+  async recordUsage(){
+
+    /*
+      Supabase update will go here.
+
+      Example:
+
+      increase usage_count by 1
+
+    */
+
+    return true;
+
+  },
+
+
+  subscriptionMessage(){
+
+    return {
+
+      title:
+      "Paul AI Subscription",
+
+      price:
+      "₦3,000 per month",
+
+      message:
+      "Your free Paul AI reviews have finished. Subscribe to continue unlimited CV reviews."
+
+    };
+
+  }
+
+
+};
+
+
+
+/* Connect Paul AI with access control */
+
+
+PaulAI.request = async function(
+cv,
+job,
+role
+){
+
+  const access =
+  await PaulAccess.checkAccess();
+
+
+
+  if(!access.allowed){
+
+    return {
+
+      assistant:"Paul AI",
+
+      message:
+      "Your Paul AI access has reached its limit. Please subscribe to continue."
+
+    };
+
+  }
+
+
+
+  await PaulAccess.recordUsage();
+
+
+
+  return this.analyse(
+    cv,
+    job,
+    role
+  );
+
+};
+window.JobSeekSmartCV={version:"smart-cv-v12-safe-improvements",scoreCV:scoreCVv6,smartFill,buildImprovementPlan,applyImprovementAnswers,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements,parseResumeText,parseResumeText,
+PaulAI,
+PaulAccess
+};
 })();
