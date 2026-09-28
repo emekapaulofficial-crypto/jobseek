@@ -47,7 +47,14 @@
     };
 
     out.email = (t.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i) || [''])[0];
-    out.phone = (t.match(/(?:\+?\d[\d\s().-]{7,}\d)/) || [''])[0];
+
+    // Prefer phone-shaped values and avoid accidentally treating years/date ranges
+    // from employment history as a phone number.
+    var phoneMatches = t.match(/(?:\+?\d{1,3}[\s.-]?)?(?:\(?\d{3,4}\)?[\s.-]?)\d{3,4}[\s.-]?\d{3,5}/g) || [];
+    out.phone = phoneMatches.map(function(x){ return x.trim(); }).find(function(x){
+      var digits = x.replace(/\D/g,'');
+      return digits.length >= 9 && digits.length <= 15;
+    }) || '';
 
     var section = '';
     var buckets = {summary:[],experience:[],education:[],skills:[],projects:[],certifications:[]};
@@ -81,6 +88,7 @@
     out.name = lines.find(function(x) {
       return x.length > 2 && x.length < 70 && !/@/.test(x) &&
         !/^\+?\d/.test(x) &&
+        !/^(email|phone|mobile|tel|whatsapp|location|address|city|nationality)\s*:/i.test(x) &&
         !heads.summary.test(x) && !heads.experience.test(x) &&
         !heads.education.test(x) && !heads.skills.test(x) &&
         !heads.projects.test(x) && !heads.certifications.test(x);
@@ -101,23 +109,34 @@
   }
 
   function parseWithSingleParser(text) {
-    var parsed = {};
+    // Use the importer parser as the deterministic base, then fill only fields
+    // that it could not confidently identify from the existing engine parser.
+    // This prevents a weak parser result from overwriting good imported fields.
+    var fallback = {};
+    var engine = {};
+
+    try { fallback = fallbackParse(text) || {}; } catch (_) { fallback = {}; }
+
     try {
       if (window.JobSeekSmartCV && typeof window.JobSeekSmartCV.parseResumeText === 'function') {
-        parsed = window.JobSeekSmartCV.parseResumeText(text) || {};
+        engine = window.JobSeekSmartCV.parseResumeText(text) || {};
       }
-    } catch (_) {}
+    } catch (_) { engine = {}; }
 
-    var useful = parsed && (
-      parsed.name || parsed.email || parsed.phone || parsed.summary ||
-      parsed.experience || parsed.education || parsed.skills
-    );
+    var merged = {};
+    [
+      'name','email','phone','location','title','summary','skills',
+      'experience','education','projects','certifications'
+    ].forEach(function(k) {
+      var primary = fallback[k];
+      var secondary = engine[k];
+      if (Array.isArray(primary)) primary = primary.join(', ');
+      if (Array.isArray(secondary)) secondary = secondary.join(', ');
+      merged[k] = String(primary == null ? '' : primary).trim() ||
+                  String(secondary == null ? '' : secondary).trim() || '';
+    });
 
-    if (!useful) {
-      try { parsed = fallbackParse(text); } catch (_) { parsed = {}; }
-    }
-
-    return parsed || {};
+    return merged;
   }
 
   function apply(text) {
