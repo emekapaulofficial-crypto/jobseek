@@ -401,30 +401,32 @@
   }
 
   function bind() {
-    if (bound) return;
-
     var btn = id('parseCv');
     var file = id('file');
-    if (!btn || !file) return;
-
-    bound = true;
+    if (!btn || !file) return false;
+    if (btn.dataset.jobseekImportBound === '1') return true;
+    btn.dataset.jobseekImportBound = '1';
     window.JobSeekImportNow = importNow;
-
-    // One explicit import action. Selecting a file alone never changes the CV.
-    // Capture phase also neutralises any older duplicate click handlers.
-    document.addEventListener('click', function(e) {
-      if (e.target && (e.target.id === 'parseCv' ||
-          (e.target.closest && e.target.closest('#parseCv')))) {
-        importNow(e);
-      }
-    }, true);
-
+    btn.type = 'button';
+    btn.onclick = function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      importNow(e);
+      return false;
+    };
     var clearBtn = id('clearImport');
-    if (clearBtn) {
-      clearBtn.addEventListener('click', clearImportedCV);
+    if (clearBtn && clearBtn.dataset.jobseekClearBound !== '1') {
+      clearBtn.dataset.jobseekClearBound = '1';
+      clearBtn.type = 'button';
+      clearBtn.onclick = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        clearImportedCV(e);
+        return false;
+      };
     }
-
     status('Import system ready — choose a PDF/TXT CV or paste your CV text, then press Import CV & Fill Fields.', true);
+    return true;
   }
 
   window.JobSeekImport = {

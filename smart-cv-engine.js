@@ -955,7 +955,7 @@ function paulImprove(input={}, jobDescription=""){
 }
 
 window.JobSeekPaulImprove=paulImprove;
-window.JobSeekSmartCV={version:"smart-cv-v13-parser-fix",scoreCV:scoreCVv6,smartFill,buildImprovementPlan,applyImprovementAnswers,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements,parseResumeText,parseResumeText,
+window.JobSeekSmartCV={version:"smart-cv-v14-stable-import",scoreCV:scoreCVv6,smartFill,buildImprovementPlan,applyImprovementAnswers,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements,parseResumeText,parseResumeText,
 PaulAI,
 PaulAccess,
 paulImprove
