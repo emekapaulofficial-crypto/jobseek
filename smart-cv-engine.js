@@ -172,6 +172,7 @@
 
   function parseResumeText(text){
     let t=String(text||'').replace(/\r/g,'');
+    t=t.replace(/\b(PROFILE SUMMARY|PROFESSIONAL SUMMARY|SUMMARY|WORK EXPERIENCE|PROFESSIONAL EXPERIENCE|EMPLOYMENT|EXPERIENCE|EDUCATION|ACADEMIC BACKGROUND|SKILLS|CORE SKILLS|TECHNICAL SKILLS|COMPETENCIES|CERTIFICATIONS|PROFESSIONAL CERTIFICATIONS|PROJECTS|SELECTED PROJECTS)\b/gi,'\n$1\n').replace(/\n{2,}/g,'\n');
     // PDF text extraction often returns the whole page as one long line.
     // Insert section boundaries before parsing so fields never swallow the entire CV.
     const headings=/\b(PROFILE SUMMARY|PROFESSIONAL SUMMARY|SUMMARY|WORK EXPERIENCE|PROFESSIONAL EXPERIENCE|EMPLOYMENT|EDUCATION|ACADEMIC BACKGROUND|SKILLS|CORE SKILLS|TECHNICAL SKILLS|COMPETENCIES|CERTIFICATIONS|PROFESSIONAL CERTIFICATIONS|PROJECTS|SELECTED PROJECTS|INTERESTS & MOTIVATION|ADDITIONAL INFORMATION)\b/gi;
@@ -189,9 +190,12 @@
     lines.forEach(line=>{const h=Object.keys(hs).find(k=>hs[k].test(line));if(h){cur=h;b[cur]=[];return}if(cur)(b[cur]||(b[cur]=[])).push(line);});
     o.summary=(b.summary||[]).join('\n'); o.experience=(b.experience||[]).join('\n'); o.education=(b.education||[]).join('\n');
     o.skills=(b.skills||[]).join(', '); o.certifications=(b.certifications||[]).join('\n'); o.projects=(b.projects||[]).join('\n'); o.location=(b.location||[]).join(', ');
-    o.name=lines.find(x=>x.length>2&&x.length<70&&!/@/.test(x)&&!Object.values(hs).some(r=>r.test(x))&&!/^(phone|email|mobile|tel)\s*:/i.test(x))||'';
-    o.title=lines.find(x=>/senior geologist|geologist|data analyst|data scientist|software engineer|developer|product manager|designer|accountant|project manager|electrician|marketing/i.test(x))||'';
+    const header=lines.find(x=>/@/.test(x)&&/\d/.test(x)&&x.length<180)||lines[0]||'';
+    const headerName=header.split(/\s*[|•·]\s*/)[0].trim();
+    o.name=(headerName&&headerName.length>2&&headerName.length<60&&!/@/.test(headerName)?headerName:lines.find(x=>x.length>2&&x.length<60&&!/@/.test(x)&&!Object.values(hs).some(r=>r.test(x))&&!/^(phone|email|mobile|tel)\s*:/i.test(x)))||'';
+    o.title=lines.find(x=>x!==o.name&&x.length<90&&/^(senior|junior|lead|graphic|web|product|project|data|software|marketing|content|ui|ux|agricultural|farm|electrical|mechanical|customer|operations|account|finance|human resources|sales|business)/i.test(x))||'';
     if(!o.location){const loc=lines.find(x=>/\b(lagos|abuja|port harcourt|ibadan|enugu|benin|kano|kaduna|warri|delta|nigeria)\b/i.test(x)&&x!==o.name);if(loc)o.location=loc;}
+    if(header){const hp=header.split(/\s*[|•·]\s*/).map(x=>x.trim()).find(x=>/\b(nigeria|lagos|abuja|enugu|ibadan|ekiti|akure|benin|port harcourt)\b/i.test(x));if(hp)o.location=hp;}
     return o;
   }
 function buildImprovementPlan(cvText,targetRole='',jobDescription=''){
@@ -951,7 +955,7 @@ function paulImprove(input={}, jobDescription=""){
 }
 
 window.JobSeekPaulImprove=paulImprove;
-window.JobSeekSmartCV={version:"smart-cv-v12-safe-improvements",scoreCV:scoreCVv6,smartFill,buildImprovementPlan,applyImprovementAnswers,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements,parseResumeText,parseResumeText,
+window.JobSeekSmartCV={version:"smart-cv-v13-parser-fix",scoreCV:scoreCVv6,smartFill,buildImprovementPlan,applyImprovementAnswers,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements,parseResumeText,parseResumeText,
 PaulAI,
 PaulAccess,
 paulImprove
