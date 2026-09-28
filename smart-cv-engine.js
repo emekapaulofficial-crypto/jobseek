@@ -952,6 +952,7 @@ function paulImprove(input={}, jobDescription=""){
 
 window.JobSeekSmartCV={version:"smart-cv-v12-safe-improvements",scoreCV:scoreCVv6,smartFill,buildImprovementPlan,applyImprovementAnswers,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements,parseResumeText,parseResumeText,
 PaulAI,
-PaulAccess
+PaulAccess,
+paulImprove
 };
 })();
