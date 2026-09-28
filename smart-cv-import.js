@@ -129,13 +129,56 @@
     return normalizeText(pages.join("\n"));
   }
 
+  async function loadTesseract(){
+    if(window.Tesseract)return window.Tesseract;
+    await new Promise(function(resolve,reject){
+      var s=document.createElement("script");
+      s.src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+      s.onload=resolve;
+      s.onerror=function(){reject(new Error("OCR reader could not be loaded."));};
+      document.head.appendChild(s);
+    });
+    if(!window.Tesseract)throw new Error("OCR reader did not initialize.");
+    return window.Tesseract;
+  }
+
+  async function ocrPdf(file){
+    var pdfjs=await loadPdfJs();
+    pdfjs.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    var pdf=await pdfjs.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise;
+    var Tesseract=await loadTesseract();
+    var pages=[];
+    var maxPages=Math.min(pdf.numPages,12);
+    for(var i=1;i<=maxPages;i++){
+      status("Scanning page "+i+" of "+maxPages+" with OCR…",true);
+      var page=await pdf.getPage(i);
+      var viewport=page.getViewport({scale:1.7});
+      var canvas=document.createElement("canvas");
+      canvas.width=Math.ceil(viewport.width);
+      canvas.height=Math.ceil(viewport.height);
+      var ctx=canvas.getContext("2d");
+      await page.render({canvasContext:ctx,viewport:viewport}).promise;
+      var result=await Tesseract.recognize(canvas,"eng",{logger:function(m){
+        if(m&&m.status==="recognizing text"&&typeof m.progress==="number"){
+          status("OCR page "+i+" of "+maxPages+" — "+Math.round(m.progress*100)+"%",true);
+        }
+      }});
+      pages.push(result&&result.data?result.data.text:"");
+      canvas.width=1;canvas.height=1;
+    }
+    return normalizeText(pages.join("\n"));
+  }
+
   async function extractFile(file){
     if(!file)throw new Error("Choose a CV file first.");
-    if(/\.txt$/i.test(file.name)||file.type==="text/plain")return normalizeText(await file.text());
-    if(/\.pdf$/i.test(file.name)||file.type==="application/pdf"){
+    if(/\\.txt$/i.test(file.name)||file.type==="text/plain")return normalizeText(await file.text());
+    if(/\\.pdf$/i.test(file.name)||file.type==="application/pdf"){
       var text=await extractPdf(file);
       if(text)return text;
-      throw new Error("This PDF appears to be scanned/image-only. Please use a text PDF or paste the CV text.");
+      status("This PDF has no selectable text. Starting browser-side OCR…",true);
+      text=await ocrPdf(file);
+      if(text)return text;
+      throw new Error("The scanned PDF could not be read. Please paste the CV text.");
     }
     throw new Error("Only PDF and TXT CV files are supported.");
   }
