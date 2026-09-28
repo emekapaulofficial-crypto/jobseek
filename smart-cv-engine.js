@@ -916,8 +916,43 @@ role
   );
 
 };
+
+/* Paul AI — active CV improvement engine. Uses only evidence already present in the candidate CV. */
+function paulImprove(input={}, jobDescription=""){
+  const data=Object.assign({},input);
+  const clean=s=>String(s||"").replace(/\s+/g," ").trim();
+  const splitLines=s=>String(s||"").replace(/\r/g,"").split(/\n+/).map(x=>x.replace(/^\s*[-•▪◦]\s*/,"").trim()).filter(Boolean);
+  const existing=String(data.cv||"").trim();
+  const experience=splitLines(data.experience);
+  const skills=unique((Array.isArray(data.skills)?data.skills:String(data.skills||"").split(/[,;\n]+/)).map(clean).filter(Boolean)).slice(0,30);
+  const actionWords=/^(managed|led|developed|created|designed|built|implemented|supported|coordinated|organized|analysed|analyzed|prepared|maintained|trained|supervised|delivered|improved|handled|operated|assisted|produced|installed|repaired|marketed|sold|served|planned|monitored|conducted|provided|worked|responsible)/i;
+  const improvedExperience=experience.map(line=>{
+    const x=clean(line);
+    if(!x || actionWords.test(x) || /^\[/.test(x)) return x;
+    if(/^responsible for\b/i.test(x)) return x.replace(/^responsible for\b/i,"Managed");
+    if(/^duties include\b/i.test(x)) return x.replace(/^duties include\b/i,"Handled");
+    if(/^worked on\b/i.test(x)) return x.replace(/^worked on\b/i,"Worked on");
+    return x.charAt(0).toUpperCase()+x.slice(1);
+  });
+  const role=clean(data.targetRole||data.title||"the target role");
+  let summary=clean(data.summary);
+  if(!summary || /^\[/.test(summary)){
+    summary="Professional with verified experience relevant to "+role+"."+(skills.length?" Key skills include "+skills.slice(0,6).join(", ")+".":"");
+  }else{
+    summary=summary.replace(/\s+/g," ").trim();
+    if(summary.length>420) summary=summary.slice(0,417).replace(/\s+\S*$/,"")+".";
+  }
+  const cvParts=[data.name||"[Full Name]",data.email||"[Professional Email]",data.phone||"[Phone]",data.location||"", "Target Role: "+role,"","PROFESSIONAL SUMMARY",summary,"","CORE SKILLS",skills.length?skills.map(x=>"• "+x).join("\n"):"[Add verified skills]","","PROFESSIONAL EXPERIENCE",improvedExperience.join("\n")||data.experience||"[Add your verified work experience]","","EDUCATION",data.education||"[Add your verified education]"];
+  if(clean(data.certifications))cvParts.push("","CERTIFICATIONS",data.certifications);
+  if(clean(data.projects))cvParts.push("","PROJECTS",data.projects);
+  const cv=cvParts.join("\n");
+  const analysis=scoreCVv6(cv,role,jobDescription||"");
+  return Object.assign(data,{cv,summary,skills,experience:improvedExperience.join("\n"),analysis,paulMessage:"Paul improved the CV using only information already present in your CV. No new qualification, employer, job, skill or result was invented."});
+}
+
 window.JobSeekSmartCV={version:"smart-cv-v12-safe-improvements",scoreCV:scoreCVv6,smartFill,buildImprovementPlan,applyImprovementAnswers,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements,parseResumeText,parseResumeText,
 PaulAI,
-PaulAccess
+PaulAccess,
+paulImprove
 };
 })();
