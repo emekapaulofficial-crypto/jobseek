@@ -36,6 +36,8 @@
 
   function fallbackParse(text) {
     var t = String(text || '').replace(/\r/g, '');
+    // PDF text extraction can flatten the entire CV into one line. Restore section boundaries first.
+    t = t.replace(/\b(PROFILE SUMMARY|PROFESSIONAL SUMMARY|SUMMARY|WORK EXPERIENCE|PROFESSIONAL EXPERIENCE|EMPLOYMENT|EXPERIENCE|EDUCATION|ACADEMIC BACKGROUND|SKILLS|CORE SKILLS|TECHNICAL SKILLS|COMPETENCIES|CERTIFICATIONS|PROFESSIONAL CERTIFICATIONS|PROJECTS|SELECTED PROJECTS)\b/gi, '\\n$1\\n').replace(/\\n{2,}/g, '\\n');
     var lines = t.split(/\n+/).map(function (x) {
       return x.replace(/^\s*[-•▪◦]\s*/, '').replace(/\*\*/g, '').trim();
     }).filter(Boolean);
@@ -85,17 +87,19 @@
     out.projects = buckets.projects.join('\n');
     out.certifications = buckets.certifications.join('\n');
 
-    out.name = lines.find(function(x) {
-      return x.length > 2 && x.length < 70 && !/@/.test(x) &&
+    var header = lines.find(function(x) { return /@/.test(x) && /\d/.test(x) && x.length < 180; }) || lines[0] || '';
+    var headerName = header.split(/\s*[|•·]\s*/)[0].trim();
+    out.name = (headerName && headerName.length > 2 && headerName.length < 60 && !/@/.test(headerName) ? headerName : lines.find(function(x) {
+      return x.length > 2 && x.length < 60 && !/@/.test(x) &&
         !/^\+?\d/.test(x) &&
         !/^(email|phone|mobile|tel|whatsapp|location|address|city|nationality)\s*:/i.test(x) &&
         !heads.summary.test(x) && !heads.experience.test(x) &&
         !heads.education.test(x) && !heads.skills.test(x) &&
         !heads.projects.test(x) && !heads.certifications.test(x);
-    }) || '';
+    }) || '').trim();
 
     out.title = lines.find(function(x) {
-      return /engineer|developer|designer|manager|analyst|accountant|marketing|farmer|electrician|technician|writer|tradesman|team lead/i.test(x) && x !== out.name;
+      return x !== out.name && x.length < 90 && /^(senior|junior|lead|graphic|web|product|project|data|software|marketing|content|ui|ux|agricultural|farm|electrical|mechanical|customer|operations|account|finance|human resources|sales|business)/i.test(x);
     }) || '';
 
     if (!out.location) {
@@ -103,6 +107,12 @@
         return /\b(nigeria|lagos|abuja|ado ekiti|akure|ibadan|port harcourt|enugu|benin|warri|ondo)\b/i.test(x);
       });
       if (loc) out.location = loc.replace(/^(location|address|city)\s*:\s*/i,'').trim();
+    }
+    if (header) {
+      var parts = header.split(/\s*[|•·]\s*/).map(function(x){return x.trim();}).filter(Boolean);
+      var hp = parts.find(function(x){return /\b(nigeria|lagos|abuja|enugu|ibadan|ekiti|akure|benin|port harcourt)\b/i.test(x);});
+      if (hp) out.location = hp.replace(/^(location|address|city)\s*:\s*/i,'').trim();
+    }
     }
 
     return out;
