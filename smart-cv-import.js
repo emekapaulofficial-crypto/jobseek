@@ -171,8 +171,8 @@
 
   async function extractFile(file){
     if(!file)throw new Error("Choose a CV file first.");
-    if(/\\.txt$/i.test(file.name)||file.type==="text/plain")return normalizeText(await file.text());
-    if(/\\.pdf$/i.test(file.name)||file.type==="application/pdf"){
+    if(/\.txt$/i.test(file.name)||file.type==="text/plain")return normalizeText(await file.text());
+    if(/\.pdf$/i.test(file.name)||file.type==="application/pdf"){
       var text=await extractPdf(file);
       if(text)return text;
       status("This PDF has no selectable text. Starting browser-side OCR…",true);
