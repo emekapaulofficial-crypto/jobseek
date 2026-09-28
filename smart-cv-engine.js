@@ -950,6 +950,7 @@ function paulImprove(input={}, jobDescription=""){
   return Object.assign(data,{cv,summary,skills,experience:improvedExperience.join("\n"),analysis,paulMessage:"Paul improved the CV using only information already present in your CV. No new qualification, employer, job, skill or result was invented."});
 }
 
+window.JobSeekPaulImprove=paulImprove;
 window.JobSeekSmartCV={version:"smart-cv-v12-safe-improvements",scoreCV:scoreCVv6,smartFill,buildImprovementPlan,applyImprovementAnswers,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements,parseResumeText,parseResumeText,
 PaulAI,
 PaulAccess,
