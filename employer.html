@@ -111,6 +111,8 @@
 <footer><div class="container copy">© 2026 JobSeek · Employer submissions are reviewed before publishing. JobSeek does not guarantee hires or visa outcomes.</div></footer>
 
 <script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
 <script>
 async function loadEmployerJobs() {
   const box = document.getElementById('employerList');
@@ -136,19 +138,46 @@ async function loadEmployerJobs() {
 }
 
 const form = document.getElementById('postJobForm');
+
+// Save the submission inside JobSeek itself (public_job_leads table) so it
+// shows up in the admin panel's review queue — not only as an email.
+// This runs alongside the existing Formspree email, so a request is never
+// lost even if one of the two is briefly unavailable.
+async function saveJobLeadToJobSeek(fd) {
+  if (!window.JobSeekSupabase || !window.JobSeekSupabase.configured || !window.supabase) return false;
+  try {
+    const client = window.JobSeekSupabase.getClient();
+    const payload = {
+      job_title: fd.get('Job title') || '',
+      company_name: fd.get('Company') || '',
+      location: fd.get('Location') || '',
+      category: fd.get('Category') || '',
+      job_type: fd.get('Job type') || '',
+      sponsorship_note: fd.get('Sponsorship') || '',
+      description: fd.get('Description') || '',
+      apply_url: fd.get('Apply URL') || '',
+      contact_email: fd.get('Contact email') || ''
+    };
+    const r = await client.from('public_job_leads').insert(payload);
+    return !r.error;
+  } catch (err) {
+    return false;
+  }
+}
+
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const note = document.getElementById('formNote');
   note.textContent = 'Submitting…';
-  try {
-    const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
-    if (res.ok) {
-      note.textContent = 'Thanks! Your job has been submitted for review.';
-      form.reset();
-    } else {
-      note.textContent = 'Something went wrong submitting the form — please try again or email us directly.';
-    }
-  } catch (err) {
+  const fd = new FormData(form);
+  const [savedToJobSeek, formspreeResult] = await Promise.all([
+    saveJobLeadToJobSeek(fd),
+    fetch(form.action, { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } }).then(r => r.ok).catch(() => false)
+  ]);
+  if (savedToJobSeek || formspreeResult) {
+    note.textContent = 'Thanks! Your job has been submitted for review.';
+    form.reset();
+  } else {
     note.textContent = 'Something went wrong submitting the form — please try again or email us directly.';
   }
 });
@@ -157,3 +186,5 @@ loadEmployerJobs();
 </script>
 </body>
 </html>
+
+
