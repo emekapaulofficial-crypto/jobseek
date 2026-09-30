@@ -172,10 +172,14 @@
 
   function parseResumeText(text){
     let t=String(text||'').replace(/\r/g,'');
-    t=t.replace(/\b(PROFILE SUMMARY|PROFESSIONAL SUMMARY|SUMMARY|WORK EXPERIENCE|PROFESSIONAL EXPERIENCE|EMPLOYMENT|EXPERIENCE|EDUCATION|ACADEMIC BACKGROUND|SKILLS|CORE SKILLS|TECHNICAL SKILLS|COMPETENCIES|CERTIFICATIONS|PROFESSIONAL CERTIFICATIONS|PROJECTS|SELECTED PROJECTS)\b/gi,'\n$1\n').replace(/\n{2,}/g,'\n');
+    t=t.replace(/\b(PROFILE SUMMARY|PROFESSIONAL SUMMARY|SUMMARY|WORK EXPERIENCE|PROFESSIONAL EXPERIENCE|EMPLOYMENT|EXPERIENCE|EDUCATION|ACADEMIC BACKGROUND|SKILLS|CORE SKILLS|TECHNICAL SKILLS|COMPETENCIES|CERTIFICATIONS|PROFESSIONAL CERTIFICATIONS|PROJECTS|SELECTED PROJECTS)\b/g,'\n$1\n').replace(/\n{2,}/g,'\n');
     // PDF text extraction often returns the whole page as one long line.
     // Insert section boundaries before parsing so fields never swallow the entire CV.
-    const headings=/\b(PROFILE SUMMARY|PROFESSIONAL SUMMARY|SUMMARY|WORK EXPERIENCE|PROFESSIONAL EXPERIENCE|EMPLOYMENT|EDUCATION|ACADEMIC BACKGROUND|SKILLS|CORE SKILLS|TECHNICAL SKILLS|COMPETENCIES|CERTIFICATIONS|PROFESSIONAL CERTIFICATIONS|PROJECTS|SELECTED PROJECTS|INTERESTS & MOTIVATION|ADDITIONAL INFORMATION)\b/gi;
+    // IMPORTANT: this must be case-sensitive (ALL CAPS only). A case-insensitive match
+    // used to fire on ordinary words like "experience" or "summary" inside a sentence
+    // (e.g. "...4 years of experience creating...") and cut the CV apart mid-sentence,
+    // scattering the rest of that sentence into the wrong field.
+    const headings=/\b(PROFILE SUMMARY|PROFESSIONAL SUMMARY|SUMMARY|WORK EXPERIENCE|PROFESSIONAL EXPERIENCE|EMPLOYMENT|EDUCATION|ACADEMIC BACKGROUND|SKILLS|CORE SKILLS|TECHNICAL SKILLS|COMPETENCIES|CERTIFICATIONS|PROFESSIONAL CERTIFICATIONS|PROJECTS|SELECTED PROJECTS|INTERESTS & MOTIVATION|ADDITIONAL INFORMATION)\b/g;
     t=t.replace(headings,(m)=>'\n'+m+'\n');
     t=t.replace(/(Email\s*:|Phone\s*:|WhatsApp\s*:|Location\s*:|Address\s*:|Nationality\s*:)/gi,'\n$1 ');
     t=t.replace(/\n{2,}/g,'\n');
@@ -191,11 +195,27 @@
     o.summary=(b.summary||[]).join('\n'); o.experience=(b.experience||[]).join('\n'); o.education=(b.education||[]).join('\n');
     o.skills=(b.skills||[]).join(', '); o.certifications=(b.certifications||[]).join('\n'); o.projects=(b.projects||[]).join('\n'); o.location=(b.location||[]).join(', ');
     const header=lines.find(x=>/@/.test(x)&&/\d/.test(x)&&x.length<180)||lines[0]||'';
-    const headerName=header.split(/\s*[|•·]\s*/)[0].trim();
-    o.name=(headerName&&headerName.length>2&&headerName.length<60&&!/@/.test(headerName)?headerName:lines.find(x=>x.length>2&&x.length<60&&!/@/.test(x)&&!Object.values(hs).some(r=>r.test(x))&&!/^(phone|email|mobile|tel)\s*:/i.test(x)))||'';
-    o.title=lines.find(x=>x!==o.name&&x.length<90&&/^(senior|junior|lead|graphic|web|product|project|data|software|marketing|content|ui|ux|agricultural|farm|electrical|mechanical|customer|operations|account|finance|human resources|sales|business)/i.test(x))||'';
-    if(!o.location){const loc=lines.find(x=>/\b(lagos|abuja|port harcourt|ibadan|enugu|benin|kano|kaduna|warri|delta|nigeria)\b/i.test(x)&&x!==o.name);if(loc)o.location=loc;}
-    if(header){const hp=header.split(/\s*[|•·]\s*/).map(x=>x.trim()).find(x=>/\b(nigeria|lagos|abuja|enugu|ibadan|ekiti|akure|benin|port harcourt)\b/i.test(x));if(hp)o.location=hp;}
+    // The header line usually packs "Name  City, Country | phone | email" onto one row
+    // with no clean delimiter between name and city, only extra spaces. Split on both
+    // pipes/bullets AND 2+ spaces so the name doesn't swallow the location.
+    const headerParts=header.split(/\s*[|•·]\s*|\s{2,}/).map(x=>x.trim()).filter(Boolean);
+    const headerName=headerParts[0]||'';
+    // The dedicated "clean" line (no @, no leading phone digits, not a section heading,
+    // not itself a place name) is the safest name candidate — CVs almost always put the
+    // candidate's name on its own line before the contact/location row.
+    const cleanNameLine=lines.find(x=>x.length>2&&x.length<60&&!/@/.test(x)&&!/^\+?\d/.test(x)&&!Object.values(hs).some(r=>r.test(x))&&!/^(phone|email|mobile|tel|location|address)\s*:/i.test(x)&&!/\b(nigeria|lagos|abuja|enugu|ibadan|ekiti|ado ekiti|akure|benin|kano|kaduna|port harcourt|warri|delta|ondo)\b/i.test(x));
+    const headerNameLooksLikePlace=/\b(nigeria|lagos|abuja|enugu|ibadan|ekiti|ado ekiti|akure|benin|kano|kaduna|port harcourt|warri|delta|ondo)\b/i.test(headerName);
+    o.name=(headerName&&headerName.length>2&&headerName.length<60&&!/@/.test(headerName)&&!/\d{5,}/.test(headerName)&&!headerNameLooksLikePlace?headerName:(cleanNameLine||headerName))||'';
+    if(!o.location){const hp=headerParts.find(x=>x!==o.name&&/\b(nigeria|lagos|abuja|enugu|ibadan|ekiti|ado ekiti|akure|benin|kano|kaduna|port harcourt|warri|delta|ondo)\b/i.test(x)&&!/@/.test(x));if(hp)o.location=hp;}
+    if(!o.location){const loc=lines.find(x=>x.length<80&&/\b(lagos|abuja|port harcourt|ibadan|enugu|benin|kano|kaduna|warri|delta|nigeria)\b/i.test(x)&&x!==o.name&&!/@/.test(x));if(loc)o.location=loc;}
+    // Title: only look at the header row and the opening sentence of the summary, using a
+    // job-title phrase match. Scanning the whole CV body (old behaviour) could latch onto
+    // an unrelated word such as "projects" appearing deep in a bullet point.
+    const titleScope=[...headerParts,...String(o.summary||'').split(/(?<=[.!?])\s+/).slice(0,2),...String(o.experience||'').split(/(?<=[.!?])\s+/).slice(0,1)];
+    const titleRe=/\b((?:senior|junior|lead|chief)\s+)?(graphic designer|web developer|software (?:engineer|developer)|data (?:analyst|scientist)|product manager|project manager|marketing (?:manager|officer|specialist)|content writer|ui\/ux designer|ux designer|ui designer|agricultural (?:officer|technician)|farm manager|electrical engineer|electrician|mechanical engineer|customer service (?:representative|officer)|operations manager|account(?:ant|s? manager)?|finance (?:officer|manager)|human resources (?:officer|manager)|sales (?:executive|manager|representative)|business (?:analyst|developer)|teacher|geologist|technician|administrator|entrepreneur|designer|developer|engineer|manager|analyst|writer)\b/i;
+    let foundTitle='';
+    for(const s of titleScope){const m=s.match(titleRe);if(m){foundTitle=m[0].trim();break;}}
+    o.title=foundTitle;
     return o;
   }
 function buildImprovementPlan(cvText,targetRole='',jobDescription=''){
