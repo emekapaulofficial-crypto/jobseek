@@ -201,13 +201,16 @@
         ?window.JobSeekSmartCV.parseResumeText(text)
         :parse(text);
       fill(data,text);
-      if(window.JobSeekSmartCV&&typeof window.JobSeekSmartCV.scoreCV==="function"&&document.getElementById("jobDescription")&&document.getElementById("jobDescription").value.trim()){
-        var role=$("role")?$("role").value:"";
-        window.JobSeekATSResult=window.JobSeekSmartCV.scoreCV(text,role,$("jobDescription").value);
-        var calc=document.getElementById("calculateCvStrength");
-        if(calc&&typeof calc.click==="function")calc.click();
+      // Score automatically, whether or not a vacancy has been pasted yet.
+      // Most job seekers import their CV first and don't know a "Calculate"
+      // button exists — the score should just appear.
+      var calc=document.getElementById("calculateCvStrength");
+      if(calc&&typeof calc.click==="function"){
+        calc.click();
+        status("CV imported and scored. See your CV Strength result above.",true);
+      }else{
+        status("CV imported successfully. Your candidate fields and live preview have been updated.",true);
       }
-      status("CV imported successfully. Your candidate fields and live preview have been updated.",true);
       return true;
     }catch(err){
       console.error("JobSeek CV import:",err);
