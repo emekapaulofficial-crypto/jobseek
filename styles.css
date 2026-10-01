@@ -1153,3 +1153,6 @@ nav.site-nav a:last-child{border-bottom:0}
   .nav-logout{padding:6px 9px;font-size:12px}
   .nav-actions .nav-login,.nav-actions .nav-signup{padding:6px 8px;font-size:12px}
 }
+@media(max-width:860px){
+  .whatsapp-community .container{grid-template-columns:1fr !important}
+}
