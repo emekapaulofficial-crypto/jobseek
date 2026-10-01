@@ -243,7 +243,11 @@ function renderAnalysis(){
   const kw=$('cvKeywordCoverage'),req=$('cvRequirementCoverage'),fb=$('cvStrengthFeedback'),vac=$('cvStrengthVacancy');
   if(scoreEl)scoreEl.textContent=score+'/100';
   if(meter)meter.style.width=score+'%';
-  if(level)level.textContent=(result.level||'CV strength')+' CV strength';
+  if(level){
+    const hasVac=!!val('jobDescription').trim();
+    level.textContent=(result.level||'CV strength')+(hasVac?' match for this vacancy':' CV strength')
+      +(hasVac&&result.qualityScore!=null?' · CV writing quality: '+result.qualityScore+'/100':'');
+  }
   if(kw)kw.textContent=Number(result.keywordCoverage||0)+'%';
   if(req)req.textContent=Number(result.requirementCoverage||0)+'%';
   if(fb){
