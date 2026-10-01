@@ -420,10 +420,26 @@ function scoreCVv6(text,role,jd){
   if(hardGaps.length) enhancedFeedback.push("Important requirement gaps detected: "+hardGaps.slice(0,3).join(" | "));
   if(otherGaps.length) enhancedFeedback.push("Requirements needing evidence: "+otherGaps.slice(0,3).join(" | "));
 
-  const clean=Math.max(0,Math.min(100,r.score));
+  const qualityScore=Math.max(0,Math.min(100,r.score));
+  // The headline score used to be pure CV-writing quality, so a well-written
+  // CV could show "85/100 STRONG" with 0% vacancy requirement coverage — a
+  // job seeker reading only the big number would think they were a strong
+  // candidate for a job they don't actually match. Once a vacancy is pasted,
+  // blend in the requirement match (weighted higher, since "does this match
+  // the job" matters more than "is this well written") and hard-cap the
+  // score so a missed mandatory/degree/years requirement can never read as
+  // STRONG.
+  const hasVacancy=String(jd||"").trim().length>0;
+  let clean=qualityScore;
+  if(hasVacancy){
+    clean=Math.round(qualityScore*0.35+reqCoverage*0.65);
+    if(hardGaps.length) clean=Math.min(clean,55);
+  }
+  clean=Math.max(0,Math.min(100,clean));
   const applicationEligible=clean>=50 && !["NOT_COMPATIBLE","WEAK_MATCH"].includes(compatibilityStatus);
   return Object.assign({},r,{
     score:clean,
+    qualityScore,
     level:clean>=80?"STRONG":clean>=50?"AVERAGE":"WEAK",
     feedback:unique(enhancedFeedback),
     readability:rd,ats:at,
