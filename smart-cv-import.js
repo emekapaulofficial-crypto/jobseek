@@ -174,11 +174,16 @@
     if(/\.txt$/i.test(file.name)||file.type==="text/plain")return normalizeText(await file.text());
     if(/\.pdf$/i.test(file.name)||file.type==="application/pdf"){
       var text=await extractPdf(file);
-      if(text)return text;
-      status("This PDF has no selectable text. Starting browser-side OCR…",true);
+      // A scanned PDF often still has a thin text layer (a watermark, a page
+      // number, a scanner header) — that text is non-empty but useless as a
+      // CV. Require a real amount of readable content before trusting it;
+      // otherwise this silently "succeeded" with almost nothing and never
+      // triggered OCR, which is why scanned CVs were failing to import.
+      if(text && text.replace(/\s+/g,"").length>=60)return text;
+      status("This looks like a scanned PDF (little or no selectable text). Starting browser-side OCR…",true);
       text=await ocrPdf(file);
-      if(text)return text;
-      throw new Error("The scanned PDF could not be read. Please paste the CV text.");
+      if(text && text.replace(/\s+/g,"").length>=20)return text;
+      throw new Error("The scanned PDF could not be read clearly. Try a clearer scan, a higher-resolution photo, or paste the CV text directly.");
     }
     throw new Error("Only PDF and TXT CV files are supported.");
   }
