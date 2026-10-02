@@ -65,7 +65,7 @@
 <div class="card editor-panel"><h2>2. Import or enter your CV</h2><label>Upload CV (PDF or TXT)</label><input id="file" type="file" accept=".pdf,.txt,application/pdf,text/plain" ><div class="field" style="margin-top:12px"><label>Full CV text</label><textarea id="cv" placeholder="Paste your existing CV here."></textarea></div><div class="toolbar" style="margin-top:10px"><button type="button" class="primary" id="parseCv">Import CV & Fill Fields</button><button type="button" class="outline" onclick="document.getElementById('file').click()">Choose CV File</button><button class="outline" id="clearImport">Clear Imported CV</button></div><p class="muted small">Upload a PDF/TXT or paste your CV above, then use the blue button. JobSeek will fill the candidate fields automatically.</p></div>
 <div class="card editor-panel"><h2>3. Candidate information</h2><div class="row"><div class="field"><label>Full Name</label><input id="name"></div><div class="field"><label>Professional Email</label><input id="email"></div><div class="field"><label>Phone</label><input id="phone"></div><div class="field"><label>City / Location</label><input id="location"></div><div class="field"><label>Professional Title</label><input id="title"></div><div class="field"><label>Certifications</label><input id="certifications"></div></div><div class="field"><label>Professional Summary</label><textarea id="summary"></textarea></div><div class="field"><label>Core Skills (comma separated)</label><textarea id="skills"></textarea></div><div class="field"><label>Work Experience</label><textarea id="experience"></textarea></div><div class="field"><label>Education</label><textarea id="education"></textarea></div><div class="field"><label>Projects</label><textarea id="projects"></textarea></div></div>
 <div class="card editor-panel"><h2>4. CV design & structure</h2><div class="template-row"><button type="button" class="template active" data-template="classic">Classic</button><button type="button" class="template" data-template="modern">Modern</button><button type="button" class="template" data-template="minimal">Minimal</button></div><p class="muted small">Classic keeps the layout deliberately simple for readability.</p><b class="small">Section order</b><div id="sectionList"></div></div>
-<div class="card editor-panel"><h2>6. Paul AI — Improve your CV</h2><p class="muted small">Paul reviews the vacancy and improves the CV using only the information already in your CV. He does not invent experience, qualifications, employers, skills or results.</p><div id="paulSummary" class="improve-summary">Paste the exact vacancy, then let Paul review and improve your CV.</div><div id="paulReview" class="coach-note"></div><button class="primary" id="applyImprovements">✦ Ask Paul to Improve My CV</button><p class="coach-note">Paul keeps your original evidence and strengthens wording, structure and vacancy alignment.</p></div><div class="card editor-panel"><h2>5. Application documents</h2><div class="tabs"><button data-tab="cv" class="active">CV</button><button data-tab="cover">Cover Letter</button><button data-tab="email">Application Email</button><button data-tab="linkedin">LinkedIn Summary</button></div><div id="document" class="doc">Analyse the CV or generate the application pack.</div></div>
+<div class="card editor-panel"><h2>6. Paul AI — Improve your CV</h2><p class="muted small">Paul reads the vacancy, reads your CV, finds the words and requirements you are missing, and rewrites your CV to include everything that is true. He never invents experience: for anything he cannot see in your CV, he asks you first.</p><div id="paulSummary" class="improve-summary">Paste the exact vacancy, then let Paul review and improve your CV.</div><div id="paulReview" class="coach-note"></div><button class="primary" id="applyImprovements">✦ Ask Paul to Improve My CV</button><p class="coach-note">Paul keeps your original evidence and strengthens wording, structure and vacancy alignment.</p></div><div class="card editor-panel"><h2>5. Application documents</h2><div class="tabs"><button data-tab="cv" class="active">CV</button><button data-tab="cover">Cover Letter</button><button data-tab="email">Application Email</button><button data-tab="linkedin">LinkedIn Summary</button></div><div id="document" class="doc">Analyse the CV or generate the application pack.</div></div>
 <div class="card editor-panel"><h2>Live CV preview</h2><div id="preview" class="preview-shell"></div><div class="cv-download-panel no-print"><div class="cv-download-title">Save your finished CV</div><p class="muted small">Download the CV currently shown above.</p><div class="toolbar cv-download-actions"><button type="button" class="primary" id="downloadPdf">⬇ Download PDF</button><button type="button" class="dark" id="downloadDoc">⬇ Download Word Document</button></div><p id="downloadStatus" class="muted small"></p></div></div>
 </section>
 </div></main><script>
@@ -147,7 +147,7 @@
   function bind(){}
 })();
 </script>
-<script src="smart-cv-engine.js?v=20260928-07"></script><script src="smart-cv-import.js?v=20260928-08"></script>
+<script src="supabase-client.js"></script><script src="smart-cv-engine.js?v=20261002-01"></script><script src="paul-brain.js?v=20261002-01"></script><script src="smart-cv-import.js?v=20260928-08"></script>
 <script>
 (function(){
 'use strict';
@@ -265,7 +265,26 @@ function renderAnalysis(){
 
 function renderCoach(){if(!coach)return;let a=coach.analysis||{};const summary=$('paulSummary'),review=$('paulReview');if(summary)summary.innerHTML='<b>Paul AI: '+(a.score??0)+' CV score.</b> Paul is ready to improve the wording and structure using only your existing evidence.';if(review)review.textContent=a.vacancyCompatibilityLabel||''}
 function buildCoach(){let t=val('cv').trim()||fullText();coach=JobSeekSmartCV.buildImprovementPlan(t,val('role'),val('jobDescription'));renderCoach()}
-function applyCoach(){const paul=$('applyImprovements');try{if(paul){paul.disabled=true;paul.textContent='✦ Paul is improving your CV…'}let text=val('cv').trim()||fullText();if(!text){status('Import or enter your CV first.',false);return}if(!val('jobDescription').trim()){status('Paste the exact employer vacancy so Paul can tailor the CV.',false);return}const improve=(window.JobSeekSmartCV&&typeof window.JobSeekSmartCV.paulImprove==='function')?window.JobSeekSmartCV.paulImprove:window.JobSeekPaulImprove;if(typeof improve!=='function'){status('Paul AI could not load. Please refresh the page once, then try again.',false);return}let x=improve(Object.assign(form(),{cv:text,targetRole:val('role'),jobDescription:val('jobDescription')}),val('jobDescription'));if(!x||!x.cv)throw new Error('Paul returned no improved CV.');$('cv').value=x.cv;setForm({summary:x.summary,skills:x.skills,experience:x.experience,education:x.education,projects:x.projects,certifications:x.certifications});result=x.analysis;coach={analysis:result,plan:[]};renderAnalysis();renderCoach();preview();status(x.paulMessage||'Paul improved your CV successfully.',true)}catch(err){console.error(err);status('Paul AI could not complete the improvement: '+(err&&err.message?err.message:'Please try again.'),false)}finally{if(paul){paul.disabled=false;paul.textContent='✦ Ask Paul to Improve My CV'}}}
+function applyCoach(){
+  const btn=$('applyImprovements');
+  const getCv=()=>val('cv').trim()||fullText();
+  const text=getCv();
+  if(!text){status('Import or enter your CV first.',false);return}
+  if(!val('jobDescription').trim()){status('Paste the exact employer vacancy so Paul can read it first.',false);return}
+  if(!window.PaulBrain){status('Paul AI could not load. Please refresh the page once, then try again.',false);return}
+  btn.disabled=true;btn.textContent='✦ Paul is working…';
+  window.PaulBrain.improve({
+    cv:text,form:form(),jd:val('jobDescription'),role:val('role'),getCv:getCv,
+    apply:function(out){
+      $('cv').value=out.cv;
+      setForm({summary:out.summary,skills:out.skills,experience:out.experience,education:out.education,projects:out.projects,certifications:out.certifications});
+      result=out.analysis||JobSeekSmartCV.scoreCV(out.cv,val('role'),val('jobDescription'));
+      coach={analysis:result,plan:[]};renderAnalysis();renderCoach();preview();
+    }
+  }).then(function(){status('Paul finished. Read your CV once and check every line is true.',true)})
+    .catch(function(err){console.error(err);status('Paul AI could not complete: '+(err&&err.message?err.message:'please try again.'),false)})
+    .finally(function(){btn.disabled=false;btn.textContent='✦ Ask Paul to Improve My CV'});
+}
 function calculateCvStrength(){
   try{
     let text=val('cv').trim()||fullText();
