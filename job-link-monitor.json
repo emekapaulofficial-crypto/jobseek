@@ -1,11 +1,12 @@
 {
-  "updated_at": "2026-10-02T06:20:08.353891+00:00",
+  "updated_at": "2026-10-02T12:50:56.291546+00:00",
   "source": "Supabase public published manual jobs",
   "check_interval": "15 minutes",
   "note": "CLOSED means the robot found a strong closed/not-found signal. JobSeek does not automatically remove jobs; an admin must review and close/remove them from the public feed.",
   "counts": {
     "CLOSED": 1,
-    "OPEN": 13
+    "CHECK_MANUALLY": 1,
+    "OPEN": 12
   },
   "jobs": [
     {
@@ -18,7 +19,19 @@
       "http_status": 404,
       "final_url": "https://job-boards.greenhouse.io/amplitude/jobs/8831207002",
       "evidence": "HTTP 404",
-      "checked_at": "2026-10-02T06:20:08.095344+00:00"
+      "checked_at": "2026-10-02T12:50:35.738056+00:00"
+    },
+    {
+      "id": "1eaff690-d78a-4fa6-aac9-ddf679b59016",
+      "title": "Traveling Superintendent, Construction",
+      "company": "ARCO/Murray Canada",
+      "location": "Calgary, Alberta, Canada / Travel across Canada",
+      "apply_url": "https://job-boards.greenhouse.io/arcocanada/jobs/4379399009",
+      "status": "CHECK_MANUALLY",
+      "http_status": null,
+      "final_url": "https://job-boards.greenhouse.io/arcocanada/jobs/4379399009",
+      "evidence": "Network/timeout: The read operation timed out",
+      "checked_at": "2026-10-02T12:50:36.275321+00:00"
     },
     {
       "id": "6e88f35f-ebc8-4e8d-b7fb-ba8c9375fb6d",
@@ -30,7 +43,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/sandtechholdingslimited/jobs/4836497101",
       "evidence": "",
-      "checked_at": "2026-10-02T06:20:07.903220+00:00"
+      "checked_at": "2026-10-02T12:50:33.716411+00:00"
     },
     {
       "id": "1da5e311-4249-445a-bf5e-d0491cd94dd5",
@@ -42,7 +55,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/iconcareers/jobs/6149171004",
       "evidence": "",
-      "checked_at": "2026-10-02T06:20:07.906548+00:00"
+      "checked_at": "2026-10-02T12:50:33.718714+00:00"
     },
     {
       "id": "b433c987-628a-4810-9c7e-c799194fc43e",
@@ -54,7 +67,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/dhpace/jobs/5429201008",
       "evidence": "",
-      "checked_at": "2026-10-02T06:20:08.103387+00:00"
+      "checked_at": "2026-10-02T12:50:35.839872+00:00"
     },
     {
       "id": "bb582c04-0596-4480-ac17-6993d7717731",
@@ -66,7 +79,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/check-technologies/efdb2736-75c7-49e9-b413-5713008e1634",
       "evidence": "",
-      "checked_at": "2026-10-02T06:20:08.144662+00:00"
+      "checked_at": "2026-10-02T12:50:37.355488+00:00"
     },
     {
       "id": "e76665bd-5543-4351-a5a0-53bf52f41b61",
@@ -78,7 +91,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/givedirectly/jobs/4738257005",
       "evidence": "",
-      "checked_at": "2026-10-02T06:20:07.905586+00:00"
+      "checked_at": "2026-10-02T12:50:33.717742+00:00"
     },
     {
       "id": "853e0e7a-58d9-4854-a0ad-f6b59a370a03",
@@ -90,7 +103,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/canonicaljobs/jobs/7104614",
       "evidence": "",
-      "checked_at": "2026-10-02T06:20:07.903571+00:00"
+      "checked_at": "2026-10-02T12:50:33.716782+00:00"
     },
     {
       "id": "a979fe4a-8521-4479-8503-4f78b59a4ee4",
@@ -102,7 +115,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/wolt/jobs/7758312",
       "evidence": "",
-      "checked_at": "2026-10-02T06:20:07.906271+00:00"
+      "checked_at": "2026-10-02T12:50:33.718469+00:00"
     },
     {
       "id": "a3e80ff9-74e6-4cd0-abdf-6bffbad776a6",
@@ -114,7 +127,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/doordashusa/jobs/8163709",
       "evidence": "",
-      "checked_at": "2026-10-02T06:20:08.123740+00:00"
+      "checked_at": "2026-10-02T12:50:36.594599+00:00"
     },
     {
       "id": "5dddc71c-3eea-4ed0-815f-afa8b2ad9ede",
@@ -126,7 +139,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/doordashcanada/jobs/8176003",
       "evidence": "",
-      "checked_at": "2026-10-02T06:20:08.047191+00:00"
+      "checked_at": "2026-10-02T12:50:35.274212+00:00"
     },
     {
       "id": "088da511-767f-46e2-a396-df52b6a80424",
@@ -138,7 +151,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/alphasense/jobs/8784592002",
       "evidence": "",
-      "checked_at": "2026-10-02T06:20:07.905122+00:00"
+      "checked_at": "2026-10-02T12:50:33.717387+00:00"
     },
     {
       "id": "d8c6e096-07d2-4507-826f-250c99feede2",
@@ -150,19 +163,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/tubi-canada/jobs/8029234",
       "evidence": "",
-      "checked_at": "2026-10-02T06:20:07.905996+00:00"
-    },
-    {
-      "id": "1eaff690-d78a-4fa6-aac9-ddf679b59016",
-      "title": "Traveling Superintendent, Construction",
-      "company": "ARCO/Murray Canada",
-      "location": "Calgary, Alberta, Canada / Travel across Canada",
-      "apply_url": "https://job-boards.greenhouse.io/arcocanada/jobs/4379399009",
-      "status": "OPEN",
-      "http_status": 200,
-      "final_url": "https://job-boards.greenhouse.io/arcocanada/jobs/4379399009",
-      "evidence": "",
-      "checked_at": "2026-10-02T06:20:08.115709+00:00"
+      "checked_at": "2026-10-02T12:50:33.718070+00:00"
     },
     {
       "id": "b77ff936-827e-444b-a773-1d64f475f024",
@@ -174,7 +175,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/newglobesandbox/jobs/6202980004",
       "evidence": "",
-      "checked_at": "2026-10-02T06:20:07.904702+00:00"
+      "checked_at": "2026-10-02T12:50:33.717126+00:00"
     }
   ]
 }
