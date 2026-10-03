@@ -94,15 +94,19 @@ async function openOrder(code){
   try{ const r=await getClient().auth.getUser(); user=r.data&&r.data.user; }catch(e){}
   if(!user){ box.innerHTML='<h3>Sign in to order</h3><p>Please sign in or create a free account first, then come back to this page.</p><p><a class="btn" href="auth.html">Sign in / Register</a> <button class="outline" id="mc">Close</button></p>'; $('mc').onclick=close; return; }
   let fields='';
-  if(p.needs==='job') fields+='<label>Job title</label><input id="f_title" required><label>Employer</label><input id="f_company"><label>Vacancy link or job ID</label><input id="f_link"><label>Anything we should know (optional)</label><textarea id="f_notes" rows="3"></textarea>';
+  const DOCS=['application_pack','pro_plus','student_starter'];
+  let pre={}; try{ pre=JSON.parse(localStorage.getItem('jobseek_order_prefill')||'{}')||{}; }catch(e){}
+  if(p.needs==='job') fields+='<label>Job title</label><input id="f_title" required value="'+esc(pre.role||'')+'"><label>Employer</label><input id="f_company" value="'+esc(pre.company||'')+'"><label>Vacancy link or job ID</label><input id="f_link">'
+    +(DOCS.indexOf(p.code)>=0?'<label>Exact job requirements (paste the full vacancy) *</label><textarea id="f_jd" rows="6" required>'+esc(pre.jd||'')+'</textarea><label>Your CV (paste the full text) *</label><textarea id="f_cv" rows="8" required>'+esc(pre.cv||'')+'</textarea><p class="micro">We write only from what is in your CV. We never add experience you do not have.</p>':'')
+    +'<label>Anything we should know (optional)</label><textarea id="f_notes" rows="3"></textarea>';
   else if(p.needs==='link') fields+='<label>Paste the job link or message to check</label><textarea id="f_link" rows="4" required></textarea><label>Employer name (optional)</label><input id="f_company">';
-  else if(p.needs==='details') fields+='<label>Your target job or industry</label><input id="f_title" required><label>Tell us about you (course, experience, location)</label><textarea id="f_notes" rows="4"></textarea>';
+  else if(p.needs==='details') fields+='<label>Your target job or industry</label><input id="f_title" required value="'+esc(pre.role||'')+'">'+(DOCS.indexOf(p.code)>=0?'<label>Your CV or education and activities (paste) *</label><textarea id="f_cv" rows="8" required>'+esc(pre.cv||'')+'</textarea>':'')+'<label>Tell us about you (course, experience, location)</label><textarea id="f_notes" rows="4"></textarea>';
   box.innerHTML='<h3>'+esc(p.name)+' — '+naira(p.price_kobo)+'</h3><p class="micro">Signed in as '+esc(user.email||'')+'</p><form id="of">'+fields+'<label>Phone / WhatsApp</label><input id="f_phone" type="tel" placeholder="+234…" required><div id="om"></div><p style="margin-top:16px"><button class="btn" id="ob" type="submit">Place order</button> <button class="outline" id="oc" type="button">Cancel</button></p></form>';
   $('oc').onclick=close;
   $('of').onsubmit=async ev=>{
     ev.preventDefault(); const ob=$('ob'); ob.disabled=true; ob.textContent='Creating order…';
     const v=id=>($(id)?$(id).value.trim():'');
-    const details={title:v('f_title'),company:v('f_company'),link:v('f_link'),notes:v('f_notes')};
+    const details={title:v('f_title'),company:v('f_company'),link:v('f_link'),notes:v('f_notes'),jd:v('f_jd').slice(0,4500),cv:v('f_cv').slice(0,6500)};
     try{
       const {data,error}=await getClient().rpc('jobseek_create_order',{p_product_code:p.code,p_details:details,p_phone:v('f_phone'),p_method:'bank_transfer'});
       if(error) throw new Error(error.message);
@@ -111,6 +115,6 @@ async function openOrder(code){
     }catch(e){ $('om').innerHTML='<div class="msg err">'+esc(e.message||'Could not create the order.')+'</div>'; ob.disabled=false; ob.textContent='Place order'; }
   };
 }
-load();
+load().then(function(){var q=new URLSearchParams(location.search).get('service');if(q&&products.some(function(x){return x.code===q}))openOrder(q)});
 })();
 </script></body></html>
