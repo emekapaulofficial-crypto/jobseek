@@ -31,6 +31,24 @@ Reply with ONE JSON object only, no markdown, no backticks:
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
   if (req.method !== "POST") return json({ error: "POST required" }, 405);
+  // --- Who is calling? Smart mode needs a signed-in user. ---
+  const SB_URL = Deno.env.get("SUPABASE_URL")!;
+  const SB_SERVICE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  const token = (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "");
+  const ures = await fetch(SB_URL + "/auth/v1/user", { headers: { apikey: Deno.env.get("SUPABASE_ANON_KEY") || SB_SERVICE, Authorization: "Bearer " + token } });
+  if (!ures.ok) return json({ error: "login_required" }, 401);
+  const user = await ures.json();
+  if (!user?.id) return json({ error: "login_required" }, 401);
+  // Count the use on the server: 2 free per month, unlimited with an active Paul Pass.
+  const cres = await fetch(SB_URL + "/rest/v1/rpc/jobseek_paul_consume", {
+    method: "POST",
+    headers: { apikey: SB_SERVICE, Authorization: "Bearer " + SB_SERVICE, "content-type": "application/json" },
+    body: JSON.stringify({ p_user: user.id, p_free_limit: 2 }),
+  });
+  if (!cres.ok) return json({ error: "quota_check_failed" }, 502);
+  const quota = await cres.json();
+  if (!quota?.allowed) return json({ error: "pass_required", message: "Your 2 free smart improvements this month are used. Get a Paul Pass to continue." }, 402);
+
   const key = Deno.env.get("ANTHROPIC_API_KEY");
   if (!key) return json({ error: "ANTHROPIC_API_KEY is not set" }, 500);
   let body: any;
