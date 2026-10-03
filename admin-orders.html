@@ -1,31 +1,39 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Orders | JobSeek</title><link rel="stylesheet" href="styles.css">
-<style>.o{background:#fff;border:1px solid #dbe4f0;border-radius:14px;padding:16px;margin:12px 0}.b{display:inline-block;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700;background:#eef2f8}.b.paid,.b.delivered{background:#e8f7ee;color:#116635}.b.pending,.b.awaiting_payment{background:#fff4de;color:#8a5a00}.b.cancelled,.b.failed{background:#fdecec;color:#9b1c1c}.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.row input,.row select{padding:8px;border:1px solid #c9d5e6;border-radius:8px;font:inherit}pre{white-space:pre-wrap;background:#f5f8fc;padding:10px;border-radius:8px;font-size:12px}</style></head><body>
+<style>.o{background:#fff;border:1px solid #dbe4f0;border-radius:14px;padding:16px;margin:12px 0}.b{display:inline-block;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700;background:#eef2f8}.b.paid,.b.delivered{background:#e8f7ee;color:#116635}.b.pending,.b.awaiting_payment{background:#fff4de;color:#8a5a00}.b.cancelled,.b.failed{background:#fdecec;color:#9b1c1c}.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.row input,.row select{padding:8px;border:1px solid #c9d5e6;border-radius:8px;font:inherit}pre{white-space:pre-wrap;background:#f5f8fc;padding:10px;border-radius:8px;font-size:12px;max-height:240px;overflow:auto}details.d{margin-top:8px}details.d summary{cursor:pointer;font-weight:600}textarea.draft{width:100%;box-sizing:border-box;min-height:260px;padding:10px;border:1px solid #c9d5e6;border-radius:8px;font:13px/1.45 inherit;margin-top:8px}.tabs2{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.tabs2 button.on{background:#1261d6;color:#fff}</style></head><body>
 <header><div class="container nav"><a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a><nav><a href="admin-dashboard.html">Admin</a><a href="admin-orders.html">Orders</a></nav></div></header>
 <main class="section"><div class="container"><p class="eyebrow">STAFF ONLY</p><h1>Orders & payments</h1>
-<div class="row"><select id="flt"><option value="pending">Awaiting payment</option><option value="paid">Paid (to deliver)</option><option value="all">All</option></select><button class="btn small" id="reload">Refresh</button></div>
+<div class="row"><select id="flt"><option value="work">Paid, to do (requests)</option><option value="pending">Awaiting payment</option><option value="paid">All paid</option><option value="all">All</option></select><button class="btn small" id="reload">Refresh</button></div>
 <p id="note" class="micro"></p><div id="list"></div></div></main>
-<script src="app.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-client.js"></script>
+<script src="app.js"></script><script src="smart-cv-engine.js?v=20261003-02"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-client.js"></script>
 <script>
 (async function(){
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const naira=k=>'₦'+(k/100).toLocaleString('en-NG');
+const DOC_PRODUCTS=['application_pack','pro_plus','student_starter'];
+const ROWS={};
 const c=supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key);
 let me=(await c.auth.getUser()).data.user;
 if(!me){ $('list').innerHTML='<p>Please <a href="auth.html">sign in</a> with a staff account.</p>'; return; }
 async function load(){
   $('note').textContent='Loading…';
   let q=c.from('jobseek_orders').select('*').order('created_at',{ascending:false}).limit(100);
-  const f=$('flt').value; if(f!=='all') q=q.eq('status',f);
+  const f=$('flt').value;
+  if(f==='work') q=q.eq('status','paid').neq('fulfilment_status','delivered').neq('fulfilment_status','cancelled'); else if(f!=='all') q=q.eq('status',f);
   const {data,error}=await q;
   if(error){ $('note').textContent=error.message; return; }
+  data.forEach(r=>{ROWS[r.id]=r});
   $('note').textContent=data.length+' order(s). Only staff accounts can see other people\'s orders.';
   $('list').innerHTML=data.map(r=>{
     const d=r.details||{};
     const listing=['featured_job','urgent_tag'].includes(r.product_code)&&r.status==='paid';
     return '<div class="o" data-id="'+esc(r.id)+'"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b>'+esc(r.product_name)+' · '+naira(r.amount_kobo)+'</b><span><span class="b '+esc(r.status)+'">'+esc(r.status)+'</span> <span class="b '+esc(r.fulfilment_status)+'">'+esc(r.fulfilment_status)+'</span></span></div>'
     +'<p class="micro">Ref <b>'+esc(r.reference)+'</b> · '+esc(r.email)+' · '+esc(r.phone||'no phone')+' · '+new Date(r.created_at).toLocaleString('en-NG')+'</p>'
-    +'<pre>'+esc(JSON.stringify(d,null,1))+'</pre>'
+    +'<p style="margin:8px 0 0"><b>Request:</b> '+esc(d.title||'')+(d.company?' at '+esc(d.company):'')+(d.link?' · <span class="micro">'+esc(d.link)+'</span>':'')+'</p>'
+    +(d.notes?'<p class="micro">Customer note: '+esc(d.notes)+'</p>':'')
+    +(d.jd?'<details class="d"><summary>Job requirements</summary><pre>'+esc(d.jd)+'</pre></details>':'')
+    +(d.cv?'<details class="d"><summary>Customer CV</summary><pre>'+esc(d.cv)+'</pre></details>':'')
+    +(DOC_PRODUCTS.indexOf(r.product_code)>=0&&r.status==='paid'?'<div class="row"><button class="outline" data-act="draft">Write draft (cover letter, email, LinkedIn)</button></div><div class="drafts"></div>':'')
     +(r.status==='pending'?'<div class="row"><input class="note" placeholder="Bank ref / note"><button class="btn small" data-act="confirm">Confirm payment received</button><button class="outline" data-act="cancel">Cancel</button></div>':'')
     +(r.status==='paid'?'<div class="row"><select class="st"><option value="queued">Queued</option><option value="in_progress">In progress</option><option value="delivered">Delivered</option></select><input class="note" placeholder="Note to customer"><input class="url" placeholder="Delivery link (https://…)"><button class="btn small" data-act="update">Save</button></div>':'')
     +(listing?'<div class="row"><input class="jobid" placeholder="Job ID on Jobs page"><button class="btn small" data-act="activate">Activate on job</button></div>':'')
@@ -36,12 +44,26 @@ async function load(){
 async function act(b){
   const box=b.closest('.o'),id=box.dataset.id,v=s=>{const e=box.querySelector(s);return e?e.value.trim():''};
   let res;
+  if(b.dataset.act==='draft'){ return makeDraft(box,ROWS[id]); }
   if(b.dataset.act==='confirm'){ if(!confirm('Confirm that the money has reached your account?'))return; res=await c.rpc('jobseek_admin_confirm_payment',{p_order_id:id,p_note:v('.note')||null}); }
   else if(b.dataset.act==='cancel'){ res=await c.rpc('jobseek_admin_update_order',{p_order_id:id,p_fulfilment:'cancelled',p_note:v('.note')||null,p_url:null}); }
   else if(b.dataset.act==='update'){ res=await c.rpc('jobseek_admin_update_order',{p_order_id:id,p_fulfilment:v('.st'),p_note:v('.note')||null,p_url:v('.url')||null}); }
   else if(b.dataset.act==='activate'){ res=await c.rpc('jobseek_admin_activate_listing',{p_order_id:id,p_job_id:v('.jobid')}); }
   if(res&&res.error){ alert(res.error.message); return; }
   load();
+}
+function makeDraft(box,r){
+  const d=r.details||{}; const out=box.querySelector('.drafts');
+  if(!d.cv){ out.innerHTML='<p class="micro">This order has no CV text. Ask the customer to send it.</p>'; return; }
+  const email=(d.cv.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)||[])[0]||r.email||'';
+  let pack; try{ pack=JobSeekSmartCV.applicationPack({cv:d.cv,role:d.title||'',company:d.company||'',jobDescription:d.jd||'',email:email}); }catch(e){ out.innerHTML='<p class="micro">Could not draft: '+esc(e.message)+'</p>'; return; }
+  const parts={cover:['Cover letter',pack.cover],email:['Application email',pack.email],linkedin:['LinkedIn summary',pack.linkedin]};
+  let cur='cover';
+  const warn=(pack.warnings||[]).concat(pack.notInCV&&pack.notInCV.length?['Not in the CV, so not claimed: '+pack.notInCV.slice(0,8).join(', ')]:[]);
+  out.innerHTML='<p class="micro">Draft from the customer CV only. Read it, edit it, then use it as the delivery note.</p>'+(warn.length?'<div class="msg err">'+warn.map(esc).join('<br>')+'</div>':'')+'<div class="tabs2">'+Object.keys(parts).map(k=>'<button class="outline'+(k===cur?' on':'')+'" data-k="'+k+'">'+parts[k][0]+'</button>').join('')+'</div><textarea class="draft"></textarea><div class="row"><button class="btn small" data-use="1">Use all three as delivery note</button></div>';
+  const ta=out.querySelector('textarea'); const store={cover:parts.cover[1],email:parts.email[1],linkedin:parts.linkedin[1]}; ta.value=store[cur];
+  out.querySelectorAll('[data-k]').forEach(t=>t.onclick=()=>{ store[cur]=ta.value; cur=t.dataset.k; ta.value=store[cur]; out.querySelectorAll('[data-k]').forEach(x=>x.classList.toggle('on',x===t)); });
+  out.querySelector('[data-use]').onclick=()=>{ store[cur]=ta.value; const n=box.querySelector('.note'); if(n){ n.value='COVER LETTER\n\n'+store.cover+'\n\n----------\n\nAPPLICATION EMAIL\n\n'+store.email+'\n\n----------\n\nLINKEDIN SUMMARY\n\n'+store.linkedin; } alert('Copied into the note box above. Set the status to Delivered and press Save.'); };
 }
 $('reload').onclick=load; $('flt').onchange=load; load();
 })();
