@@ -1,0 +1,33 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My Orders | JobSeek</title><link rel="stylesheet" href="styles.css">
+<style>.o{background:#fff;border:1px solid #dbe4f0;border-radius:14px;padding:16px;margin:12px 0}.b{display:inline-block;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700;background:#eef2f8;color:#334}.b.paid,.b.delivered{background:#e8f7ee;color:#116635}.b.pending,.b.awaiting_payment{background:#fff4de;color:#8a5a00}.b.cancelled,.b.failed{background:#fdecec;color:#9b1c1c}</style></head><body>
+<header><div class="container nav"><a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a><nav><a href="jobs.html">Find Jobs</a><a href="smart-cv.html">CV Builder</a><a href="pricing.html">Plans</a></nav></div></header>
+<main class="section"><div class="container"><p class="eyebrow">MY ACCOUNT</p><h1>My Orders</h1>
+<div class="card" id="ent"></div><div id="list"><p>Loading…</p></div></div></main>
+<script src="app.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-client.js"></script>
+<script>
+(async function(){
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const naira=k=>'₦'+(k/100).toLocaleString('en-NG');
+const NAMES={paul_pass:'Paul Pass',interview_prep:'Interview Prep',job_alerts_plus:'Job Alerts Plus'};
+const FUL={awaiting_payment:'Awaiting payment',queued:'Queued',in_progress:'In progress',delivered:'Delivered',cancelled:'Cancelled'};
+try{
+ const c=supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key);
+ const u=(await c.auth.getUser()).data.user;
+ if(!u){ $('list').innerHTML='<p>Please <a href="auth.html">sign in</a> to see your orders.</p>'; return; }
+ const [o,e]=await Promise.all([
+  c.from('jobseek_orders').select('*').eq('user_id',u.id).order('created_at',{ascending:false}),
+  c.from('jobseek_entitlements').select('*').eq('user_id',u.id).gt('expires_at',new Date().toISOString()).order('expires_at',{ascending:false})]);
+ if(o.error) throw o.error;
+ const act=(e.data||[]);
+ $('ent').innerHTML='<h2>Active access</h2>'+(act.length?act.map(x=>'<p>✓ <b>'+esc(NAMES[x.grants]||x.grants)+'</b> until '+new Date(x.expires_at).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'})+'</p>').join(''):'<p class="micro">No active passes. <a href="pricing.html">See plans</a>.</p>');
+ const rows=o.data||[];
+ $('list').innerHTML=rows.length?rows.map(r=>{
+  const url=/^https?:\/\//i.test(r.delivery_url||'')?r.delivery_url:'';
+  return '<div class="o"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><b>'+esc(r.product_name)+'</b><span><span class="b '+esc(r.status)+'">Payment: '+esc(r.status)+'</span> <span class="b '+esc(r.fulfilment_status)+'">'+esc(FUL[r.fulfilment_status]||r.fulfilment_status)+'</span></span></div><p class="micro">Ref <b>'+esc(r.reference)+'</b> · '+naira(r.amount_kobo)+' · '+new Date(r.created_at).toLocaleDateString('en-NG')+'</p>'
+   +(r.status==='pending'?'<p class="micro">Transfer '+naira(r.amount_kobo)+' to Access Bank 1472478793 (IGWE Emeka Paul) with <b>'+esc(r.reference)+'</b> as narration. We confirm payments by hand.</p>':'')
+   +(r.delivery_note?'<p>'+esc(r.delivery_note)+'</p>':'')+(url?'<p><a class="btn small" href="'+esc(url)+'" target="_blank" rel="noopener">Open your delivery</a></p>':'')+'</div>';
+ }).join(''):'<p>No orders yet. <a href="pricing.html">Browse services</a>.</p>';
+}catch(err){ $('list').innerHTML='<p>Could not load orders: '+esc(err.message||err)+'</p>'; }
+})();
+</script></body></html>
