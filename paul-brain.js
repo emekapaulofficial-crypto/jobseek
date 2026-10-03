@@ -142,11 +142,15 @@
     const ctl = new AbortController();
     const timer = setTimeout(() => ctl.abort(), 25000);
     try {
+      let bearer = S.key;
+      try { const sb = window.supabase.createClient(S.url, S.key); const ses = (await sb.auth.getSession()).data.session; if (ses && ses.access_token) bearer = ses.access_token; } catch (e) {}
       const r = await fetch(S.url + '/functions/v1/paul-ai', {
         method: 'POST', signal: ctl.signal,
-        headers: { 'Content-Type': 'application/json', apikey: S.key, Authorization: 'Bearer ' + S.key },
+        headers: { 'Content-Type': 'application/json', apikey: S.key, Authorization: 'Bearer ' + bearer },
         body: JSON.stringify({ cv: input.cv, vacancy: jd, role: input.targetRole || input.title || '', confirmed: confirmed || [] })
       });
+      if (r.status === 402) { window.JobSeekPaulLimit = true; throw new Error('pass_required'); }
+      if (r.status === 401) throw new Error('login_required');
       if (!r.ok) throw new Error('HTTP ' + r.status);
       const j = await r.json();
       if (!j || !j.cv) throw new Error('empty');
@@ -196,6 +200,8 @@
       res = { out, before: first, after, added: j.added || [], gaps: (j.gaps && j.gaps.length ? j.gaps : after.missing).slice(0, 10), message: j.message, mode };
     } catch (e) {
       res = quickImprove(input, ctx.jd, state.confirmed); mode = 'quick';
+      if (window.JobSeekPaulLimit) { window.JobSeekPaulLimit = false; say('You have used your 2 free smart improvements this month, so I used quick mode. For unlimited smart mode, get a <a href="pricing.html">Paul Pass</a> (from ₦500 for 7 days).'); }
+      else if (e && e.message === 'login_required') say('Sign in to use smart mode (2 free uses every month). I used quick mode for now. <a href="auth.html">Sign in</a>');
     }
     m4.innerHTML = '✍️ Done' + (mode === 'smart' ? ' (smart mode).' : ' (quick mode).');
     state.last = { ctx, res };
