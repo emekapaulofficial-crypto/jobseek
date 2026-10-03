@@ -127,48 +127,198 @@
     return {cv:cv.join("\n"),summary,skills:finalSkills,experience,education,certifications,projects,guessedFields:guessed,jobRequirements:job,targetRole:role};
   }
 
-  function coverLetter(data={}) {
-    const jdText=String(data.jobDescription||"");
-    const job=extractJobRequirements(jdText,data.role||"");
-    const req=(data.jobRequirements||job.keywords||[]).slice(0,6);
-    const skills=Array.isArray(data.skills)?data.skills.filter(Boolean):[];
-    const exp=String(data.experience||"").trim();
-    const evidence=unique([...skills,...(data.matchedKeywords||[])]).slice(0,6);
-    const role=data.role||"the position";
-    const company=data.company||"[Company Name]";
-    const opening=req.length
-      ? "After reviewing the vacancy, I understand that this role focuses on "+req.slice(0,4).map(titleCase).join(", ")+". I have tailored my application to those specific requirements rather than using a general cover letter."
-      : "After reviewing the vacancy, I have tailored my application to the responsibilities and requirements described for this specific role.";
-    const evidenceLine=evidence.length
-      ? "The relevant evidence I have provided includes "+evidence.map(titleCase).join(", ")+"."
-      : "I have included only the skills and experience I can verify from the candidate information supplied, and I would be pleased to discuss the areas that match your requirements.";
-    const experienceLine=exp && !/^\\[.*\\]$/.test(exp)
-      ? "My stated experience is: "+exp+"."
-      : "My experience section identifies the candidate's actual roles, responsibilities and measurable results so that the application can be reviewed against your requirements without inventing qualifications.";
-    const roleFocus=req.length
-      ? "In particular, I would be interested in contributing to the vacancy's requirements around "+req.slice(0,3).map(titleCase).join(", ")+"."
-      : "I would welcome the opportunity to discuss how my verified background aligns with the role.";
-    return "Dear "+(data.hiringManager||"[Hiring Manager]")+",\\n\\n"+
-      "I am applying for the "+role+" position at "+company+". "+opening+"\\n\\n"+
-      evidenceLine+" "+experienceLine+"\\n\\n"+
-      roleFocus+" I understand the importance of meeting the employer's stated requirements while being accurate about my own experience and qualifications.\\n\\n"+
-      "Thank you for considering my application. I would welcome the opportunity to discuss my fit for the role and provide any additional evidence required.\\n\\n"+
-      "Kind regards,\\n"+(data.name||"[Full Name]");
+  /* ===== Application pack: cover letter, email, LinkedIn =====
+     Everything below is built ONLY from what is in the candidate's CV.
+     Nothing is invented. Vacancy terms are mentioned only when the CV really contains them. */
+  const PLACEHOLDER = /^\s*\[.*\]\s*$/;
+  const GENERIC_TERMS = new Set(["team","project","management","analysis","research","customer","client","strategy","reporting","communication","leadership","stakeholder"]);
+  const cleanLine = s => String(s||"").replace(/^\s*[-•▪◦*]\s*/,"").replace(/\s+/g," ").trim();
+  const realLines = s => String(s||"").replace(/\r/g,"").split(/\n+/).map(cleanLine).filter(x=>x && !PLACEHOLDER.test(x));
+  const stripEnd = s => String(s||"").replace(/[\s.;,]+$/,"");
+  const lowerFirst = s => s.charAt(0).toLowerCase()+s.slice(1);
+  const cvHas = (cvNorm, term) => {
+    const t = norm(term); if(!t) return false;
+    const esc = t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+    const re = new RegExp("(^|[^a-z0-9])"+esc+"(s|es)?([^a-z0-9]|$)");
+    return re.test(cvNorm);
+  };
+  const joinList = a => a.length<=1 ? (a[0]||"") : a.slice(0,-1).join(", ")+" and "+a[a.length-1];
+
+  const showTerm = (e,t) => (e.skills.find(sk=>norm(sk)===t) || (t.length<=4 ? t.toUpperCase() : titleCase(t)));
+  function firstPerson(line){
+    const l = stripEnd(cleanLine(line)); if(!l) return "";
+    if(/^(i|my|we)\b/i.test(l)) return l;
+    if(/^responsible for\b/i.test(l)) return "I was "+lowerFirst(l);
+    const w = (l.split(/\s+/)[0]||"");
+    if(/^[A-Za-z]+ed$/.test(w) || /^(led|built|ran|taught|sold|made|wrote|kept|drove|set|began|grew|won|oversaw|spearheaded)$/i.test(w)) return "I "+lowerFirst(l);
+    if(/^[A-Za-z]+ing$/.test(w)) return "My work included "+lowerFirst(l);
+    return "On my CV I list: "+l;
+  }
+  // A line like "Graphic Designer — ABC Ltd — 2021 to 2024" is a position header, not an achievement.
+  const isPositionHeader = l => (/\b(19|20)\d{2}\b|\bpresent\b|\bto date\b/i.test(l)) && l.length<130 && !/[.!?]$/.test(l) && !/^(managed|led|developed|created|designed|built|implemented|supported|coordinated|organized|organised|prepared|maintained|trained|supervised|delivered|improved|handled|operated|assisted|produced|installed|repaired|sold|served|planned|monitored|conducted|provided)/i.test(l);
+
+  function collectEvidence(data){
+    const d = data||{};
+    const cvText = String(d.cv||"").trim();
+    const parsed = cvText ? parseResumeText(cvText) : {};
+    const pick = k => (String(d[k]!==undefined && !PLACEHOLDER.test(String(d[k])) ? d[k] : "").trim() || String(parsed[k]||"").trim()).trim();
+    const skillsRaw = Array.isArray(d.skills) ? d.skills.join(", ") : String(d.skills||"");
+    const skills = unique((skillsRaw.trim()?skillsRaw:String(parsed.skills||"")).split(/[,;\n•]+/).map(cleanLine).filter(x=>x && !PLACEHOLDER.test(x))).slice(0,30);
+    const e = {
+      name: pick("name"), email: pick("email"), phone: pick("phone"), location: pick("location"),
+      title: pick("title"), summary: pick("summary"), skills,
+      expLines: realLines(pick("experience")), eduLines: realLines(pick("education")),
+      certLines: realLines(pick("certifications")).filter(x=>!/^none\.?$/i.test(x)),
+      projLines: realLines(pick("projects"))
+    };
+    // Source of truth for every check: the final CV text (or, if none, the fields).
+    const cvAll = cvText || [e.name,e.email,e.phone,e.location,e.title,e.summary,e.skills.join(" "),e.expLines.join(" "),e.eduLines.join(" "),e.certLines.join(" "),e.projLines.join(" ")].join(" ");
+    e.cvNorm = norm(cvAll);
+    // keep only items that really exist in the CV text
+    e.skills = e.skills.filter(s=>e.cvNorm.includes(norm(s)));
+    e.positions = e.expLines.filter(isPositionHeader);
+    e.achievements = e.expLines.filter(l=>!isPositionHeader(l) && l.length>=20);
+    const ym = (e.summary+" "+e.expLines.join(" ")).match(/(\d{1,2})\s*\+?\s*(?:years?|yrs)\b[^.]{0,40}?\b(?:experience|industry|field|practice)\b/i) || (e.summary+" "+e.expLines.join(" ")).match(/\bexperience\b[^.]{0,30}?(\d{1,2})\s*\+?\s*(?:years?|yrs)\b/i);
+    e.years = ym ? ym[1] : "";
+    // Vacancy
+    const jd = String(d.jobDescription||"");
+    const role = String(d.role||d.targetRole||"").trim() || ((jd.match(/(?:job\s*title|title|position|role)\s*:\s*([^\n\r]+)/i)||[])[1]||"").trim();
+    e.role = PLACEHOLDER.test(role)?"":role;
+    const co = String(d.company||"").trim() || ((jd.match(/(?:company|employer|organi[sz]ation)\s*:\s*([^\n\r]+)/i)||[])[1]||"").trim();
+    e.company = PLACEHOLDER.test(co)?"":co;
+    e.hiringManager = String(d.hiringManager||"").trim();
+    const baseTerms = (d.jobRequirements && d.jobRequirements.length ? d.jobRequirements : extractJobRequirements(jd, e.role).keywords) || [];
+    // Phrases the vacancy itself asks for, e.g. "experience in brand identity and social media design"
+    const jdPhrases = [];
+    jd.split(/\n|•|;/).forEach(line=>{
+      const m = line.match(/\b(?:experience|proficiency|proficient|knowledge|skills?|expertise|background|familiarity|understanding|ability)\s+(?:in|with|of|using|to use)\s+(.+)/i);
+      if(!m) return;
+      m[1].replace(/[.:]+$/,"").split(/,|\band\b|\bor\b|\/|&/i)
+        .map(x=>norm(x).replace(/^(strong|good|excellent|proven|solid|hands-on|working|the|a|an|using)\s+/,""))
+        .filter(x=>x.length>2 && x.split(" ").length<=4).forEach(x=>jdPhrases.push(x));
+    });
+    // Skills the candidate already lists that the vacancy also names (strongest evidence)
+    const jdNorm = norm(jd);
+    const skillsInJD = e.skills.map(norm).filter(s=>s && cvHas(jdNorm,s));
+    let terms = unique([...skillsInJD, ...jdPhrases, ...baseTerms.map(norm)].filter(Boolean));
+    // drop a short term when a longer term already contains it (e.g. "adobe" inside "adobe illustrator")
+    terms = terms.filter(t=>!terms.some(o=>o!==t && o.length>t.length && cvHas(o,t)));
+    e.jobTerms = terms;
+    e.matched = e.jobTerms.filter(t=>cvHas(e.cvNorm,t));
+    e.unmatched = e.jobTerms.filter(t=>!cvHas(e.cvNorm,t));
+    const strong = e.matched.filter(t=>!GENERIC_TERMS.has(t));
+    e.matchedStrong = (strong.length?strong:e.matched).sort((a,b)=>b.split(" ").length-a.split(" ").length).slice(0,6);
+    // rank the candidate's own achievement lines by how many vacancy terms they contain
+    const score = l => { const n=norm(l); return e.matched.reduce((s,t)=>s+(cvHas(n,t)?(GENERIC_TERMS.has(t)?0.5:1):0),0); };
+    e.bestAchievements = e.achievements.map((l,i)=>({l,i,s:score(l)})).sort((a,b)=>b.s-a.s||a.i-b.i).slice(0,3).sort((a,b)=>a.i-b.i).map(x=>x.l);
+    e.matchedSkills = e.skills.filter(s=>e.matched.some(t=>norm(s).includes(t)||t.includes(norm(s)))).concat(e.skills.filter(s=>!e.matched.some(t=>norm(s).includes(t)||t.includes(norm(s))))).slice(0,8);
+    e.warnings = [];
+    if(!e.name) e.warnings.push("Your name was not found in the CV. Add it so the letter, email and LinkedIn text can be signed.");
+    if(!e.email) e.warnings.push("No email found in the CV.");
+    if(!e.phone) e.warnings.push("No phone number found in the CV.");
+    if(!e.role) e.warnings.push("No job title found. Type the job title in the Target role box.");
+    if(!e.company) e.warnings.push("No company name found. Type it in the Company box so the letter names the employer.");
+    if(!e.expLines.length && !e.summary) e.warnings.push("Your CV has no experience or summary text, so the documents will be very short. Add your real experience first.");
+    if(e.jobTerms.length && !e.matched.length) e.warnings.push("None of the vacancy requirements appear in your CV yet. The documents do not claim any match. Add your real, truthful evidence to the CV first.");
+    return e;
   }
 
-  function applicationEmail(data={}) {
-    const req=(data.jobRequirements||[]).slice(0,5).join(", ");
-    return "Subject: Application for "+(data.role||"[Role]")+" — "+(data.name||"[Full Name]")+"\n\n"+
-      "Dear "+(data.hiringManager||"[Hiring Manager]")+",\n\n"+
-      "Please find my application for the "+(data.role||"[Role]")+" position at "+(data.company||"[Company Name]")+". I reviewed the exact vacancy requirements, including "+(req||"the stated role requirements")+", and tailored my application to them.\n\n"+
-      "Relevant verified skills: "+((data.skills||[]).slice(0,6).join(", ")||"[relevant skills]")+".\n\nThank you for your consideration.\n\nKind regards,\n"+(data.name||"[Full Name]")+"\n"+(data.email||"[Professional Email]")+"\n"+(data.phone||"[Phone]");
+  function buildCoverLetter(e){
+    const P = [];
+    const posn = e.role ? "the "+e.role+" position" : "the advertised position";
+    const rolen = e.role ? "the "+e.role+" role" : "the advertised role";
+    const to = e.company ? " at "+e.company : "";
+    P.push("Dear "+(e.hiringManager||"Hiring Manager")+",");
+    let p1 = "I am writing to apply for "+posn+to+".";
+    if(e.title && norm(e.title)!==norm(e.role)) p1 += " I am "+(/^[aeiou]/i.test(e.title)?"an ":"a ")+lowerFirst(e.title)+(e.years?" with "+e.years+" years of experience":"")+".";
+    else if(e.years) p1 += " I have "+e.years+" years of experience.";
+    P.push(p1);
+    if(e.summary){
+      const s1 = (e.summary.split(/(?<=[.!?])\s+/)[0]||"").trim();
+      if(s1) P.push("In brief, my CV describes my background as follows: "+stripEnd(s1)+".");
+    } else if(e.positions.length){
+      P.push("My most recent position listed on my CV is: "+stripEnd(e.positions[0])+".");
+    }
+    if(e.matchedStrong.length){
+      let p = "Your vacancy asks for "+joinList(e.matchedStrong.map(t=>showTerm(e,t)))+". My CV shows experience in each of these.";
+      if(e.bestAchievements.length) p += " For example: "+e.bestAchievements.slice(0,2).map(x=>stripEnd(firstPerson(x))).join(". ")+".";
+      P.push(p);
+    } else if(e.bestAchievements.length){
+      P.push("From my CV: "+e.bestAchievements.slice(0,2).map(x=>stripEnd(firstPerson(x))).join(". ")+".");
+    }
+    if(e.matchedSkills.length) P.push("My skills as listed on my CV include "+joinList(e.matchedSkills.slice(0,6))+".");
+    const qual = [];
+    if(e.eduLines.length) qual.push("Education: "+stripEnd(e.eduLines[0])+".");
+    if(e.certLines.length) qual.push("Certification: "+stripEnd(e.certLines[0])+".");
+    if(qual.length) P.push(qual.join(" "));
+    P.push("I have attached my CV and would welcome the opportunity to discuss how my experience fits "+rolen+to+". Thank you for your time and consideration.");
+    P.push(["Yours sincerely,",e.name,e.phone,e.email].filter(Boolean).join("\n"));
+    return P.join("\n\n");
   }
 
-  function linkedin(data={}) {
-    return (data.name||"[Full Name]")+" | "+(data.role||"[Target Role]")+"\n\n"+
-      "Professional profile focused on "+((data.skills||[]).slice(0,6).join(", ")||"[verified skills]")+
-      ". I am interested in opportunities where I can apply verified experience to real employer requirements and deliver measurable results.";
+  function buildEmail(e){
+    const role = e.role || "the advertised position";
+    const posn = e.role ? "the "+e.role+" position" : "the advertised position";
+    const to = e.company ? " at "+e.company : "";
+    const L = [];
+    L.push("Subject: Application for "+role+(e.name?" — "+e.name:""));
+    L.push("");
+    L.push("Dear "+(e.hiringManager||"Hiring Manager")+",");
+    L.push("");
+    L.push("I am applying for "+posn+to+". Please find my CV and cover letter attached.");
+    if(e.matchedStrong.length){ L.push(""); L.push("My CV shows experience in "+joinList(e.matchedStrong.slice(0,4).map(t=>showTerm(e,t)))+", which your vacancy asks for."); }
+    const pts = [];
+    e.bestAchievements.slice(0,2).forEach(x=>{ const t=stripEnd(cleanLine(x)); pts.push(t.length>170?t.slice(0,167).replace(/\s+\S*$/,"")+"…":t); });
+    if(e.matchedSkills.length) pts.push("Key skills: "+e.matchedSkills.slice(0,6).join(", "));
+    if(pts.length){ L.push(""); L.push("Highlights from my CV:"); pts.forEach(p=>L.push("• "+p)); }
+    L.push("");
+    L.push("I would be glad to discuss my application at your convenience. Thank you for your consideration.");
+    L.push("");
+    L.push("Kind regards,");
+    [e.name,e.phone,e.email].filter(Boolean).forEach(x=>L.push(x));
+    return L.join("\n");
   }
+
+  function buildLinkedIn(e){
+    const L = [];
+    const head = [ e.title || (e.role?"Open to "+e.role+" roles":""), ...e.matchedSkills.slice(0,3) ].filter(Boolean).join(" | ");
+    L.push("HEADLINE"); L.push((head||e.name).slice(0,220)); L.push("");
+    L.push("ABOUT");
+    const about = [];
+    if(e.summary) about.push(stripEnd(e.summary.replace(/\s+/g," "))+".");
+    else if(e.positions.length) about.push("Most recent position: "+stripEnd(e.positions[0])+".");
+    if(e.years && !/years/i.test(e.summary)) about.push(e.years+" years of experience.");
+    if(e.skills.length) about.push("Core skills: "+e.skills.slice(0,10).join(", ")+".");
+    if(e.bestAchievements.length) about.push("Experience highlights: "+e.bestAchievements.slice(0,2).map(x=>stripEnd(cleanLine(x))).join("; ")+".");
+    if(e.role) about.push("Open to "+e.role+" opportunities.");
+    if(e.email) about.push("Contact: "+e.email);
+    L.push(about.join("\n\n")); L.push("");
+    if(e.skills.length){ L.push("SKILLS (add these on LinkedIn)"); L.push(e.matchedSkills.concat(e.skills.filter(s=>!e.matchedSkills.includes(s))).slice(0,30).join(", ")); L.push(""); }
+    if(e.expLines.length){ L.push("EXPERIENCE (copy from your CV)"); e.expLines.slice(0,14).forEach(x=>L.push("• "+x)); L.push(""); }
+    if(e.eduLines.length){ L.push("EDUCATION"); e.eduLines.forEach(x=>L.push("• "+x)); L.push(""); }
+    if(e.certLines.length){ L.push("LICENSES & CERTIFICATIONS"); e.certLines.forEach(x=>L.push("• "+x)); L.push(""); }
+    return L.join("\n").trim();
+  }
+
+  // Safety net: every skill and every experience line used in the documents must exist in the CV.
+  function verifyAgainstCV(e, texts){
+    const problems = [];
+    const all = norm(texts.join(" \n "));
+    e.bestAchievements.concat(e.eduLines.slice(0,1),e.certLines.slice(0,1)).forEach(l=>{ if(!e.cvNorm.includes(norm(stripEnd(l)))) problems.push("Not found in CV: "+l); });
+    e.matchedSkills.forEach(s=>{ if(!e.cvNorm.includes(norm(s))) problems.push("Skill not in CV: "+s); });
+    e.matchedStrong.forEach(t=>{ if(!cvHas(e.cvNorm,t)) problems.push("Requirement not in CV: "+t); });
+    return {ok:!problems.length, problems, checked: all.length>0};
+  }
+
+  function applicationPack(data={}){
+    const e = collectEvidence(data);
+    const cover = buildCoverLetter(e), email = buildEmail(e), linkedinText = buildLinkedIn(e);
+    const check = verifyAgainstCV(e,[cover,email,linkedinText]);
+    return { cover, email, linkedin: linkedinText, warnings: e.warnings, matched: e.matched, notInCV: e.unmatched, check, evidence: e };
+  }
+  function coverLetter(data={}) { return applicationPack(data).cover; }
+  function applicationEmail(data={}) { return applicationPack(data).email; }
+  function linkedin(data={}) { return applicationPack(data).linkedin; }
 
   function parseResumeText(text){
     let t=String(text||'').replace(/\r/g,'');
@@ -902,10 +1052,10 @@ const PaulAccess = {
       "Paul AI Subscription",
 
       price:
-      "₦3,000 per month",
+      "Paul Pass from ₦500 for 7 days or ₦1,500 for 30 days",
 
       message:
-      "Your free Paul AI reviews have finished. Subscribe to continue unlimited CV reviews."
+      "Your free Paul AI reviews have finished. Get a Paul Pass to continue unlimited smart CV improvements."
 
     };
 
@@ -991,7 +1141,7 @@ function paulImprove(input={}, jobDescription=""){
 }
 
 window.JobSeekPaulImprove=paulImprove;
-window.JobSeekSmartCV={version:"smart-cv-v14-stable-import",scoreCV:scoreCVv6,smartFill,buildImprovementPlan,applyImprovementAnswers,coverLetter,applicationEmail,linkedin,titleCase,roleKeywords,extractJobRequirements,parseResumeText,parseResumeText,
+window.JobSeekSmartCV={version:"smart-cv-v14-stable-import",scoreCV:scoreCVv6,smartFill,buildImprovementPlan,applyImprovementAnswers,coverLetter,applicationEmail,linkedin,applicationPack,titleCase,roleKeywords,extractJobRequirements,parseResumeText,parseResumeText,
 PaulAI,
 PaulAccess,
 paulImprove
