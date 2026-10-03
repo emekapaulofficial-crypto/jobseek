@@ -1,0 +1,48 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Orders | JobSeek</title><link rel="stylesheet" href="styles.css">
+<style>.o{background:#fff;border:1px solid #dbe4f0;border-radius:14px;padding:16px;margin:12px 0}.b{display:inline-block;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700;background:#eef2f8}.b.paid,.b.delivered{background:#e8f7ee;color:#116635}.b.pending,.b.awaiting_payment{background:#fff4de;color:#8a5a00}.b.cancelled,.b.failed{background:#fdecec;color:#9b1c1c}.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.row input,.row select{padding:8px;border:1px solid #c9d5e6;border-radius:8px;font:inherit}pre{white-space:pre-wrap;background:#f5f8fc;padding:10px;border-radius:8px;font-size:12px}</style></head><body>
+<header><div class="container nav"><a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a><nav><a href="admin-dashboard.html">Admin</a><a href="admin-orders.html">Orders</a></nav></div></header>
+<main class="section"><div class="container"><p class="eyebrow">STAFF ONLY</p><h1>Orders & payments</h1>
+<div class="row"><select id="flt"><option value="pending">Awaiting payment</option><option value="paid">Paid (to deliver)</option><option value="all">All</option></select><button class="btn small" id="reload">Refresh</button></div>
+<p id="note" class="micro"></p><div id="list"></div></div></main>
+<script src="app.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-client.js"></script>
+<script>
+(async function(){
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const naira=k=>'₦'+(k/100).toLocaleString('en-NG');
+const c=supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key);
+let me=(await c.auth.getUser()).data.user;
+if(!me){ $('list').innerHTML='<p>Please <a href="auth.html">sign in</a> with a staff account.</p>'; return; }
+async function load(){
+  $('note').textContent='Loading…';
+  let q=c.from('jobseek_orders').select('*').order('created_at',{ascending:false}).limit(100);
+  const f=$('flt').value; if(f!=='all') q=q.eq('status',f);
+  const {data,error}=await q;
+  if(error){ $('note').textContent=error.message; return; }
+  $('note').textContent=data.length+' order(s). Only staff accounts can see other people\'s orders.';
+  $('list').innerHTML=data.map(r=>{
+    const d=r.details||{};
+    const listing=['featured_job','urgent_tag'].includes(r.product_code)&&r.status==='paid';
+    return '<div class="o" data-id="'+esc(r.id)+'"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b>'+esc(r.product_name)+' · '+naira(r.amount_kobo)+'</b><span><span class="b '+esc(r.status)+'">'+esc(r.status)+'</span> <span class="b '+esc(r.fulfilment_status)+'">'+esc(r.fulfilment_status)+'</span></span></div>'
+    +'<p class="micro">Ref <b>'+esc(r.reference)+'</b> · '+esc(r.email)+' · '+esc(r.phone||'no phone')+' · '+new Date(r.created_at).toLocaleString('en-NG')+'</p>'
+    +'<pre>'+esc(JSON.stringify(d,null,1))+'</pre>'
+    +(r.status==='pending'?'<div class="row"><input class="note" placeholder="Bank ref / note"><button class="btn small" data-act="confirm">Confirm payment received</button><button class="outline" data-act="cancel">Cancel</button></div>':'')
+    +(r.status==='paid'?'<div class="row"><select class="st"><option value="queued">Queued</option><option value="in_progress">In progress</option><option value="delivered">Delivered</option></select><input class="note" placeholder="Note to customer"><input class="url" placeholder="Delivery link (https://…)"><button class="btn small" data-act="update">Save</button></div>':'')
+    +(listing?'<div class="row"><input class="jobid" placeholder="Job ID on Jobs page"><button class="btn small" data-act="activate">Activate on job</button></div>':'')
+    +'</div>';
+  }).join('')||'<p>Nothing here.</p>';
+  document.querySelectorAll('[data-act]').forEach(b=>b.onclick=()=>act(b));
+}
+async function act(b){
+  const box=b.closest('.o'),id=box.dataset.id,v=s=>{const e=box.querySelector(s);return e?e.value.trim():''};
+  let res;
+  if(b.dataset.act==='confirm'){ if(!confirm('Confirm that the money has reached your account?'))return; res=await c.rpc('jobseek_admin_confirm_payment',{p_order_id:id,p_note:v('.note')||null}); }
+  else if(b.dataset.act==='cancel'){ res=await c.rpc('jobseek_admin_update_order',{p_order_id:id,p_fulfilment:'cancelled',p_note:v('.note')||null,p_url:null}); }
+  else if(b.dataset.act==='update'){ res=await c.rpc('jobseek_admin_update_order',{p_order_id:id,p_fulfilment:v('.st'),p_note:v('.note')||null,p_url:v('.url')||null}); }
+  else if(b.dataset.act==='activate'){ res=await c.rpc('jobseek_admin_activate_listing',{p_order_id:id,p_job_id:v('.jobid')}); }
+  if(res&&res.error){ alert(res.error.message); return; }
+  load();
+}
+$('reload').onclick=load; $('flt').onchange=load; load();
+})();
+</script></body></html>
