@@ -1,60 +1,355 @@
--- JobSeek: publish a public job lead as a real agency vacancy
---
--- WHY THIS EXISTS
--- agency_jobs.employer_id is NOT NULL and must point at a real employers row,
--- and employers.user_id is itself NOT NULL and must point at a real signed-up
--- account. A quick "Post a Job" submission from employer.html has neither —
--- it is just a company name and an email typed by a visitor who never signed
--- up. So marking a lead "published" can only ever mean one thing safely:
--- attach it to an employer who DOES already have a verified JobSeek account.
---
--- This function does that attachment in one step, as an admin/agent action:
--- given a lead and an existing employer, it creates the agency_jobs row and
--- marks the lead published. If the company has no JobSeek account yet, run
--- this only after inviting them to sign up via employer-portal.html — there
--- is no safe way to auto-create an employer account from a lead.
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JobSeek | CV Engine</title>
+<style>
+:root{--blue:#155eef;--navy:#081a33;--ink:#10233d;--muted:#66758a;--line:#dfe7f1;--bg:#f5f8fc;--green:#15803d;--red:#b91c1c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif}header{position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid var(--line);padding:12px 20px}.head{max-width:1380px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:15px}.brand{font-size:22px;font-weight:900}.blue{color:var(--blue)}.small{font-size:12px}.wrap{max-width:1380px;margin:auto;padding:24px 18px}h1{font-size:38px;letter-spacing:-1.5px;margin:6px 0}h2{font-size:22px;margin:0 0 14px}.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:minmax(0,1fr) 430px;gap:18px;align-items:start}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:18px;box-shadow:0 5px 20px #0f23400d}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-bottom:13px}label{display:block;font-size:13px;font-weight:800;margin-bottom:6px}input,textarea{width:100%;padding:11px 12px;border:1px solid #cbd8e6;border-radius:10px;font:inherit;color:var(--ink);background:#fff}textarea{min-height:105px;resize:vertical}input:focus,textarea:focus{outline:3px solid #155eef18;border-color:#7aa8f2}button{border:0;border-radius:10px;padding:11px 14px;font-weight:800;cursor:pointer;margin:3px}button.primary{background:var(--blue);color:#fff}button.dark{background:var(--navy);color:#fff}button.outline{background:#fff;border:1px solid #cbd8e6;color:var(--ink)}.toolbar{display:flex;gap:6px;flex-wrap:wrap}.score{font-size:58px;font-weight:900;text-align:center}.gate{padding:12px;border-radius:11px;font-weight:800;text-align:center}.open{background:#dcfce7;color:#166534}.closed{background:#fee2e2;color:#991b1b}.meter{height:8px;background:#e9eef5;border-radius:20px;overflow:hidden}.meter i{display:block;height:100%;width:0;background:var(--blue);transition:.3s}.pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:5px 9px;font-size:11px;margin:3px}.match{background:#ecfdf3;color:var(--green);border-color:#bbf7d0}.miss{background:#fff7ed;color:#9a3412;border-color:#fed7aa}.tabs{display:flex;gap:5px;flex-wrap:wrap}.tabs button{background:#edf2f8;border-radius:999px}.tabs button.active{background:var(--blue);color:#fff}.doc{white-space:pre-wrap;background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:15px;min-height:230px;font-size:13px;line-height:1.6}.template-row{display:flex;gap:7px;flex-wrap:wrap}.template{padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:#fff;cursor:pointer}.template.active{border-color:var(--blue);box-shadow:0 0 0 2px #155eef18}.section-chip{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-radius:9px;padding:8px 11px;margin:6px 0;background:#fff}.section-chip button{padding:4px 8px}.preview-shell{background:#eef2f7;border-radius:14px;padding:14px;min-height:620px;overflow:auto;display:block}.preview-shell:empty:before{content:'Your CV preview will appear here';display:block;text-align:center;padding:80px 20px;color:#66758a}.resume-page{background:#fff;width:100%;max-width:794px;min-height:900px;margin:auto;padding:42px 48px;box-shadow:0 5px 20px #0002;font-family:Arial,sans-serif;color:#111;line-height:1.45}.resume-page.classic{border-top:8px solid #155eef}.resume-page.classic .resume-header{border-bottom:2px solid #222;padding-bottom:14px}.resume-page.classic .resume-name{font-family:Arial,sans-serif}.resume-page.classic .resume-title{font-weight:700}.resume-page.classic .resume-section h3{color:#155eef}.resume-page.classic .resume-body{display:block}
+.resume-page.modern{font-family:Inter,Arial,sans-serif;border-left:12px solid #155eef;background:linear-gradient(90deg,#fff 0,#fff 78%,#f7faff 78%,#f7faff 100%)}.resume-page.modern .resume-header{background:#155eef;color:#fff;margin:-42px -48px 24px;padding:34px 48px;border-bottom:0}.resume-page.modern .resume-name{font-size:36px;color:#fff;letter-spacing:-.5px}.resume-page.modern .resume-title{color:#dbeafe;font-weight:700}.resume-page.modern .resume-contact{color:#e0ecff;border-bottom:0}.resume-page.modern .resume-section{padding-left:18px;border-left:3px solid #dbeafe}.resume-page.modern .resume-section h3{color:#155eef;border-bottom:0;background:#eef4ff;padding:7px 10px;border-radius:6px}
+.resume-page.minimal{font-family:Georgia,serif;border:1px solid #222;box-shadow:none;padding:58px 64px;background:#fff}.resume-page.minimal .resume-header{text-align:center;padding-bottom:24px;border-bottom:1px solid #222}.resume-page.minimal .resume-name{font-size:40px;font-weight:500;letter-spacing:1px}.resume-page.minimal .resume-title{font-style:italic;color:#333}.resume-page.minimal .resume-contact{border:0;color:#333}.resume-page.minimal .resume-section{margin-top:24px}.resume-page.minimal .resume-section h3{font-family:Arial,sans-serif;font-size:10px;letter-spacing:2.5px;border:0;border-bottom:1px solid #222;padding-bottom:7px;color:#111}.resume-page.minimal .resume-section p,.resume-page.minimal .resume-section li{font-size:11.5px}
+.resume-header{display:block}.resume-body{display:block}.resume-name{font-size:30px;font-weight:900;margin-bottom:3px}.resume-title{font-size:15px;color:#555;margin-bottom:8px}.resume-contact{font-size:11px;color:#555;padding-bottom:12px}.resume-section{margin-top:18px}.resume-section h3{font-size:12px;text-transform:uppercase;letter-spacing:1.4px;border-bottom:1px solid #bbb;padding-bottom:4px;margin:0 0 8px}.resume-section p,.resume-section li{font-size:11px;white-space:pre-wrap}.resume-section ul{margin:5px 0 0 18px;padding:0}.check{padding:8px 0;border-bottom:1px solid #edf1f5;font-size:13px}.good{color:var(--green)}.danger{color:var(--red)}.sticky{position:sticky;top:85px}.coach-item{border:1px solid var(--line);border-radius:12px;padding:12px;margin:9px 0;background:#fbfdff}.coach-key{font-size:12px;font-weight:900;text-transform:uppercase;color:var(--blue)}.coach-q{font-size:13px;font-weight:700;margin:6px 0}.coach-note{font-size:11px;color:var(--muted)}.improve-summary{background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:12px;font-size:13px;margin-bottom:10px}.hidden{display:none}@media(max-width:1050px){.grid{grid-template-columns:1fr}.sticky{position:static}}@media(max-width:700px){.row{grid-template-columns:1fr}h1{font-size:30px}.resume-page{padding:30px 25px}.toolbar button{flex:1 1 145px}}@media print{body{background:#fff}.no-print,.editor-panel{display:none!important}.wrap{padding:0}.grid{display:block}.preview-shell{padding:0;background:#fff}.resume-page{box-shadow:none;max-width:none;min-height:auto;padding:35px 40px}}
+ .preview-empty{min-height:520px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;color:#66758a}.preview-empty strong{display:block;color:#10233d;font-size:18px;margin-bottom:8px}.preview-empty span{max-width:420px;line-height:1.6}.cv-download-panel{margin-top:14px;padding:16px;border:1px solid var(--line);border-radius:14px;background:#f8fafc}.cv-download-title{font-weight:900;font-size:16px}.cv-download-actions{margin-top:10px;display:flex;flex-wrap:wrap}.cv-download-actions button{min-height:48px}.cv-download-actions button{flex:1 1 220px}.grid{grid-template-columns:minmax(0,1fr)}
 
-create or replace function public.jobseek_publish_job_lead(
-  p_lead_id uuid,
-  p_employer_id uuid
-) returns uuid
-language plpgsql
-security definer
-set search_path = public, jobseek_private
-as $$
-declare
-  v_lead public.public_job_leads;
-  v_job_id uuid;
-begin
-  if not jobseek_private.is_staff(auth.uid()) then
-    raise exception 'Only JobSeek admins/agents can publish a job lead.';
-  end if;
+/* JobSeek CV Strength Calculator */
+.cv-strength-card{margin-top:18px}
+.cv-strength-action{margin:12px 0}
+.cv-strength-action button{width:100%;min-height:46px}
+.cv-strength-score-wrap{margin-top:14px;padding:18px;border-radius:12px;background:#f7f9fc}
+.cv-strength-score-wrap .score{font-size:48px}
+.cv-strength-stats{margin-top:12px;gap:10px}
+.cv-strength-stats .mini-stat{flex:1;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.cv-strength-stats .mini-stat strong{display:block;font-size:21px;margin-top:4px}
+.cv-strength-result{margin-top:14px}
+.cv-strength-result h3{font-size:15px;margin:0 0 8px}
+.cv-strength-vacancy{margin-top:10px;padding:10px;border-radius:9px;background:#f7f9fc}
+.cv-strength-message{padding:8px 0}
+@media(max-width:700px){.cv-strength-stats{display:block}.cv-strength-stats .mini-stat{margin-bottom:8px}}
+.cv-progress{display:flex;gap:4px;margin:16px 0 22px;flex-wrap:wrap}
+.cv-progress .step{flex:1;min-width:90px;text-align:center;padding:9px 4px;border-radius:10px;background:#eef2f7;color:#66758a;font-size:11px;font-weight:700;border:2px solid transparent;transition:all .2s}
+.cv-progress .step .num{display:block;font-size:13px;margin-bottom:2px}
+.cv-progress .step.done{background:#e7f7ee;color:#15803d;border-color:#bfe8cf}
+.cv-progress .step.active{background:#eaf1ff;color:#1d4ed8;border-color:#bcd2ff}
+.score-next{margin:12px 0 14px;padding:14px 16px;border-radius:12px;background:#0f1f3d;color:#fff}
+.score-next b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#9db4e0;margin-bottom:4px}
+.score-next span{font-size:14px;line-height:1.5}
+</style></head>
+<body><header class="no-print"><div class="head"><div class="brand">Job<span class="blue">Seek</span> <span class="muted small">CV ENGINE</span></div><div class="toolbar"><button class="outline" id="newCv">New CV</button><button class="outline" id="saveCv">Save</button><button class="outline" id="loadCv">Load</button><button class="primary" id="printCv">Export / Print PDF</button></div></div></header>
+<main id="app" class="wrap">
+<p class="blue no-print"><b>JOBSEEK — CV ENGINE</b></p><h1 class="no-print">Build and check your CV</h1>
+<p class="muted no-print">Create a structured CV, compare it with the exact vacancy, check readability issues and see the finished document live.</p>
+<div id="cvProgress" class="cv-progress no-print" aria-label="Application progress"></div>
+<div class="grid"><section>
+<div class="card editor-panel"><h2>1. Target the vacancy</h2><div class="row"><div class="field"><label>Target Role</label><input id="role" placeholder="e.g. Data Analyst"></div><div class="field"><label>Company</label><input id="company" placeholder="Employer name"></div></div><div class="field"><label>Exact employer job description / requirements *</label><textarea id="jobDescription" style="min-height:170px" placeholder="Paste the exact vacancy here. This is what the matching engine uses."></textarea></div><div class="toolbar"><button class="primary" id="score">Review CV</button><button class="dark" id="fix">Tailor / Repair CV</button><button class="outline" id="generate">Generate Application Pack</button></div><p id="status" class="muted small">Start by pasting the exact vacancy.</p></div>
+<div class="card editor-panel cv-strength-card" id="cvStrengthCard">
+<h2>CV Strength Calculator</h2>
+<p class="muted small">Check your CV strength before applying. JobSeek evaluates your CV structure, readability, ATS keyword coverage and vacancy requirements.</p>
+<div class="cv-strength-action"><button type="button" class="primary" id="calculateCvStrength">Calculate CV Strength</button></div>
+<div id="cvStrengthEmpty" class="muted small cv-strength-message">Import your CV or enter your CV information, then press <b>Calculate CV Strength</b>.</div>
+<div id="cvStrengthBody" class="hidden">
+<div id="cvNextStep" class="score-next"></div>
+<div class="cv-strength-score-wrap">
+<div class="score" id="cvStrengthScore">0/100</div>
+<div class="meter"><i id="cvStrengthMeter"></i></div>
+<p id="cvStrengthLevel" class="muted small" style="text-align:center;margin:8px 0"></p>
+</div>
+<div class="row cv-strength-stats">
+<div class="mini-stat"><b class="small">ATS keyword coverage</b><strong id="cvKeywordCoverage">0%</strong></div>
+<div class="mini-stat"><b class="small">Vacancy requirement coverage</b><strong id="cvRequirementCoverage">0%</strong></div>
+</div>
+<div class="cv-strength-result">
+<h3>CV Strength Feedback</h3>
+<div id="cvStrengthFeedback" class="coach-note"></div>
+</div>
+<div id="cvStrengthVacancy" class="cv-strength-vacancy muted small"></div>
+</div>
+</div>
+<div class="card editor-panel"><h2>2. Import or enter your CV</h2><label>Upload CV (PDF or TXT)</label><input id="file" type="file" accept=".pdf,.txt,application/pdf,text/plain" ><div class="field" style="margin-top:12px"><label>Full CV text</label><textarea id="cv" placeholder="Paste your existing CV here."></textarea></div><div class="toolbar" style="margin-top:10px"><button type="button" class="primary" id="parseCv">Import CV & Fill Fields</button><button type="button" class="outline" onclick="document.getElementById('file').click()">Choose CV File</button><button class="outline" id="clearImport">Clear Imported CV</button></div><p class="muted small">Upload a PDF/TXT or paste your CV above, then use the blue button. JobSeek will fill the candidate fields automatically.</p></div>
+<div class="card editor-panel"><h2>3. Candidate information</h2><div class="row"><div class="field"><label>Full Name</label><input id="name"></div><div class="field"><label>Professional Email</label><input id="email"></div><div class="field"><label>Phone</label><input id="phone"></div><div class="field"><label>City / Location</label><input id="location"></div><div class="field"><label>Professional Title</label><input id="title"></div><div class="field"><label>Certifications</label><input id="certifications"></div></div><div class="field"><label>Professional Summary</label><textarea id="summary"></textarea></div><div class="field"><label>Core Skills (comma separated)</label><textarea id="skills"></textarea></div><div class="field"><label>Work Experience</label><textarea id="experience"></textarea></div><div class="field"><label>Education</label><textarea id="education"></textarea></div><div class="field"><label>Projects</label><textarea id="projects"></textarea></div></div>
+<div class="card editor-panel"><h2>4. CV design & structure</h2><div class="template-row"><button type="button" class="template active" data-template="classic">Classic</button><button type="button" class="template" data-template="modern">Modern</button><button type="button" class="template" data-template="minimal">Minimal</button></div><p class="muted small">Classic keeps the layout deliberately simple for readability.</p><b class="small">Section order</b><div id="sectionList"></div></div>
+<div class="card editor-panel"><h2>6. Paul AI — Improve your CV</h2><p class="muted small">Paul reads the vacancy, reads your CV, finds the words and requirements you are missing, and rewrites your CV to include everything that is true. He never invents experience: for anything he cannot see in your CV, he asks you first.</p><div id="paulSummary" class="improve-summary">Paste the exact vacancy, then let Paul review and improve your CV.</div><div id="paulReview" class="coach-note"></div><button class="primary" id="applyImprovements">✦ Ask Paul to Improve My CV</button><p class="coach-note">Paul keeps your original evidence and strengthens wording, structure and vacancy alignment.</p></div><div class="card editor-panel"><h2>5. Application documents</h2><div class="tabs"><button data-tab="cv" class="active">CV</button><button data-tab="cover">Cover Letter</button><button data-tab="email">Application Email</button><button data-tab="linkedin">LinkedIn Summary</button></div><div id="document" class="doc">Analyse the CV or generate the application pack.</div></div>
+<div class="card editor-panel"><h2>Live CV preview</h2><div id="preview" class="preview-shell"></div><div class="cv-download-panel no-print"><div class="cv-download-title">Save your finished CV</div><p class="muted small">Download the CV currently shown above.</p><div class="toolbar cv-download-actions"><button type="button" class="primary" id="downloadPdf">⬇ Download PDF</button><button type="button" class="dark" id="downloadDoc">⬇ Download Word Document</button></div><p id="downloadStatus" class="muted small"></p></div></div>
+</section>
+</div></main><script>
+(function(){
+  'use strict';
+  const byId=id=>document.getElementById(id);
+  const setVal=(id,v)=>{const el=byId(id);if(el)el.value=v||''};
+  const statusMsg=(msg,ok)=>{const el=byId('status');if(el){el.textContent=msg;el.className=ok?'muted small success':'muted small';}};
+  const clean=s=>String(s||'').replace(/^\s*(?:#{1,6}\s*)/,'').replace(/\*\*/g,'').replace(/__+/g,'').trim();
+  const parseStandalone=text=>{
+    let t=String(text||'').replace(/\r/g,'');
+    t=t.replace(/\b(PROFILE SUMMARY|PROFESSIONAL SUMMARY|SUMMARY|WORK EXPERIENCE|PROFESSIONAL EXPERIENCE|EMPLOYMENT|EDUCATION|ACADEMIC BACKGROUND|SKILLS|CORE SKILLS|TECHNICAL SKILLS|COMPETENCIES|CERTIFICATIONS|PROFESSIONAL CERTIFICATIONS|PROJECTS|SELECTED PROJECTS|INTERESTS & MOTIVATION|ADDITIONAL INFORMATION)\b/gi,'\n$1\n');
+    t=t.replace(/(Email\s*:|Phone\s*:|WhatsApp\s*:|Location\s*:|Address\s*:|Nationality\s*:)/gi,'\n$1 ');
+    const lines=t.split(/\n+/).map(clean).filter(Boolean);
+    const o={name:'',email:'',phone:'',location:'',title:'',summary:'',skills:'',experience:'',education:'',certifications:'',projects:''};
+    o.email=(t.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)||[])[0]||'';
+    o.phone=(t.match(/(?:\+?\d[\d\s().-]{7,}\d)/)||[])[0]||'';
+    const headings={summary:/^(profile summary|professional summary|summary|profile|objective)$/i,experience:/^(work experience|professional experience|employment|experience)$/i,education:/^(education|academic background)$/i,skills:/^(skills|core skills|technical skills|competencies|core competencies)$/i,certifications:/^(certifications?|licenses?|professional certifications)$/i,projects:/^(projects?|portfolio|selected projects)$/i};
+    let section='';
+    const buckets={summary:[],experience:[],education:[],skills:[],certifications:[],projects:[]};
+    for(const raw of lines){
+      const line=raw.replace(/^[-•▪◦]\s*/,'').trim();
+      const h=Object.keys(headings).find(k=>headings[k].test(line));
+      if(h){section=h;continue}
+      const m=line.match(/^(Location|Address|City)\s*:\s*(.+)$/i);
+      if(m){o.location=m[2].trim();continue}
+      if(/^(Email|Phone|WhatsApp)\s*:/i.test(line))continue;
+      if(section)buckets[section].push(raw);
+    }
+    o.summary=buckets.summary.join('\n');
+    o.experience=buckets.experience.join('\n');
+    o.education=buckets.education.join('\n');
+    o.skills=buckets.skills.join(', ');
+    o.certifications=buckets.certifications.join('\n');
+    o.projects=buckets.projects.join('\n');
+    if(!o.location){
+      const loc=lines.find(x=>/\b(nigeria|lagos|abuja|akure|ibadan|port harcourt|enugu|benin|warri|delta|ondo)\b/i.test(x)&&!/@/.test(x));
+      if(loc)o.location=loc.replace(/^(location|address|city)\s*:\s*/i,'').trim();
+    }
+    const nameLine=lines.find(x=>x.length>2&&x.length<60&&!/@/.test(x)&&!/^\+?\d/.test(x)&&!/^(profile|summary|work experience|professional experience|education|skills|certifications|projects|location|address|phone|email|whatsapp)$/i.test(x));
+    if(nameLine)o.name=nameLine;
+    const titleLine=lines.find(x=>/entrepreneur|skilled tradesman|team lead|geologist|data analyst|engineer|developer|manager|electrician|accountant|designer/i.test(x)&&x!==o.name);
+    if(titleLine)o.title=titleLine;
+    return o;
+  };
+  window.JobSeekParseStandalone=parseStandalone;
+  async function pdfLib(){
+    if(window.pdfjsLib)return window.pdfjsLib;
+    await new Promise((resolve,reject)=>{
+      const s=document.createElement('script');
+      s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+      s.onload=()=>window.pdfjsLib?resolve():reject(new Error('PDF reader did not initialize'));
+      s.onerror=()=>reject(new Error('PDF reader could not be loaded'));
+      document.head.appendChild(s);
+    });
+    return window.pdfjsLib;
+  }
+  async function extract(file){
+    if(/\.txt$/i.test(file.name)||file.type==='text/plain')return await file.text();
+    if(!/\.pdf$/i.test(file.name)&&file.type!=='application/pdf')throw new Error('Please select a PDF or TXT file.');
+    const pdfjs=await pdfLib();
+    pdfjs.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const pdf=await pdfjs.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise;
+    const pages=[];
+    for(let i=1;i<=pdf.numPages;i++){
+      const page=await pdf.getPage(i);
+      const content=await page.getTextContent();
+      const items=content.items||[];
+      pages.push(items.map(x=>x.str||'').join(' ').trim());
+    }
+    const text=pages.filter(Boolean).join('\n\n').trim();
+    if(!text)throw new Error('This PDF has no selectable text. Please use a text-based PDF or paste the CV text.');
+    return text;
+  }
+  function fill(o){
+    setVal('name',o.name);setVal('email',o.email);setVal('phone',o.phone);setVal('location',o.location);setVal('title',o.title);setVal('summary',o.summary);setVal('skills',o.skills);setVal('experience',o.experience);setVal('education',o.education);setVal('certifications',o.certifications);setVal('projects',o.projects);
+     if(typeof window.JobSeekPreview==='function')window.JobSeekPreview();
+  }
+  function bind(){}
+})();
+</script>
+<script src="supabase-client.js"></script><script src="smart-cv-engine.js?v=20261003-02"></script><script src="paul-brain.js?v=20261003-01"></script><script src="smart-cv-import.js?v=20260928-08"></script>
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id),val=id=>$(id)?.value||'',esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let result=null,docs=null,coach=null,tab='cv',template='classic';let order=['summary','experience','skills','education','projects','certifications'];
+const labels={summary:'Professional Summary',experience:'Professional Experience',skills:'Core Skills',education:'Education',projects:'Projects',certifications:'Certifications'};
+function form(){return{jobDescription:val('jobDescription'),name:val('name'),email:val('email'),phone:val('phone'),location:val('location'),title:val('title'),summary:val('summary'),skills:val('skills'),experience:val('experience'),education:val('education'),projects:val('projects'),certifications:val('certifications')}}
+function setForm(x){['name','email','phone','location','title','summary','experience','education','projects','certifications'].forEach(k=>{if(x[k]!==undefined)$(k).value=x[k]||''});if(x.skills!==undefined)$('skills').value=Array.isArray(x.skills)?x.skills.join(', '):x.skills||''}
+function fullText(){let f=form();return[f.name,f.email,f.phone,f.location,'Target Role: '+val('role'),'Professional Summary',f.summary,'Core Skills',f.skills,'Professional Experience',f.experience,'Education',f.education,'Projects',f.projects,'Certifications',f.certifications].filter(Boolean).join('\n')}
+function status(s,good){$('status').textContent=s;$('status').className='small '+(good?'good':'muted')}
+function renderSections(){$('sectionList').innerHTML=order.map((k,i)=>'<div class="section-chip"><span>'+labels[k]+'</span><span><button class="outline" data-up="'+i+'">↑</button><button class="outline" data-down="'+i+'">↓</button></span></div>').join('');document.querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>move(+b.dataset.up,-1));document.querySelectorAll('[data-down]').forEach(b=>b.onclick=()=>move(+b.dataset.down,1))}
+function move(i,d){let j=i+d;if(j<0||j>=order.length)return;[order[i],order[j]]=[order[j],order[i]];renderSections();preview()}
+function richText(text){let a=String(text||'').replace(/\r/g,'').split(/\n+/).map(x=>x.trim()).filter(Boolean);let html='';a.forEach(x=>{let y=x.replace(/^[-•▪◦]\s*/,'').trim();if(!y)return;if(/^(?:[-•▪◦])/.test(x)||/^[•▪◦]/.test(x))html+='<li>'+esc(y)+'</li>';else if(/^[A-Z][A-Z &]+$/.test(y)&&y.length<60)html+='<h4>'+esc(y)+'</h4>';else html+='<p>'+esc(y)+'</p>'});return html}
+function sec(k,f){let c='';if(k==='summary')c=richText(f.summary);if(k==='skills')c='<ul>'+String(f.skills||'').split(/[,;\n]+/).filter(Boolean).map(x=>'<li>'+esc(x.trim())+'</li>').join('')+'</ul>';if(k==='experience')c=richText(f.experience);if(k==='education')c=richText(f.education);if(k==='projects')c=richText(f.projects);if(k==='certifications')c=richText(f.certifications);if(!String(c).replace(/<[^>]+>/g,'').trim())return '';return '<section class="resume-section"><h3>'+labels[k]+'</h3>'+c+'</section>'}
+function preview(){
+  const host=$('preview');
+  if(!host)return;
+  try{
+    const source=val('cv').trim();
+    let f=form();
+    if(source){
+      const parsed=window.JobSeekParseStandalone?window.JobSeekParseStandalone(source):{};
+      ['name','email','phone','location','title','summary','skills','experience','education','projects','certifications'].forEach(k=>{
+        if(!f[k] && parsed[k]) f[k]=parsed[k];
+      });
+    }
+    const hasData=['name','email','phone','location','title','summary','skills','experience','education','projects','certifications'].some(k=>String(f[k]||'').trim());
+    if(!hasData){
+      host.innerHTML='<div class="preview-empty"><strong>Your CV preview will appear here</strong><span>Import your CV or fill the candidate information to see the finished CV.</span></div>';
+      host.dataset.previewReady='false';
+      updateProgress();
+      return;
+    }
+    const name=esc(f.name||'Your Full Name');
+    const title=esc(f.title||val('role')||'Professional Title');
+    const contact=esc([f.email,f.phone,f.location].filter(Boolean).join(' · ')||'Email · Phone · Location');
+    const body=order.map(k=>sec(k,f)).join('')||'<section class="resume-section"><h3>Professional Summary</h3><p>Start entering your CV information to replace this sample.</p></section>';
+    const variant=template==='modern'?'modern':template==='minimal'?'minimal':'classic';
+    host.innerHTML='<article class="resume-page '+variant+'">'+
+      '<header class="resume-header"><div><div class="resume-name">'+name+'</div><div class="resume-title">'+title+'</div><div class="resume-contact">'+contact+'</div></div></header>'+
+      '<div class="resume-body">'+body+'</div></article>';
+    host.dataset.previewReady='true';
+    updateProgress();
+  }catch(err){
+    host.innerHTML='<article class="resume-page classic"><div class="resume-name">CV Preview</div><div class="resume-section"><h3>Preview error</h3><p>'+esc(err&&err.message?err.message:String(err))+'</p></div></article>';
+  }
+}
+window.JobSeekPreview=preview;
+function updateProgress(){
+  const bar=$('cvProgress');if(!bar)return;
+  const f=form();
+  const steps=[
+    {label:'Vacancy',done:!!val('jobDescription').trim()},
+    {label:'Import CV',done:!!(val('cv').trim()||f.experience||f.summary)},
+    {label:'Your info',done:!!(f.name&&f.email&&(f.summary||f.experience))},
+    {label:'Design',done:document.querySelector('#preview .resume-page')!==null},
+    {label:'Score & fix',done:!!result},
+    {label:'Get documents',done:!!docs}
+  ];
+  let firstUndone=steps.findIndex(s=>!s.done);
+  if(firstUndone===-1)firstUndone=steps.length;
+  bar.innerHTML=steps.map((s,i)=>'<div class="step '+(s.done?'done':(i===firstUndone?'active':''))+'"><span class="num">'+(s.done?'✓':(i+1))+'</span>'+esc(s.label)+'</div>').join('');
+}
+function pickNextStep(r){
+  // One clear instruction, not a wall of feedback. Priority order: a missing
+  // hard requirement from the vacancy beats a general CV-quality issue,
+  // because it's the thing most likely to get the application rejected.
+  const gaps=Array.isArray(r.hardRequirementGaps)?r.hardRequirementGaps.filter(Boolean):[];
+  const fb=Array.isArray(r.feedback)?r.feedback.filter(Boolean):[];
+  if(!val('jobDescription').trim()){
+    return 'Paste the exact employer vacancy above, then recalculate — JobSeek can only check your match once it knows the job.';
+  }
+  if(gaps.length){
+    return 'The vacancy asks for "'+esc(String(gaps[0]))+'" and your CV does not show it yet. Only add it if it is true — then recalculate.';
+  }
+  if(fb.length){
+    return esc(String(fb[0]));
+  }
+  const score=Math.max(0,Math.min(100,Number(r.score||0)));
+  if(score>=80)return 'Your CV is in strong shape for this vacancy. Go to step 5 and generate your application pack.';
+  return 'Fill in more detail under Work Experience and Skills, then recalculate.';
+}
+function renderAnalysis(){
+  if(!result)return;
+  window.JobSeekATSResult=result;
+  const empty=$('cvStrengthEmpty'),body=$('cvStrengthBody');
+  if(empty)empty.classList.add('hidden');
+  if(body)body.classList.remove('hidden');
+  const nextStep=$('cvNextStep');
+  if(nextStep)nextStep.innerHTML='<b>Do this next</b><span>'+pickNextStep(result)+'</span>';
+  const score=Math.max(0,Math.min(100,Number(result.score||0)));
+  const scoreEl=$('cvStrengthScore'),meter=$('cvStrengthMeter'),level=$('cvStrengthLevel');
+  const kw=$('cvKeywordCoverage'),req=$('cvRequirementCoverage'),fb=$('cvStrengthFeedback'),vac=$('cvStrengthVacancy');
+  if(scoreEl)scoreEl.textContent=score+'/100';
+  if(meter)meter.style.width=score+'%';
+  if(level){
+    const hasVac=!!val('jobDescription').trim();
+    level.textContent=(result.level||'CV strength')+(hasVac?' match for this vacancy':' CV strength')
+      +(hasVac&&result.qualityScore!=null?' · CV writing quality: '+result.qualityScore+'/100':'');
+  }
+  if(kw)kw.textContent=Number(result.keywordCoverage||0)+'%';
+  if(req)req.textContent=Number(result.requirementCoverage||0)+'%';
+  if(fb){
+    const items=Array.isArray(result.feedback)?result.feedback.filter(Boolean):[];
+    fb.innerHTML=items.length?items.slice(0,6).map(x=>'<div style="margin-bottom:6px">• '+esc(String(x))+'</div>').join(''):'Your CV has been analysed successfully.';
+  }
+  if(vac){
+    const label=result.vacancyCompatibilityLabel||'';
+    const message=result.vacancyCompatibilityMessage||'';
+    vac.innerHTML=(label?'<b>Vacancy compatibility:</b> '+esc(String(label)):'')+(message?'<br>'+esc(String(message)):'');
+    if(!label&&!message)vac.textContent='Add the exact vacancy to see detailed vacancy compatibility.';
+  }
+  if(docs&&$('document'))$('document').textContent=docs[tab]||''
+}
 
-  select * into v_lead from public.public_job_leads where id = p_lead_id;
-  if v_lead.id is null then
-    raise exception 'Job lead not found.';
-  end if;
-
-  if not exists (select 1 from public.employers e where e.id = p_employer_id) then
-    raise exception 'That employer account does not exist yet. Ask the company to sign up at employer-portal.html first, then try again.';
-  end if;
-
-  insert into public.agency_jobs (
-    employer_id, title, description, country, city, job_type, category,
-    status, verification_status, approved_by, approved_at, published_at
-  ) values (
-    p_employer_id, v_lead.job_title, v_lead.description, v_lead.location, null,
-    v_lead.job_type, v_lead.category,
-    'published', 'verified', auth.uid(), now(), now()
-  ) returning id into v_job_id;
-
-  update public.public_job_leads
-    set status = 'published', reviewed_by = auth.uid(), reviewed_at = now(), agency_job_id = v_job_id
-    where id = p_lead_id;
-
-  return v_job_id;
-end;
-$$;
-
-revoke all on function public.jobseek_publish_job_lead(uuid, uuid) from public;
-grant execute on function public.jobseek_publish_job_lead(uuid, uuid) to authenticated;
+function renderCoach(){if(!coach)return;let a=coach.analysis||{};const summary=$('paulSummary'),review=$('paulReview');if(summary)summary.innerHTML='<b>Paul AI: '+(a.score??0)+' CV score.</b> Paul is ready to improve the wording and structure using only your existing evidence.';if(review)review.textContent=a.vacancyCompatibilityLabel||''}
+function buildCoach(){let t=val('cv').trim()||fullText();coach=JobSeekSmartCV.buildImprovementPlan(t,val('role'),val('jobDescription'));renderCoach()}
+function applyCoach(){
+  const btn=$('applyImprovements');
+  const getCv=()=>val('cv').trim()||fullText();
+  const text=getCv();
+  if(!text){status('Import or enter your CV first.',false);return}
+  if(!val('jobDescription').trim()){status('Paste the exact employer vacancy so Paul can read it first.',false);return}
+  if(!window.PaulBrain){status('Paul AI could not load. Please refresh the page once, then try again.',false);return}
+  btn.disabled=true;btn.textContent='✦ Paul is working…';
+  window.PaulBrain.improve({
+    cv:text,form:form(),jd:val('jobDescription'),role:val('role'),getCv:getCv,
+    apply:function(out){
+      $('cv').value=out.cv;
+      setForm({summary:out.summary,skills:out.skills,experience:out.experience,education:out.education,projects:out.projects,certifications:out.certifications});
+      result=out.analysis||JobSeekSmartCV.scoreCV(out.cv,val('role'),val('jobDescription'));
+      coach={analysis:result,plan:[]};renderAnalysis();renderCoach();preview();
+    }
+  }).then(function(){status('Paul finished. Read your CV once and check every line is true.',true)})
+    .catch(function(err){console.error(err);status('Paul AI could not complete: '+(err&&err.message?err.message:'please try again.'),false)})
+    .finally(function(){btn.disabled=false;btn.textContent='✦ Ask Paul to Improve My CV'});
+}
+function calculateCvStrength(){
+  try{
+    let text=val('cv').trim()||fullText();
+    if(!text){
+      status('Import or enter your CV before calculating its strength.',false);
+      return;
+    }
+    if(!window.JobSeekSmartCV||typeof window.JobSeekSmartCV.scoreCV!=='function'){
+      status('CV strength engine is still loading. Please refresh the page and try again.',false);
+      return;
+    }
+    result=window.JobSeekSmartCV.scoreCV(text,val('role'),val('jobDescription'));
+    renderAnalysis();
+    preview();
+    status('CV strength calculated successfully.',true);
+  }catch(err){
+    console.error('CV Strength Calculator:',err);
+    status('CV strength could not be calculated: '+(err&&err.message?err.message:'Please try again.'),false);
+  }
+}
+function analyse(){if(!val('jobDescription').trim()){status('Paste the exact employer vacancy before analysing.',false);return}let text=val('cv').trim()||fullText();result=JobSeekSmartCV.scoreCV(text,val('role'),val('jobDescription'));coach=JobSeekSmartCV.buildImprovementPlan(text,val('role'),val('jobDescription'));renderAnalysis();renderCoach();preview();status('CV analysed against this vacancy.',true)}
+function fix(){if(!val('jobDescription').trim()){status('Paste the exact employer vacancy before tailoring.',false);return}let x=JobSeekSmartCV.smartFill(Object.assign(form(),{targetRole:val('role'),jobDescription:val('jobDescription')}));setForm({summary:x.summary,skills:x.skills,experience:x.experience,education:x.education,projects:x.projects,certifications:x.certifications});$('cv').value=x.cv;result=JobSeekSmartCV.scoreCV(x.cv,x.targetRole,val('jobDescription'));renderAnalysis();preview();status('CV tailored. Review every [bracketed] placeholder before applying.',true)}
+function generate(){
+try{
+const cvTxt=val('cv').trim(),hasFields=val('name').trim()||val('experience').trim()||val('summary').trim();
+if(!cvTxt&&!hasFields){const m='Paste or upload your CV first (step 2), then press Import CV & Fill Fields.';status(m,false);$('document').textContent=m;return}
+if(!val('jobDescription').trim()){const m='Paste the job requirements first (step 1), so the documents can match the vacancy.';status(m,false);$('document').textContent=m;return}
+let f=form();
+let x={};try{x=JobSeekSmartCV.smartFill(Object.assign({},f,{targetRole:val('role'),jobDescription:val('jobDescription')}))||{}}catch(e){x={}}
+// Documents are built ONLY from the CV text and the form fields. Nothing is invented.
+const base=(val('cv').trim()||x.cv||'');
+const pack=JobSeekSmartCV.applicationPack({cv:base,name:f.name,email:f.email,phone:f.phone,location:f.location,title:f.title,summary:f.summary||x.summary,skills:f.skills||x.skills,experience:f.experience||x.experience,education:f.education||x.education,certifications:f.certifications||x.certifications,projects:f.projects||x.projects,role:val('role'),company:val('company'),jobDescription:val('jobDescription')});
+docs={cv:base||(docs&&docs.cv)||'',cover:pack.cover,email:pack.email,linkedin:pack.linkedin};
+tab=(document.querySelector('[data-tab].active')||{dataset:{tab:'cover'}}).dataset.tab||'cover';if(tab==='cv'&&!docs.cv)tab='cover';
+document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+$('document').textContent=docs[tab]||'';
+try{preview();updateProgress()}catch(e){}
+const notes=[];if(pack.warnings.length)notes.push(pack.warnings.join(' '));if(pack.notInCV.length)notes.push('Not claimed because it is not in your CV: '+pack.notInCV.slice(0,6).join(', ')+'.');if(!pack.check.ok)notes.push('Check: '+pack.check.problems.join('; '));
+status('Done. Cover letter, email and LinkedIn text are ready. Use the tabs above the box to switch. '+notes.join(' '),pack.warnings.length===0&&pack.check.ok);
+const el=$('document');if(el&&el.scrollIntoView)el.scrollIntoView({behavior:'smooth',block:'start'});
+}catch(e){const m='Could not generate: '+(e&&e.message||e);status(m,false);try{$('document').textContent=m}catch(_){}}
+}
+function save(){localStorage.setItem('jobseek_cv_engine_v2',JSON.stringify({form:form(),role:val('role'),company:val('company'),template,order,cv:val('cv')}));status('CV saved on this device.',true)}
+function load(){try{let x=JSON.parse(localStorage.getItem('jobseek_cv_engine_v2')||'null');if(!x){status('No saved CV found.',false);return}setForm(x.form||{});$('role').value=x.role||'';$('company').value=x.company||'';$('cv').value=x.cv||'';template=x.template||'classic';order=x.order||order;document.querySelectorAll('[data-template]').forEach(b=>b.classList.toggle('active',b.dataset.template===template));renderSections();preview();status('Saved CV loaded.',true)}catch(e){status('Could not load saved CV.',false)}}
+function downloadBlob(blob,filename){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+function cvFileName(ext){return ((val('name')||'JobSeek-CV').trim().replace(/[^a-z0-9]+/gi,'-')||'JobSeek-CV')+'.'+ext}
+async function loadExportLibs(){if(!window.html2canvas){await new Promise((res,rej)=>{let x=document.createElement('script');x.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';x.onload=res;x.onerror=rej;document.head.appendChild(x)})}if(!window.jspdf){await new Promise((res,rej)=>{let x=document.createElement('script');x.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';x.onload=res;x.onerror=rej;document.head.appendChild(x)})}}
+async function downloadPDF(){try{const n=document.querySelector('#preview .resume-page');if(!n)throw Error('Create your CV first.');$('downloadStatus').textContent='Preparing PDF…';await loadExportLibs();const c=await html2canvas(n,{scale:2,backgroundColor:'#fff'});const {jsPDF}=window.jspdf;const p=new jsPDF('p','pt','a4'),w=p.internal.pageSize.getWidth(),h=p.internal.pageSize.getHeight(),ih=c.height*w/c.width;for(let y=0,i=0;y<ih;y+=h,i++){if(i)p.addPage();p.addImage(c.toDataURL('image/jpeg',.95),'JPEG',0,-y,w,ih)}p.save(cvFileName('pdf'));$('downloadStatus').textContent='PDF downloaded.'}catch(e){$('downloadStatus').textContent='PDF error: '+e.message}}
+function downloadDOC(){try{const n=document.querySelector('#preview .resume-page');if(!n)throw Error('Create your CV first.');const html='<!doctype html><html><head><meta charset="utf-8"><style>body{font-family:Arial;color:#111}.resume-page{width:794px;margin:auto;padding:42px 48px;box-sizing:border-box}.resume-name{font-size:30px;font-weight:bold}.resume-section{margin-top:18px}.resume-section h3{font-size:12px;border-bottom:1px solid #bbb;padding-bottom:4px}.resume-section p,.resume-section li{font-size:11px}</style></head><body>'+n.outerHTML+'</body></html>';downloadBlob(new Blob([html],{type:'application/msword'}),cvFileName('doc'));$('downloadStatus').textContent='Word document downloaded.'}catch(e){$('downloadStatus').textContent='Word error: '+e.message}}
+function bindEngineActions(){const bind=(id,fn)=>{const el=$(id);if(el){el.type='button';el.onclick=fn}};bind('score',analyse);bind('calculateCvStrength',calculateCvStrength);bind('fix',fix);bind('generate',generate);bind('applyImprovements',applyCoach);bind('saveCv',save);bind('loadCv',load);bind('printCv',()=>{preview();window.print()});}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bindEngineActions);else bindEngineActions();
+function initCVPreview(){document.getElementById('downloadPdf')?.addEventListener('click',downloadPDF);document.getElementById('downloadDoc')?.addEventListener('click',downloadDOC);
+$('jobDescription')?.addEventListener('blur',()=>{if(val('jobDescription').trim()&&(val('cv').trim()||val('name').trim()))calculateCvStrength()});document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));if(docs)$('document').textContent=docs[tab]||''});document.querySelectorAll('[data-template]').forEach(b=>b.onclick=(e)=>{e.preventDefault();template=b.dataset.template;document.querySelectorAll('[data-template]').forEach(x=>x.classList.toggle('active',x===b));preview()});document.querySelectorAll('input,textarea').forEach(x=>x.addEventListener('input',()=>{
+  preview();
+}));
+renderSections();preview();updateProgress();setTimeout(preview,100);
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initCVPreview);else initCVPreview();
+})();
+</script><script>
+(function(){
+ const key='jobseek_cv_engine_collapsed',btn=document.getElementById('cvEngineToggle'),grid=document.querySelector('.grid');
+ if(!btn||!grid)return;
+ const set=v=>{grid.style.display=v?'none':'';btn.setAttribute('aria-expanded',String(!v));btn.textContent=v?'▸ Open CV Engine':'▾ Collapse CV Engine';localStorage.setItem(key,v?'1':'0')};
+ set(localStorage.getItem(key)==='1');
+ btn.onclick=()=>set(grid.style.display!=='none');
+})();
+</script></body></html>
