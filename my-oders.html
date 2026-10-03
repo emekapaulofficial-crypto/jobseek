@@ -26,8 +26,9 @@ try{
   const url=/^https?:\/\//i.test(r.delivery_url||'')?r.delivery_url:'';
   return '<div class="o"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><b>'+esc(r.product_name)+'</b><span><span class="b '+esc(r.status)+'">Payment: '+esc(r.status)+'</span> <span class="b '+esc(r.fulfilment_status)+'">'+esc(FUL[r.fulfilment_status]||r.fulfilment_status)+'</span></span></div><p class="micro">Ref <b>'+esc(r.reference)+'</b> · '+naira(r.amount_kobo)+' · '+new Date(r.created_at).toLocaleDateString('en-NG')+'</p>'
    +(r.status==='pending'?'<p class="micro">Transfer '+naira(r.amount_kobo)+' to Access Bank 1472478793 (IGWE Emeka Paul) with <b>'+esc(r.reference)+'</b> as narration. We confirm payments by hand.</p>':'')
-   +(r.delivery_note?'<p>'+esc(r.delivery_note)+'</p>':'')+(url?'<p><a class="btn small" href="'+esc(url)+'" target="_blank" rel="noopener">Open your delivery</a></p>':'')+'</div>';
+   +(r.delivery_note?'<pre style="white-space:pre-wrap;background:#f5f8fc;padding:12px;border-radius:10px;font:14px/1.5 inherit">'+esc(r.delivery_note)+'</pre><p><button class="outline" data-copy="'+esc(r.id)+'">Copy</button></p>':'')+(url?'<p><a class="btn small" href="'+esc(url)+'" target="_blank" rel="noopener">Open your delivery</a></p>':'')+'</div>';
  }).join(''):'<p>No orders yet. <a href="pricing.html">Browse services</a>.</p>';
+document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>{const r=rows.find(x=>x.id===b.dataset.copy);if(r&&navigator.clipboard)navigator.clipboard.writeText(r.delivery_note).then(()=>{b.textContent='Copied'})});
 }catch(err){ $('list').innerHTML='<p>Could not load orders: '+esc(err.message||err)+'</p>'; }
 })();
 </script></body></html>
