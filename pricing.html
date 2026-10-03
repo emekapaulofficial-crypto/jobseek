@@ -1,5 +1,116 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JobSeek Plans | Free & Premium</title><link rel="stylesheet" href="styles.css"></head><body class="pricing-page"><header><div class="container nav"><a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a><button id="menu" aria-label="Open navigation" aria-expanded="false">☰</button><nav id="nav"><a href="jobs.html">Find Jobs</a><a href="jobs.html">Find Jobs</a><a href="employer.html">Employers</a><a href="application-assistant.html">Application Assistant</a><a class="btn small" href="pricing.html">Plans</a></nav></div></header><main><section class="hero" style="padding:65px 0"><div class="container" style="text-align:center"><p class="eyebrow">JOBSEEK MEMBERSHIP</p><h1>Free to find jobs.<br><em>Premium to apply smarter.</em></h1><p class="lead" style="margin:20px auto">Keep job discovery open to everyone. Charge for professional tools that save candidates time and help employers reach qualified applicants.</p></div></section><section class="section" style="background:#f7faff"><div class="container"><div class="jobs">
-<article class="job"><span class="tag">FREE</span><h3>JobSeeker Free</h3><p>Find opportunities and explore the platform.</p><h2>₦0</h2><p>✓ Global job search<br>✓ Direct employer websites<br>✓ Job requirements guidance<br>✓ Basic application guidance</p><a class="outline" style="display:block;text-align:center" href="jobs.html">Find jobs</a></article>
-<article class="job" style="border:2px solid #1261d6"><span class="tag">PRO — ₦10,000</span><h3>Pro Application Service</h3><p>Professional preparation for one specific vacancy.</p><h2>₦10,000 <span style="font-size:14px;color:#65748b">/job</span></h2><p>✓ ATS-optimized CV tailored to the vacancy<br>✓ Personalized cover letter<br>✓ Job requirement and keyword analysis<br>✓ CV-to-job matching<br>✓ Application checklist and document guidance<br>✓ Application form guidance<br>✓ Professional profile improvement<br>✓ Interview preparation<br>✓ Final application review<br>✓ One-on-one support<br>✓ <strong>When we see a matching specific job offer you want, we will update your application materials for that specific offer.</strong><br>✓ One vacancy/application per ₦10,000</p><a class="btn" style="display:block;text-align:center" href="#payment">Get Pro Support — ₦10,000</a></article>
-<article class="job"><span class="tag">PRO PLUS — ₦15,000</span><h3>Pro Plus Career Package</h3><p>Everything in the ₦10,000 Pro service, plus professional LinkedIn and Indeed profile creation.</p><h2>₦15,000 <span style="font-size:14px;color:#65748b">/job</span></h2><p>✓ <strong>All Pro Application Service benefits</strong><br>✓ LinkedIn profile creation and optimization<br>✓ Indeed profile creation and optimization<br>✓ Professional headline and summary<br>✓ Skills and keyword optimization<br>✓ Experience and education presentation<br>✓ Job-search profile guidance<br>✓ Updates when we see the specific job offer you want<br>✓ One-on-one career application support</p><a class="btn" style="display:block;text-align:center" href="#payment">Get Pro Plus — ₦15,000</a></article>
-</div></div></section></section><section class="section" id="payment"><div class="container card"><p class="eyebrow">SECURE CHECKOUT</p><h2>Pay & Request Your Service</h2><p>Choose the service you want, then contact JobSeek to submit your details and payment confirmation. For the current manual payment option, use the bank details below.</p><div style="margin:22px auto;padding:20px;border:2px solid #1261d6;border-radius:14px;background:#f7faff;text-align:left;max-width:560px"><h3 style="margin-top:0">Bank Transfer — Access Bank</h3><p style="margin:8px 0"><strong>Account Number:</strong> 1472478793</p><p style="margin:8px 0"><strong>Account Name:</strong> IGWE Emeka Paul</p><p style="margin:8px 0"><strong>Pro:</strong> ₦10,000 per vacancy</p><p style="margin:8px 0"><strong>Pro Plus:</strong> ₦15,000</p><p class="micro" style="margin-bottom:0">After transfer, submit your full name, phone/WhatsApp, email, service selected, job title, employer, vacancy link, transaction/reference number and payment date. Do not send false qualifications or experience.</p></div><p class="micro">After payment integration, premium access should be granted from a verified server-side webhook and stored in the candidate account.</p></div></section><section class="cta"><div class="container"><p class="eyebrow light">FOR EMPLOYERS</p><h2>Reach candidates directly.</h2><p>Post jobs today for free, with paid featured listings and candidate search coming soon.</p><a class="btn light" href="employer.html">Post a job</a></div></section></main><footer><div class="container copy">© 2026 JobSeek · Application services improve documents and readiness; they never guarantee employment or visa approval.</div></footer></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JobSeek Plans & Services</title><link rel="stylesheet" href="styles.css">
+<style>
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:18px}
+.pcard{background:#fff;border:1px solid #dbe4f0;border-radius:16px;padding:20px;display:flex;flex-direction:column}
+.pcard.hot{border:2px solid #1261d6}
+.pcard h3{margin:6px 0}.pcard .price{font-size:28px;font-weight:800;margin:6px 0}
+.pcard .price small{font-size:13px;font-weight:500;color:#65748b}
+.pcard ul{padding-left:18px;margin:10px 0 16px;flex:1}.pcard li{margin:4px 0;font-size:14px}
+.modal{position:fixed;inset:0;background:rgba(10,20,40,.55);display:none;align-items:center;justify-content:center;padding:14px;z-index:99}
+.modal.open{display:flex}
+.mbox{background:#fff;border-radius:16px;max-width:520px;width:100%;max-height:92vh;overflow:auto;padding:22px}
+.mbox label{display:block;margin:12px 0 4px;font-weight:600;font-size:14px}
+.mbox input,.mbox textarea{width:100%;box-sizing:border-box;padding:10px;border:1px solid #c9d5e6;border-radius:10px;font:inherit}
+.bank{margin:14px 0;padding:16px;border:2px solid #1261d6;border-radius:14px;background:#f7faff}
+.msg{padding:10px 12px;border-radius:10px;margin-top:12px;font-size:14px}.msg.err{background:#fdecec;color:#9b1c1c}.msg.ok{background:#e8f7ee;color:#116635}
+</style></head><body class="pricing-page">
+<header><div class="container nav"><a class="brand" href="index.html"><span class="logo">J</span><b>Job<span>Seek</span></b></a><button id="menu" aria-label="Open navigation" aria-expanded="false">☰</button><nav id="nav"><a href="jobs.html">Find Jobs</a><a href="employer.html">Employers</a><a href="smart-cv.html">CV Builder</a><a href="my-orders.html">My Orders</a><a class="btn small" href="pricing.html">Plans</a></nav></div></header>
+<main>
+<section class="hero" style="padding:55px 0"><div class="container" style="text-align:center"><p class="eyebrow">JOBSEEK PLANS & SERVICES</p><h1>Free to find jobs.<br><em>Pay only for the help you want.</em></h1><p class="lead" style="margin:20px auto;max-width:640px">Real people review your documents. We charge for document preparation and review, never for job outcomes.</p></div></section>
+
+<section class="section" style="background:#f7faff"><div class="container">
+<h2>For job seekers</h2><p class="micro">Free: job search, job alerts, CV builder, and 2 free Paul smart CV improvements every month.</p>
+<div class="pgrid" id="candGrid"><p>Loading prices…</p></div>
+</div></section>
+
+<section class="section"><div class="container">
+<h2>For employers</h2><p class="micro">Posting a job stays free. Upgrade a published vacancy to reach more candidates.</p>
+<div class="pgrid" id="empGrid"></div>
+</div></section>
+
+<section class="section" id="payment" style="background:#f7faff"><div class="container card">
+<p class="eyebrow">HOW PAYMENT WORKS</p><h2>Pay by bank transfer</h2>
+<ol><li>Choose a service and tap <b>Order</b> (you must be signed in).</li><li>You get an order reference. Transfer the exact amount and put the reference as the narration.</li><li>We confirm your payment by hand. Your order then moves to <b>Queued</b> and you can follow it on <a href="my-orders.html">My Orders</a>.</li></ol>
+<div class="bank"><h3 style="margin-top:0">Access Bank</h3><p style="margin:6px 0"><b>Account number:</b> 1472478793</p><p style="margin:6px 0"><b>Account name:</b> IGWE Emeka Paul</p></div>
+<p class="micro">Never send card details or passwords to us. We never promise jobs, interviews or visas, and we never charge for "guaranteed" placement.</p>
+</div></section>
+</main>
+<footer><div class="container copy">© 2026 JobSeek · Our services improve documents and readiness. They never guarantee employment or visa approval.</div></footer>
+
+<div class="modal" id="modal"><div class="mbox" id="mbox"></div></div>
+
+<script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const naira=k=>'₦'+(k/100).toLocaleString('en-NG');
+// Fallback list. The real prices are read from the server table jobseek_products and are enforced there.
+const FALLBACK=[
+{code:'student_starter',audience:'candidate',name:'Graduate & NYSC Starter',summary:'Your first professional CV and cover letter, written for fresh graduates and NYSC corps members.',features:['ATS-friendly CV built from your real education and activities','Matching cover letter','Human review before delivery','Delivered as Word and PDF'],price_kobo:500000,billing:'one_time',needs:'details'},
+{code:'application_pack',audience:'candidate',name:'Application Pack',summary:'Everything you need to apply for one specific vacancy, reviewed by a person.',features:['CV tailored to the vacancy','Cover letter and application email','Requirement and keyword check','Interview preparation guide','Final review before you submit'],price_kobo:1000000,billing:'one_time',needs:'job',hot:true},
+{code:'pro_plus',audience:'candidate',name:'Pro Plus Career Package',summary:'The Application Pack plus professional LinkedIn and Indeed profiles.',features:['Everything in the Application Pack','LinkedIn headline, summary and skills','Indeed profile setup text','Job-search profile guidance'],price_kobo:1500000,billing:'one_time',needs:'job'},
+{code:'interview_prep',audience:'candidate',name:'Interview Prep Pack',summary:'Full tailored question set and answer guide for any vacancy, for 30 days.',features:['15+ questions built from the vacancy and your CV','Answer frameworks using your real experience','Mock interview with feedback','Questions to ask the employer'],price_kobo:150000,billing:'access',duration_days:30,needs:'none'},
+{code:'paul_pass_week',audience:'candidate',name:'Paul Pass - 7 days',summary:'Unlimited smart (AI) CV improvements and full interview prep for a week.',features:['Unlimited smart Paul CV improvements','Full interview prep access','No monthly commitment'],price_kobo:50000,billing:'access',duration_days:7,needs:'none'},
+{code:'paul_pass_month',audience:'candidate',name:'Paul Pass - 30 days',summary:'Unlimited smart (AI) CV improvements and full interview prep for a month.',features:['Unlimited smart Paul CV improvements','Full interview prep access','Best value for active job seekers'],price_kobo:150000,billing:'access',duration_days:30,needs:'none'},
+{code:'job_alerts_plus',audience:'candidate',name:'Job Alerts Plus',summary:'A weekly shortlist of verified jobs that match your profile, sent by our team.',features:['Weekly shortlist matched to your CV and target role','Sent to your email or WhatsApp','Only verified, open vacancies','30 days'],price_kobo:200000,billing:'access',duration_days:30,needs:'details'},
+{code:'scam_verify',audience:'candidate',name:'Human Job Verification',summary:'Our team checks a job offer, employer and contact details and sends a written verdict.',features:['We check the employer, website, contacts and requests made of you','Written verdict with reasons','We aim to reply within 24 hours'],price_kobo:100000,billing:'one_time',needs:'link'},
+{code:'featured_job',audience:'employer',name:'Featured Job Listing',summary:'Your vacancy at the top of the Jobs page and home page for 30 days.',features:['Top position on Jobs page and home page','Featured badge','30 days'],price_kobo:1000000,billing:'one_time',duration_days:30,needs:'job'},
+{code:'urgent_tag',audience:'employer',name:'Urgent Hiring Tag',summary:'Add an Urgent Hiring badge to your vacancy for 14 days.',features:['Urgent Hiring badge on the listing','14 days','Works with any listing'],price_kobo:250000,billing:'one_time',duration_days:14,needs:'job'}
+];
+let products=FALLBACK, client=null;
+function getClient(){ if(!client){ if(!window.JobSeekSupabase||!JobSeekSupabase.configured||!window.supabase) throw new Error('Service is not configured.'); client=supabase.createClient(JobSeekSupabase.url,JobSeekSupabase.key); } return client; }
+
+function card(p){
+  const per=p.billing==='access'&&p.duration_days?' <small>/ '+p.duration_days+' days</small>':'';
+  const feats=(Array.isArray(p.features)?p.features:[]).map(f=>'<li>'+esc(f)+'</li>').join('');
+  return '<article class="pcard'+(p.hot?' hot':'')+'"><h3>'+esc(p.name)+'</h3><p class="micro">'+esc(p.summary)+'</p><div class="price">'+naira(p.price_kobo)+per+'</div><ul>'+feats+'</ul><button class="btn" data-order="'+esc(p.code)+'">Order — '+naira(p.price_kobo)+'</button></article>';
+}
+function render(){
+  const list=a=>products.filter(p=>p.audience===a).map(card).join('');
+  $('candGrid').innerHTML=list('candidate')||'<p>No services available right now.</p>';
+  $('empGrid').innerHTML=list('employer')||'<p>No employer services available right now.</p>';
+  document.querySelectorAll('[data-order]').forEach(b=>b.onclick=()=>openOrder(b.dataset.order));
+}
+async function load(){
+  render();
+  try{
+    const c=getClient();
+    const {data,error}=await c.from('jobseek_products').select('*').eq('active',true).order('sort_order');
+    if(!error&&data&&data.length){ products=data.map(p=>Object.assign(p,{hot:p.code==='application_pack'})); render(); }
+  }catch(e){ /* keep fallback list for display; ordering still needs the server */ }
+}
+function close(){ $('modal').classList.remove('open'); }
+$('modal').addEventListener('click',e=>{ if(e.target===$('modal')) close(); });
+
+async function openOrder(code){
+  const p=products.find(x=>x.code===code); if(!p) return;
+  const box=$('mbox'); $('modal').classList.add('open');
+  box.innerHTML='<p>Checking your account…</p>';
+  let user=null;
+  try{ const r=await getClient().auth.getUser(); user=r.data&&r.data.user; }catch(e){}
+  if(!user){ box.innerHTML='<h3>Sign in to order</h3><p>Please sign in or create a free account first, then come back to this page.</p><p><a class="btn" href="auth.html">Sign in / Register</a> <button class="outline" id="mc">Close</button></p>'; $('mc').onclick=close; return; }
+  let fields='';
+  if(p.needs==='job') fields+='<label>Job title</label><input id="f_title" required><label>Employer</label><input id="f_company"><label>Vacancy link or job ID</label><input id="f_link"><label>Anything we should know (optional)</label><textarea id="f_notes" rows="3"></textarea>';
+  else if(p.needs==='link') fields+='<label>Paste the job link or message to check</label><textarea id="f_link" rows="4" required></textarea><label>Employer name (optional)</label><input id="f_company">';
+  else if(p.needs==='details') fields+='<label>Your target job or industry</label><input id="f_title" required><label>Tell us about you (course, experience, location)</label><textarea id="f_notes" rows="4"></textarea>';
+  box.innerHTML='<h3>'+esc(p.name)+' — '+naira(p.price_kobo)+'</h3><p class="micro">Signed in as '+esc(user.email||'')+'</p><form id="of">'+fields+'<label>Phone / WhatsApp</label><input id="f_phone" type="tel" placeholder="+234…" required><div id="om"></div><p style="margin-top:16px"><button class="btn" id="ob" type="submit">Place order</button> <button class="outline" id="oc" type="button">Cancel</button></p></form>';
+  $('oc').onclick=close;
+  $('of').onsubmit=async ev=>{
+    ev.preventDefault(); const ob=$('ob'); ob.disabled=true; ob.textContent='Creating order…';
+    const v=id=>($(id)?$(id).value.trim():'');
+    const details={title:v('f_title'),company:v('f_company'),link:v('f_link'),notes:v('f_notes')};
+    try{
+      const {data,error}=await getClient().rpc('jobseek_create_order',{p_product_code:p.code,p_details:details,p_phone:v('f_phone'),p_method:'bank_transfer'});
+      if(error) throw new Error(error.message);
+      box.innerHTML='<h3>Order created ✓</h3><p>Reference: <b style="font-size:18px">'+esc(data.reference)+'</b></p><p>Amount to pay: <b>'+naira(data.amount_kobo)+'</b></p><div class="bank"><p style="margin:4px 0"><b>Bank:</b> Access Bank</p><p style="margin:4px 0"><b>Account number:</b> 1472478793</p><p style="margin:4px 0"><b>Account name:</b> IGWE Emeka Paul</p><p style="margin:4px 0"><b>Narration:</b> '+esc(data.reference)+'</p></div><p class="micro">Transfer the exact amount with the reference as narration. We confirm payments by hand and your order will move to Queued. Track it on My Orders.</p><p><a class="btn" href="my-orders.html">Go to My Orders</a> <button class="outline" id="mc">Close</button></p>';
+      $('mc').onclick=close;
+    }catch(e){ $('om').innerHTML='<div class="msg err">'+esc(e.message||'Could not create the order.')+'</div>'; ob.disabled=false; ob.textContent='Place order'; }
+  };
+}
+load();
+})();
+</script></body></html>
