@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-03T06:36:23.058429+00:00",
+  "updated_at": "2026-10-03T12:00:14.340489+00:00",
   "source": "Supabase public published manual jobs",
   "check_interval": "15 minutes",
   "note": "CLOSED means the robot found a strong closed/not-found signal. JobSeek does not automatically remove jobs; an admin must review and close/remove them from the public feed.",
@@ -18,7 +18,7 @@
       "http_status": 404,
       "final_url": "https://job-boards.greenhouse.io/amplitude/jobs/8831207002",
       "evidence": "HTTP 404",
-      "checked_at": "2026-10-03T06:36:22.640442+00:00"
+      "checked_at": "2026-10-03T12:00:14.003802+00:00"
     },
     {
       "id": "6e88f35f-ebc8-4e8d-b7fb-ba8c9375fb6d",
@@ -30,7 +30,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/sandtechholdingslimited/jobs/4836497101",
       "evidence": "",
-      "checked_at": "2026-10-03T06:36:22.402239+00:00"
+      "checked_at": "2026-10-03T12:00:13.829106+00:00"
     },
     {
       "id": "1da5e311-4249-445a-bf5e-d0491cd94dd5",
@@ -42,7 +42,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/iconcareers/jobs/6149171004",
       "evidence": "",
-      "checked_at": "2026-10-03T06:36:22.404340+00:00"
+      "checked_at": "2026-10-03T12:00:13.831361+00:00"
     },
     {
       "id": "b433c987-628a-4810-9c7e-c799194fc43e",
@@ -54,7 +54,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/dhpace/jobs/5429201008",
       "evidence": "",
-      "checked_at": "2026-10-03T06:36:22.647057+00:00"
+      "checked_at": "2026-10-03T12:00:14.030705+00:00"
     },
     {
       "id": "bb582c04-0596-4480-ac17-6993d7717731",
@@ -66,7 +66,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/check-technologies/efdb2736-75c7-49e9-b413-5713008e1634",
       "evidence": "",
-      "checked_at": "2026-10-03T06:36:22.685245+00:00"
+      "checked_at": "2026-10-03T12:00:14.118270+00:00"
     },
     {
       "id": "e76665bd-5543-4351-a5a0-53bf52f41b61",
@@ -78,7 +78,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/givedirectly/jobs/4738257005",
       "evidence": "",
-      "checked_at": "2026-10-03T06:36:22.403551+00:00"
+      "checked_at": "2026-10-03T12:00:13.830428+00:00"
     },
     {
       "id": "853e0e7a-58d9-4854-a0ad-f6b59a370a03",
@@ -90,7 +90,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/canonicaljobs/jobs/7104614",
       "evidence": "",
-      "checked_at": "2026-10-03T06:36:22.402624+00:00"
+      "checked_at": "2026-10-03T12:00:13.829463+00:00"
     },
     {
       "id": "a979fe4a-8521-4479-8503-4f78b59a4ee4",
@@ -102,7 +102,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/wolt/jobs/7758312",
       "evidence": "",
-      "checked_at": "2026-10-03T06:36:22.404091+00:00"
+      "checked_at": "2026-10-03T12:00:13.831069+00:00"
     },
     {
       "id": "a3e80ff9-74e6-4cd0-abdf-6bffbad776a6",
@@ -114,7 +114,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/doordashusa/jobs/8163709",
       "evidence": "",
-      "checked_at": "2026-10-03T06:36:22.657986+00:00"
+      "checked_at": "2026-10-03T12:00:14.059990+00:00"
     },
     {
       "id": "5dddc71c-3eea-4ed0-815f-afa8b2ad9ede",
@@ -126,7 +126,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/doordashcanada/jobs/8176003",
       "evidence": "",
-      "checked_at": "2026-10-03T06:36:22.624994+00:00"
+      "checked_at": "2026-10-03T12:00:13.989084+00:00"
     },
     {
       "id": "088da511-767f-46e2-a396-df52b6a80424",
@@ -138,7 +138,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/alphasense/jobs/8784592002",
       "evidence": "",
-      "checked_at": "2026-10-03T06:36:22.403243+00:00"
+      "checked_at": "2026-10-03T12:00:13.830163+00:00"
     },
     {
       "id": "d8c6e096-07d2-4507-826f-250c99feede2",
@@ -150,7 +150,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/tubi-canada/jobs/8029234",
       "evidence": "",
-      "checked_at": "2026-10-03T06:36:22.403859+00:00"
+      "checked_at": "2026-10-03T12:00:13.830830+00:00"
     },
     {
       "id": "1eaff690-d78a-4fa6-aac9-ddf679b59016",
@@ -162,7 +162,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/arcocanada/jobs/4379399009",
       "evidence": "",
-      "checked_at": "2026-10-03T06:36:22.651739+00:00"
+      "checked_at": "2026-10-03T12:00:14.041692+00:00"
     },
     {
       "id": "b77ff936-827e-444b-a773-1d64f475f024",
@@ -174,7 +174,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/newglobesandbox/jobs/6202980004",
       "evidence": "",
-      "checked_at": "2026-10-03T06:36:22.403002+00:00"
+      "checked_at": "2026-10-03T12:00:13.829789+00:00"
     }
   ]
 }
