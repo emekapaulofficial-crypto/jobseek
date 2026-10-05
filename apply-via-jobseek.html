@@ -1,0 +1,44 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JobSeek | Apply through JobSeek</title><link rel="stylesheet" href="styles.css"></head><body>
+<main class="section"><div class="container" style="max-width:680px">
+<a class="back-link" href="jobs.html">← Back to jobs</a>
+<p class="eyebrow" style="margin-top:14px">APPLY THROUGH JOBSEEK</p>
+<h1 id="jobTitle">This vacancy</h1>
+<p class="lead" id="jobCompany"></p>
+<div class="job" style="padding:22px;margin-top:18px">
+<p>The employer did not give a direct application link for this job. Send us a message and the JobSeek team will handle your application for you and keep you updated.</p>
+<div id="signinBox" hidden style="margin:14px 0;padding:14px;background:#f7faff;border:1px solid #dbe7f5;border-radius:12px">Please sign in first so we know who to reply to. <a class="btn small" href="auth.html">Sign in / Create account</a></div>
+<form id="reqForm" style="display:grid;gap:12px;margin-top:14px" hidden>
+<label>Your full name<input id="rqName" required autocomplete="name"></label>
+<label>Your email<input id="rqEmail" type="email" required autocomplete="email"></label>
+<label>Phone / WhatsApp (optional)<input id="rqPhone" autocomplete="tel"></label>
+<label>Message to JobSeek (optional)<textarea id="rqNotes" rows="4" placeholder="Anything we should know, for example a link to your CV, or the best time to reach you."></textarea></label>
+<button class="btn" type="submit" id="rqBtn">Send my application request</button>
+<div id="rqMsg" class="micro"></div>
+</form>
+</div></div></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-client.js"></script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const q=new URLSearchParams(location.search);
+const title=q.get('title')||'this vacancy',company=q.get('company')||'',jobId=q.get('jobId')||q.get('id')||'';
+$('jobTitle').textContent=title;$('jobCompany').textContent=company;
+let client,user;
+async function init(){
+  try{client=JobSeekSupabase.getClient();const r=await client.auth.getUser();user=r.data&&r.data.user}catch(e){user=null}
+  if(!user){$('signinBox').hidden=false;return}
+  $('reqForm').hidden=false;
+  $('rqEmail').value=user.email||'';
+  $('rqName').value=(user.user_metadata&&(user.user_metadata.full_name||user.user_metadata.name))||'';
+}
+$('reqForm').onsubmit=async e=>{
+  e.preventDefault();const btn=$('rqBtn'),msg=$('rqMsg');btn.disabled=true;msg.textContent='Sending…';
+  const notes=[$('rqPhone').value.trim()?('Phone/WhatsApp: '+$('rqPhone').value.trim()):'',$('rqNotes').value.trim()].filter(Boolean).join('\n')||null;
+  const row={user_id:user.id,job_id:jobId||null,job_title:title,employer_name:company||'Not specified',candidate_name:$('rqName').value.trim(),candidate_email:$('rqEmail').value.trim(),service_type:'complete_application',notes:notes};
+  const r=await client.from('jobseek_application_requests').insert(row);
+  if(r.error){msg.textContent='Could not send: '+r.error.message;btn.disabled=false;return}
+  $('reqForm').innerHTML='<h3>✅ Request sent</h3><p>JobSeek has received your request for <strong>'+title.replace(/[<>&]/g,'')+'</strong>. We will contact you by email.</p><a class="outline" href="jobs.html">Back to jobs</a>';
+};
+init();
+})();
+</script></body></html>
