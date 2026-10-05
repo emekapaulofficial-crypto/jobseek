@@ -264,14 +264,19 @@ document.addEventListener('click',async e=>{const t=e.target;if(t.dataset.publis
           (errs.length?'<p style="margin:6px 0"><strong>Needs fixing:</strong> '+esc(errs.join(', '))+'</p>':'')+
           '</div>';
       }).join('')+
-      '<button class="btn" id="publishExcelJobs" type="button">Save Selected Jobs for Review</button>';
+      '<button class="btn" id="publishExcelJobs" type="button">Save Selected Jobs for Review</button><p id="excelMsgBtn" class="micro" style="margin-top:10px;font-weight:600"></p>';
     document.getElementById('publishExcelJobs').onclick=publishExcelJobs;
   }
   async function publishExcelJobs(){
-    const msg=document.getElementById('excelMsg');
+    const top=document.getElementById('excelMsg');
+    const say=t=>{top.textContent=t;const b=document.getElementById('excelMsgBtn');if(b){b.textContent=t;b.scrollIntoView({block:'center',behavior:'smooth'});}};
+    const btn=document.getElementById('publishExcelJobs');
     const selected=[...document.querySelectorAll('[data-excel-index]:checked')].map(x=>Number(x.dataset.excelIndex));
-    if(!selected.length){const bad=excelJobs.map((j,i)=>{const e=validate(j);return e.length?'Row '+(i+2)+' needs: '+e.join(', '):''}).filter(Boolean);msg.textContent='No job is ticked. '+(bad.length?bad.join(' | '):'Tick the box beside a job first.');return;}
-    msg.textContent='Checking duplicates and saving for review…';
+    if(!selected.length){const bad=excelJobs.map((j,i)=>{const e=validate(j);return e.length?'Row '+(i+2)+' needs: '+e.join(', '):''}).filter(Boolean);say('No job is ticked. '+(bad.length?bad.join(' | '):'Tick the box beside a job first.'));return;}
+    if(!client||!user){say('You are not signed in as admin. Log out, log in again, then retry.');return;}
+    if(btn){btn.disabled=true;}
+    say('Checking duplicates and saving for review…');
+    let saved=0;
     try{
       const existing=await duplicateKeys(), seen=new Set(), rows=[], skipped=[];
       selected.forEach(i=>{
@@ -279,15 +284,21 @@ document.addEventListener('click',async e=>{const t=e.target;if(t.dataset.publis
         const errs=validate(j);
         if(errs.length){skipped.push('Row '+(i+2)+': '+errs.join(', '));return;}
         if(existing.has(k)||seen.has(k)){skipped.push('Row '+(i+2)+': duplicate job');return;}
-        seen.add(k); rows.push({...j,created_by:user.id,updated_at:new Date().toISOString()});
+        seen.add(k); rows.push({...j,apply_url:j.apply_url||null,direct_application_url:j.apply_url||null,created_by:user.id,updated_at:new Date().toISOString()});
       });
-      if(!rows.length){msg.textContent='Nothing saved. '+skipped.join(' | ');return;}
-      const r=await client.from('jobseek_manual_jobs').insert(rows);
+      if(!rows.length){say('Nothing saved. '+skipped.join(' | '));if(btn)btn.disabled=false;return;}
+      const r=await insertManualJobs(rows);
       if(r.error) throw r.error;
-      msg.textContent=rows.length+' job(s) saved for review.'+(skipped.length?' Skipped: '+skipped.join(' | '):'');
+      saved=rows.length;
       excelJobs=[]; renderExcelPreview(); document.getElementById('jobExcel').value='';
-      await loadManualJobs(); await load();
-    }catch(e){console.error(e);msg.textContent='Save failed: '+(e&&e.message||JSON.stringify(e));}
+      say('✅ '+saved+' job(s) saved for review.'+(skipped.length?' Skipped: '+skipped.join(' | '):''));
+    }catch(e){
+      console.error(e);
+      say('❌ Save failed: '+((e&&(e.message||e.details||e.hint))||JSON.stringify(e)));
+      if(btn)btn.disabled=false;
+      return;
+    }
+    try{await loadManualJobs();await load();}catch(e){console.error('Refresh after save failed',e);}
   }
   function downloadTemplate(){
     const headers=['Job Title','Company','Location','Category','Job Type','Salary','Posted Date','Closing Date','Visa Sponsorship','Application Link','Description','Requirements','Responsibilities','Source','Visa Evidence'];
