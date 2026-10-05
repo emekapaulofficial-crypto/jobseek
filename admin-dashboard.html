@@ -254,10 +254,13 @@ document.addEventListener('click',async e=>{const t=e.target;if(t.dataset.publis
     if(!j.title) errors.push('Job Title');
     if(!j.company) errors.push('Company');
     if(!j.location) errors.push('Location');
-    if(!j.requirements) errors.push('exact Requirements');
-    if(!j.closing_date) errors.push('Closing Date');
-    if(j.closing_date && new Date(j.closing_date)<new Date() && j.status==='published') errors.push('future Closing Date');
     return errors;
+  }
+  function warnings(j){
+    const w=[];
+    if(!j.requirements) w.push('Requirements');
+    if(!j.closing_date) w.push('Closing Date');
+    return w;
   }
   async function duplicateKeys(){
     const r=await client.from('jobseek_manual_jobs').select('title,company,apply_url');
@@ -267,7 +270,7 @@ document.addEventListener('click',async e=>{const t=e.target;if(t.dataset.publis
   function renderExcelPreview(){
     const box=document.getElementById('excelPreview');
     if(!excelJobs.length){box.innerHTML='';return;}
-    box.innerHTML='<h4>Excel jobs — review before publishing</h4>'+
+    box.innerHTML='<h4>'+excelJobs.length+' job(s) found — '+excelJobs.filter(j=>!validate(j).length).length+' ready to save for review</h4><p class="micro">Saving only stores them as drafts. Requirements and closing date can be added before you publish.</p><label class="micro"><input type="checkbox" id="excelSelectAll" checked> Select all</label>'+
       excelJobs.map((j,i)=>{
         const errs=validate(j);
         return '<div class="job" style="padding:14px;margin:10px 0">'+
@@ -275,19 +278,19 @@ document.addEventListener('click',async e=>{const t=e.target;if(t.dataset.publis
           '<strong>Row '+(i+2)+': '+esc(j.title||'Title missing')+'</strong>'+
           '<p class="micro">'+esc(j.company||'Company missing')+' · '+esc(j.location||'Location missing')+' · '+esc(j.category)+'</p>'+
           '<p class="micro">Posted: '+esc(j.posted_at?new Date(j.posted_at).toLocaleDateString():'')+' · Visa: '+(j.visa_sponsorship?'Yes':'No')+'</p>'+
-          '<p class="micro">Apply: '+esc(j.apply_url||'None - candidates apply through JobSeek')+'</p>'+ '<p class="micro"><strong>Exact requirements:</strong> '+esc(j.requirements||'NOT FOUND — do not publish until supplied or safely extracted from the vacancy.')+'</p>'+ '<p class="micro"><strong>Responsibilities:</strong> '+esc(j.responsibilities||'Not supplied')+'</p>'+
-          (errs.length?'<p style="margin:6px 0"><strong>Needs fixing:</strong> '+esc(errs.join(', '))+'</p>':'')+
+          '<p class="micro">Apply: '+esc(j.apply_url||'None - candidates apply through JobSeek')+'</p>'+ '<p class="micro"><strong>Exact requirements:</strong> '+esc(j.requirements||'Not supplied yet')+'</p>'+ '<p class="micro"><strong>Responsibilities:</strong> '+esc(j.responsibilities||'Not supplied')+'</p>'+
+          (errs.length?'<p class="micro" style="color:#b91c1c"><strong>Cannot save — missing:</strong> '+esc(errs.join(', '))+'</p>':(warnings(j).length?'<p class="micro" style="color:#b45309">⚠ Add '+esc(warnings(j).join(' and '))+' in the review list before pressing Publish.</p>':''))+
           '</div>';
       }).join('')+
       '<button class="btn" id="publishExcelJobs" type="button">Save Selected Jobs for Review</button><p id="excelMsgBtn" class="micro" style="margin-top:10px;font-weight:600"></p>';
-    document.getElementById('publishExcelJobs').onclick=publishExcelJobs;
+    document.getElementById('publishExcelJobs').onclick=publishExcelJobs;const sa=document.getElementById('excelSelectAll');if(sa)sa.onchange=()=>document.querySelectorAll('[data-excel-index]').forEach(c=>{const j=excelJobs[+c.dataset.excelIndex];c.checked=sa.checked&&!validate(j).length;});
   }
   async function publishExcelJobs(){
     const top=document.getElementById('excelMsg');
     const say=t=>{top.textContent=t;const b=document.getElementById('excelMsgBtn');if(b){b.textContent=t;b.scrollIntoView({block:'center',behavior:'smooth'});}};
     const btn=document.getElementById('publishExcelJobs');
     const selected=[...document.querySelectorAll('[data-excel-index]:checked')].map(x=>Number(x.dataset.excelIndex));
-    if(!selected.length){const bad=excelJobs.map((j,i)=>{const e=validate(j);return e.length?'Row '+(i+2)+' needs: '+e.join(', '):''}).filter(Boolean);say('No job is ticked. '+(bad.length?bad.join(' | '):'Tick the box beside a job first.'));return;}
+    if(!selected.length){const n=excelJobs.filter(j=>validate(j).length).length;say('No job is ticked. '+(n?n+' row(s) lack a title, company or location.':'Tick the box beside a job first.'));return;}
     if(!client||!user){say('You are not signed in as admin. Log out, log in again, then retry.');return;}
     if(btn){btn.disabled=true;}
     say('Checking duplicates and saving for review…');
@@ -301,12 +304,13 @@ document.addEventListener('click',async e=>{const t=e.target;if(t.dataset.publis
         if(existing.has(k)||seen.has(k)){skipped.push('Row '+(i+2)+': duplicate job');return;}
         seen.add(k); rows.push({...j,apply_url:j.apply_url||null,direct_application_url:j.apply_url||null,created_by:user.id,updated_at:new Date().toISOString()});
       });
-      if(!rows.length){say('Nothing saved. '+skipped.join(' | '));if(btn)btn.disabled=false;return;}
-      const r=await insertManualJobs(rows);
+      if(!rows.length){say('Nothing saved. '+skipped.length+' row(s) skipped (missing details or already saved).');if(btn)btn.disabled=false;return;}
+      let r=await insertManualJobs(rows);
+      if(r.error&&/closing_date/i.test(r.error.message||'')){const d=new Date(Date.now()+30*864e5).toISOString();r=await insertManualJobs(rows.map(x=>({...x,closing_date:x.closing_date||d})));}
       if(r.error) throw r.error;
       saved=rows.length;
       excelJobs=[]; renderExcelPreview(); document.getElementById('jobExcel').value='';
-      say('✅ '+saved+' job(s) saved for review.'+(skipped.length?' Skipped: '+skipped.join(' | '):''));
+      say('✅ '+saved+' job(s) saved as drafts. Find them under "Manual jobs" below, add any missing requirements/closing date, then Publish.'+(skipped.length?' '+skipped.length+' skipped (duplicate or incomplete).':''));
     }catch(e){
       console.error(e);
       say('❌ Save failed: '+((e&&(e.message||e.details||e.hint))||JSON.stringify(e)));
