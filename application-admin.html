@@ -187,15 +187,15 @@ document.addEventListener('click',async e=>{const t=e.target;if(t.dataset.publis
   function extractRequirementEvidence(description,responsibilities){
     const source=[description,responsibilities].filter(Boolean).join('\n');
     if(!source.trim()) return null;
-    const lines=source.replace(/\\r/g,'').split(/\\n|[•▪●]/).map(excelText).filter(Boolean);
+    const lines=source.replace(/\r/g,'').split(/\n|[•▪●]/).map(excelText).filter(Boolean);
     const sectionPattern=/(requirements?|qualifications?|required skills?|skills?|experience|education|certifications?|what you(’|')ll do|what you will do|responsibilities?|duties?)/i;
     const candidates=[];
     lines.forEach(line=>{
-      if(sectionPattern.test(line) || /\\b(must|should|required|preferred|minimum|years? of experience|degree|diploma|certificate|license|proficien|ability to|knowledge of|experience with|experience in|valid driver's licence|driver's license)\\b/i.test(line)) candidates.push(line);
+      if(sectionPattern.test(line) || /\b(must|should|required|preferred|minimum|years? of experience|degree|diploma|certificate|license|proficien|ability to|knowledge of|experience with|experience in|valid driver's licence|driver's license)\b/i.test(line)) candidates.push(line);
     });
-    if(candidates.length) return [...new Set(candidates)].slice(0,40).join('\\n');
-    const sentences=source.split(/(?<=[.!?])\\s+(?=[A-Z0-9])/).map(excelText).filter(x=>x.length>18 && /\\b(experience|skill|degree|diploma|certificate|license|ability|knowledge|operate|maintain|manage|coordinate|develop|analy[sz]e|communicate|supervise|install|repair|drive)\\b/i.test(x));
-    return sentences.length?[...new Set(sentences)].slice(0,25).join('\\n'):null;
+    if(candidates.length) return [...new Set(candidates)].slice(0,40).join('\n');
+    const sentences=source.split(/(?<=[.!?])\s+(?=[A-Z0-9])/).map(excelText).filter(x=>x.length>18 && /\b(experience|skill|degree|diploma|certificate|license|ability|knowledge|operate|maintain|manage|coordinate|develop|analy[sz]e|communicate|supervise|install|repair|drive)\b/i.test(x));
+    return sentences.length?[...new Set(sentences)].slice(0,25).join('\n'):null;
   }
   function normalizeVisa(v){
     const s=excelText(v).toLowerCase();
@@ -270,7 +270,7 @@ document.addEventListener('click',async e=>{const t=e.target;if(t.dataset.publis
   async function publishExcelJobs(){
     const msg=document.getElementById('excelMsg');
     const selected=[...document.querySelectorAll('[data-excel-index]:checked')].map(x=>Number(x.dataset.excelIndex));
-    if(!selected.length){msg.textContent='Select at least one valid job.';return;}
+    if(!selected.length){const bad=excelJobs.map((j,i)=>{const e=validate(j);return e.length?'Row '+(i+2)+' needs: '+e.join(', '):''}).filter(Boolean);msg.textContent='No job is ticked. '+(bad.length?bad.join(' | '):'Tick the box beside a job first.');return;}
     msg.textContent='Checking duplicates and saving for review…';
     try{
       const existing=await duplicateKeys(), seen=new Set(), rows=[], skipped=[];
@@ -287,7 +287,7 @@ document.addEventListener('click',async e=>{const t=e.target;if(t.dataset.publis
       msg.textContent=rows.length+' job(s) saved for review.'+(skipped.length?' Skipped: '+skipped.join(' | '):'');
       excelJobs=[]; renderExcelPreview(); document.getElementById('jobExcel').value='';
       await loadManualJobs(); await load();
-    }catch(e){msg.textContent='Publish failed: '+e.message;}
+    }catch(e){console.error(e);msg.textContent='Save failed: '+(e&&e.message||JSON.stringify(e));}
   }
   function downloadTemplate(){
     const headers=['Job Title','Company','Location','Category','Job Type','Salary','Posted Date','Closing Date','Visa Sponsorship','Application Link','Description','Requirements','Responsibilities','Source','Visa Evidence'];
@@ -297,7 +297,7 @@ document.addEventListener('click',async e=>{const t=e.target;if(t.dataset.publis
     const ins=[
       ['JOBSEEK EXCEL JOB UPLOAD — INSTRUCTIONS'],
       ['1. Add one job per row. Do not merge cells.'],
-      ['2. Required: Job Title, Company, Location and Application Link.'],
+      ['2. Required: Job Title, Company, Location, Closing Date, and Requirements (or a Description that clearly lists them).'],
       ['3. Dates should be YYYY-MM-DD where possible.'],
       ['4. Visa Sponsorship must be Yes or No. Use Yes only when the source explicitly states sponsorship.'],
       ['5. Application Link must be the original employer or job-portal application URL.'],
