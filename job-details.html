@@ -62,9 +62,9 @@ function render(){
  $('employerRoute').href=apply||'#';$('employerRoute').style.display=apply?'inline-flex':'none';$('employerRoute').textContent=apply?'Open Job Website ↗':'Job website link not available';
  $('copyRequirements').onclick=()=>{const parts=[];if(req.text)parts.push('Requirements:\n'+req.text);if((j.responsibilities||'').trim())parts.push('Responsibilities:\n'+j.responsibilities.trim());const text=parts.join('\n\n');if(!text){$('copyRequirements').textContent='Nothing to copy';return}if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(()=>{$('copyRequirements').textContent='Copied ✓'}).catch(()=>alert('Please select and copy the requirements manually.'))}else{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();$('copyRequirements').textContent='Copied ✓'}};
  $('build').href='application-assistant.html?'+params.toString();
- $('admin').href='application-admin.html?'+new URLSearchParams({title:j.title,company:j.company,jobId:j.id}).toString();
+ $('admin').href='apply-via-jobseek.html?'+new URLSearchParams({title:j.title,company:j.company,jobId:j.id}).toString();
  if(apply){$('selfApply').href=apply;$('selfApply').target='_blank';$('selfApply').rel='noopener noreferrer';$('selfApply').textContent='Open Job Website ↗';}
- else{$('selfApply').href='application-assistant.html?'+params.toString();$('selfApply').removeAttribute('target');$('selfApply').textContent='Prepare Application';}
+ else{$('selfApply').href=$('admin').href;$('selfApply').removeAttribute('target');$('selfApply').textContent='Apply through JobSeek';}
  $('requirements').dataset.loaded='true';
 }
 /* A vacancy found in the database / public feed replaces the URL data completely, so URL values never get mixed into verified details. */
