@@ -24,8 +24,9 @@
   }
   function roleKeywords(role, extra="") {
     const base = ROLE_KEYWORDS[roleKey(role)] || [];
+    const pack = (typeof window!=='undefined' && window.JobSeekCVPro) ? window.JobSeekCVPro.packFor(role) : [];
     const extras = String(extra).split(/[,;\n]+/).map(x=>norm(x)).filter(x=>x.length>3);
-    return unique([...base,...extras]);
+    return unique([...base,...pack,...extras]);
   }
 
   function extractJobRequirements(jobDescription,targetRole) {
