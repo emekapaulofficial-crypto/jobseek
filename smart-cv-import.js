@@ -1,263 +1,192 @@
-/* JobSeek CV Importer — single source of truth */
+/* JobSeek CV Importer v2 — accurate PDF reading (text layer + OCR cross-check) */
 (function(){
   "use strict";
-
   var busy=false;
+  var PDFJS="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
+  var PDFJS_WORKER="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  var TESS="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+  var FIELDS=["name","email","phone","location","title","summary","skills","experience","education","projects","certifications","stateOfOrigin","nationality","languages","dob","maritalStatus","references"];
   function $(id){return document.getElementById(id);}
-  function clean(v){return String(v||"").replace(/\r/g,"").replace(/\u00a0/g," ").trim();}
-  function status(msg,ok){
-    var el=$("status");
-    if(el){el.textContent=msg;el.className=ok?"muted small":"muted small";}
-  }
-
+  function status(msg){var el=$("status");if(el){el.textContent=msg;el.className="muted small";}}
+  function pro(){return window.JobSeekCVPro;}
   function normalizeText(text){
-    return clean(text)
+    return String(text||"").replace(/\r/g,"").replace(/\u00a0/g," ")
       .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g,"")
-      .replace(/[ \t]+\n/g,"\n")
-      .replace(/\n[ \t]+/g,"\n")
-      .replace(/\n{3,}/g,"\n\n")
-      .trim();
+      .replace(/[ \t]+\n/g,"\n").replace(/\n[ \t]+/g,"\n").replace(/\n{3,}/g,"\n\n").trim();
+  }
+  function loadScript(src,test,label){
+    if(test())return Promise.resolve();
+    return new Promise(function(resolve,reject){
+      var s=document.createElement("script");s.src=src;
+      s.onload=function(){test()?resolve():reject(new Error(label+" did not start."));};
+      s.onerror=function(){reject(new Error(label+" could not be loaded. Check your internet connection."));};
+      document.head.appendChild(s);
+    });
+  }
+  async function pdfDoc(file){
+    await loadScript(PDFJS,function(){return !!window.pdfjsLib;},"PDF reader");
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc=PDFJS_WORKER;
+    return window.pdfjsLib.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise;
   }
 
-  function parse(text){
-    var t=normalizeText(text);
-    var lines=t.split(/\n+/).map(function(x){return x.replace(/^\s*[-•▪◦*]\s*/,"").trim();}).filter(Boolean);
-    var out={name:"",email:"",phone:"",location:"",title:"",summary:"",skills:"",experience:"",education:"",projects:"",certifications:""};
-    out.email=(t.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)||[""])[0];
-
-    var phoneMatches=t.match(/(?:\+?\d[\d\s().-]{7,}\d)/g)||[];
-    out.phone=(phoneMatches.map(function(x){return x.trim();}).find(function(x){
-      var n=x.replace(/\D/g,""); return n.length>=9&&n.length<=15;
-    })||"");
-
-    var headings={
-      summary:/^(profile summary|professional summary|summary|profile|objective)$/i,
-      experience:/^(work experience|professional experience|employment|experience|employment history)$/i,
-      education:/^(education|academic background|academic history)$/i,
-      skills:/^(skills|core skills|technical skills|competencies|core competencies)$/i,
-      certifications:/^(certifications?|professional certifications?|licenses?)$/i,
-      projects:/^(projects?|selected projects|portfolio)$/i,
-      interests:/^(interests?|interests & motivation)$/i,
-      additional:/^(additional information|additional details)$/i
-    };
-    var buckets={summary:[],experience:[],education:[],skills:[],certifications:[],projects:[]};
-    var section="";
-    lines.forEach(function(line){
-      var h=Object.keys(headings).find(function(k){return headings[k].test(line);});
-      if(h){section=h;return;}
-      var label=line.match(/^(Location|Address|City|Email|Phone|WhatsApp|Mobile)\s*:\s*(.*)$/i);
-      if(label){
-        var key=label[1].toLowerCase();
-        if(/location|address|city/.test(key)) out.location=label[2].trim();
-        if(/email/.test(key)&&!out.email) out.email=label[2].trim();
-        if(/phone|whatsapp|mobile/.test(key)&&!out.phone) out.phone=label[2].trim();
-        return;
-      }
-      if(section==="summary"||section==="experience"||section==="education"||section==="skills"||section==="certifications"||section==="projects"){
-        buckets[section].push(line);
-      }
+  /* Rebuild real lines from positioned text pieces (not one long run of words). */
+  function itemsToLines(items,pageWidth){
+    var rows=[];
+    items.forEach(function(it){
+      if(!it||typeof it.str!=="string"||!it.str.length||!it.transform)return;
+      var h=Math.abs(it.transform[3])||it.height||10,x=it.transform[4],y=it.transform[5],w=it.width||0;
+      if(!it.str.trim())return;
+      var row=null;
+      for(var i=0;i<rows.length;i++){if(Math.abs(rows[i].y-y)<=Math.max(2.5,h*0.5)){row=rows[i];break;}}
+      if(!row){row={y:y,h:h,items:[]};rows.push(row);}
+      row.items.push({x:x,w:w,s:it.str,h:h});
     });
-
-    out.summary=buckets.summary.join("\n");
-    out.experience=buckets.experience.join("\n");
-    out.education=buckets.education.join("\n");
-    out.skills=buckets.skills.join(", ");
-    out.projects=buckets.projects.join("\n");
-    out.certifications=buckets.certifications.join("\n");
-
-    var headerCandidates=lines.slice(0,8);
-    out.name=headerCandidates.find(function(line){
-      return line.length>=3&&line.length<=60&&!/@/.test(line)&&!/^\+?\d/.test(line)&&
-        !/^(curriculum vitae|resume|cv|profile|professional summary|summary|work experience|professional experience|employment|education|skills|core skills|certifications|projects)$/i.test(line)&&
-        !/^(email|phone|mobile|whatsapp|location|address|city)\s*:/i.test(line);
-    })||"";
-
-    out.title=headerCandidates.find(function(line){
-      return line!==out.name&&line.length<=100&&
-        /\b(graphic designer|designer|developer|engineer|manager|analyst|writer|farmer|geologist|accountant|technician|electrician|project manager|product manager|team lead|skilled tradesman|entrepreneur|teacher|administrator|marketing)\b/i.test(line);
-    })||"";
-
-    if(!out.location){
-      var loc=lines.find(function(line){
-        return line!==out.name&&!/@/.test(line)&&
-          /\b(nigeria|lagos|abuja|enugu|ekiti|ado ekiti|ibadan|akure|benin|kano|kaduna|port harcourt|warri|delta|ondo)\b/i.test(line);
+    rows.sort(function(a,b){return b.y-a.y;});
+    var built=rows.map(function(r){
+      r.items.sort(function(a,b){return a.x-b.x;});
+      var segs=[],cur=null,prevEnd=null;
+      r.items.forEach(function(it){
+        var gap=prevEnd===null?0:it.x-prevEnd;
+        if(!cur||gap>it.h*4){cur={x0:it.x,text:"",h:it.h};segs.push(cur);prevEnd=null;gap=0;}
+        if(prevEnd!==null&&gap>it.h*0.22&&!/\s$/.test(cur.text)&&!/^\s/.test(it.s))cur.text+=" ";
+        cur.text+=it.s;prevEnd=it.x+it.w;
       });
-      if(loc)out.location=loc.replace(/^(location|address|city)\s*:\s*/i,"").trim();
+      segs.forEach(function(s){s.text=s.text.replace(/\s+/g," ").trim();});
+      return {segs:segs.filter(function(s){return s.text;}),y:r.y};
+    }).filter(function(r){return r.segs.length;});
+    // two-column layout? (sidebar CVs) read left column fully, then right column
+    var W=pageWidth||600,twoCol=built.filter(function(r){return r.segs.length>=2&&r.segs[0].x0<W*0.3&&r.segs[r.segs.length-1].x0>W*0.38;}).length;
+    if(built.length>=8&&twoCol/built.length>=0.4){
+      var split=W*0.36,left=[],right=[];
+      built.forEach(function(r){
+        var l=r.segs.filter(function(s){return s.x0<split;}).map(function(s){return s.text;}).join(" ");
+        var rr=r.segs.filter(function(s){return s.x0>=split;}).map(function(s){return s.text;}).join(" ");
+        if(l)left.push(l);if(rr)right.push(rr);
+      });
+      return left.concat(right);
     }
-
-    return out;
+    return built.map(function(r){return r.segs.map(function(s){return s.text;}).join(" | ");});
   }
-
-  window.JobSeekParseStandalone=parse;
-
-  function fill(data,rawText){
-    var fields=["name","email","phone","location","title","summary","skills","experience","education","projects","certifications"];
-    fields.forEach(function(k){
-      var el=$(k);
-      if(el && data[k]){
-        el.value=Array.isArray(data[k])?data[k].join(", "):data[k];
-        el.dispatchEvent(new Event("input",{bubbles:true}));
-      }
-    });
-    var cv=$("cv");
-    if(cv && rawText)cv.value=rawText;
-    if(window.JobSeekPreview)window.JobSeekPreview();
-  }
-
-  async function loadPdfJs(){
-    if(window.pdfjsLib)return window.pdfjsLib;
-    await new Promise(function(resolve,reject){
-      var s=document.createElement("script");
-      s.src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
-      s.onload=resolve;s.onerror=function(){reject(new Error("PDF reader could not be loaded."));};
-      document.head.appendChild(s);
-    });
-    if(!window.pdfjsLib)throw new Error("PDF reader did not initialize.");
-    return window.pdfjsLib;
-  }
-
-  async function extractPdf(file){
-    var pdfjs=await loadPdfJs();
-    pdfjs.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-    var pdf=await pdfjs.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise;
-    var pages=[];
+  async function pdfTextLines(file){
+    var pdf=await pdfDoc(file),lines=[];
     for(var i=1;i<=pdf.numPages;i++){
-      var page=await pdf.getPage(i);
-      var content=await page.getTextContent();
-      pages.push(content.items.map(function(x){return x.str||"";}).join(" "));
+      var page=await pdf.getPage(i),vp=page.getViewport({scale:1}),content=await page.getTextContent();
+      lines=lines.concat(itemsToLines(content.items||[],vp.width));
     }
-    return normalizeText(pages.join("\n"));
+    return lines;
   }
 
-  async function loadTesseract(){
-    if(window.Tesseract)return window.Tesseract;
-    await new Promise(function(resolve,reject){
-      var s=document.createElement("script");
-      s.src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
-      s.onload=resolve;
-      s.onerror=function(){reject(new Error("OCR reader could not be loaded."));};
-      document.head.appendChild(s);
-    });
-    if(!window.Tesseract)throw new Error("OCR reader did not initialize.");
-    return window.Tesseract;
-  }
-
-  async function ocrPdf(file){
-    var pdfjs=await loadPdfJs();
-    pdfjs.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-    var pdf=await pdfjs.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise;
-    var Tesseract=await loadTesseract();
-    var pages=[];
-    var maxPages=Math.min(pdf.numPages,12);
-    for(var i=1;i<=maxPages;i++){
-      status("Scanning page "+i+" of "+maxPages+" with OCR…",true);
-      var page=await pdf.getPage(i);
-      var viewport=page.getViewport({scale:1.7});
-      var canvas=document.createElement("canvas");
-      canvas.width=Math.ceil(viewport.width);
-      canvas.height=Math.ceil(viewport.height);
-      var ctx=canvas.getContext("2d");
-      await page.render({canvasContext:ctx,viewport:viewport}).promise;
-      var result=await Tesseract.recognize(canvas,"eng",{logger:function(m){
-        if(m&&m.status==="recognizing text"&&typeof m.progress==="number"){
-          status("OCR page "+i+" of "+maxPages+" — "+Math.round(m.progress*100)+"%",true);
-        }
+  async function ocrPdf(file,maxPages){
+    var pdf=await pdfDoc(file);
+    await loadScript(TESS,function(){return !!window.Tesseract;},"OCR reader");
+    var words=[],text=[],n=Math.min(pdf.numPages,maxPages||3);
+    for(var i=1;i<=n;i++){
+      status("Double-checking spelling with OCR (page "+i+" of "+n+")…");
+      var page=await pdf.getPage(i),vp=page.getViewport({scale:2.2}),canvas=document.createElement("canvas");
+      canvas.width=Math.ceil(vp.width);canvas.height=Math.ceil(vp.height);
+      var ctx=canvas.getContext("2d");ctx.fillStyle="#fff";ctx.fillRect(0,0,canvas.width,canvas.height);
+      await page.render({canvasContext:ctx,viewport:vp}).promise;
+      var res=await window.Tesseract.recognize(canvas,"eng",{logger:function(m){
+        if(m&&m.status==="recognizing text"&&typeof m.progress==="number")status("Double-checking spelling with OCR (page "+i+" of "+n+") — "+Math.round(m.progress*100)+"%");
       }});
-      pages.push(result&&result.data?result.data.text:"");
+      var d=(res&&res.data)||{};
+      text.push(d.text||"");
+      if(d.words&&d.words.length)d.words.forEach(function(w){words.push({text:w.text,conf:w.confidence});});
+      else String(d.text||"").split(/\s+/).filter(Boolean).forEach(function(w){words.push({text:w,conf:90});});
       canvas.width=1;canvas.height=1;
     }
-    return normalizeText(pages.join("\n"));
+    var all=text.join("\n");
+    return {text:all,words:words,lines:all.split(/\n+/).map(function(x){return x.trim();}).filter(Boolean)};
   }
 
-  async function extractFile(file){
+  /* returns {text, altHeaderLines, fixes, usedOcr} */
+  async function readFile(file){
     if(!file)throw new Error("Choose a CV file first.");
-    if(/\.txt$/i.test(file.name)||file.type==="text/plain")return normalizeText(await file.text());
-    if(/\.pdf$/i.test(file.name)||file.type==="application/pdf"){
-      var text=await extractPdf(file);
-      // A scanned PDF often still has a thin text layer (a watermark, a page
-      // number, a scanner header) — that text is non-empty but useless as a
-      // CV. Require a real amount of readable content before trusting it;
-      // otherwise this silently "succeeded" with almost nothing and never
-      // triggered OCR, which is why scanned CVs were failing to import.
-      if(text && text.replace(/\s+/g,"").length>=60)return text;
-      status("This looks like a scanned PDF (little or no selectable text). Starting browser-side OCR…",true);
-      text=await ocrPdf(file);
-      if(text && text.replace(/\s+/g,"").length>=20)return text;
-      throw new Error("The scanned PDF could not be read clearly. Try a clearer scan, a higher-resolution photo, or paste the CV text directly.");
+    if(/\.txt$/i.test(file.name)||file.type==="text/plain")return {text:normalizeText(await file.text()),altHeaderLines:[],fixes:[],usedOcr:false};
+    if(!(/\.pdf$/i.test(file.name)||file.type==="application/pdf"))throw new Error("Only PDF and TXT CV files are supported.");
+    status("Reading your PDF…");
+    var lines=await pdfTextLines(file),textOk=lines.join("").replace(/\s+/g,"").length>=60,ocr=null,fixes=[];
+    try{ocr=await ocrPdf(file,3);}catch(e){console.warn("OCR skipped:",e);ocr=null;}
+    if(!textOk){
+      if(!ocr||ocr.lines.join("").replace(/\s+/g,"").length<20)throw new Error("This PDF could not be read clearly. Try a clearer file, or paste the CV text into the box.");
+      lines=ocr.lines;
+    }else if(ocr&&pro()){
+      var merged=pro().mergeWithOcr(lines,ocr.words);lines=merged.lines;fixes=merged.fixes;
     }
-    throw new Error("Only PDF and TXT CV files are supported.");
+    return {text:normalizeText(lines.join("\n")),altHeaderLines:ocr?ocr.lines.slice(0,14):[],fixes:fixes,usedOcr:!!ocr};
+  }
+
+  function setField(id,v){var el=$(id);if(!el)return;el.value=v||"";el.dispatchEvent(new Event("input",{bubbles:true}));}
+  function fill(data,rawText){
+    FIELDS.forEach(function(k){setField(k,data[k]);});
+    var role=$("role");if(role&&!role.value.trim()&&data.role){role.value=data.role;role.dispatchEvent(new Event("input",{bubbles:true}));}
+    var cv=$("cv");
+    if(cv&&rawText){cv.value=pro()?pro().stripPlaceholders(rawText,[]).replace(/\n{3,}/g,"\n\n"):rawText;}
+    if(window.JobSeekPreview)window.JobSeekPreview();
+  }
+  function showCheck(data,fixes){
+    var box=$("importCheck");if(!box)return;
+    var found=[];
+    if(data.name)found.push("name");if(data.phone)found.push("phone");if(data.email)found.push("email");if(data.location)found.push("address");
+    if(data.summary)found.push("summary");var sk=String(data.skills||"").split(", ").filter(Boolean).length;if(sk)found.push(sk+" skills");
+    if(data.experience)found.push("work experience");if(data.education)found.push("education");if(data.languages)found.push("languages");if(data.stateOfOrigin)found.push("state of origin");
+    var html="<b>Import check</b><div class=\"ic-ok\">✅ Found: "+found.join(", ")+"</div>";
+    if(fixes&&fixes.length){
+      var ex=fixes.slice(0,3).map(function(f){return f[0]+" → "+f[1];}).join(", ");
+      html+="<div class=\"ic-ok\">✅ Corrected "+fixes.length+" spelling error(s) the PDF reader had missed ("+ex+(fixes.length>3?", …":"")+").</div>";
+    }
+    (data.warnings||[]).forEach(function(w){html+="<div class=\"ic-warn\">⚠️ "+w.replace(/</g,"&lt;")+"</div>";});
+    html+="<div class=\"ic-note\">Please read the fields below once before you download. You are the only one who can confirm every line is true.</div>";
+    box.innerHTML=html;box.classList.remove("hidden");
+    if(!data.experience){var xb=$("expBuilder");if(xb)xb.open=true;}
   }
 
   async function importNow(event){
     if(event){event.preventDefault();event.stopPropagation();}
-    if(busy)return false;
-    busy=true;
+    if(busy)return false;busy=true;
     var button=$("parseCv");
     try{
+      if(!pro())throw new Error("CV reader did not load. Refresh the page and try again.");
       if(button){button.disabled=true;button.textContent="Importing CV…";}
-      var file=$("file");
-      var cv=$("cv");
-      status("Reading your CV…",true);
-      var text=file&&file.files&&file.files.length?await extractFile(file.files[0]):(cv?normalizeText(cv.value):"");
-      if(!text)throw new Error("Choose a PDF/TXT CV or paste your CV text first.");
-      if(cv)cv.value=text;
-      status("Analysing the CV structure and filling fields…",true);
-      var data=(window.JobSeekSmartCV&&typeof window.JobSeekSmartCV.parseResumeText==="function")
-        ?window.JobSeekSmartCV.parseResumeText(text)
-        :parse(text);
-      fill(data,text);
-      // Score automatically, whether or not a vacancy has been pasted yet.
-      // Most job seekers import their CV first and don't know a "Calculate"
-      // button exists — the score should just appear.
-      var calc=document.getElementById("calculateCvStrength");
-      if(calc&&typeof calc.click==="function"){
-        calc.click();
-        status("CV imported and scored. See your CV Strength result above.",true);
-      }else{
-        status("CV imported successfully. Your candidate fields and live preview have been updated.",true);
-      }
+      var fileEl=$("file"),cvEl=$("cv"),file=fileEl&&fileEl.files&&fileEl.files.length?fileEl.files[0]:null;
+      var read=file?await readFile(file):{text:normalizeText(cvEl?cvEl.value:""),altHeaderLines:[],fixes:[],usedOcr:false};
+      if(!read.text)throw new Error("Choose a PDF/TXT CV or paste your CV text first.");
+      status("Sorting your CV into sections…");
+      var data=pro().parseCV(read.text,{filename:file?file.name:"",altHeaderLines:read.altHeaderLines});
+      fill(data,read.text);
+      showCheck(data,read.fixes);
+      var calc=$("calculateCvStrength");
+      if(calc&&typeof calc.click==="function"){calc.click();}
+      status("CV imported. Read the Import check below and fix anything marked ⚠️.");
       return true;
     }catch(err){
       console.error("JobSeek CV import:",err);
-      status("CV import failed: "+(err&&err.message?err.message:"Please try again."),false);
+      status("CV import failed: "+(err&&err.message?err.message:"Please try again."));
       return false;
     }finally{
-      busy=false;
-      if(button){button.disabled=false;button.textContent="Import CV & Fill Fields";}
+      busy=false;if(button){button.disabled=false;button.textContent="Import CV & Fill Fields";}
     }
   }
-
   function clearImportedCV(event){
     if(event){event.preventDefault();event.stopPropagation();}
-    ["cv","name","email","phone","location","title","summary","skills","experience","education","projects","certifications"].forEach(function(id){
-      var el=$(id);if(el)el.value="";
-    });
+    ["cv"].concat(FIELDS).forEach(function(id){var el=$(id);if(el)el.value="";});
     var file=$("file");if(file)file.value="";
+    var box=$("importCheck");if(box){box.innerHTML="";box.classList.add("hidden");}
     if(window.JobSeekPreview)window.JobSeekPreview();
-    status("Imported CV cleared.",true);
+    status("Imported CV cleared.");
   }
-
   function bind(){
-    var button=$("parseCv");
-    var file=$("file");
+    var button=$("parseCv"),file=$("file");
     if(!button||!file)return false;
     if(button.dataset.jobseekImportBound==="1")return true;
-    button.dataset.jobseekImportBound="1";
-    button.type="button";
-    button.onclick=importNow;
+    button.dataset.jobseekImportBound="1";button.type="button";button.onclick=importNow;
     var clear=$("clearImport");
-    if(clear&&clear.dataset.jobseekClearBound!=="1"){
-      clear.dataset.jobseekClearBound="1";
-      clear.type="button";
-      clear.onclick=clearImportedCV;
-    }
-    status("Import system ready — choose a PDF/TXT CV or paste your CV, then press Import CV & Fill Fields.",true);
+    if(clear&&clear.dataset.jobseekClearBound!=="1"){clear.dataset.jobseekClearBound="1";clear.type="button";clear.onclick=clearImportedCV;}
+    status("Import system ready. Choose a PDF/TXT CV or paste your CV, then press Import CV & Fill Fields.");
     return true;
   }
-
+  window.JobSeekParseStandalone=function(text){return pro()?pro().parseCV(text):{};};
   window.JobSeekImportNow=importNow;
-  window.JobSeekImport={importNow:importNow,clear:clearImportedCV,parse:parse};
-
-  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bind);
-  else bind();
+  window.JobSeekImport={importNow:importNow,clear:clearImportedCV,parse:window.JobSeekParseStandalone,itemsToLines:itemsToLines};
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bind);else bind();
 })();
