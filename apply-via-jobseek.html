@@ -5,7 +5,8 @@
 <h1 id="jobTitle">This vacancy</h1>
 <p class="lead" id="jobCompany"></p>
 <div class="job" style="padding:22px;margin-top:18px">
-<p>The employer did not give a direct application link for this job. Send us a message and the JobSeek team will handle your application for you and keep you updated.</p>
+<p id="introText">The employer did not give a direct application link for this job. Send us a message and the JobSeek team will handle your application for you and keep you updated.</p>
+<div id="visitBox" hidden style="margin:12px 0;padding:14px;background:#fff8e6;border:1px solid #f0d58a;border-radius:12px"><strong>📍 This employer has no online application.</strong><br>They ask candidates to visit in person at: <strong id="visitLoc"></strong><br><span class="micro">You can go yourself with your CV, or send a request below and the JobSeek team will help you and follow up.</span></div>
 <div id="signinBox" hidden style="margin:14px 0;padding:14px;background:#f7faff;border:1px solid #dbe7f5;border-radius:12px">Please sign in first so we know who to reply to. <a class="btn small" href="auth.html">Sign in / Create account</a></div>
 <form id="reqForm" style="display:grid;gap:12px;margin-top:14px" hidden>
 <label>Your full name<input id="rqName" required autocomplete="name"></label>
@@ -21,8 +22,9 @@
 (function(){
 const $=id=>document.getElementById(id);
 const q=new URLSearchParams(location.search);
-const title=q.get('title')||'this vacancy',company=q.get('company')||'',jobId=q.get('jobId')||q.get('id')||'';
+const title=q.get('title')||'this vacancy',company=q.get('company')||'',jobId=q.get('jobId')||q.get('id')||'',loc=q.get('location')||'',jtype=q.get('type')||'';
 $('jobTitle').textContent=title;$('jobCompany').textContent=company;
+if(loc){$('visitLoc').textContent=loc;$('visitBox').hidden=false}
 let client,user;
 async function init(){
   try{client=JobSeekSupabase.getClient();const r=await client.auth.getUser();user=r.data&&r.data.user}catch(e){user=null}
@@ -33,7 +35,8 @@ async function init(){
 }
 $('reqForm').onsubmit=async e=>{
   e.preventDefault();const btn=$('rqBtn'),msg=$('rqMsg');btn.disabled=true;msg.textContent='Sending…';
-  const notes=[$('rqPhone').value.trim()?('Phone/WhatsApp: '+$('rqPhone').value.trim()):'',$('rqNotes').value.trim()].filter(Boolean).join('\n')||null;
+  const jobLink=jobId?(new URL('job-details.html?id='+encodeURIComponent(jobId),location.href).href):'';
+  const notes=['JOB: '+title+(company?' at '+company:''),'Application route: NO ONLINE LINK - walk-in / visit in person'+(loc?' at '+loc:''),loc?'Location: '+loc:'',jtype?'Job type: '+jtype:'',jobId?'Job ID: '+jobId:'',jobLink?'View job: '+jobLink:'',$('rqPhone').value.trim()?('Phone/WhatsApp: '+$('rqPhone').value.trim()):'',$('rqNotes').value.trim()?('Candidate message: '+$('rqNotes').value.trim()):''].filter(Boolean).join('\n')||null;
   const row={user_id:user.id,job_id:jobId||null,job_title:title,employer_name:company||'Not specified',candidate_name:$('rqName').value.trim(),candidate_email:$('rqEmail').value.trim(),service_type:'complete_application',notes:notes};
   const r=await client.from('jobseek_application_requests').insert(row);
   if(r.error){msg.textContent='Could not send: '+r.error.message;btn.disabled=false;return}
