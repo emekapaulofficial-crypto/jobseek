@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-10-08T03:00:36.356635+00:00",
+  "updated_at": "2026-10-08T10:23:35.063116+00:00",
   "source": "Supabase public published manual jobs",
   "check_interval": "15 minutes",
   "note": "CLOSED means the robot found a strong closed/not-found signal. JobSeek does not automatically remove jobs; an admin must review and close/remove them from the public feed.",
   "counts": {
     "CLOSED": 1,
-    "CHECK_MANUALLY": 2,
-    "NO_LINK": 2,
-    "OPEN": 11
+    "CHECK_MANUALLY": 3,
+    "NO_LINK": 3,
+    "OPEN": 12
   },
   "jobs": [
     {
@@ -20,7 +20,7 @@
       "http_status": 404,
       "final_url": "https://job-boards.greenhouse.io/amplitude/jobs/8831207002",
       "evidence": "HTTP 404",
-      "checked_at": "2026-10-08T03:00:35.361965+00:00"
+      "checked_at": "2026-10-08T10:23:34.642784+00:00"
     },
     {
       "id": "8d9193c6-6f67-4927-a30a-356bebfb0437",
@@ -32,7 +32,7 @@
       "http_status": null,
       "final_url": "mailto:hr@saocap.com",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-08T03:00:35.672595+00:00"
+      "checked_at": "2026-10-08T10:23:34.894990+00:00"
     },
     {
       "id": "a8c5d241-6971-450a-b239-9e1f81dbdf41",
@@ -44,7 +44,19 @@
       "http_status": null,
       "final_url": "mailto:applyresurgir@gmail.com",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-08T03:00:35.672680+00:00"
+      "checked_at": "2026-10-08T10:23:34.895116+00:00"
+    },
+    {
+      "id": "58e824f8-234d-46a8-97a0-4eceb21dd909",
+      "title": "Receptionist / Secretary",
+      "company": "1501 Lab and Diagnostic Centre",
+      "location": "Osun",
+      "apply_url": "mailto:admin@1501medical.com.ng",
+      "status": "CHECK_MANUALLY",
+      "http_status": null,
+      "final_url": "mailto:admin@1501medical.com.ng",
+      "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
+      "checked_at": "2026-10-08T10:23:34.895174+00:00"
     },
     {
       "id": "62e0c9bd-5ad4-419b-9171-5cea192b1700",
@@ -56,7 +68,19 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-08T03:00:35.672711+00:00"
+      "checked_at": "2026-10-08T10:23:34.895157+00:00"
+    },
+    {
+      "id": "29374534-0eb5-49f0-a4b5-3226ff568147",
+      "title": "Bar Manager - Sheraton Lagos Hotel",
+      "company": "Marriott International, Inc.",
+      "location": "Lagos",
+      "apply_url": "",
+      "status": "NO_LINK",
+      "http_status": null,
+      "final_url": "",
+      "evidence": "",
+      "checked_at": "2026-10-08T10:23:34.895166+00:00"
     },
     {
       "id": "6e1156e4-08e2-466c-ab4f-bdf0d93ac2a8",
@@ -68,7 +92,19 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-08T03:00:35.609495+00:00"
+      "checked_at": "2026-10-08T10:23:34.846513+00:00"
+    },
+    {
+      "id": "6f099873-8f25-482e-a6fa-0dbc942872a7",
+      "title": "Digital Marketing & Lead Generation Executive",
+      "company": "V.S.L Concepts Digital Marketing Agency",
+      "location": "Lagos",
+      "apply_url": "https://www.myjobmag.com/job-application/1351349",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://www.myjobmag.com/job-application/1351349",
+      "evidence": "",
+      "checked_at": "2026-10-08T10:23:34.895201+00:00"
     },
     {
       "id": "1da5e311-4249-445a-bf5e-d0491cd94dd5",
@@ -80,7 +116,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/iconcareers/jobs/6149171004",
       "evidence": "",
-      "checked_at": "2026-10-08T03:00:35.361361+00:00"
+      "checked_at": "2026-10-08T10:23:34.642117+00:00"
     },
     {
       "id": "b433c987-628a-4810-9c7e-c799194fc43e",
@@ -92,7 +128,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/dhpace/jobs/5429201008",
       "evidence": "",
-      "checked_at": "2026-10-08T03:00:35.362181+00:00"
+      "checked_at": "2026-10-08T10:23:34.643121+00:00"
     },
     {
       "id": "a65f1f6f-4961-483d-8ae0-3d4a627b99c4",
@@ -104,7 +140,7 @@
       "http_status": 200,
       "final_url": "https://www.myjobmag.com/job-application/1354278",
       "evidence": "",
-      "checked_at": "2026-10-08T03:00:35.635900+00:00"
+      "checked_at": "2026-10-08T10:23:34.851743+00:00"
     },
     {
       "id": "bb582c04-0596-4480-ac17-6993d7717731",
@@ -116,7 +152,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/check-technologies/efdb2736-75c7-49e9-b413-5713008e1634",
       "evidence": "",
-      "checked_at": "2026-10-08T03:00:35.606356+00:00"
+      "checked_at": "2026-10-08T10:23:34.808723+00:00"
     },
     {
       "id": "853e0e7a-58d9-4854-a0ad-f6b59a370a03",
@@ -128,7 +164,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/canonicaljobs/jobs/7104614",
       "evidence": "",
-      "checked_at": "2026-10-08T03:00:35.360359+00:00"
+      "checked_at": "2026-10-08T10:23:34.640980+00:00"
     },
     {
       "id": "a979fe4a-8521-4479-8503-4f78b59a4ee4",
@@ -140,7 +176,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/wolt/jobs/7758312",
       "evidence": "",
-      "checked_at": "2026-10-08T03:00:35.361039+00:00"
+      "checked_at": "2026-10-08T10:23:34.641690+00:00"
     },
     {
       "id": "a3e80ff9-74e6-4cd0-abdf-6bffbad776a6",
@@ -152,7 +188,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/doordashusa/jobs/8163709",
       "evidence": "",
-      "checked_at": "2026-10-08T03:00:35.587483+00:00"
+      "checked_at": "2026-10-08T10:23:34.791443+00:00"
     },
     {
       "id": "5dddc71c-3eea-4ed0-815f-afa8b2ad9ede",
@@ -164,7 +200,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/doordashcanada/jobs/8176003",
       "evidence": "",
-      "checked_at": "2026-10-08T03:00:35.361631+00:00"
+      "checked_at": "2026-10-08T10:23:34.642391+00:00"
     },
     {
       "id": "40c06bcc-3c45-410a-918a-20b95ceb614b",
@@ -176,7 +212,7 @@
       "http_status": 200,
       "final_url": "https://www.google.com/search?q=Lumos+on+docs.google.com&rlz=1CAPPDO_enNG1220&oq=Lumos+on+docs.google.com&aqs=chrome..69i57j33i160.1095j0j7&sourceid=chrome&ie=UTF-8",
       "evidence": "",
-      "checked_at": "2026-10-08T03:00:35.609519+00:00"
+      "checked_at": "2026-10-08T10:23:34.846544+00:00"
     },
     {
       "id": "1eaff690-d78a-4fa6-aac9-ddf679b59016",
@@ -188,7 +224,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/arcocanada/jobs/4379399009",
       "evidence": "",
-      "checked_at": "2026-10-08T03:00:35.362470+00:00"
+      "checked_at": "2026-10-08T10:23:34.643491+00:00"
     },
     {
       "id": "b77ff936-827e-444b-a773-1d64f475f024",
@@ -200,7 +236,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/newglobesandbox/jobs/6202980004",
       "evidence": "",
-      "checked_at": "2026-10-08T03:00:35.360719+00:00"
+      "checked_at": "2026-10-08T10:23:34.641400+00:00"
     }
   ]
 }
