@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-08T22:23:25.230000+00:00",
+  "updated_at": "2026-10-09T02:29:27.884652+00:00",
   "source": "Supabase public published manual jobs",
   "check_interval": "15 minutes",
   "note": "CLOSED means the robot found a strong closed/not-found signal. JobSeek does not automatically remove jobs; an admin must review and close/remove them from the public feed.",
@@ -20,7 +20,7 @@
       "http_status": 404,
       "final_url": "https://job-boards.greenhouse.io/amplitude/jobs/8831207002",
       "evidence": "HTTP 404",
-      "checked_at": "2026-10-08T22:23:24.685202+00:00"
+      "checked_at": "2026-10-09T02:29:27.152239+00:00"
     },
     {
       "id": "8d9193c6-6f67-4927-a30a-356bebfb0437",
@@ -32,7 +32,7 @@
       "http_status": null,
       "final_url": "mailto:hr@saocap.com",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-08T22:23:24.913465+00:00"
+      "checked_at": "2026-10-09T02:29:27.504057+00:00"
     },
     {
       "id": "a8c5d241-6971-450a-b239-9e1f81dbdf41",
@@ -44,7 +44,7 @@
       "http_status": null,
       "final_url": "mailto:applyresurgir@gmail.com",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-08T22:23:24.913532+00:00"
+      "checked_at": "2026-10-09T02:29:27.504138+00:00"
     },
     {
       "id": "c1df74bf-1357-4baa-a524-636df7505842",
@@ -56,7 +56,7 @@
       "http_status": null,
       "final_url": "mailto:jobs@pefai.org",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-08T22:23:24.930065+00:00"
+      "checked_at": "2026-10-09T02:29:27.513618+00:00"
     },
     {
       "id": "58e824f8-234d-46a8-97a0-4eceb21dd909",
@@ -68,7 +68,7 @@
       "http_status": null,
       "final_url": "mailto:admin@1501medical.com.ng",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-08T22:23:24.913585+00:00"
+      "checked_at": "2026-10-09T02:29:27.504209+00:00"
     },
     {
       "id": "62e0c9bd-5ad4-419b-9171-5cea192b1700",
@@ -80,7 +80,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-08T22:23:24.913570+00:00"
+      "checked_at": "2026-10-09T02:29:27.504191+00:00"
     },
     {
       "id": "29374534-0eb5-49f0-a4b5-3226ff568147",
@@ -92,7 +92,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-08T22:23:24.913579+00:00"
+      "checked_at": "2026-10-09T02:29:27.504201+00:00"
     },
     {
       "id": "b4b0f8da-07f6-444d-b197-3ea72e53143b",
@@ -104,7 +104,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-08T22:23:24.930128+00:00"
+      "checked_at": "2026-10-09T02:29:27.513671+00:00"
     },
     {
       "id": "58f27726-3df1-45a7-b36f-a5986552b562",
@@ -116,7 +116,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-08T22:23:24.930137+00:00"
+      "checked_at": "2026-10-09T02:29:27.513680+00:00"
     },
     {
       "id": "6e1156e4-08e2-466c-ab4f-bdf0d93ac2a8",
@@ -128,7 +128,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-08T22:23:24.907880+00:00"
+      "checked_at": "2026-10-09T02:29:27.465309+00:00"
     },
     {
       "id": "6f099873-8f25-482e-a6fa-0dbc942872a7",
@@ -140,7 +140,7 @@
       "http_status": 200,
       "final_url": "https://www.myjobmag.com/job-application/1351349",
       "evidence": "",
-      "checked_at": "2026-10-08T22:23:24.913607+00:00"
+      "checked_at": "2026-10-09T02:29:27.504239+00:00"
     },
     {
       "id": "1da5e311-4249-445a-bf5e-d0491cd94dd5",
@@ -150,9 +150,9 @@
       "apply_url": "https://job-boards.greenhouse.io/iconcareers/jobs/6149171004",
       "status": "OPEN",
       "http_status": 200,
-      "final_url": "https://job-boards.greenhouse.io/iconcareers/jobs/6149171004",
+      "final_url": "https://job-boards.greenhouse.io/iconcareers?error=true",
       "evidence": "",
-      "checked_at": "2026-10-08T22:23:24.684528+00:00"
+      "checked_at": "2026-10-09T02:29:27.151520+00:00"
     },
     {
       "id": "b433c987-628a-4810-9c7e-c799194fc43e",
@@ -164,7 +164,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/dhpace/jobs/5429201008",
       "evidence": "",
-      "checked_at": "2026-10-08T22:23:24.685449+00:00"
+      "checked_at": "2026-10-09T02:29:27.152497+00:00"
     },
     {
       "id": "a65f1f6f-4961-483d-8ae0-3d4a627b99c4",
@@ -176,7 +176,7 @@
       "http_status": 200,
       "final_url": "https://www.myjobmag.com/job-application/1354278",
       "evidence": "",
-      "checked_at": "2026-10-08T22:23:24.912881+00:00"
+      "checked_at": "2026-10-09T02:29:27.470416+00:00"
     },
     {
       "id": "bb582c04-0596-4480-ac17-6993d7717731",
@@ -188,7 +188,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/check-technologies/efdb2736-75c7-49e9-b413-5713008e1634",
       "evidence": "",
-      "checked_at": "2026-10-08T22:23:24.893861+00:00"
+      "checked_at": "2026-10-09T02:29:27.453125+00:00"
     },
     {
       "id": "853e0e7a-58d9-4854-a0ad-f6b59a370a03",
@@ -200,7 +200,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/canonicaljobs/jobs/7104614",
       "evidence": "",
-      "checked_at": "2026-10-08T22:23:24.683588+00:00"
+      "checked_at": "2026-10-09T02:29:27.150449+00:00"
     },
     {
       "id": "a979fe4a-8521-4479-8503-4f78b59a4ee4",
@@ -212,7 +212,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/wolt/jobs/7758312",
       "evidence": "",
-      "checked_at": "2026-10-08T22:23:24.684224+00:00"
+      "checked_at": "2026-10-09T02:29:27.151170+00:00"
     },
     {
       "id": "a3e80ff9-74e6-4cd0-abdf-6bffbad776a6",
@@ -224,7 +224,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/doordashusa/jobs/8163709",
       "evidence": "",
-      "checked_at": "2026-10-08T22:23:24.841879+00:00"
+      "checked_at": "2026-10-09T02:29:27.408007+00:00"
     },
     {
       "id": "5dddc71c-3eea-4ed0-815f-afa8b2ad9ede",
@@ -236,7 +236,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/doordashcanada/jobs/8176003",
       "evidence": "",
-      "checked_at": "2026-10-08T22:23:24.684803+00:00"
+      "checked_at": "2026-10-09T02:29:27.151791+00:00"
     },
     {
       "id": "40c06bcc-3c45-410a-918a-20b95ceb614b",
@@ -248,7 +248,7 @@
       "http_status": 200,
       "final_url": "https://www.google.com/search?q=Lumos+on+docs.google.com&rlz=1CAPPDO_enNG1220&oq=Lumos+on+docs.google.com&aqs=chrome..69i57j33i160.1095j0j7&sourceid=chrome&ie=UTF-8",
       "evidence": "",
-      "checked_at": "2026-10-08T22:23:24.907898+00:00"
+      "checked_at": "2026-10-09T02:29:27.465327+00:00"
     },
     {
       "id": "1eaff690-d78a-4fa6-aac9-ddf679b59016",
@@ -260,7 +260,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/arcocanada/jobs/4379399009",
       "evidence": "",
-      "checked_at": "2026-10-08T22:23:24.685714+00:00"
+      "checked_at": "2026-10-09T02:29:27.152814+00:00"
     },
     {
       "id": "b77ff936-827e-444b-a773-1d64f475f024",
@@ -272,7 +272,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.greenhouse.io/newglobesandbox/jobs/6202980004",
       "evidence": "",
-      "checked_at": "2026-10-08T22:23:24.683925+00:00"
+      "checked_at": "2026-10-09T02:29:27.150814+00:00"
     }
   ]
 }
