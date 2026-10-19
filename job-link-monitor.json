@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-19T14:01:59.669605+00:00",
+  "updated_at": "2026-10-19T19:46:59.485343+00:00",
   "source": "Supabase public published manual jobs",
   "check_interval": "15 minutes",
   "note": "CLOSED means the robot found a strong closed/not-found signal. JobSeek does not automatically remove jobs; an admin must review and close/remove them from the public feed.",
@@ -19,7 +19,7 @@
       "http_status": null,
       "final_url": "mailto:hr@jomavhomesproperties.com",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-19T14:01:58.934158+00:00"
+      "checked_at": "2026-10-19T19:46:58.007447+00:00"
     },
     {
       "id": "d25c114c-7bd0-4e0a-a8f9-3171420d8a7c",
@@ -31,7 +31,7 @@
       "http_status": null,
       "final_url": "mailto:whipsmartrecruitment@gmail.com",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-19T14:01:58.651447+00:00"
+      "checked_at": "2026-10-19T19:46:57.685027+00:00"
     },
     {
       "id": "1358770c-e6ee-485c-8f3d-f0b444fffc23",
@@ -43,7 +43,7 @@
       "http_status": null,
       "final_url": "mailto:recruitmentbodafrica@gmail.com",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-19T14:01:58.651483+00:00"
+      "checked_at": "2026-10-19T19:46:57.685062+00:00"
     },
     {
       "id": "8d9193c6-6f67-4927-a30a-356bebfb0437",
@@ -55,7 +55,7 @@
       "http_status": null,
       "final_url": "mailto:hr@saocap.com",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-19T14:01:59.119025+00:00"
+      "checked_at": "2026-10-19T19:46:58.550204+00:00"
     },
     {
       "id": "a8c5d241-6971-450a-b239-9e1f81dbdf41",
@@ -67,7 +67,7 @@
       "http_status": null,
       "final_url": "mailto:applyresurgir@gmail.com",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-19T14:01:59.119058+00:00"
+      "checked_at": "2026-10-19T19:46:58.550235+00:00"
     },
     {
       "id": "d1c8b7be-ec33-4e52-8fd2-e4a02c622721",
@@ -79,7 +79,7 @@
       "http_status": null,
       "final_url": "mailto:hr@ecofitnesshub.com",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-19T14:01:58.934076+00:00"
+      "checked_at": "2026-10-19T19:46:58.007393+00:00"
     },
     {
       "id": "ac2854c6-4bb6-43a4-b02e-d4a19803ed2b",
@@ -91,7 +91,7 @@
       "http_status": null,
       "final_url": "mailto:recruitment@mshelconstruction.com",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-19T14:01:58.651388+00:00"
+      "checked_at": "2026-10-19T19:46:57.684962+00:00"
     },
     {
       "id": "e8809213-f4ee-43bb-ae4e-cd72447f0136",
@@ -103,7 +103,7 @@
       "http_status": null,
       "final_url": "mailto:admin@captaincook.ng",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-19T14:01:58.934185+00:00"
+      "checked_at": "2026-10-19T19:46:58.007468+00:00"
     },
     {
       "id": "7299cdbd-2ae6-4643-ac51-f9f63c67b3e3",
@@ -115,7 +115,7 @@
       "http_status": null,
       "final_url": "mailto:hr@jomavhomesproperties.com",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-19T14:01:58.934208+00:00"
+      "checked_at": "2026-10-19T19:46:58.007488+00:00"
     },
     {
       "id": "c1df74bf-1357-4baa-a524-636df7505842",
@@ -127,7 +127,7 @@
       "http_status": null,
       "final_url": "mailto:jobs@pefai.org",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-19T14:01:59.008969+00:00"
+      "checked_at": "2026-10-19T19:46:58.459925+00:00"
     },
     {
       "id": "eec6baf8-dda5-4eea-9f26-32bcb16cc3ef",
@@ -139,7 +139,7 @@
       "http_status": null,
       "final_url": "mailto:hrmanager8@hotmail.com",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-19T14:01:58.649870+00:00"
+      "checked_at": "2026-10-19T19:46:57.683292+00:00"
     },
     {
       "id": "20b78bc2-2e33-4799-87ea-2b46da8268fb",
@@ -151,7 +151,7 @@
       "http_status": null,
       "final_url": "mailto:sylviaezeoka@vaobeauty.com",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-19T14:01:58.649454+00:00"
+      "checked_at": "2026-10-19T19:46:57.682933+00:00"
     },
     {
       "id": "fd096a44-efa3-4b48-9738-6e6e652969da",
@@ -163,7 +163,7 @@
       "http_status": null,
       "final_url": "mailto:toluwalope.aladesuyi@rolanfoundation.org",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-19T14:01:59.118936+00:00"
+      "checked_at": "2026-10-19T19:46:58.550135+00:00"
     },
     {
       "id": "58e824f8-234d-46a8-97a0-4eceb21dd909",
@@ -175,7 +175,7 @@
       "http_status": null,
       "final_url": "mailto:admin@1501medical.com.ng",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-19T14:01:59.119085+00:00"
+      "checked_at": "2026-10-19T19:46:58.550260+00:00"
     },
     {
       "id": "df30a28d-fc26-4514-a20a-a9ab8bd98974",
@@ -187,7 +187,7 @@
       "http_status": null,
       "final_url": "mailto:career@rpm.com.ng",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-19T14:01:58.933942+00:00"
+      "checked_at": "2026-10-19T19:46:58.007239+00:00"
     },
     {
       "id": "2e68c33c-73bb-409d-9cc7-0a4a4477427a",
@@ -199,7 +199,7 @@
       "http_status": null,
       "final_url": "mailto:dglhrexecutive@gmail.com",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-19T14:01:58.648155+00:00"
+      "checked_at": "2026-10-19T19:46:57.682177+00:00"
     },
     {
       "id": "bfb7f7e0-00dd-4a30-8974-1a0151cad195",
@@ -211,7 +211,7 @@
       "http_status": null,
       "final_url": "mailto:careers@comerciopartners.com",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-19T14:01:58.650780+00:00"
+      "checked_at": "2026-10-19T19:46:57.684471+00:00"
     },
     {
       "id": "2d476911-a20a-4b0b-a10b-cb061788f3b2",
@@ -223,7 +223,7 @@
       "http_status": null,
       "final_url": "mailto:quemaconsulting@gmail.com",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-19T14:01:58.934041+00:00"
+      "checked_at": "2026-10-19T19:46:58.007352+00:00"
     },
     {
       "id": "0e3e1aee-7d20-4bf1-a391-bcb03a7eaa54",
@@ -235,7 +235,7 @@
       "http_status": null,
       "final_url": "mailto:careers@actrustfoundation.org",
       "evidence": "Network/timeout: <urlopen error unknown url type: mailto>",
-      "checked_at": "2026-10-19T14:01:58.934111+00:00"
+      "checked_at": "2026-10-19T19:46:58.007425+00:00"
     },
     {
       "id": "cf2371c9-241c-4157-a3c1-deac1573d359",
@@ -247,7 +247,7 @@
       "http_status": 401,
       "final_url": "https://docs.google.com/forms/d/e/1FAIpQLSeKgxml4pC-wGnBF3FfqHiY8FKZPAW-KGzh3tBFxGtiZ5dTEQ/viewform",
       "evidence": "HTTP 401",
-      "checked_at": "2026-10-19T14:01:58.651810+00:00"
+      "checked_at": "2026-10-19T19:46:57.685381+00:00"
     },
     {
       "id": "0dc40ab6-3b11-4377-8579-2809670a8f3a",
@@ -259,7 +259,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.648614+00:00"
+      "checked_at": "2026-10-19T19:46:57.682618+00:00"
     },
     {
       "id": "62e0c9bd-5ad4-419b-9171-5cea192b1700",
@@ -271,7 +271,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:59.383941+00:00"
+      "checked_at": "2026-10-19T19:46:58.564461+00:00"
     },
     {
       "id": "f867d603-75ec-45f6-b4e5-aa24487ffa4e",
@@ -283,7 +283,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.649928+00:00"
+      "checked_at": "2026-10-19T19:46:57.683613+00:00"
     },
     {
       "id": "29374534-0eb5-49f0-a4b5-3226ff568147",
@@ -295,7 +295,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:59.008938+00:00"
+      "checked_at": "2026-10-19T19:46:58.459912+00:00"
     },
     {
       "id": "a986eac9-c526-44e0-ac8f-ec1e8c233ee9",
@@ -307,7 +307,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:59.119008+00:00"
+      "checked_at": "2026-10-19T19:46:58.550184+00:00"
     },
     {
       "id": "5d8473e0-1993-4390-b3ed-25fb0bdcaec2",
@@ -319,7 +319,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.649979+00:00"
+      "checked_at": "2026-10-19T19:46:57.683629+00:00"
     },
     {
       "id": "efce5428-86bd-4de0-976c-85034678fd6c",
@@ -331,7 +331,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.648845+00:00"
+      "checked_at": "2026-10-19T19:46:57.682632+00:00"
     },
     {
       "id": "97820a8f-d2e2-4b82-8f62-3f8ba0c884fc",
@@ -343,7 +343,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.934233+00:00"
+      "checked_at": "2026-10-19T19:46:58.007511+00:00"
     },
     {
       "id": "b4b0f8da-07f6-444d-b197-3ea72e53143b",
@@ -355,7 +355,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:59.118900+00:00"
+      "checked_at": "2026-10-19T19:46:58.550098+00:00"
     },
     {
       "id": "cc0f8998-73b6-45b4-8795-b3e4e294ef38",
@@ -367,7 +367,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.934103+00:00"
+      "checked_at": "2026-10-19T19:46:58.007418+00:00"
     },
     {
       "id": "5027d391-daae-446d-a113-18d31d69fcd9",
@@ -379,7 +379,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.649532+00:00"
+      "checked_at": "2026-10-19T19:46:57.683277+00:00"
     },
     {
       "id": "5089f369-85aa-441b-97fe-894c5aad6e98",
@@ -391,7 +391,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.650199+00:00"
+      "checked_at": "2026-10-19T19:46:57.683638+00:00"
     },
     {
       "id": "4cd8ff11-b99c-4288-8ceb-1c8469a69be6",
@@ -403,7 +403,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.650231+00:00"
+      "checked_at": "2026-10-19T19:46:57.683809+00:00"
     },
     {
       "id": "1b5a9a08-f8a8-4d03-968e-787dfd95ff5f",
@@ -415,7 +415,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.647896+00:00"
+      "checked_at": "2026-10-19T19:46:57.681987+00:00"
     },
     {
       "id": "0a279d28-f302-44d4-88c9-ee3d66e97cb1",
@@ -427,7 +427,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.648139+00:00"
+      "checked_at": "2026-10-19T19:46:57.682165+00:00"
     },
     {
       "id": "58f27726-3df1-45a7-b36f-a5986552b562",
@@ -439,7 +439,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:59.118927+00:00"
+      "checked_at": "2026-10-19T19:46:58.550127+00:00"
     },
     {
       "id": "6e1156e4-08e2-466c-ab4f-bdf0d93ac2a8",
@@ -451,7 +451,7 @@
       "http_status": null,
       "final_url": "",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:59.119017+00:00"
+      "checked_at": "2026-10-19T19:46:58.550193+00:00"
     },
     {
       "id": "2545c8e7-d7d3-4b71-a33f-03cb491bd400",
@@ -463,7 +463,7 @@
       "http_status": 200,
       "final_url": "https://careers.iconicuniversity.edu.ng/job/ad-hoc-job-opportunity-examination-proctors-supervisors-at-iconic-open-university/?utm_source=MyJobMag",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.648864+00:00"
+      "checked_at": "2026-10-19T19:46:57.682789+00:00"
     },
     {
       "id": "4876750e-e380-4d36-a394-9a223c27f85c",
@@ -475,7 +475,7 @@
       "http_status": 200,
       "final_url": "https://wemabank.seamlesshiring.com/job/view/261#/?utm_source=MyJobMag",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.650242+00:00"
+      "checked_at": "2026-10-19T19:46:57.683829+00:00"
     },
     {
       "id": "6f099873-8f25-482e-a6fa-0dbc942872a7",
@@ -487,7 +487,7 @@
       "http_status": 200,
       "final_url": "https://www.myjobmag.com/job-application/1351349",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:59.119109+00:00"
+      "checked_at": "2026-10-19T19:46:58.550281+00:00"
     },
     {
       "id": "98477b43-e9f7-4268-be78-ce6b36cb1181",
@@ -499,19 +499,7 @@
       "http_status": 200,
       "final_url": "https://jobs.smartrecruiters.com/AgbeyewaFarms/744000154633939-general-manager?utm_source=MyJobMag",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.934241+00:00"
-    },
-    {
-      "id": "9ef5dc83-1e61-4538-9d12-8c3a6725e94d",
-      "title": "Hub Manager - Aramoko-Ado Ekiti",
-      "company": "Jaza Energy",
-      "location": "Ekiti",
-      "apply_url": "https://hris.peoplehum.com/ehire/jobs/9d9e0527-4b1a-43ab-8453-cebe9182dcf3/2ad595ab-539d-432e-bb6b-39d53f4b4315?source_name=LinkedIn&source_type=Social&utm_source=MyJobMag",
-      "status": "OPEN",
-      "http_status": 200,
-      "final_url": "https://hris.peoplehum.com/ehire/jobs/9d9e0527-4b1a-43ab-8453-cebe9182dcf3/2ad595ab-539d-432e-bb6b-39d53f4b4315?source_name=LinkedIn&source_type=Social&utm_source=MyJobMag",
-      "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.992362+00:00"
+      "checked_at": "2026-10-19T19:46:58.007517+00:00"
     },
     {
       "id": "91e6aaf0-cd3f-4a9c-a11d-327bd247bb30",
@@ -523,7 +511,19 @@
       "http_status": 200,
       "final_url": "https://hris.peoplehum.com/ehire/jobs/9d9e0527-4b1a-43ab-8453-cebe9182dcf3/2ad595ab-539d-432e-bb6b-39d53f4b4315?source_name=LinkedIn&source_type=Social&utm_source=MyJobMag",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.961678+00:00"
+      "checked_at": "2026-10-19T19:46:58.184292+00:00"
+    },
+    {
+      "id": "9ef5dc83-1e61-4538-9d12-8c3a6725e94d",
+      "title": "Hub Manager - Aramoko-Ado Ekiti",
+      "company": "Jaza Energy",
+      "location": "Ekiti",
+      "apply_url": "https://hris.peoplehum.com/ehire/jobs/9d9e0527-4b1a-43ab-8453-cebe9182dcf3/2ad595ab-539d-432e-bb6b-39d53f4b4315?source_name=LinkedIn&source_type=Social&utm_source=MyJobMag",
+      "status": "OPEN",
+      "http_status": 200,
+      "final_url": "https://hris.peoplehum.com/ehire/jobs/9d9e0527-4b1a-43ab-8453-cebe9182dcf3/2ad595ab-539d-432e-bb6b-39d53f4b4315?source_name=LinkedIn&source_type=Social&utm_source=MyJobMag",
+      "evidence": "",
+      "checked_at": "2026-10-19T19:46:58.397731+00:00"
     },
     {
       "id": "492d4abe-2689-4d24-b9e5-fe2fb72e781f",
@@ -535,7 +535,7 @@
       "http_status": 200,
       "final_url": "https://www.myjobmag.com/job-application/1360593",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.651617+00:00"
+      "checked_at": "2026-10-19T19:46:57.685216+00:00"
     },
     {
       "id": "fe2dc583-d142-46f5-9b96-51c56fc26759",
@@ -547,7 +547,7 @@
       "http_status": 200,
       "final_url": "https://www.myjobmag.com/job-application/1360593",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.651971+00:00"
+      "checked_at": "2026-10-19T19:46:57.685507+00:00"
     },
     {
       "id": "a65f1f6f-4961-483d-8ae0-3d4a627b99c4",
@@ -559,7 +559,7 @@
       "http_status": 200,
       "final_url": "https://www.myjobmag.com/job-application/1354278",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:59.087039+00:00"
+      "checked_at": "2026-10-19T19:46:58.481237+00:00"
     },
     {
       "id": "bb582c04-0596-4480-ac17-6993d7717731",
@@ -571,7 +571,7 @@
       "http_status": 200,
       "final_url": "https://jobs.ashbyhq.com/check-technologies/efdb2736-75c7-49e9-b413-5713008e1634",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:59.383968+00:00"
+      "checked_at": "2026-10-19T19:46:58.564474+00:00"
     },
     {
       "id": "93805ad4-09db-4c00-865e-0ba389514e5c",
@@ -583,7 +583,7 @@
       "http_status": 200,
       "final_url": "https://careers.dangote.com/job/Head-Office-Lagos-Relationship-Officer%2C-Osun-Head/1375012957/?utm_source=MyJobMag",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.650606+00:00"
+      "checked_at": "2026-10-19T19:46:57.684178+00:00"
     },
     {
       "id": "a172e3c3-fc66-4dec-8b62-615400c21a82",
@@ -595,7 +595,7 @@
       "http_status": 200,
       "final_url": "https://job-boards.eu.greenhouse.io/moniepoint/jobs/4637395101?utm_source=MyJobMag",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.648427+00:00"
+      "checked_at": "2026-10-19T19:46:57.682449+00:00"
     },
     {
       "id": "40c06bcc-3c45-410a-918a-20b95ceb614b",
@@ -607,7 +607,7 @@
       "http_status": 200,
       "final_url": "https://www.google.com/search?q=Lumos+on+docs.google.com&rlz=1CAPPDO_enNG1220&oq=Lumos+on+docs.google.com&aqs=chrome..69i57j33i160.1095j0j7&sourceid=chrome&ie=UTF-8",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:59.009079+00:00"
+      "checked_at": "2026-10-19T19:46:58.459985+00:00"
     },
     {
       "id": "7244ddc8-0c80-4451-90b0-dd96d6afebe9",
@@ -619,7 +619,7 @@
       "http_status": 200,
       "final_url": "https://ng.linkedin.com/jobs/view/trainer-driver-x2-dp-world-logistics-limited-nigeria-at-dp-world-4476670073",
       "evidence": "",
-      "checked_at": "2026-10-19T14:01:58.651516+00:00"
+      "checked_at": "2026-10-19T19:46:57.685091+00:00"
     }
   ]
 }
