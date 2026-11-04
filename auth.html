@@ -81,7 +81,7 @@ async function accountRole(client,uid){
  return r.data?.role||null;
 }
 function goForRole(role){
- if(role==='admin'||role==='agent')return location.replace('index.html');
+ if(role==='admin'||role==='agent')return location.replace('admin-dashboard.html');
  if(role==='employer')return location.replace('employer-portal.html');
  return location.replace('candidate-dashboard.html');
 }
@@ -111,6 +111,7 @@ form.onsubmit=async e=>{
    // has no JobSeek row yet, keep the authenticated session and use the role
    // the person selected instead of leaving them stranded on this page.
    let role=await accountRole(client,result.data.user.id);
+   if(!role)console.warn('JobSeek: no role row readable for this user; check jobseek_accounts row and RLS.');
    role=role||accountType;
    if(role!==accountType && !((role==='admin'||role==='agent')&&accountType==='candidate')){
     msg.textContent='Login successful. Opening the account dashboard…';
